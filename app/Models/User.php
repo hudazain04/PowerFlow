@@ -18,11 +18,22 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
         'password',
+        'role',
+        'phone'
     ];
 
+    public function subcriptionrequest()
+    {
+        return $this->hasMany(SubscriptionRequest::class);
+    }
+    public function serviceproviders()
+    {
+        return $this->hasMany(PowerGenerator::class);
+    }
     /**
      * The attributes that should be hidden for serialization.
      *
