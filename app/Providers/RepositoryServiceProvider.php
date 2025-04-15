@@ -2,14 +2,13 @@
 
 namespace App\Providers;
 
-use App\Repositories\Eloquent\AuthRepository;
-use App\Repositories\interfaces\AuthRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
-
-class AppServiceProvider extends ServiceProvider
+use App\Repositories\Interfaces\AuthRepositoryInterface;
+use App\Repositories\Eloquent\AuthRepository;
+class RepositoryServiceProvider extends ServiceProvider
 {
     /**
-     * Register any application services.
+     * Register services.
      */
     public function register(): void
     {
@@ -17,7 +16,7 @@ class AppServiceProvider extends ServiceProvider
     }
 
     /**
-     * Bootstrap any application services.
+     * Bootstrap services.
      */
     public function boot(): void
     {
