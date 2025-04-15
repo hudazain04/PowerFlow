@@ -3,9 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Counter extends Model
 {
+     use HasFactory;
+
+   
     protected $fillable = [
         'number',
         'QRCode',
@@ -24,8 +28,8 @@ class Counter extends Model
     {
         return $this->hasMany(Payment::class);
     }
-    public function users()
+   public function user()
     {
-        return $this->hasMany(User::class);
+        return $this->belongsTo(User::class);
     }
 }
