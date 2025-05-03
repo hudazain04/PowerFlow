@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Domain\Feature\Repositories;
+namespace App\Repositories\interfaces\SuperAdmin;
 
-use App\Domain\Feature\DTOs\FeatureDTO;
 use Illuminate\Support\Collection;
+use App\DTOs\FeatureDTO;
 
 interface FeatureRepositoryInterface
 {
@@ -16,6 +16,4 @@ interface FeatureRepositoryInterface
     public function update(int $id , FeatureDTO $featureDTO) : FeatureDTO;
 
     public function delete(int $id) : bool;
-
-
 }

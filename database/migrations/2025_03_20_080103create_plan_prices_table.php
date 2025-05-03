@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('price');
             $table->integer('period');
+            $table->integer('discount');
             $table->foreignId('plan_id')->constrained('plans')->onDelete('cascade');
             $table->timestamps();
         });

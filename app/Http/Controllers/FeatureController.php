@@ -4,15 +4,11 @@ namespace App\Http\Controllers;
 
 use App\ApiHelper\ApiCode;
 use App\ApiHelper\ApiResponse;
-use App\Application\Feature\UseCases\CreateHandler;
-use App\Application\Feature\UseCases\DeleteHandler;
-use App\Application\Feature\UseCases\FindHandler;
-use App\Application\Feature\UseCases\GetAllHandler;
-use App\Application\Feature\UseCases\UpdateHandler;
-use App\Domain\Feature\DTOs\FeatureDTO;
+use App\DTOs\FeatureDTO;
 use App\Exceptions\ErrorException;
 use App\Http\Requests\Feature\CreateFeatureRequest;
 use App\Http\Resources\FeatureResource;
+use App\Services\SuperAdmin\FeatureService;
 use Illuminate\Http\Request;
 use PHPUnit\Event\Code\Throwable;
 
@@ -20,36 +16,35 @@ class FeatureController extends Controller
 {
     use ApiResponse;
 
-    public function index(GetAllHandler $handler)
+    public function __construct(protected FeatureService $featureService)
     {
-            $feature=$handler->handle();
-            return $this->success(FeatureResource::collection($feature),__('messages.success'));
+
     }
 
-    public function store(CreateHandler $handler,CreateFeatureRequest $request)
+    public function index()
     {
-            $featureDTO=FeatureDTO::fromRequest($request);
-            $feature=$handler->handle($featureDTO);
-            return $this->success(FeatureResource::make($feature),__('feature.created'),ApiCode::CREATED);
+             return $this->featureService->getAll();
     }
 
-    public function update(UpdateHandler $handler,int $id , CreateFeatureRequest $request)
+    public function store(CreateFeatureRequest $request)
     {
-            $featureDTO=FeatureDTO::fromRequest($request);
-            $feature=$handler->handle($id,$featureDTO);
-            return $this->success(FeatureResource::make($feature),__('feature.update'));
+            return $this->featureService->create($request);
     }
 
-    public function delete(int $id , DeleteHandler $handler)
+    public function update(int $id , CreateFeatureRequest $request)
     {
-            $handler->handle($id);
-            return $this->success(__('feature.delete'));
+            return $this->featureService->update($id,$request);
     }
 
-    public function findById(FindHandler $handler, int $id)
+    public function findById( int $id)
     {
-         $feature=$handler->handle($id);
-            return $this->success(FeatureResource::make($feature),__('messages.success'));
+        return $this->featureService->find($id);
     }
+
+    public function delete(int $id )
+    {
+           return $this->featureService->delete($id);
+    }
+
 
 }

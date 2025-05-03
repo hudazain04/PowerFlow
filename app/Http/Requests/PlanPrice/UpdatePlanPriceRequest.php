@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Feature;
+namespace App\Http\Requests\PlanPrice;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateFeatureRequest extends FormRequest
+class UpdatePlanPriceRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -19,12 +19,11 @@ class CreateFeatureRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-
     public function rules(): array
-    {       return [
-            'key'=>'required|string',
-        'description'=>'required|string'
-
+    {
+        return [
+            'period'=>'sometimes|integer',
+            'discount'=>'sometimes|integer',
         ];
     }
 }

@@ -22,6 +22,7 @@ use App\Models\Subscription;
 use App\Models\SubscriptionRequest;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Faker\Factory;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -69,7 +70,7 @@ class DatabaseSeeder extends Seeder
 
         // Create 3 Plans
         $plans = Plan::factory()->count(3)->create();
-
+        $faker = Factory::create();
         // Create 6 Features and randomly attach to plans
         $features = Feature::factory()->count(6)->create();
         foreach ($plans as $plan) {
@@ -78,6 +79,7 @@ class DatabaseSeeder extends Seeder
                 Plan_Feature::factory()->create([
                     'plan_id' => $plan->id,
                     'feature_id' => $feature->id,
+                    'value' => $faker->numberBetween(1, 10000),
                 ]);
             }
         }
