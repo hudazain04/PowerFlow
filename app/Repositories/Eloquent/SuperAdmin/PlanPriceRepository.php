@@ -30,14 +30,7 @@ class PlanPriceRepository implements PlanPriceRepositoryInterface
     public function find(int $id): PlanPriceDTO
     {
         $PlanPrice=PlanPriceModel::find($id);
-        if ($PlanPrice)
-        {
-            return PlanPriceDTO::fromModel($PlanPrice);
-        }
-        else
-        {
-            throw new ErrorException(__('planPrice.notFound'),ApiCode::NOT_FOUND);
-        }
+        return PlanPriceDTO::fromModel($PlanPrice);
     }
 
     public function create(PlanPriceDTO $PlanPriceDTO): PlanPriceDTO
@@ -46,31 +39,17 @@ class PlanPriceRepository implements PlanPriceRepositoryInterface
         return PlanPriceDTO::fromModel($PlanPrice);
     }
 
-    public function update(int $id, PlanPriceDTO $PlanPriceDTO): PlanPriceDTO
+    public function update(PlanPriceDTO $planPrice, PlanPriceDTO $PlanPriceDTO): PlanPriceDTO
     {
-        $PlanPrice=PlanPriceModel::find($id);
-        if ($PlanPrice)
-        {
-            $PlanPrice->update($PlanPriceDTO->toArray());
-            $PlanPrice->save();
-            return $PlanPriceDTO::fromModel($PlanPrice);
-        }
-        else
-        {
-            throw new ErrorException(__('planPrice.notFound'),ApiCode::NOT_FOUND);
-        }
+        $PlanPrice=$planPrice->toModel(PlanPriceModel::class);
+        $PlanPrice->update($PlanPriceDTO->toArray());
+        $PlanPrice->save();
+        return $PlanPriceDTO::fromModel($PlanPrice);
     }
 
-    public function delete(int $id): bool
+    public function delete(PlanPriceDTO $planPriceDTO): bool
     {
-        $PlanPrice=PlanPriceModel::find($id);
-        if ($PlanPrice)
-        {
-            return $PlanPrice->delete();
-        }
-        else
-        {
-            throw new ErrorException(__('planPrice.notFound'),ApiCode::NOT_FOUND);
-        }
+        $PlanPrice=$planPriceDTO->toModel(PlanPriceModel::class);
+        return $PlanPrice->delete();
     }
 }

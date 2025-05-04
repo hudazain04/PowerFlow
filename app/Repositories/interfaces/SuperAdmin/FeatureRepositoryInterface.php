@@ -13,7 +13,7 @@ interface FeatureRepositoryInterface
 
     public function create(FeatureDTO $featureDTO) : FeatureDTO;
 
-    public function update(int $id , FeatureDTO $featureDTO) : FeatureDTO;
+    public function update(FeatureDTO $feature , FeatureDTO $featureDTO) : FeatureDTO;
 
-    public function delete(int $id) : bool;
+    public function delete(FeatureDTO $featureDTO) : bool;
 }

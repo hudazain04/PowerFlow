@@ -31,14 +31,7 @@ class FeatureRepository implements FeatureRepositoryInterface
     public function find(int $id): FeatureDTO
     {
         $feature=FeatureModel::find($id);
-        if ($feature)
-        {
-            return FeatureDTO::fromModel($feature);
-        }
-        else
-        {
-            throw new ErrorException(__('feature.notFound'),ApiCode::NOT_FOUND);
-        }
+        return FeatureDTO::fromModel($feature);
 
     }
 
@@ -48,33 +41,18 @@ class FeatureRepository implements FeatureRepositoryInterface
         return FeatureDTO::fromModel($feature);
     }
 
-    public function update(int $id, FeatureDTO $featureDTO): FeatureDTO
+    public function update(FeatureDTO $feature, FeatureDTO $featureDTO): FeatureDTO
     {
-        $feature=FeatureModel::find($id);
-        if ($feature)
-        {
+            $feature=$feature->toModel(FeatureModel::class);
             $feature->update($featureDTO->toArray());
             $feature->save();
             return $featureDTO::fromModel($feature);
-        }
-        else
-        {
-            throw new ErrorException(__('feature.notFound'),ApiCode::NOT_FOUND);
-        }
-
-
     }
 
-    public function delete(int $id): bool
+    public function delete(FeatureDTO $featureDTO): bool
     {
-        $feature=FeatureModel::find($id);
-        if ($feature)
-        {
-            return $feature->delete();
-        }
-        else
-        {
-            throw new ErrorException(__('feature.notFound'),ApiCode::NOT_FOUND);
-        }
+        $feature=$featureDTO->toModel(FeatureModel::class);
+        return $feature->delete();
+
     }
 }

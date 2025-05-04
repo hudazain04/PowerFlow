@@ -50,24 +50,57 @@ class PlanPriceService
     {
         $planPriceDTO=planPriceDTO::fromRequest($request);
         $plan=$this->planRepository->find($planPriceDTO->plan_id);
-        $monthlyPrice=$plan->monthlyPrice;
-        $price=$this->calculateTotalPrice($monthlyPrice,$planPriceDTO->discount,$planPriceDTO->period);
-        $planPriceDTO->price=$price;
-        $planPrice=$this->planPricePriceRepository->update($id,$planPriceDTO);
-        return $this->success(PlanPriceResource::make($planPrice),__('planPrice.update'));
+        if ($plan)
+        {
+            $PlanPrice=$this->planPricePriceRepository->find($id);
+            if ($PlanPrice)
+            {
+                $monthlyPrice=$plan->monthlyPrice;
+                $price=$this->calculateTotalPrice($monthlyPrice,$planPriceDTO->discount,$planPriceDTO->period);
+                $planPriceDTO->price=$price;
+                $planPrice=$this->planPricePriceRepository->update($PlanPrice,$planPriceDTO);
+                return $this->success(PlanPriceResource::make($planPrice),__('planPrice.update'));
+            }
+            else
+            {
+                throw new ErrorException(__('planPrice.notFound'),ApiCode::NOT_FOUND);
+            }
+
+
+        }
+        else
+        {
+            throw new ErrorException(__('plan.notFound'),ApiCode::NOT_FOUND);
+        }
+
     }
 
     public function find(int $id)
     {
         $planPrice=$this->planPricePriceRepository->find($id);
-        return $this->success(PlanPriceResource::make($planPrice),__('messages.success'));
+        if ($planPrice)
+        {
+            return $this->success(PlanPriceResource::make($planPrice),__('messages.success'));
+        }
+        else
+        {
+            throw new ErrorException(__('planPrice.notFound'),ApiCode::NOT_FOUND);
+        }
 
     }
 
     public function delete(int $id)
     {
-        $this->planPricePriceRepository->delete($id);
-        return $this->success(__('planPrice.delete'));
+        $planPrice=$this->planPricePriceRepository->find($id);
+        if ($planPrice)
+        {
+            $this->planPricePriceRepository->delete($planPrice);
+            return $this->success(__('planPrice.delete'));
+        }
+        else
+        {
+            throw new ErrorException(__('planPrice.notFound'),ApiCode::NOT_FOUND);
+        }
     }
 
 }

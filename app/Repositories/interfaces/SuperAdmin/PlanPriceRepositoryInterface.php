@@ -13,7 +13,7 @@ interface PlanPriceRepositoryInterface
 
     public function create(PlanPriceDTO $planPriceDTO) : PlanPriceDTO;
 
-    public function update(int $id , PlanPriceDTO $planPriceDTO) : PlanPriceDTO;
+    public function update(PlanPriceDTO $planPrice , PlanPriceDTO $planPriceDTO) : PlanPriceDTO;
 
-    public function delete(int $id) : bool;
+    public function delete(PlanPriceDTO $planPriceDTO) : bool;
 }

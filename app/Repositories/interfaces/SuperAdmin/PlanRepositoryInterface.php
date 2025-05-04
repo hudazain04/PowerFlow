@@ -13,9 +13,9 @@ interface PlanRepositoryInterface
 
     public function create(PlanDTO $planDTO) : PlanDTO;
 
-    public function update(int $id , PlanDTO $planDTO) : PlanDTO;
+    public function update(PlanDTO $plan , PlanDTO $planDTO) : PlanDTO;
 
-    public function delete(int $id) : bool;
+    public function delete(PlanDTO $planDTO) : bool;
 
     public function getFeatures(int $plan_id): Collection;
 

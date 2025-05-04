@@ -3,6 +3,7 @@
 namespace App\Services\SuperAdmin;
 use App\ApiHelper\ApiCode;
 use App\ApiHelper\ApiResponse;
+use App\Exceptions\ErrorException;
 use App\Http\Requests\Feature\CreateFeatureRequest;
 use App\Http\Resources\FeatureResource;
 use App\Repositories\interfaces\SuperAdmin\FeatureRepositoryInterface;
@@ -38,21 +39,45 @@ class FeatureService
     public function update(int $id , CreateFeatureRequest $request)
     {
         $featureDTO=FeatureDTO::fromRequest($request);
-        $feature=$this->featureRepository->update($id,$featureDTO);
-        return $this->success(FeatureResource::make($feature),__('feature.update'));
+        $feature=$this->featureRepository->find($id);
+        if ($feature)
+        {
+            $feature=$this->featureRepository->update($feature,$featureDTO);
+            return $this->success(FeatureResource::make($feature),__('feature.update'));
+        }
+       else
+       {
+           throw new ErrorException(__('feature.notFound'),ApiCode::NOT_FOUND);
+       }
     }
 
     public function find(int $id)
     {
         $feature=$this->featureRepository->find($id);
-        return $this->success(FeatureResource::make($feature),__('messages.success'));
+        if ($feature)
+        {
+            return $this->success(FeatureResource::make($feature),__('messages.success'));
 
+        }
+        else
+        {
+            throw new ErrorException(__('feature.notFound'),ApiCode::NOT_FOUND);
+        }
     }
 
     public function delete(int $id)
     {
-        $this->featureRepository->delete($id);
-        return $this->success(__('feature.delete'));
+        $feature=$this->featureRepository->find($id);
+        if ($feature)
+        {
+            $this->featureRepository->delete($feature);
+            return $this->success(__('feature.delete'));
+        }
+        else
+        {
+            throw new ErrorException(__('feature.notFound'),ApiCode::NOT_FOUND);
+        }
+
     }
 
 

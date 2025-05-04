@@ -7,6 +7,7 @@ use App\DTOs\FeatureDTO;
 use App\DTOs\PlanDTO;
 use App\DTOs\PlanPriceDTO;
 use App\Exceptions\ErrorException;
+use App\Models\Plan;
 use App\Repositories\interfaces\SuperAdmin\PlanRepositoryInterface;
 use Illuminate\Support\Collection;
 use App\Models\Plan as PlanModel;
@@ -33,14 +34,7 @@ class PlanRepository implements PlanRepositoryInterface
     public function find(int $id): PlanDTO
     {
         $plan=PlanModel::find($id);
-        if ($plan)
-        {
-            return PlanDTO::fromModel($plan);
-        }
-        else
-        {
-            throw new ErrorException(__('plan.notFound'),ApiCode::NOT_FOUND);
-        }
+        return PlanDTO::fromModel($plan);
     }
 
     public function create(PlanDTO $planDTO): PlanDTO
@@ -49,34 +43,18 @@ class PlanRepository implements PlanRepositoryInterface
         return PlanDTO::fromModel($plan);
     }
 
-    public function update(int $id, PlanDTO $planDTO): PlanDTO
+    public function update(PlanDTO $plan, PlanDTO $planDTO): PlanDTO
     {
-        $plan=PlanModel::find($id);
-        if ($plan)
-        {
-            $plan->update($planDTO->toArray());
-            $plan->save();
-            return $planDTO::fromModel($plan);
-
-        }
-        else
-        {
-            throw new ErrorException(__('plan.notFound'),ApiCode::NOT_FOUND);
-        }
-
+        $plan=$plan->toModel(PlanModel::class);
+        $plan->update($planDTO->toArray());
+        $plan->save();
+        return $planDTO::fromModel($plan);
     }
 
-    public function delete(int $id): bool
+    public function delete(PlanDTO $planDTO): bool
     {
-        $plan=PlanModel::find($id);
-        if ($plan)
-        {
-            return $plan->delete();
-        }
-        else
-        {
-            throw new ErrorException(__('plan.notFound'),ApiCode::NOT_FOUND);
-        }
+        $plan=$planDTO->toModel(PlanModel::class);
+        return $plan->delete();
     }
 
     public function getFeatures(int $plan_id): Collection
