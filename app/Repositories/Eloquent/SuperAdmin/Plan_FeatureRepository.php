@@ -20,43 +20,39 @@ class Plan_FeatureRepository implements Plan_FeatureRepositoryInterface
     public function all(): Collection
     {
         $Plan_features=Plan_FeatureModel::all();
-        return $Plan_features->map(function ($Plan_feature){
-            return Plan_FeatureDTO::fromModel($Plan_feature);
-        });
+        return $Plan_features;
     }
 
-    public function find(int $id): Plan_FeatureDTO
+    public function find(int $id): Plan_FeatureModel
     {
-        $Plan_feature=Plan_FeatureModel::findOrFail($id);
-        return Plan_FeatureDTO::fromModel($Plan_feature);
+        $Plan_feature=Plan_FeatureModel::find($id);
+        return $Plan_feature;
     }
 
-    public function create(Plan_FeatureDTO $plan_FeatureDTO): Plan_FeatureDTO
+    public function create(array $data): Plan_FeatureModel
     {
-        $Plan_feature=Plan_FeatureModel::create($plan_FeatureDTO->toArray());
-        return Plan_FeatureDTO::fromModel($Plan_feature);
+        $Plan_feature=Plan_FeatureModel::create($data);
+        return $Plan_feature;
     }
 
-    public function update(int $id, Plan_FeatureDTO $plan_FeatureDTO): Plan_FeatureDTO
+    public function update(Plan_FeatureModel $plan_Feature, array $data): Plan_FeatureModel
     {
-        $Plan_feature=Plan_FeatureModel::findOrFail($id);
-        $Plan_feature->update($plan_FeatureDTO->toArray());
-        $Plan_feature->save();
-        return Plan_FeatureDTO::fromModel($Plan_feature);
+        $plan_Feature->update($data);
+        $plan_Feature->save();
+        return $plan_Feature;
 
     }
 
-    public function delete(int $id): bool
+    public function delete(Plan_FeatureModel $plan_Feature): bool
     {
-        $Plan_feature=Plan_FeatureModel::findOrFail($id);
-        return $Plan_feature->delete();
+        return $plan_Feature->delete();
     }
 
-    public function findByPlanAndFeature(int $feature_id, int $plan_id): Plan_FeatureDTO
+    public function findByPlanAndFeature(int $feature_id, int $plan_id): Plan_FeatureModel
     {
         $Plan_feature=Plan_FeatureModel::where([
             'plan_id'=>$plan_id,'feature_id'=>$feature_id,
         ])->first();
-        return Plan_FeatureDTO::fromModel($Plan_feature);
+        return $Plan_feature;
     }
 }

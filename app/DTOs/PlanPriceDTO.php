@@ -11,7 +11,7 @@ class PlanPriceDTO extends SimpleDTO
     public ?int $price;
     public int $discount;
     public int $period;
-    public int $plan_id;
+    public ?int $plan_id;
 
     protected function defaults(): array
     {

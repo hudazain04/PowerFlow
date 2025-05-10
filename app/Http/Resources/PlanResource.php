@@ -24,7 +24,7 @@ class PlanResource extends JsonResource
             'description'=>$this->description,
             'monthlyPrice'=>$this->monthlyPrice,
             'planPrices'=>PlanPriceResource::collection($this->planPrices),
-            'feature'=>FeatureResource::collection($this->features),
+            'features'=>FeatureResource::collection($this->features),
 
         ];
     }

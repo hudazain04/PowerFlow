@@ -25,70 +25,52 @@ class PlanRepository implements PlanRepositoryInterface
     public function all(): Collection
     {
         $plans=PlanModel::all();
-        return $plans->map(function ($plan){
-            return PlanDTO::fromModel($plan);
-        });
+        return $plans;
 
     }
 
-    public function find(int $id): PlanDTO
+    public function find(int $id): PlanModel
     {
         $plan=PlanModel::find($id);
-        return PlanDTO::fromModel($plan);
+        return $plan;
     }
 
-    public function create(PlanDTO $planDTO): PlanDTO
+    public function create(array $data): PlanModel
     {
-        $plan=PlanModel::create($planDTO->toArray());
-        return PlanDTO::fromModel($plan);
+        $plan=PlanModel::create($data);
+        return $plan;
     }
 
-    public function update(PlanDTO $plan, PlanDTO $planDTO): PlanDTO
+    public function update(PlanModel $plan, array $data): PlanModel
     {
-        $plan=$plan->toModel(PlanModel::class);
-        $plan->update($planDTO->toArray());
+        $plan->update($data);
         $plan->save();
-        return $planDTO::fromModel($plan);
+        return $plan;
     }
 
-    public function delete(PlanDTO $planDTO): bool
+    public function delete(PlanModel $plan): bool
     {
-        $plan=$planDTO->toModel(PlanModel::class);
         return $plan->delete();
     }
 
-    public function getFeatures(int $plan_id): Collection
+    public function getFeatures(PlanModel $plan): Collection
     {
-        $plan=PlanModel::find($plan_id);
-        if ($plan)
-        {
+
             $features=$plan->features;
-             return $features->map(function ($feature){
-                $featureDTO= FeatureDTO::fromModel($feature);
-                $featureDTO->value=$feature->pivot->value;
-                return $featureDTO;
-            });
-        }
-        else
-        {
-            throw new ErrorException(__('plan.notFound'),ApiCode::NOT_FOUND);
-        }
+             return $features;
+
+//        ->map(function ($feature){
+//        $featureDTO= FeatureDTO::fromModel($feature);
+//        $featureDTO->value=$feature->pivot->value;
+//        return $featureDTO;
+//    })
+
     }
 
-    public function getPlanPrices(int $plan_id): Collection
+    public function getPlanPrices(PlanModel $plan): Collection
     {
-        $plan=PlanModel::find($plan_id);
-        if ($plan)
-        {
             $planPrices=$plan->prices;
-            return $planPrices->map(function ($planPrice){
-                $planPriceDTO= PlanPriceDTO::fromModel($planPrice);
-                return $planPriceDTO;
-            });
-        }
-        else
-        {
-            throw new ErrorException(__('plan.notFound'),ApiCode::NOT_FOUND);
-        }
+            return $planPrices;
+
     }
 }

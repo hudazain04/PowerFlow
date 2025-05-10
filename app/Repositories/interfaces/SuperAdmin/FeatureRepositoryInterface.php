@@ -4,16 +4,17 @@ namespace App\Repositories\interfaces\SuperAdmin;
 
 use Illuminate\Support\Collection;
 use App\DTOs\FeatureDTO;
+use App\Models\Feature as FeatureModel;
 
 interface FeatureRepositoryInterface
 {
     public function all() : Collection;
 
-    public function find(int $id) : FeatureDTO;
+    public function find(int $id) : FeatureModel;
 
-    public function create(FeatureDTO $featureDTO) : FeatureDTO;
+    public function create(array $data) : FeatureModel;
 
-    public function update(FeatureDTO $feature , FeatureDTO $featureDTO) : FeatureDTO;
+    public function update(FeatureModel $feature , array $data) : FeatureModel;
 
-    public function delete(FeatureDTO $featureDTO) : bool;
+    public function delete(FeatureModel $feature) : bool;
 }

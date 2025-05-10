@@ -28,12 +28,14 @@ class FeatureController extends Controller
 
     public function store(CreateFeatureRequest $request)
     {
-            return $this->featureService->create($request);
+        $featureDTO=FeatureDTO::fromRequest($request);
+        return $this->featureService->create($featureDTO);
     }
 
     public function update(int $id , CreateFeatureRequest $request)
     {
-            return $this->featureService->update($id,$request);
+        $featureDTO=FeatureDTO::fromRequest($request);
+        return $this->featureService->update($id,$featureDTO);
     }
 
     public function findById( int $id)

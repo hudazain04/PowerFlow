@@ -21,35 +21,31 @@ class PlanPriceRepository implements PlanPriceRepositoryInterface
 
     public function all(int $plan_id): Collection
     {
-        $PlanPrices=PlanPriceModel::where('plan_id',$plan_id)->get();
-        return $PlanPrices->map(function ($PlanPrice){
-            return PlanPriceDTO::fromModel($PlanPrice);
-        });
+        $planPrices=PlanPriceModel::where('plan_id',$plan_id)->get();
+        return $planPrices;
     }
 
-    public function find(int $id): PlanPriceDTO
+    public function find(int $id): PlanPriceModel
     {
-        $PlanPrice=PlanPriceModel::find($id);
-        return PlanPriceDTO::fromModel($PlanPrice);
+        $planPrice=PlanPriceModel::find($id);
+        return $planPrice;
     }
 
-    public function create(PlanPriceDTO $PlanPriceDTO): PlanPriceDTO
+    public function create(array $data): PlanPriceModel
     {
-        $PlanPrice=PlanPriceModel::create($PlanPriceDTO->toArray());
-        return PlanPriceDTO::fromModel($PlanPrice);
+        $planPrice=PlanPriceModel::create($data);
+        return $planPrice;
     }
 
-    public function update(PlanPriceDTO $planPrice, PlanPriceDTO $PlanPriceDTO): PlanPriceDTO
+    public function update(PlanPriceModel $planPrice, array $data): PlanPriceModel
     {
-        $PlanPrice=$planPrice->toModel(PlanPriceModel::class);
-        $PlanPrice->update($PlanPriceDTO->toArray());
-        $PlanPrice->save();
-        return $PlanPriceDTO::fromModel($PlanPrice);
+        $planPrice->update($data);
+        $planPrice->save();
+        return $planPrice;
     }
 
-    public function delete(PlanPriceDTO $planPriceDTO): bool
+    public function delete(PlanPriceModel $planPrice): bool
     {
-        $PlanPrice=$planPriceDTO->toModel(PlanPriceModel::class);
-        return $PlanPrice->delete();
+        return $planPrice->delete();
     }
 }

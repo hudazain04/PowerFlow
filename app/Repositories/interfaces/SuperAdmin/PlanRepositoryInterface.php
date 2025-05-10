@@ -2,22 +2,25 @@
 
 namespace App\Repositories\interfaces\SuperAdmin;
 
+use App\Models\Plan;
 use Illuminate\Support\Collection;
 use App\DTOs\PlanDTO;
+use App\Models\Plan as PlanModel;
+
 
 interface PlanRepositoryInterface
 {
     public function all() : Collection;
 
-    public function find(int $id) : PlanDTO;
+    public function find(int $id) : PlanModel;
 
-    public function create(PlanDTO $planDTO) : PlanDTO;
+    public function create(array $data) : PlanModel;
 
-    public function update(PlanDTO $plan , PlanDTO $planDTO) : PlanDTO;
+    public function update(PlanModel $plan , array $data) : PlanModel;
 
-    public function delete(PlanDTO $planDTO) : bool;
+    public function delete(PlanModel $plan) : bool;
 
-    public function getFeatures(int $plan_id): Collection;
+    public function getFeatures(PlanModel $plan): Collection;
 
-    public function getPlanPrices(int $plan_id): Collection;
+    public function getPlanPrices(PlanModel $plan): Collection;
 }

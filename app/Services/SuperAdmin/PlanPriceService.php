@@ -5,6 +5,7 @@ namespace App\Services\SuperAdmin;
 use App\ApiHelper\ApiCode;
 use App\ApiHelper\ApiResponse;
 use App\ApiHelper\HelperMethods;
+use App\DTOs\PlanDTO;
 use App\DTOs\PlanPriceDTO;
 use App\Exceptions\ErrorException;
 use App\Http\Requests\planPrice\CreatePlanPriceRequest;
@@ -29,37 +30,43 @@ class PlanPriceService
     }
     public function getAll(int $plan_id)
     {
-        $planPrice= $this->planPricePriceRepository->all($plan_id);
-        return $this->success(PlanPriceResource::collection($planPrice),__('messages.success'));
+        $planPrices= $this->planPricePriceRepository->all($plan_id);
+        $planPricesDTOs=$planPrices->map(function ($planPrice){
+            return PlanPriceDTO::fromModel($planPrice);
+        });
+        return $this->success(PlanPriceResource::collection($planPricesDTOs),__('messages.success'));
 
     }
 
-    public function create(CreatePlanPriceRequest $request)
+    public function create(PlanPriceDTO $planPriceDTO)
     {
-        $planPriceDTO=planPriceDTO::fromRequest($request);
 //        dd($planPriceDTO);
         $plan=$this->planRepository->find($planPriceDTO->plan_id);
-        $monthlyPrice=$plan->monthlyPrice;
+        $planDTO=PlanDTO::fromModel($plan);
+        $monthlyPrice=$planDTO->monthlyPrice;
         $price=$this->calculateTotalPrice($monthlyPrice,$planPriceDTO->discount,$planPriceDTO->period);
         $planPriceDTO->price=$price;
-        $planPrice= $this->planPricePriceRepository->create($planPriceDTO);
-        return $this->success(PlanPriceResource::make($planPrice),__('planPrice.create'),ApiCode::CREATED);
+        $planPrice= $this->planPricePriceRepository->create($planPriceDTO->toArray());
+        $planPriceDTO=PlanPriceDTO::fromModel($planPrice);
+        return $this->success(PlanPriceResource::make($planPriceDTO),__('planPrice.create'),ApiCode::CREATED);
     }
 
-    public function update(int $id , CreatePlanPriceRequest $request)
+    public function update(int $id , PlanPriceDTO $planPriceDTO)
     {
-        $planPriceDTO=planPriceDTO::fromRequest($request);
         $plan=$this->planRepository->find($planPriceDTO->plan_id);
         if ($plan)
         {
+            $planDTO=PlanDTO::fromModel($plan);
             $PlanPrice=$this->planPricePriceRepository->find($id);
             if ($PlanPrice)
             {
-                $monthlyPrice=$plan->monthlyPrice;
+                $planPriceDTO=PlanPriceDTO::fromModel($PlanPrice);
+                $monthlyPrice=$planDTO->monthlyPrice;
                 $price=$this->calculateTotalPrice($monthlyPrice,$planPriceDTO->discount,$planPriceDTO->period);
                 $planPriceDTO->price=$price;
-                $planPrice=$this->planPricePriceRepository->update($PlanPrice,$planPriceDTO);
-                return $this->success(PlanPriceResource::make($planPrice),__('planPrice.update'));
+                $planPrice=$this->planPricePriceRepository->update($PlanPrice,$planPriceDTO->toArray());
+                $planPriceDTO=PlanPriceDTO::fromModel($planPrice);
+                return $this->success(PlanPriceResource::make($planPriceDTO),__('planPrice.update'));
             }
             else
             {
@@ -80,7 +87,8 @@ class PlanPriceService
         $planPrice=$this->planPricePriceRepository->find($id);
         if ($planPrice)
         {
-            return $this->success(PlanPriceResource::make($planPrice),__('messages.success'));
+            $planPriceDTO=PlanPriceDTO::fromModel($planPrice);
+            return $this->success(PlanPriceResource::make($planPriceDTO),__('messages.success'));
         }
         else
         {

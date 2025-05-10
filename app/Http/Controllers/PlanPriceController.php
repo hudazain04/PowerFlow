@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DTOs\PlanPriceDTO;
 use App\Http\Requests\PlanPrice\CreatePlanPriceRequest;
 use App\Http\Requests\PlanPrice\UpdatePlanPriceRequest;
 use App\Services\SuperAdmin\PlanPriceService;
@@ -20,12 +21,14 @@ class PlanPriceController extends Controller
 
     public function store(CreatePlanPriceRequest $request)
     {
-        return $this->planPriceService->create($request);
+        $planPriceDTO=PlanPriceDTO::fromRequest($request);
+        return $this->planPriceService->create($planPriceDTO);
     }
 
     public function update(int $id , CreatePlanPriceRequest $request)
     {
-        return $this->planPriceService->update($id,$request);
+        $planPriceDTO=PlanPriceDTO::fromRequest($request);
+        return $this->planPriceService->update($id,$planPriceDTO);
     }
 
     public function findById( int $id)

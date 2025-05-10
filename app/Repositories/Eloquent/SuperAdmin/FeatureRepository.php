@@ -22,36 +22,32 @@ class FeatureRepository implements FeatureRepositoryInterface
     public function all(): Collection
     {
         $features=FeatureModel::all();
-        return $features->map(function ($feature){
-            return FeatureDTO::fromModel($feature);
-        });
+        return $features;
 
     }
 
-    public function find(int $id): FeatureDTO
+    public function find(int $id): FeatureModel
     {
         $feature=FeatureModel::find($id);
-        return FeatureDTO::fromModel($feature);
+        return $feature;
 
     }
 
-    public function create(FeatureDTO $featureDTO): FeatureDTO
+    public function create(array $data): FeatureModel
     {
-        $feature=FeatureModel::create($featureDTO->toArray());
-        return FeatureDTO::fromModel($feature);
+        $feature=FeatureModel::create($data);
+        return $feature;
     }
 
-    public function update(FeatureDTO $feature, FeatureDTO $featureDTO): FeatureDTO
+    public function update(FeatureModel $feature, array $data): FeatureModel
     {
-            $feature=$feature->toModel(FeatureModel::class);
-            $feature->update($featureDTO->toArray());
+            $feature->update($data);
             $feature->save();
-            return $featureDTO::fromModel($feature);
+            return $feature;
     }
 
-    public function delete(FeatureDTO $featureDTO): bool
+    public function delete(FeatureModel $feature): bool
     {
-        $feature=$featureDTO->toModel(FeatureModel::class);
         return $feature->delete();
 
     }

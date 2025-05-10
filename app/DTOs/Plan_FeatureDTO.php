@@ -8,7 +8,7 @@ use WendellAdriel\ValidatedDTO\SimpleDTO;
 class Plan_FeatureDTO extends SimpleDTO
 {
     public  ?int $id;
-    public int $plan_id;
+    public ?int $plan_id;
     public ?int $feature_id;
     public ?int $value;
     protected function defaults(): array

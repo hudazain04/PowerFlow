@@ -25,25 +25,28 @@ class FeatureService
     public function getAll()
     {
         $features= $this->featureRepository->all();
-        return $this->success(FeatureResource::collection($features),__('messages.success'));
+        $featureDTOs= $features->map(function ($feature){
+            return FeatureDTO::fromModel($feature);
+        });
+        return $this->success(FeatureResource::collection($featureDTOs),__('messages.success'));
 
     }
 
-    public function create(CreateFeatureRequest $request)
+    public function create(FeatureDTO $featureDTO)
     {
-        $featureDTO=FeatureDTO::fromRequest($request);
-        $feature= $this->featureRepository->create($featureDTO);
-        return $this->success(FeatureResource::make($feature),__('feature.create'),ApiCode::CREATED);
+        $feature= $this->featureRepository->create($featureDTO->toArray());
+        $featureDTO=FeatureDTO::fromModel($feature);
+        return $this->success(FeatureResource::make($featureDTO),__('feature.create'),ApiCode::CREATED);
     }
 
-    public function update(int $id , CreateFeatureRequest $request)
+    public function update(int $id , FeatureDTO $featureDTO)
     {
-        $featureDTO=FeatureDTO::fromRequest($request);
         $feature=$this->featureRepository->find($id);
         if ($feature)
         {
-            $feature=$this->featureRepository->update($feature,$featureDTO);
-            return $this->success(FeatureResource::make($feature),__('feature.update'));
+            $feature=$this->featureRepository->update($feature,$featureDTO->toArray());
+            $featureDTO=FeatureDTO::fromModel($feature);
+            return $this->success(FeatureResource::make($featureDTO),__('feature.update'));
         }
        else
        {
@@ -56,7 +59,8 @@ class FeatureService
         $feature=$this->featureRepository->find($id);
         if ($feature)
         {
-            return $this->success(FeatureResource::make($feature),__('messages.success'));
+            $featureDTO=FeatureDTO::fromModel($feature);
+            return $this->success(FeatureResource::make($featureDTO),__('messages.success'));
 
         }
         else
