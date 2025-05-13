@@ -21,9 +21,9 @@ class FeatureController extends Controller
 
     }
 
-    public function index()
+    public function index(Request $request)
     {
-             return $this->featureService->getAll();
+             return $this->featureService->getAll($request);
     }
 
     public function store(CreateFeatureRequest $request)

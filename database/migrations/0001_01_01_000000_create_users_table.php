@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('password');
             $table->enum('role',array_values((new \ReflectionClass(UserTypes::class))->getConstants()));
             $table->integer('phone_number');
+            $table->boolean('blocked')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

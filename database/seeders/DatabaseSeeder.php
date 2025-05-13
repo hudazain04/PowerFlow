@@ -126,10 +126,7 @@ class DatabaseSeeder extends Seeder
             Complaint::factory()->count(1)->for($counter)->create();
         }
 
-        // Subscription Requests
-        foreach ($users as $user) {
-            SubscriptionRequest::factory()->count(1)->for($user)->create();
-        }
+
 
         // Subscriptions (linking a generator to a plan price)
         $planPrices = PlanPrice::all();
@@ -138,6 +135,11 @@ class DatabaseSeeder extends Seeder
                 'generator_id' => $generator->id,
                 'planPrice_id' => $planPrices->random()->id,
             ]);
+        }
+        // Subscription Requests
+        foreach ($users as $user) {
+            $randomPlanPrices = $planPrices->random();
+            SubscriptionRequest::factory()->count(1)->for($user)->create(['planPrice_id'=>$randomPlanPrices->id]);
         }
 
     }

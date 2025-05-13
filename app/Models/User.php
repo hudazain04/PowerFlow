@@ -27,13 +27,18 @@ class User extends Authenticatable
         'phone'
     ];
 
+    public function fullName()
+    {
+        return $this->first_name . ' '. $this->last_name;
+    }
+
     public function subcriptionrequest()
     {
         return $this->hasMany(SubscriptionRequest::class);
     }
-    public function serviceproviders()
+    public function powerGenerator()
     {
-        return $this->hasMany(PowerGenerator::class);
+        return $this->hasOne(PowerGenerator::class);
     }
     /**
      * The attributes that should be hidden for serialization.

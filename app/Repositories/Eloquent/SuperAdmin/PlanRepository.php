@@ -29,6 +29,11 @@ class PlanRepository implements PlanRepositoryInterface
 
     }
 
+    public function getAllByColumns(array $columns = ['*']): Collection
+    {
+        return PlanModel::all($columns);
+    }
+
     public function find(int $id): PlanModel
     {
         $plan=PlanModel::find($id);

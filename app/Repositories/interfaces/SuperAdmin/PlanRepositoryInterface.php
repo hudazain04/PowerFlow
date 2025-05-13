@@ -12,6 +12,8 @@ interface PlanRepositoryInterface
 {
     public function all() : Collection;
 
+    public function getAllByColumns(array $columns) : Collection;
+
     public function find(int $id) : PlanModel;
 
     public function create(array $data) : PlanModel;

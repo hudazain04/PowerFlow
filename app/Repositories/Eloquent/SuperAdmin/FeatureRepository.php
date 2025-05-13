@@ -2,9 +2,6 @@
 
 namespace App\Repositories\Eloquent\SuperAdmin;
 
-use App\ApiHelper\ApiCode;
-use App\DTOs\FeatureDTO;
-use App\Exceptions\ErrorException;
 use App\Models\Feature as FeatureModel;
 use App\Repositories\interfaces\SuperAdmin\FeatureRepositoryInterface;
 use Illuminate\Support\Collection;
@@ -19,9 +16,9 @@ class FeatureRepository implements FeatureRepositoryInterface
         //
     }
 
-    public function all(): Collection
+    public function all(?array $filters=[]): Collection
     {
-        $features=FeatureModel::all();
+        $features=FeatureModel::filter($filters)->get();
         return $features;
 
     }

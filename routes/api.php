@@ -3,6 +3,8 @@
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\PlanPriceController;
+use App\Http\Controllers\SubscriptionRequestController;
+use App\Http\Controllers\SuperAdminStatisticsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -35,4 +37,19 @@ Route::prefix('plan')->group(function (){
     Route::patch('update/{id}',[PlanController::class,'update']);
     Route::delete('delete/{id}',[PlanController::class,'delete']);
 
+});
+
+
+Route::prefix('superAdminStatistics')->group(function (){
+   Route::get('homeStatistics',[SuperAdminStatisticsController::class,'homeStatistics']);
+   Route::get('getSubscriptionDistributionByPlan/{year}',[SuperAdminStatisticsController::class,'getSubscriptionDistributionByPlan']);
+   Route::get('subscriptionsPerPlans',[SuperAdminStatisticsController::class,'subscriptionsPerPlans']);
+   Route::get('subscriptionRequestsPerPlans',[SuperAdminStatisticsController::class,'subscriptionRequestsPerPlans']);
+   Route::get('topRequestedPlan',[SuperAdminStatisticsController::class,'topRequestedPlan']);
+
+});
+
+
+Route::prefix('subscriptionRequest')->group(function (){
+   Route::get('getLastFive',[SubscriptionRequestController::class,'getLastFive']);
 });
