@@ -2,8 +2,13 @@
 
 namespace App\Providers;
 
-use App\Repositories\Eloquent\AuthRepository;
-use App\Repositories\interfaces\AuthRepositoryInterface;
+use App\Events\UserApproved;
+use App\Events\UserRegistered;
+use App\Listeners\NotifySuperAdmin;
+use App\Listeners\SendApprovalNotification;
+use App\Listeners\SendVerificationCode;
+use App\Repositories\Eloquent\UserRepository;
+use App\Repositories\interfaces\UserRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,7 +18,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(AuthRepositoryInterface::class, AuthRepository::class);
+        $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
     }
 
     /**
@@ -23,4 +28,14 @@ class AppServiceProvider extends ServiceProvider
     {
         //
     }
+    protected $listen = [
+        UserRegistered::class => [
+            SendVerificationCode::class,
+            NotifySuperAdmin::class,
+        ],
+        UserApproved::class => [
+            SendApprovalNotification::class,
+        ],
+    ];
+
 }

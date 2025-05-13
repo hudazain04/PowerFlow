@@ -5,57 +5,109 @@ namespace App\Http\Controllers;
 use App\ApiHelper\ApiCode;
 use App\ApiHelper\ApiResponse;
 use App\DTOs\UserDTO;
+use App\Events\UserApproved;
+use App\Events\UserRegistered;
+use App\Events\UserVerified;
+use App\Exceptions\AuthException;
+use App\Http\Requests\LoginRequest;
 use App\Http\Requests\UserRequest;
+use App\Http\Resources\UserResource;
 use App\Models\Area;
-use App\Services\AuthService;
+use App\Models\User;
+use App\Notifications\AccountApprovedNotification;
+use App\Notifications\AccountRejectedNotification;
+use App\Services\UserService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
-    protected $authservice;
-    public function __construct(AuthService $authservice)
+
+    public function __construct(private UserService $authservice)
     {
-        $this->authservice=$authservice;
     }
 
-    public function register(UserRequest $request){
-        $data=$request->validated();
+     public function register(UserRequest $request){
 
-        $roleName = $data['role'];
+        $user=$this->authservice->register($request->validated(),$request->role);
+         $userData=new UserResource($user);
+        $token=JWTAuth::fromUser($user);
+        $result=[...[$userData,'token'=>$token]];
+        return ApiResponse::success($result,__('messages.user_registered'),ApiCode::OK);
+
+     }
+
+     public function login (LoginRequest $request){
+
+       $credintials = $request->only('email','password');
+
+       if (!$token=JWTAuth::attempt($credintials)){
+           throw AuthException::invalidCredentials();
+       }
+       return ApiResponse::success($token, __('messages.login_success'), ApiCode::OK);
+
+     }
+     public function logout(){
+         JWTAuth::invalidate(JWTAuth::getToken());
+         return ApiResponse::success(null, __('messages.logout'),ApiCode::OK);
+     }
 
 
-        $userData = array_diff_key($data, array_flip(['role']));
-        $userDTO = new UserDTO(...$userData);
-
-        $result = $this->authservice->register($userDTO, $roleName);
-
-        return ApiResponse::success($result, 'User registered successfully', ApiCode::CREATED);
-    }
-    public function login(Request $request)
+    public function verify(Request $request)
     {
-        try {
-            $data = $request->validate([
-                'email' => 'required|email',
-                'password' => 'required|string',
-                'secret_key' => 'nullable|string',
-            ]);
-//            logger($data);
-            $result = $this->authservice->login(
-                $data['email'],
-                $data['password'],
-                array_key_exists('secret_key', $data) ? $data['secret_key'] : null
-            );
+        $request->validate([
+            'email' => 'required|email',
+            'code' => 'required|string'
+        ]);
 
-            return ApiResponse::success($result, 'Login successful');
-        } catch (\Exception $e) {
-            return ApiResponse::error($e->getMessage(), $e->getCode() ?: 401);
+        $user = User::where('email', $request->email)->firstOrFail();
+
+        if ($user->isVerified()) {
+            return ApiResponse::error('email already verified',400);
         }
+
+        if (now()->gt($user->verification_code_expires_at)) {
+            return ApiResponse::error('expired',400);
+        }
+
+
+        $user->update([
+
+            'verification_code' => null,
+            'verification_code_expires_at' => null,
+            'verified'=>true
+        ]);
+
+        return response()->json(['message' => 'Email verified successfully']);
     }
 
-    public function logout()
+
+    public function approve(User $user)
     {
-        $this->authservice->logout();
-        return ApiResponse::success([], 'Logged out successfully');
+        if ($user->isApproved()) {
+            return response()->json(['message' => 'User already approved'], 400);
+        }
+
+        $user->update([
+            'approved' => true
+
+        ]);
+
+        $user->notify(new AccountApprovedNotification());
+
+        return response()->json(['message' => 'User approved successfully']);
     }
+
+    public function reject(User $user)
+    {
+        $user->notify(new AccountRejectedNotification());
+        $user->delete();
+
+        return response()->json(['message' => 'User rejected ']);
+    }
+
 
 }

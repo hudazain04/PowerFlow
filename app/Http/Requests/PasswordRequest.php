@@ -2,11 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Types\UserTypes;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class UserRequest extends FormRequest
+class PasswordRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,13 +22,9 @@ class UserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-            'email' => 'required|email',
-            'password' => 'required|string|min:6',
-            'phone_number' => 'required|nullable|max:10',
-            'role' => ['required', 'string', Rule::in(UserTypes::$statuses)],
-
+//            'token' => 'required|string',
+            'password' => 'required|string|min:6|confirmed',
+            'password_confirmation' => 'required|string|min:6',
         ];
     }
 }

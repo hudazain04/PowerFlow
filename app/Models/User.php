@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -10,10 +10,10 @@ use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable implements JWTSubject,MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable,HasRoles;
+    use HasFactory, Notifiable,HasRoles,\Illuminate\Auth\MustVerifyEmail;
 
     /**
      * The attributes that are mass assignable.
@@ -21,20 +21,17 @@ class User extends Authenticatable implements JWTSubject
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
         'password',
-//        'phone'
+        'phone_number',
     ];
 
-    public function subcriptionrequest()
-    {
-        return $this->hasMany(SubscriptionRequest::class);
-    }
-    public function serviceproviders()
-    {
-        return $this->hasMany(PowerGenerator::class);
-    }
+
+
+    protected $guard_name = 'api';
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -58,6 +55,19 @@ class User extends Authenticatable implements JWTSubject
         ];
     }
 
+    public function subcriptionrequest()
+    {
+        return $this->hasMany(SubscriptionRequest::class);
+    }
+    public function powerGenerators()
+    {
+        return $this->hasMany(PowerGenerator::class);
+    }
+
+    public function faqs()
+    {
+        return $this->belongsToMany(Faq::class);
+    }
     public function getJWTIdentifier()
     {
         return $this->getKey();
