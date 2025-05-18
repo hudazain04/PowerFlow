@@ -68,6 +68,9 @@ class User extends Authenticatable implements JWTSubject,MustVerifyEmail
     {
         return $this->belongsToMany(Faq::class);
     }
+    public function generatorRequest(){
+        return $this->BelongsTo(GeneratorRequest::class);
+    }
     public function getJWTIdentifier()
     {
         return $this->getKey();

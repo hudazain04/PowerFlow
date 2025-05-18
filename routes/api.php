@@ -5,6 +5,7 @@ use \App\Http\Controllers\AuthController;
 use \App\Http\Controllers\FaqController;
 use \App\Http\Controllers\User\VerificationController;
 use \App\Http\Controllers\User\PasswordController;
+use \App\Http\Controllers\SuperAdmin\GeneratorRequestController;
 
 //Route::get('/ping', function () {
 //    return response()->json(['message' => 'pong']);
@@ -48,6 +49,13 @@ Route::prefix('/password')->middleware('auth:api')->group(function (){
 });
 
 
+Route::post('request',[GeneratorRequestController::class,'store']);
+
+Route::prefix('/gen')->middleware(['auth:api','role:super admin'])->group(function (){
+    Route::post('approve/{id}',[GeneratorRequestController::class,'approve']);
+    Route::post('reject/{id}',[GeneratorRequestController::class,'reject']);
+    Route::get('get',[GeneratorRequestController::class,'pendingRequests']);
+});
 
 
 
