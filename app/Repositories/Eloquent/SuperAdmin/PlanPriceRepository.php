@@ -48,4 +48,10 @@ class PlanPriceRepository implements PlanPriceRepositoryInterface
     {
         return $planPrice->delete();
     }
+
+    public function distributionOfRequests(int $plan_id): Collection
+    {
+        $planPrices=PlanPriceModel::where('plan_id',$plan_id)->withCount('subscriptionRequests')->get();
+        return $planPrices;
+    }
 }

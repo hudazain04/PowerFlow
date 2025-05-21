@@ -36,4 +36,28 @@ class SuperAdminStatisticsController extends Controller
         return $this->statisticsService->topRequestedPlan();
     }
 
+    public function visitLandingPage()
+    {
+        return $this->statisticsService->visitLandingPage();
+    }
+
+    public function getTotalVisitors()
+    {
+        return $this->statisticsService->getTotalVisitors();
+    }
+
+    public function getAvgDailyVisits()
+    {
+        return $this->statisticsService->getAvgDailyVisits();
+    }
+
+    public function planStatistics(int $plan_id)
+    {
+        return $this->statisticsService->planStatistics($plan_id);
+    }
+
+    public function distributionOfPlanPricesRequests(int $plan_id)
+    {
+        return $this->statisticsService->distributionOfPlanPricesRequests($plan_id);
+    }
 }

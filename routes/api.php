@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\AppInfoController;
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\PlanPriceController;
+use App\Http\Controllers\PowerGeneratorController;
 use App\Http\Controllers\SubscriptionRequestController;
 use App\Http\Controllers\SuperAdminStatisticsController;
 use Illuminate\Http\Request;
@@ -24,7 +26,7 @@ Route::prefix('feature')->group(function (){
 Route::prefix('planPrice')->group(function (){
     Route::get('getAll/{plan_id}',[PlanPriceController::class,'index']);
     Route::get('findById/{id}',[PlanPriceController::class,'findById']);
-    Route::post('create',[PlanPriceController::class,'store']);
+    Route::post('create/{plan_id}',[PlanPriceController::class,'store']);
     Route::patch('update/{id}',[PlanPriceController::class,'update']);
     Route::delete('delete/{id}',[PlanPriceController::class,'delete']);
 
@@ -36,6 +38,10 @@ Route::prefix('plan')->group(function (){
     Route::post('create',[PlanController::class,'store']);
     Route::patch('update/{id}',[PlanController::class,'update']);
     Route::delete('delete/{id}',[PlanController::class,'delete']);
+    Route::post('addFeature',[PlanController::class,'addFeature']);
+    Route::delete('deleteFeature/{id}',[PlanController::class,'deleteFeature']);
+    Route::patch('updateFeature/{id}',[PlanController::class,'updateFeature']);
+
 
 });
 
@@ -46,10 +52,35 @@ Route::prefix('superAdminStatistics')->group(function (){
    Route::get('subscriptionsPerPlans',[SuperAdminStatisticsController::class,'subscriptionsPerPlans']);
    Route::get('subscriptionRequestsPerPlans',[SuperAdminStatisticsController::class,'subscriptionRequestsPerPlans']);
    Route::get('topRequestedPlan',[SuperAdminStatisticsController::class,'topRequestedPlan']);
-
+   Route::get('getTotalVisitors',[SuperAdminStatisticsController::class,'getTotalVisitors']);
+   Route::get('getAvgDailyVisits',[SuperAdminStatisticsController::class,'getAvgDailyVisits']);
+   Route::get('planStatistics/{plan_id}',[SuperAdminStatisticsController::class,'planStatistics']);
+   Route::get('distributionOfPlanPricesRequests/{plan_id}',[SuperAdminStatisticsController::class,'distributionOfPlanPricesRequests']);
 });
 
 
 Route::prefix('subscriptionRequest')->group(function (){
    Route::get('getLastFive',[SubscriptionRequestController::class,'getLastFive']);
 });
+
+
+Route::prefix('AppInfo')->group(function (){
+   Route::post('createAboutApp',[AppInfoController::class,'createAboutApp']);
+   Route::patch('updateAboutApp',[AppInfoController::class,'updateAboutApp']);
+   Route::get('getAboutApp',[AppInfoController::class,'getAboutApp']);
+   Route::delete('deleteAboutApp',[AppInfoController::class,'deleteAboutApp']);
+    Route::post('createTermsAndConditions',[AppInfoController::class,'createTermsAndConditions']);
+    Route::patch('updateTermsAndConditions',[AppInfoController::class,'updateTermsAndConditions']);
+    Route::get('getTermsAndConditions',[AppInfoController::class,'getTermsAndConditions']);
+    Route::delete('deleteTermsAndConditions',[AppInfoController::class,'deleteTermsAndConditions']);
+    Route::post('createPrivacyPolicy',[AppInfoController::class,'createPrivacyPolicy']);
+    Route::patch('updatePrivacyPolicy',[AppInfoController::class,'updatePrivacyPolicy']);
+    Route::get('getPrivacyPolicy',[AppInfoController::class,'getPrivacyPolicy']);
+    Route::delete('deletePrivacyPolicy',[AppInfoController::class,'deletePrivacyPolicy']);
+
+});
+Route::prefix('powerGenerator')->group(function (){
+    Route::get('getForPlan/{id}',[PowerGeneratorController::class,'getForPlan']);
+});
+
+Route::get('visitLandingPage',[SuperAdminStatisticsController::class,'visitLandingPage']);

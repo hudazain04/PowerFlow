@@ -5,11 +5,16 @@ namespace App\Services\SuperAdmin;
 use App\ApiHelper\ApiCode;
 use App\ApiHelper\ApiResponse;
 use App\Repositories\interfaces\Admin\PowerGeneratorRepositoryInterface;
+use App\Repositories\interfaces\SuperAdmin\PlanPriceRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\PlanRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\SubscriptionRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\SubscriptionRequestRepositoryInterface;
+use App\Repositories\interfaces\SuperAdmin\VisitorRepositoryInterface;
 use App\Repositories\interfaces\UserRepositoryInterface;
+use App\Types\SubscriptionExpirationTypes;
+use App\Types\SubscriptionTypes;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Redis;
 
 class StatisticsService
 {
@@ -24,6 +29,9 @@ class StatisticsService
         protected SubscriptionRequestRepositoryInterface $subscriptionRequestRepository,
         protected SubscriptionRepositoryInterface $subscriptionRepository,
         protected PlanRepositoryInterface $planRepository,
+        protected VisitorRepositoryInterface $visitorRepository,
+        protected PlanPriceRepositoryInterface $planPriceRepository,
+
     )
     {
         //
@@ -114,5 +122,57 @@ class StatisticsService
         return $this->success($topRequestedPlan,__('messages.success'));
 
     }
+
+    public function visitLandingPage()
+    {
+        $timestamp = Carbon::now()->toDateTimeString();
+        $key = 'visits:' . Carbon::now()->format('Y-m-d');
+        Redis::rpush($key, $timestamp);
+        return $this->success(null,__('messages.success'));
+    }
+
+    public function getTotalVisitors()
+    {
+        $visitors=$this->visitorRepository->count();
+        return  $this->success($visitors,__('messages.success'));
+    }
+
+    public function getAvgDailyVisits()
+    {
+        $dailyAvg=$this->visitorRepository->dailyAvg();
+        return $this->success($dailyAvg,__('messages.success'));
+    }
+
+    public function planStatistics(int $plan_id)
+    {
+        $requests=$this->subscriptionRequestRepository->getRequestsCountForPlan($plan_id);
+        $renewalRequests=$this->subscriptionRequestRepository->getRequestsForPlan($plan_id,SubscriptionTypes::Renew)->count();
+        $activeSubscriptions=$this->subscriptionRepository->getSubscriptionsForPlan($plan_id,SubscriptionExpirationTypes::Active)->count();
+        $expiredSubscriptions=$this->subscriptionRepository->getSubscriptionsForPlan($plan_id,SubscriptionExpirationTypes::Expired)->count();
+        $data=[
+            'requests'=>$requests,
+            'renewalRequests'=>$renewalRequests,
+            'activeSubscriptions'=>$activeSubscriptions,
+            'expiredSubscriptions'=>$expiredSubscriptions,
+        ];
+        return $this->success($data,__('messages.success'));
+    }
+
+    public function distributionOfPlanPricesRequests(int $plan_id)
+    {
+        $planPrices=$this->planPriceRepository->distributionOfRequests($plan_id);
+        $data=[];
+        foreach ($planPrices as $planPrice)
+        {
+            array_push($data,[
+                'id'=>$planPrice->id,
+               'period'=> $planPrice->period,
+               'count'=>$planPrice->subscription_requests_count,
+            ]);
+
+        }
+        return $this->success($data,__('messages.success'));
+    }
+
 
 }

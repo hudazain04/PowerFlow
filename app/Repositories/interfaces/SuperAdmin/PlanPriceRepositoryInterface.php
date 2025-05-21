@@ -17,4 +17,6 @@ interface PlanPriceRepositoryInterface
     public function update(PlanPriceModel $planPrice , array $data) : PlanPriceModel;
 
     public function delete(PlanPriceModel $planPrice) : bool;
+
+    public function distributionOfRequests(int $plan_id) : Collection;
 }
