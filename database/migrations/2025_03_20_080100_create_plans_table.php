@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('target')->nullable();
             $table->string('description');
             $table->string('image')->nullable();
+            $table->integer('monthlyPrice');
             $table->timestamps();
         });
     }

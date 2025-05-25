@@ -33,6 +33,7 @@ class UserFactory extends Factory
             'password' => static::$password ??= Hash::make('password'),
             'role' => $this->faker->randomElement(array_values((new \ReflectionClass(UserTypes::class))->getConstants())),
             'phone_number' => $this->faker->numerify('09########'),
+            'blocked'=>$this->faker->boolean,
         ];
     }
 

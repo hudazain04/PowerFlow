@@ -16,13 +16,13 @@ return new class extends Migration
             $table->id();
             $table->string('first_name');
             $table->string('last_name');
-//            $table->string('email')->unique();
-//            $table->timestamp('email_verified_at')->nullable();
-//            $table->string('password');
-////            $table->enum('role',array_values((new \ReflectionClass(UserTypes::class))->getConstants()));
-//            $table->integer('phone_number');
-//            $table->rememberToken();
-//            $table->timestamps();
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->integer('phone_number');
+            $table->boolean('blocked')->default(false);
+            $table->rememberToken();
+            $table->timestamps();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

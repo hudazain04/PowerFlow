@@ -16,7 +16,9 @@ return new class extends Migration
             $table->id();
             $table->integer('period');
             $table->enum('type',array_values((new \ReflectionClass(SubscriptionTypes::class))->getConstants()));
+            $table->string('location');
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('planPrice_id')->nullable()->constrained('plan_prices')->nullOnDelete();
             $table->timestamps();
         });
     }

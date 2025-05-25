@@ -21,6 +21,7 @@ class PlanFactory extends Factory
             'target' => $this->faker->word,
             'image' => $this->faker->imageUrl(),
             'description' => $this->faker->sentence,
+            'monthlyPrice'=>$this->faker->numberBetween(5,50),
         ];
     }
 }
