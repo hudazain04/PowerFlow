@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\ApiHelper\ApiCode;
-use App\ApiHelper\ApiResponse;
+use App\ApiHelper\ApiResponses;
 use App\DTOs\PasswordDto;
 use App\DTOs\PasswordEmailDTO;
 use App\Http\Controllers\Controller;
@@ -23,7 +23,7 @@ class PasswordController extends Controller
         $dto = new PasswordEmailDTO($request->email);
          $this->service->sendLink($dto);
 
-       return ApiResponse::success(null,__('password.request'),ApiCode::OK);
+       return ApiResponses::success(null,__('password.request'),ApiCode::OK);
     }
 
 
@@ -31,7 +31,7 @@ class PasswordController extends Controller
     {
        $this->service->verify($request->token);
 
-      return ApiResponse::success(null,__('password.verify'),ApiCode::OK);
+      return ApiResponses::success(null,__('password.verify'),ApiCode::OK);
     }
 
 
@@ -41,7 +41,7 @@ class PasswordController extends Controller
 
         $this->service->resetPassword($dto);
 
-       return ApiResponse::success(null,__('password.reset'),ApiCode::OK);
+       return ApiResponses::success(null,__('password.reset'),ApiCode::OK);
     }
 
 
@@ -50,6 +50,6 @@ class PasswordController extends Controller
         $dto = new PasswordEmailDTO($request->email);
         $this->service->sendLink($dto);
 
-        return ApiResponse::success(null,__('password.resend'),ApiCode::OK);
+        return ApiResponses::success(null,__('password.resend'),ApiCode::OK);
     }
 }

@@ -20,6 +20,8 @@ class SubscriptionRequestFactory extends Factory
         return [
             'type' => $this->faker->randomElement(array_values((new \ReflectionClass(SubscriptionTypes::class))->getConstants())),
             'period' => $this->faker->randomElement([1,3,6,12]),
+            'location' => $this->faker->address,
+
         ];
     }
 }

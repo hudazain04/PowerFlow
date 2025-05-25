@@ -16,6 +16,8 @@ return new class extends Migration
             $table->integer('number');
             $table->string('location');
             $table->string('maps');
+            $table->integer('capacity');
+            $table->geometry('dd');
             $table->timestamps();
         });
     }

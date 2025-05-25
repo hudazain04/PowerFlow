@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('neighborhood_id')->constrained('neighborhoods')->cascadeOnDelete();
             $table->foreignId('generator_id')->nullable()->constrained('power_generators')->nullOnDelete();
+            $table->string('name');
             $table->timestamps();
         });
     }

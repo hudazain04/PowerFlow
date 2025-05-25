@@ -7,6 +7,7 @@ use App\Events\GeneratorApproved;
 use App\Events\GeneratorRejected;
 use App\Events\NewGeneratorRequest;
 use App\Models\PowerGenerator;
+use App\Models\User;
 use App\Repositories\interfaces\SuperAdmin\GeneratorRequestRepositoryInterface;
 use App\Types\GeneratorRequests;
 use Illuminate\Support\Facades\DB;
@@ -38,7 +39,7 @@ class GeneratorRequestService
             $generator = PowerGenerator::create([
                 'name' => $request->generator_name,
                 'location' => $request->generator_location,
-                'user_id' => $request->user_id
+                'user_id' => $request->id
 
             ]);
 

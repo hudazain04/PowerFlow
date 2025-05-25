@@ -15,7 +15,7 @@ class FaqSeeder extends Seeder
     public function run(): void
     {
         Faq::insert([
-           [ 'question'=>'what is this platform','answer'=>'it will help you track your electricity consumption','role'=>null],
+           [ 'question'=>'what is this platform','answer'=>'it will help you track your electricity consumption','role'=>'landing'],
             ['question'=>'How to add my employees','answer'=>'go to your dashboard','role'=>'admin'],
             ['question'=>'how can i make complaintes','answer'=>'go to the section make a report','role'=>'user'],
             ['question'=>'how to change the statues of an electrisity box','answer'=>'go to manage electrical boxes','role'=>'employee'],

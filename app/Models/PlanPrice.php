@@ -10,6 +10,8 @@ class PlanPrice extends Model
 {
     use HasFactory;
 
+    protected $guarded=['id'];
+
     public function plan()
     {
         return $this->belongsTo(Plan::class);

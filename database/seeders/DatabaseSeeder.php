@@ -22,6 +22,7 @@ use App\Models\Subscription;
 use App\Models\SubscriptionRequest;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Faker\Factory;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -36,6 +37,7 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             FaqSeeder::class
         ]);
+
 //        User::factory()->create([
 //            'first_name' => 'Admin',
 //            'email' => 'huda1812zain@gmail.com',
@@ -142,6 +144,9 @@ class DatabaseSeeder extends Seeder
 //        }
 //
 //    }
+
+
+
 
     }
 }

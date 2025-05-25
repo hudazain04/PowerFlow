@@ -9,4 +9,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Plan_Feature extends Model
 {
     use HasFactory;
+
+    protected $guarded=['id'];
 }

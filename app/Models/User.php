@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
@@ -13,7 +14,9 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 class User extends Authenticatable implements JWTSubject,MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
+
     use HasFactory, Notifiable,HasRoles,\Illuminate\Auth\MustVerifyEmail;
+
 
     /**
      * The attributes that are mass assignable.
@@ -31,6 +34,21 @@ class User extends Authenticatable implements JWTSubject,MustVerifyEmail
 
 
     protected $guard_name = 'api';
+
+
+    public function fullName()
+    {
+        return $this->first_name . ' '. $this->last_name;
+    }
+
+    public function subcriptionrequest()
+    {
+        return $this->hasMany(SubscriptionRequest::class);
+    }
+    public function powerGenerator()
+    {
+        return $this->hasOne(PowerGenerator::class);
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -55,14 +73,14 @@ class User extends Authenticatable implements JWTSubject,MustVerifyEmail
         ];
     }
 
-    public function subcriptionrequest()
-    {
-        return $this->hasMany(SubscriptionRequest::class);
-    }
-    public function powerGenerators()
-    {
-        return $this->hasMany(PowerGenerator::class);
-    }
+//    public function subcriptionrequest()
+//    {
+//        return $this->hasMany(SubscriptionRequest::class);
+//    }
+//    public function powerGenerators()
+//    {
+//        return $this->hasMany(PowerGenerator::class);
+//    }
 
     public function faqs()
     {
@@ -70,6 +88,9 @@ class User extends Authenticatable implements JWTSubject,MustVerifyEmail
     }
     public function generatorRequest(){
         return $this->BelongsTo(GeneratorRequest::class);
+    }
+    public function customerRequests(){
+        return $this->hasMany(CustomerRequest::class);
     }
     public function getJWTIdentifier()
     {

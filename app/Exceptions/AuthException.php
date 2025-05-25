@@ -2,7 +2,7 @@
 
 namespace App\Exceptions;
 
-use App\ApiHelper\ApiResponse;
+use App\ApiHelper\ApiResponses;
 use Exception;
 
 class AuthException extends Exception
@@ -50,6 +50,6 @@ class AuthException extends Exception
 
     public function render($request)
     {
-        return ApiResponse::error($this->getMessage(), $this->getCode());
+        return ApiResponses::error($this->getMessage(), $this->getCode());
     }
 }

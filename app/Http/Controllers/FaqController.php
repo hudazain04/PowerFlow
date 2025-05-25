@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\ApiHelper\ApiCode;
-use App\ApiHelper\ApiResponse;
+use App\ApiHelper\ApiResponses;
 use App\Http\Requests\FaqRequest;
 use App\Http\Resources\FaqResource;
 use App\Models\Faq;
@@ -27,24 +27,24 @@ class FaqController extends Controller
      public function getFaqByRole(string $role){
        $faq = $this->faqService->getFaqByRole($role);
          $faqData=FaqResource::collection($faq);
-       return ApiResponse::success($faqData,__('Faqmessages.Faq'),ApiCode::OK);
+       return ApiResponses::success($faqData,__('Faqmessages.Faq'),ApiCode::OK);
      }
 
      public function createFaq(FaqRequest $request){
         $faq = $this->faqService->createFaq($request->validated());
         $faqData=FaqResource::make($faq);
-        return ApiResponse::success($faqData,__('Faqmessages.Faq_created'),ApiCode::OK);
+        return ApiResponses::success($faqData,__('Faqmessages.Faq_created'),ApiCode::OK);
      }
 
      public function updateFaq(int $id,FaqRequest $request){
        $faq = $this->faqService->update($id,$request->validated());
          $faqData=FaqResource::make($faq);
-       return ApiResponse::success($faqData,__('Faqmessages.Faq_updated'),ApiCode::OK);
+       return ApiResponses::success($faqData,__('Faqmessages.Faq_updated'),ApiCode::OK);
      }
 
      public function deleteFaq(int $id){
       $faq = $this->faqService->delete($id);
-      return ApiResponse::success($faq,__('Faqmessages.Faq_deleted'),ApiCode::OK);
+      return ApiResponses::success($faq,__('Faqmessages.Faq_deleted'),ApiCode::OK);
      }
 
 }

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\ApiHelper\ApiCode;
-use App\ApiHelper\ApiResponse;
+use App\ApiHelper\ApiResponses;
 use App\DTOs\GeneratorDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterGeneratorRequest;
@@ -20,12 +20,12 @@ class GeneratorRequestController extends Controller
         $dto = new GeneratorDTO(...$request->validated());
         $generatorRequest = $this->service->createRequest($dto);
         $generator=GeneratorRequestResource::make($generatorRequest);
-        return ApiResponse::success($generator,__('generatorRequest.generatorRequest'),ApiCode::OK);
+        return ApiResponses::success($generator,__('generatorRequest.generatorRequest'),ApiCode::OK);
     }
     public function pendingRequests()
     {
         $requests = $this->service->getPendingRequests();
-        return ApiResponse::success($requests,__('generatorRequest.approve'),ApiCode::OK);
+        return ApiResponses::success($requests,__('generatorRequest.approve'),ApiCode::OK);
 
     }
 
@@ -33,14 +33,14 @@ class GeneratorRequestController extends Controller
     {
         $generator = $this->service->approveRequest($id);
 
-        return ApiResponse::success(null,__('generatorRequest.reject'),ApiCode::OK);
+        return ApiResponses::success(null,__('generatorRequest.approve'),ApiCode::OK);
 
     }
 
     public function reject(int $id)
     {
         $this->service->rejectRequest($id);
-        return ApiResponse::success(null,'sucess',ApiCode::OK);
+        return ApiResponses::success(null,'sucess',ApiCode::OK);
     }
 
 }
