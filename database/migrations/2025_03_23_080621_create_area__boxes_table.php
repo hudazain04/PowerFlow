@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('area_id')->constrained('areas')->cascadeOnDelete();
             $table->foreignId('box_id')->constrained('electrical_boxes')->cascadeOnDelete();
+            $table->timestamp('assigned_at')->useCurrent();
+            $table->timestamp('removed_at')->nullable();
             $table->timestamps();
         });
     }

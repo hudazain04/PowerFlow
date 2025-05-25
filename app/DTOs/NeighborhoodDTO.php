@@ -1,7 +1,12 @@
 <?php
 
 namespace App\DTOs;
-class NeighborhoodDTO
-{
+use Spatie\LaravelData\Data;
 
+class NeighborhoodDTO extends Data
+{
+  public function __construct(
+   public string $name,
+   public string $location
+  ){}
 }

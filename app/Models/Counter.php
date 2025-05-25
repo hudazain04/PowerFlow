@@ -9,11 +9,12 @@ class Counter extends Model
 {
      use HasFactory;
 
-   
+
     protected $fillable = [
         'number',
         'QRCode',
-        'subscriber_id'
+        'current_spending',
+        'user_id'
     ];
 
     public function complaints()

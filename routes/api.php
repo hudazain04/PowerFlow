@@ -1,6 +1,5 @@
 <?php
 
-use \App\Http\Controllers\AuthController;
 use App\Http\Controllers\AppInfoController;
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\PlanController;
@@ -10,10 +9,21 @@ use App\Http\Controllers\SubscriptionRequestController;
 use App\Http\Controllers\SuperAdminStatisticsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
-
-
-
+use \App\Http\Controllers\AuthController;
+use \App\Http\Controllers\FaqController;
+use \App\Http\Controllers\User\VerificationController;
+use \App\Http\Controllers\User\PasswordController;
+use \App\Http\Controllers\SuperAdmin\GeneratorRequestController;
+use App\Http\Controllers\FeatureController;
+use App\Http\Controllers\PlanController;
+use App\Http\Controllers\PlanPriceController;
+use App\Http\Controllers\SubscriptionRequestController;
+use App\Http\Controllers\SuperAdminStatisticsController;
+use Illuminate\Http\Request;
+use \App\Http\Controllers\User\CustomerRequestController;
+use \App\Http\Controllers\SuperAdmin\NeighborhoodController;
+use \App\Http\Controllers\Admin\AreaController;
+use \App\Http\Controllers\Admin\ElectricalBoxController;
 //Route::get('/ping', function () {
 //    return response()->json(['message' => 'pong']);
 //
@@ -42,10 +52,87 @@ Route::prefix('subscriber')->middleware(['auth:api', 'role:subscriber'])->group(
 });
 
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+Route::prefix('faq')->middleware(['auth:api', 'role:super admin'])->group(function () {
+    Route::put('/update/{id}',[FaqController::class,'updateFaq']);
+    Route::delete('delete/{id}',[FaqController::class,'deleteFaq']);
+    Route::post('/store',[FaqController::class,'createFaq']);
+    Route::get('get/{category}',[FaqController::class,'getFaqByRole']);
+});
 
+Route::prefix('email')->middleware('auth:api')->group(function () {
+
+    Route::post('/send-verification', [VerificationController::class, 'send'])
+        ->name('verification.send');
+    Route::post('/verify/{id}/{hash}', [VerificationController::class, 'verify'])
+        ->name('verification.verify');
+    Route::post('/resend', [VerificationController::class, 'resend'])
+        ->middleware('throttle:3,1')
+        ->name('verification.resend');
+});
+
+Route::prefix('/password')->middleware('auth:api')->group(function (){
+    Route::post('/request', [PasswordController::class, 'request'])  ;
+    Route::post('/verify', [PasswordController::class, 'verify']) ;
+    Route::post('/resend', [PasswordController::class, 'resend']) ;
+    Route::post('/reset', [PasswordController::class, 'reset'])  ;
+});
+
+Route::post('request',[GeneratorRequestController::class,'store'])->middleware(['auth:api', 'role:user']);
+
+Route::prefix('/gen')->middleware(['auth:api','role:super admin'])->group(function (){
+    Route::post('approve/{id}',[GeneratorRequestController::class,'approve']);
+    Route::post('reject/{id}',[GeneratorRequestController::class,'reject']);
+    Route::get('get',[GeneratorRequestController::class,'pendingRequests']);
+});
+
+Route::prefix('customer')->middleware('auth:api')->group(function (){
+    Route::post('request',[CustomerRequestController::class,'store']);
+
+});
+Route::prefix('customer')->middleware(['auth:api'])->group(function () {
+Route::post('approve/{id}',[CustomerRequestController::class,'approveRequest']);
+    Route::post('reject/{id}',[CustomerRequestController::class,'rejectRequest']);
+});
+
+//super admin
+Route::prefix('neighborhood')->middleware(['auth:api'])->group(function () {
+    Route::post('store', [NeighborhoodController::class, 'store']);
+    Route::get('all', [NeighborhoodController::class, 'index']);
+    Route::get('show/{id}', [NeighborhoodController::class, 'show']);
+});
+
+// Generator Admin routes
+Route::middleware(['auth:api'])->prefix('generator')->group(function () {
+    // Areas
+    Route::post('areas', [AreaController::class, 'store']);
+    Route::post('areas/assign-box', [AreaController::class, 'assignBox']);
+    Route::get('generator/areas', [AreaController::class, 'index']);
+    Route::get('generator/areas/{id}/boxes', [AreaController::class, 'boxes']);
+
+
+
+
+    // Boxes
+
+    Route::post('boxes', [ElectricalBoxController::class, 'store']);
+    Route::post('boxes/assign-counter', [ElectricalBoxController::class, 'assignCounter']);
+    Route::get('generator/boxes/{id}/counters', [ElectricalBoxController::class, 'counters']);
+    Route::get('generator/boxes/available', [ElectricalBoxController::class, 'available']);
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+//////////////////////////////////Huda Api's///////////////////////////////////////////////////////////////
 Route::prefix('feature')->group(function (){
    Route::get('getAll',[FeatureController::class,'index']);
     Route::get('findById/{id}',[FeatureController::class,'findById']);
@@ -75,8 +162,18 @@ Route::prefix('plan')->group(function (){
     Route::patch('updateFeature/{id}',[PlanController::class,'updateFeature']);
 
 
+
 });
 
+
+
+
+
+Route::prefix('employee')->middleware(['auth:api', 'role:employee'])->group(function () {
+
+});
+
+Route::prefix('user')->middleware(['auth:api', 'role:user'])->group(function () {
 
 Route::prefix('superAdminStatistics')->group(function (){
    Route::get('homeStatistics',[SuperAdminStatisticsController::class,'homeStatistics']);
@@ -90,6 +187,7 @@ Route::prefix('superAdminStatistics')->group(function (){
    Route::get('distributionOfPlanPricesRequests/{plan_id}',[SuperAdminStatisticsController::class,'distributionOfPlanPricesRequests']);
 });
 
+});});
 
 Route::prefix('subscriptionRequest')->group(function (){
    Route::get('getLastFive',[SubscriptionRequestController::class,'getLastFive']);

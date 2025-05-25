@@ -2,7 +2,7 @@
 
 namespace App\Exceptions;
 
-use App\ApiHelper\ApiResponse;
+use App\ApiHelper\ApiResponses;
 use Exception;
 
 class AuthException extends Exception
@@ -19,7 +19,10 @@ class AuthException extends Exception
 
     public static function emailExists(): self
     {
-        return new self('The email address is already registered.', 400);
+        return new self('The email address is already registeredd.', 400);
+    }
+    public static function usernotExists() : self {
+        return new self('the user not found',400);
     }
 
     public static function invalidCredentials(): self
@@ -41,9 +44,12 @@ class AuthException extends Exception
     {
         return new self('A generator ID is required for employee registration.', 400);
     }
+    public static function InvalidResetTokenException():self{
+        return new self('invalid Token',400);
+    }
 
     public function render($request)
     {
-        return ApiResponse::error($this->getMessage(), $this->getCode());
+        return ApiResponses::error($this->getMessage(), $this->getCode());
     }
 }

@@ -35,114 +35,118 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
         $this->call([
             RoleSeeder::class,
-        ]);
-        User::factory()->create([
-            'first_name' => 'Admin',
-            'email' => 'huda1812zain@gmail.com',
-            'role'=>'Admin'
+            FaqSeeder::class
         ]);
 
-        // Create 10 Users with role 'user'
-        $users = User::factory()
-            ->count(10)
-            ->state(['role' => 'Customer'])
-            ->create();
+//        User::factory()->create([
+//            'first_name' => 'Admin',
+//            'email' => 'huda1812zain@gmail.com',
+//            'role'=>'Admin'
+//        ]);
+//
+//        // Create 10 Users with role 'user'
+//        $users = User::factory()
+//            ->count(10)
+//            ->state(['role' => 'Customer'])
+//            ->create();
+//
+//        // Create 5 Users with role 'powergenerator' and related PowerGenerators
+//        $generatorUsers = User::factory()
+//            ->count(5)
+//            ->state(['role' => 'PowerGenerator'])
+//            ->create();
+//
+//        $generators = collect();
+//        foreach ($generatorUsers as $user) {
+//            $generator = PowerGenerator::factory()->for($user)->create();
+//            $generators->push($generator);
+//
+//            // Each Generator gets 3 Employees
+//            Employee::factory()->count(3)->state([
+//                'generator_id' => $generator->id,
+//            ])->create();
+//
+//            // Each Generator gets 2 Phones
+//            Phone::factory()->count(2)->state([
+//                'generator_id' => $generator->id,
+//            ])->create();
+//        }
+//
+//        // Create 3 Plans
+//        $plans = Plan::factory()->count(3)->create();
+//
+//        // Create 6 Features and randomly attach to plans
+//        $features = Feature::factory()->count(6)->create();
+//        foreach ($plans as $plan) {
+//            $planFeatures = $features->random(rand(2, 4));
+//            foreach ($planFeatures as $feature) {
+//                Plan_Feature::factory()->create([
+//                    'plan_id' => $plan->id,
+//                    'feature_id' => $feature->id,
+//                ]);
+//            }
+//        }
+//
+//        // Add pricing to each plan
+//        foreach ($plans as $plan) {
+//            PlanPrice::factory()->count(2)->for($plan)->create();
+//        }
+//
+//        // Create 10 Neighborhoods with Areas
+//        $neighborhoods = Neighborhood::factory()->count(10)->create();
+//        foreach ($neighborhoods as $neighborhood) {
+//            Area::factory()->count(2)->state([
+//                'neighborhood_id' => $neighborhood->id,
+//                'generator_id' => $generators->random()->id,
+//            ])->create();
+//        }
+//
+//        // Create ElectricalBoxes
+//        $boxes = ElectricalBox::factory()->count(20)->create();
+//
+//        // Link Areas to Boxes
+//        foreach (Area::all() as $area) {
+//            $randomBoxes = $boxes->random(rand(1, 3));
+//            foreach ($randomBoxes as $box) {
+//                Area_Box::factory()->create([
+//                    'area_id' => $area->id,
+//                    'box_id' => $box->id,
+//                ]);
+//            }
+//        }
+//
+//        // Create Counters for users
+//        foreach ($users as $user) {
+//            $counter = Counter::factory()->for($user)->create();
+//            $box = $boxes->random();
+//            Counter_Box::factory()->create([
+//                'counter_id' => $counter->id,
+//                'box_id' => $box->id,
+//            ]);
+//
+//            Spending::factory()->count(3)->for($counter)->create();
+//            Payment::factory()->count(2)->for($counter)->create();
+//            Complaint::factory()->count(1)->for($counter)->create();
+//        }
+//
+//        // Subscription Requests
+//        foreach ($users as $user) {
+//            SubscriptionRequest::factory()->count(1)->for($user)->create();
+//        }
+//
+//        // Subscriptions (linking a generator to a plan price)
+//        $planPrices = PlanPrice::all();
+//        foreach ($generators as $generator) {
+//            Subscription::factory()->create([
+//                'generator_id' => $generator->id,
+//                'planPrice_id' => $planPrices->random()->id,
+//            ]);
+//        }
+//
+//    }
 
-        // Create 5 Users with role 'powergenerator' and related PowerGenerators
-        $generatorUsers = User::factory()
-            ->count(5)
-            ->state(['role' => 'PowerGenerator'])
-            ->create();
-
-        $generators = collect();
-        foreach ($generatorUsers as $user) {
-            $generator = PowerGenerator::factory()->for($user)->create();
-            $generators->push($generator);
-
-            // Each Generator gets 3 Employees
-            Employee::factory()->count(3)->state([
-                'generator_id' => $generator->id,
-            ])->create();
-
-            // Each Generator gets 2 Phones
-            Phone::factory()->count(2)->state([
-                'generator_id' => $generator->id,
-            ])->create();
-        }
-
-        // Create 3 Plans
-        $plans = Plan::factory()->count(3)->create();
-        $faker = Factory::create();
-        // Create 6 Features and randomly attach to plans
-        $features = Feature::factory()->count(6)->create();
-        foreach ($plans as $plan) {
-            $planFeatures = $features->random(rand(2, 4));
-            foreach ($planFeatures as $feature) {
-                Plan_Feature::factory()->create([
-                    'plan_id' => $plan->id,
-                    'feature_id' => $feature->id,
-                    'value' => $faker->numberBetween(1, 10000),
-                ]);
-            }
-        }
-
-        // Add pricing to each plan
-        foreach ($plans as $plan) {
-            PlanPrice::factory()->count(2)->for($plan)->create();
-        }
-
-        // Create 10 Neighborhoods with Areas
-        $neighborhoods = Neighborhood::factory()->count(10)->create();
-        foreach ($neighborhoods as $neighborhood) {
-            Area::factory()->count(2)->state([
-                'neighborhood_id' => $neighborhood->id,
-                'generator_id' => $generators->random()->id,
-            ])->create();
-        }
-
-        // Create ElectricalBoxes
-        $boxes = ElectricalBox::factory()->count(20)->create();
-
-        // Link Areas to Boxes
-        foreach (Area::all() as $area) {
-            $randomBoxes = $boxes->random(rand(1, 3));
-            foreach ($randomBoxes as $box) {
-                Area_Box::factory()->create([
-                    'area_id' => $area->id,
-                    'box_id' => $box->id,
-                ]);
-            }
-        }
-
-        // Create Counters for users
-        foreach ($users as $user) {
-            $counter = Counter::factory()->for($user)->create();
-            $box = $boxes->random();
-            Counter_Box::factory()->create([
-                'counter_id' => $counter->id,
-                'box_id' => $box->id,
-            ]);
-
-            Spending::factory()->count(3)->for($counter)->create();
-            Payment::factory()->count(2)->for($counter)->create();
-            Complaint::factory()->count(1)->for($counter)->create();
-        }
 
 
-
-        // Subscriptions (linking a generator to a plan price)
-        $planPrices = PlanPrice::all();
-        foreach ($generators as $generator) {
-            Subscription::factory()->create([
-                'generator_id' => $generator->id,
-                'planPrice_id' => $planPrices->random()->id,
-            ]);
-        }
-        // Subscription Requests
-        foreach ($users as $user) {
-            $randomPlanPrices = $planPrices->random();
-            SubscriptionRequest::factory()->count(1)->for($user)->create(['planPrice_id'=>$randomPlanPrices->id]);
-        }
 
     }
 }

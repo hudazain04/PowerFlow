@@ -2,6 +2,7 @@
 
 namespace App\ApiHelper;
 use Illuminate\Http\JsonResponse;
+use PhpParser\Builder\Trait_;
 
 trait ApiResponse
 {

@@ -11,24 +11,34 @@ use Laravel\Sanctum\HasApiTokens;
 
 class Employee extends Authenticate
 {
+<<<<<<< HEAD
+        use HasFactory;
+=======
         use HasFactory,HasApiTokens;
+>>>>>>> origin/huda
 
     protected $fillable = [
+        'phone_number',
         'first_name',
         'last_name',
-        'email',
-        'generator_id',
-        'phone_number',
         'secret_key',
-        'password',
-        'user_id'
+        'generator_id',
+        'user_id',
     ];
-    public function serviceprovider()
+    public function powergenerator()
     {
         return $this->belongsTo(PowerGenerator::class);
     }
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    public function generateSecretKey(): string
+    {
+        $key = bin2hex(random_bytes(2));
+        $this->update([
+            'secret_key' => $key,
+        ]);
+        return $key;
     }
 }
