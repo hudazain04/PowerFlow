@@ -26,4 +26,11 @@ class PowerGeneratorRepository implements PowerGeneratorRepositoryInterface
         $generators=PowerGeneratorModel::planGenerators($filters)->whereRelation('subscriptions.planPrice.plan','id', $plan_id)->with(['user','subscriptions.planPrice.plan'])->get();
         return $generators;
     }
+    public function find(int $id){
+        return PowerGeneratorModel::where('id',$id)->first();
+    }
+    public function create(array $data){
+        return PowerGeneratorModel::create($data);
+    }
+
 }
