@@ -19,7 +19,6 @@ class CustomerRequestService
 
     public function createRequest(CustomerRequestDTO $dto)
     {
-        ;
         return $this->requestRepository->createRequest(
          array_merge(['user_id'=>auth()->id()],$dto->toArray())
 
