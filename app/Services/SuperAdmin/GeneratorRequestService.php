@@ -8,6 +8,7 @@ use App\Events\GeneratorRejected;
 use App\Events\NewGeneratorRequest;
 use App\Models\PowerGenerator;
 use App\Models\User;
+use App\Repositories\interfaces\Admin\PowerGeneratorRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\GeneratorRequestRepositoryInterface;
 use App\Types\GeneratorRequests;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +16,8 @@ use Illuminate\Support\Facades\DB;
 class GeneratorRequestService
 {
     public function __construct(
-        protected GeneratorRequestRepositoryInterface $repository
+        protected GeneratorRequestRepositoryInterface $repository,
+        protected PowerGeneratorRepositoryInterface $generatorRepository
     ){}
 
     public function createRequest(GeneratorDTO $dto)
@@ -36,11 +38,16 @@ class GeneratorRequestService
                 'status' => GeneratorRequests::APPROVED,
             ]);
 
-            $generator = PowerGenerator::create([
+//            $generator = PowerGenerator::create([
+//                'name' => $request->generator_name,
+//                'location' => $request->generator_location,
+//                'user_id' => $request->id
+//
+//            ]);
+            $generator=$this->generatorRepository->create([
                 'name' => $request->generator_name,
                 'location' => $request->generator_location,
                 'user_id' => $request->id
-
             ]);
 
             event(new GeneratorApproved($request->user_id, $generator));

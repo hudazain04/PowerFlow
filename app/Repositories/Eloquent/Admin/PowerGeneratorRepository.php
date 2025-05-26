@@ -19,4 +19,11 @@ class PowerGeneratorRepository implements PowerGeneratorRepositoryInterface
     {
         return PowerGeneratorModel::count();
     }
+    public function find(int $id){
+        return PowerGeneratorModel::where('id',$id)->first();
+    }
+    public function create(array $data){
+        return PowerGeneratorModel::create($data);
+    }
+
 }
