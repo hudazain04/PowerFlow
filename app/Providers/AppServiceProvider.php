@@ -21,7 +21,6 @@ use App\Repositories\Eloquent\SuperAdmin\PlanRepository;
 use App\Repositories\Eloquent\SuperAdmin\SubscriptionRepository;
 use App\Repositories\Eloquent\SuperAdmin\SubscriptionRequestRepository;
 use App\Repositories\Eloquent\SuperAdmin\VisitorRepository;
-use App\Repositories\Eloquent\UserRepository;
 use App\Repositories\interfaces\Admin\PowerGeneratorRepositoryInterface;
 use App\Repositories\interfaces\AppInfoRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\FeatureRepositoryInterface;
