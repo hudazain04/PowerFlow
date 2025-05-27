@@ -14,12 +14,6 @@ use \App\Http\Controllers\FaqController;
 use \App\Http\Controllers\User\VerificationController;
 use \App\Http\Controllers\User\PasswordController;
 use \App\Http\Controllers\SuperAdmin\GeneratorRequestController;
-use App\Http\Controllers\FeatureController;
-use App\Http\Controllers\PlanController;
-use App\Http\Controllers\PlanPriceController;
-use App\Http\Controllers\SubscriptionRequestController;
-use App\Http\Controllers\SuperAdminStatisticsController;
-use Illuminate\Http\Request;
 use \App\Http\Controllers\User\CustomerRequestController;
 use \App\Http\Controllers\SuperAdmin\NeighborhoodController;
 use \App\Http\Controllers\Admin\AreaController;
@@ -187,7 +181,7 @@ Route::prefix('superAdminStatistics')->group(function (){
    Route::get('distributionOfPlanPricesRequests/{plan_id}',[SuperAdminStatisticsController::class,'distributionOfPlanPricesRequests']);
 });
 
-});});
+});
 
 Route::prefix('subscriptionRequest')->group(function (){
    Route::get('getLastFive',[SubscriptionRequestController::class,'getLastFive']);
