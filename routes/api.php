@@ -1,16 +1,18 @@
 <?php
 
-use App\Http\Controllers\AppInfoController;
-use App\Http\Controllers\FeatureController;
-use App\Http\Controllers\PlanController;
-use App\Http\Controllers\PlanPriceController;
-use App\Http\Controllers\PowerGeneratorController;
-use App\Http\Controllers\SubscriptionRequestController;
-use App\Http\Controllers\SuperAdminStatisticsController;
+use App\Http\Controllers\AccountController;
+use App\Http\Controllers\Admin\PowerGeneratorController;
+use App\Http\Controllers\SuperAdmin\AppInfoController;
+use App\Http\Controllers\SuperAdmin\FaqController;
+use App\Http\Controllers\SuperAdmin\FeatureController;
+use App\Http\Controllers\SuperAdmin\PlanController;
+use App\Http\Controllers\SuperAdmin\PlanPriceController;
+use App\Http\Controllers\SuperAdmin\SubscriptionRequestController;
+use App\Http\Controllers\SuperAdmin\SuperAdminStatisticsController;
+use App\Http\Controllers\User\complaintcontroller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\AuthController;
-use \App\Http\Controllers\FaqController;
 use \App\Http\Controllers\User\VerificationController;
 use \App\Http\Controllers\User\PasswordController;
 use \App\Http\Controllers\SuperAdmin\GeneratorRequestController;
@@ -128,36 +130,106 @@ Route::middleware(['auth:api'])->prefix('generator')->group(function () {
 
 //////////////////////////////////Huda Api's///////////////////////////////////////////////////////////////
 Route::prefix('feature')->group(function (){
-   Route::get('getAll',[FeatureController::class,'index']);
+    Route::get('getAll',[FeatureController::class,'index']);
     Route::get('findById/{id}',[FeatureController::class,'findById']);
-    Route::post('create',[FeatureController::class,'store']);
-    Route::patch('update/{id}',[FeatureController::class,'update']);
-    Route::delete('delete/{id}',[FeatureController::class,'delete']);
-
 });
 
 Route::prefix('planPrice')->group(function (){
     Route::get('getAll/{plan_id}',[PlanPriceController::class,'index']);
     Route::get('findById/{id}',[PlanPriceController::class,'findById']);
-    Route::post('create/{plan_id}',[PlanPriceController::class,'store']);
-    Route::patch('update/{id}',[PlanPriceController::class,'update']);
-    Route::delete('delete/{id}',[PlanPriceController::class,'delete']);
 
 });
 
 Route::prefix('plan')->group(function (){
     Route::get('getAll',[PlanController::class,'index']);
     Route::get('findById/{id}',[PlanController::class,'findById']);
-    Route::post('create',[PlanController::class,'store']);
-    Route::patch('update/{id}',[PlanController::class,'update']);
-    Route::delete('delete/{id}',[PlanController::class,'delete']);
-    Route::post('addFeature',[PlanController::class,'addFeature']);
-    Route::delete('deleteFeature/{id}',[PlanController::class,'deleteFeature']);
-    Route::patch('updateFeature/{id}',[PlanController::class,'updateFeature']);
-
-
 
 });
+
+
+
+Route::middleware('auth:api')->group(function (){
+    Route::prefix('feature')->group(function (){
+        Route::post('create',[FeatureController::class,'store'])->middleware('role:super admin');
+        Route::patch('update/{id}',[FeatureController::class,'update'])->middleware('role:super admin');
+        Route::delete('delete/{id}',[FeatureController::class,'delete'])->middleware('role:super admin');
+
+    });
+
+    Route::prefix('planPrice')->group(function (){
+        Route::post('create/{plan_id}',[PlanPriceController::class,'store'])->middleware('role:super admin');
+        Route::patch('update/{id}',[PlanPriceController::class,'update'])->middleware('role:super admin');
+        Route::delete('delete/{id}',[PlanPriceController::class,'delete'])->middleware('role:super admin');
+
+    });
+
+    Route::prefix('plan')->group(function (){
+        Route::post('create',[PlanController::class,'store'])->middleware('role:super admin');
+        Route::patch('update/{id}',[PlanController::class,'update'])->middleware('role:super admin');
+        Route::delete('delete/{id}',[PlanController::class,'delete'])->middleware('role:super admin');
+        Route::post('addFeature',[PlanController::class,'addFeature'])->middleware('role:super admin');
+        Route::delete('deleteFeature/{id}',[PlanController::class,'deleteFeature'])->middleware('role:super admin');
+        Route::patch('updateFeature/{id}',[PlanController::class,'updateFeature'])->middleware('role:super admin');
+
+
+
+    });
+
+
+    Route::prefix('superAdminStatistics')->middleware('role:super admin')->group(function (){
+        Route::get('homeStatistics',[SuperAdminStatisticsController::class,'homeStatistics']);
+        Route::get('getSubscriptionDistributionByPlan/{year}',[SuperAdminStatisticsController::class,'getSubscriptionDistributionByPlan']);
+        Route::get('subscriptionsPerPlans',[SuperAdminStatisticsController::class,'subscriptionsPerPlans']);
+        Route::get('subscriptionRequestsPerPlans',[SuperAdminStatisticsController::class,'subscriptionRequestsPerPlans']);
+        Route::get('topRequestedPlan',[SuperAdminStatisticsController::class,'topRequestedPlan']);
+        Route::get('getTotalVisitors',[SuperAdminStatisticsController::class,'getTotalVisitors']);
+        Route::get('getAvgDailyVisits',[SuperAdminStatisticsController::class,'getAvgDailyVisits']);
+        Route::get('planStatistics/{plan_id}',[SuperAdminStatisticsController::class,'planStatistics']);
+        Route::get('distributionOfPlanPricesRequests/{plan_id}',[SuperAdminStatisticsController::class,'distributionOfPlanPricesRequests']);
+    });
+
+
+
+    Route::prefix('AppInfo')->group(function (){
+        Route::middleware('role:super admin')->group(function (){
+            Route::post('createAboutApp',[AppInfoController::class,'createAboutApp']);
+            Route::patch('updateAboutApp',[AppInfoController::class,'updateAboutApp']);
+            Route::delete('deleteAboutApp',[AppInfoController::class,'deleteAboutApp']);
+            Route::post('createTermsAndConditions',[AppInfoController::class,'createTermsAndConditions']);
+            Route::patch('updateTermsAndConditions',[AppInfoController::class,'updateTermsAndConditions']);
+            Route::delete('deleteTermsAndConditions',[AppInfoController::class,'deleteTermsAndConditions']);
+            Route::post('createPrivacyPolicy',[AppInfoController::class,'createPrivacyPolicy']);
+            Route::patch('updatePrivacyPolicy',[AppInfoController::class,'updatePrivacyPolicy']);
+            Route::delete('deletePrivacyPolicy',[AppInfoController::class,'deletePrivacyPolicy']);
+
+        });
+        Route::get('getAboutApp',[AppInfoController::class,'getAboutApp']);
+        Route::get('getTermsAndConditions',[AppInfoController::class,'getTermsAndConditions']);
+        Route::get('getPrivacyPolicy',[AppInfoController::class,'getPrivacyPolicy']);
+
+    });
+    Route::prefix('powerGenerator')->group(function (){
+        Route::get('getForPlan/{id}',[PowerGeneratorController::class,'getForPlan'])->middleware('role:super admin');
+    });
+
+    Route::prefix('complaint')->group(function (){
+        Route::post('createCutComplaint',[ComplaintController::class,'createCutComplaint'])->middleware('block');
+        Route::patch('updateCutComplaint/{complaint_id}',[complaintcontroller::class,'updateCutComplaint'])->middleware('role:employee');
+        Route::post('createComplaint',[complaintcontroller::class,'createComplaint']);
+        Route::delete('deleteComplaint/{complaint_id}',[complaintcontroller::class,'deleteComplaint']);
+        Route::get('getComplaints',[complaintcontroller::class,'getComplaints']);
+    });
+
+    Route::prefix('subscriptionRequest')->group(function (){
+        Route::get('getLastFive',[SubscriptionRequestController::class,'getLastFive'])->middleware('role:super admin');
+    });
+
+    Route::prefix('account')->group(function (){
+        Route::get('blocking/{id}',[AccountController::class,'blocking'])->middleware('role:super admin');
+    });
+
+});
+
 
 
 
@@ -169,42 +241,14 @@ Route::prefix('employee')->middleware(['auth:api', 'role:employee'])->group(func
 
 Route::prefix('user')->middleware(['auth:api', 'role:user'])->group(function () {
 
-Route::prefix('superAdminStatistics')->group(function (){
-   Route::get('homeStatistics',[SuperAdminStatisticsController::class,'homeStatistics']);
-   Route::get('getSubscriptionDistributionByPlan/{year}',[SuperAdminStatisticsController::class,'getSubscriptionDistributionByPlan']);
-   Route::get('subscriptionsPerPlans',[SuperAdminStatisticsController::class,'subscriptionsPerPlans']);
-   Route::get('subscriptionRequestsPerPlans',[SuperAdminStatisticsController::class,'subscriptionRequestsPerPlans']);
-   Route::get('topRequestedPlan',[SuperAdminStatisticsController::class,'topRequestedPlan']);
-   Route::get('getTotalVisitors',[SuperAdminStatisticsController::class,'getTotalVisitors']);
-   Route::get('getAvgDailyVisits',[SuperAdminStatisticsController::class,'getAvgDailyVisits']);
-   Route::get('planStatistics/{plan_id}',[SuperAdminStatisticsController::class,'planStatistics']);
-   Route::get('distributionOfPlanPricesRequests/{plan_id}',[SuperAdminStatisticsController::class,'distributionOfPlanPricesRequests']);
-});
+
 
 });
 
-Route::prefix('subscriptionRequest')->group(function (){
-   Route::get('getLastFive',[SubscriptionRequestController::class,'getLastFive']);
-});
 
 
-Route::prefix('AppInfo')->group(function (){
-   Route::post('createAboutApp',[AppInfoController::class,'createAboutApp']);
-   Route::patch('updateAboutApp',[AppInfoController::class,'updateAboutApp']);
-   Route::get('getAboutApp',[AppInfoController::class,'getAboutApp']);
-   Route::delete('deleteAboutApp',[AppInfoController::class,'deleteAboutApp']);
-    Route::post('createTermsAndConditions',[AppInfoController::class,'createTermsAndConditions']);
-    Route::patch('updateTermsAndConditions',[AppInfoController::class,'updateTermsAndConditions']);
-    Route::get('getTermsAndConditions',[AppInfoController::class,'getTermsAndConditions']);
-    Route::delete('deleteTermsAndConditions',[AppInfoController::class,'deleteTermsAndConditions']);
-    Route::post('createPrivacyPolicy',[AppInfoController::class,'createPrivacyPolicy']);
-    Route::patch('updatePrivacyPolicy',[AppInfoController::class,'updatePrivacyPolicy']);
-    Route::get('getPrivacyPolicy',[AppInfoController::class,'getPrivacyPolicy']);
-    Route::delete('deletePrivacyPolicy',[AppInfoController::class,'deletePrivacyPolicy']);
 
-});
-Route::prefix('powerGenerator')->group(function (){
-    Route::get('getForPlan/{id}',[PowerGeneratorController::class,'getForPlan']);
-});
+
+
 
 Route::get('visitLandingPage',[SuperAdminStatisticsController::class,'visitLandingPage']);

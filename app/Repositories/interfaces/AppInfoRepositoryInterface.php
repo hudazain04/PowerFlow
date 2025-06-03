@@ -9,7 +9,7 @@ interface AppInfoRepositoryInterface
 
     public function updateAppInfo(AppInfoModel $appInfo,array $data) : AppInfoModel;
 
-    public function find(string $id) : AppInfoModel;
+    public function find(string $id) : ?AppInfoModel;
 
     public function delete(AppInfoModel $appInfo) : bool;
 }

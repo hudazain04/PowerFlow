@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Repositories\Eloquent\AuthRepository;
+use App\Repositories\Eloquent\User\ComplaintRepository;
 use App\Repositories\interfaces\AuthRepositoryInterface;
 
 use App\Events\UserApproved;
@@ -31,6 +32,7 @@ use App\Repositories\interfaces\SuperAdmin\SubscriptionRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\SubscriptionRequestRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\VisitorRepositoryInterface;
 
+use App\Repositories\interfaces\User\ComplaintRepositoryInterface;
 use App\Repositories\interfaces\UserRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
@@ -55,6 +57,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(SubscriptionRepositoryInterface::class,SubscriptionRepository::class);
         $this->app->bind(AppInfoRepositoryInterface::class,AppInfoRepository::class);
         $this->app->bind(VisitorRepositoryInterface::class,VisitorRepository::class);
+        $this->app->bind(ComplaintRepositoryInterface::class,ComplaintRepository::class);
 
 
     }

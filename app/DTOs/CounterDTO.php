@@ -2,14 +2,23 @@
 
 namespace App\DTOs;
 use Spatie\LaravelData\Data;
+use WendellAdriel\ValidatedDTO\SimpleDTO;
 
-class CounterDTO extends Data
+class CounterDTO extends SimpleDTO
 {
-    public function __construct(
-        public readonly int $request_id,
-        public readonly int $user_id,
-        public readonly int $generator_id,
-        public readonly string $counterNumber,
-        public readonly ?string $qrCode = null
-    ) {}
+        public  int $request_id;
+        public  int $user_id;
+        public  int $generator_id;
+        public  string $counterNumber;
+        public  ?string $qrCode = null;
+
+    protected function defaults(): array
+    {
+        return [];
+    }
+
+    protected function casts(): array
+    {
+        return [];
+    }
 }

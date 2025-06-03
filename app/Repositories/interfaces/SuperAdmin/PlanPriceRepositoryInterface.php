@@ -10,7 +10,7 @@ interface PlanPriceRepositoryInterface
 {
     public function all(int $plan_id) : Collection;
 
-    public function find(int $id) : PlanPriceModel;
+    public function find(int $id) : ?PlanPriceModel;
 
     public function create(array $data) : PlanPriceModel;
 

@@ -26,7 +26,7 @@ class FeatureService
     public function getAll(Request $request)
     {
         $plan_id=$request->query('plan_id');
-        $features= $this->featureRepository->all([$request->query('plan_id')]);
+        $features= $this->featureRepository->all(['plan_id'=>$request->query('plan_id')]);
         $featureDTOs= $features->map(function ($feature) use ($plan_id){
             $featureDTO= FeatureDTO::fromModel($feature);
             $featureDTO->value=$plan_id && $feature->plans->first() ? $feature->plans->first()->pivot->value : null;

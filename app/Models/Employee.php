@@ -11,12 +11,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class Employee extends Authenticate
 {
-<<<<<<< HEAD
-        use HasFactory;
-=======
-        use HasFactory,HasApiTokens;
->>>>>>> origin/huda
-
+    use HasFactory;
     protected $fillable = [
         'phone_number',
         'first_name',

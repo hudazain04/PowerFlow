@@ -20,6 +20,7 @@ class ElectricalBoxFactory extends Factory
             'location' => $this->faker->address,
             'maps' => $this->faker->url,
             'number' => $this->faker->unique()->randomNumber(5),
+            'capacity'=>$this->faker->randomNumber(),
         ];
     }
 }

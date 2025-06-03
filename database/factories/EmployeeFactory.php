@@ -22,7 +22,6 @@ class EmployeeFactory extends Factory
             'first_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
             'secret_key' => Str::random(10),
-            'password' => bcrypt('employee123'),
             ];
     }
 }

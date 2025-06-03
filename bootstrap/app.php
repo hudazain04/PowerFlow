@@ -20,6 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->api();
         $middleware->alias([
             'role' => \App\Http\Middleware\RoleMiddleware::class,
+            'block'=>\App\Http\Middleware\BlockMiddleware::class,
         ]);
 
     })

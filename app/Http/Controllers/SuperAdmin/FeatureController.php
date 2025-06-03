@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\SuperAdmin;
 
 use App\ApiHelper\ApiCode;
 use App\ApiHelper\ApiResponse;
 use App\DTOs\FeatureDTO;
 use App\Exceptions\ErrorException;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Feature\CreateFeatureRequest;
 use App\Http\Resources\FeatureResource;
 use App\Services\SuperAdmin\FeatureService;
