@@ -225,6 +225,8 @@ Route::middleware('auth:api')->group(function (){
     });
 
     Route::prefix('account')->group(function (){
+        Route::get('getProfile',[AccountController::class,'getProfile']);
+        Route::patch('updateProfile',[AccountController::class,'updateProfile']);
         Route::get('blocking/{id}',[AccountController::class,'blocking'])->middleware('role:super admin');
     });
 
