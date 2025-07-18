@@ -27,4 +27,13 @@ class SubscriptionRequest extends Model
     {
         return $this->belongsTo(PlanPrice::class , 'planPrice_id');
     }
+
+    public function scopeFilter($query,?string $type=null)
+    {
+        if(!$type)
+        {
+            return $query;
+        }
+        return $query->where('type',$type);
+    }
 }

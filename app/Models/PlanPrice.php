@@ -16,4 +16,9 @@ class PlanPrice extends Model
     {
         return $this->belongsTo(Plan::class);
     }
+
+    public function subscriptionRequests()
+    {
+        return $this->hasMany(SubscriptionRequest::class, 'planPrice_id');
+    }
 }

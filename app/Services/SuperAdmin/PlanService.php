@@ -10,6 +10,7 @@ use App\DTOs\Plan_FeatureDTO;
 use App\DTOs\PlanDTO;
 use App\DTOs\PlanPriceDTO;
 use App\Exceptions\ErrorException;
+use App\Http\Requests\Plan\UpdateFeatureRequest;
 use App\Models\PlanPrice;
 use App\Repositories\interfaces\SuperAdmin\Plan_FeatureRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\PlanPriceRepositoryInterface;
@@ -188,6 +189,36 @@ class PlanService
         }
 
     }
+
+
+
+    public function addFeature(Plan_FeatureDTO $plan_FeatureDTO)
+    {
+        $plan_Feature=$this->plan_FeatureRepository->create($plan_FeatureDTO->toArray());
+        return $this->success(null,__('plan.addFeature'),ApiCode::CREATED);
+    }
+
+    public function deleteFeature(int $id)
+    {
+        $planFeature=$this->plan_FeatureRepository->find($id);
+        if (! $planFeature) {
+            throw new ErrorException(__('feature.notFound'));
+        }
+        $this->plan_FeatureRepository->delete($planFeature);
+        return $this->success(null,__('feature.delete'));
+    }
+
+    public function updateFeature(int $id,Plan_FeatureDTO $plan_FeatureDTO)
+    {
+        $plan_Feature=$this->plan_FeatureRepository->find($id);
+        if (!  $plan_Feature)
+        {
+            throw new ErrorException(__('feature.notFound'));
+        }
+        $plan_Feature=$this->plan_FeatureRepository->update($plan_Feature,$plan_FeatureDTO->toArray());
+        return $this->success(null,__('feature.update'));
+    }
+
 
 
 }

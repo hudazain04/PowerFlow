@@ -11,19 +11,29 @@ namespace App\Providers;
 use App\Repositories\Eloquent\UserRepository;
 
 use App\Repositories\Eloquent\Admin\PowerGeneratorRepository;
+use App\Repositories\Eloquent\AppInfoRepository;
 use App\Repositories\Eloquent\SuperAdmin\FeatureRepository;
 use App\Repositories\Eloquent\SuperAdmin\Plan_FeatureRepository;
 use App\Repositories\Eloquent\SuperAdmin\PlanPriceRepository;
 use App\Repositories\Eloquent\SuperAdmin\PlanRepository;
 use App\Repositories\Eloquent\SuperAdmin\SubscriptionRepository;
 use App\Repositories\Eloquent\SuperAdmin\SubscriptionRequestRepository;
+
+use App\Repositories\Eloquent\SuperAdmin\VisitorRepository;
+
+
 use App\Repositories\interfaces\Admin\PowerGeneratorRepositoryInterface;
+use App\Repositories\interfaces\AppInfoRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\FeatureRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\Plan_FeatureRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\PlanPriceRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\PlanRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\SubscriptionRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\SubscriptionRequestRepositoryInterface;
+
+
+
+use App\Repositories\interfaces\SuperAdmin\VisitorRepositoryInterface;
 
 use App\Repositories\interfaces\UserRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
@@ -47,6 +57,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(SubscriptionRequestRepositoryInterface::class,SubscriptionRequestRepository::class);
         $this->app->bind(SubscriptionRepositoryInterface::class,SubscriptionRepository::class);
 
+
+
+
+        $this->app->bind(AppInfoRepositoryInterface::class,AppInfoRepository::class);
+        $this->app->bind(VisitorRepositoryInterface::class,VisitorRepository::class);
 
     }
 

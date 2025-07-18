@@ -6,7 +6,10 @@ use App\DTOs\FeatureDTO;
 use App\DTOs\Plan_FeatureDTO;
 use App\DTOs\PlanDTO;
 use App\DTOs\PlanPriceDTO;
+use App\Http\Requests\Plan\AddFeatureRequest;
 use App\Http\Requests\Plan\CreatePlanRequest;
+use App\Http\Requests\Plan\DeleteFeatureRequest;
+use App\Http\Requests\Plan\UpdateFeatureRequest;
 use App\Services\SuperAdmin\PlanService;
 use Illuminate\Http\Request;
 
@@ -55,6 +58,24 @@ class PlanController extends Controller
     public function delete(int $id )
     {
         return $this->planService->delete($id);
+    }
+
+    public function addFeature(AddFeatureRequest $request)
+    {
+        $planFeatureDTO=Plan_FeatureDTO::fromRequest($request);
+        return $this->planService->addFeature($planFeatureDTO);
+    }
+
+    public function deleteFeature(int $id)
+    {
+        return $this->planService->deleteFeature($id);
+    }
+
+    public function updateFeature(int $id,UpdateFeatureRequest $request)
+    {
+        $planFeatureDTO=Plan_FeatureDTO::fromRequest($request);
+        return $this->planService->updateFeature( $id,$planFeatureDTO);
+
     }
 
 }
