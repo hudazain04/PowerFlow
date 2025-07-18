@@ -2,65 +2,28 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\ApiHelper\ApiCode;
+use App\ApiHelper\ApiResponses;
+use App\DTOs\AssignCounterToBoxDTO;
+use App\DTOs\ElectricalBoxDTO;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ElectricalBoxRequest;
 use App\Models\ElectricalBox;
+use App\Services\Admin\ElectricalBoxService;
 use Illuminate\Http\Request;
 
 class ElectricalBoxController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function __construct(private ElectricalBoxService $service) {}
+
+
+    public function store(ElectricalBoxRequest $request)
     {
-        //
+
+
+        $box = $this->service->createBox($request->validated());
+
+        return ApiResponses::success($box,'sucess',ApiCode::OK);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(ElectricalBox $electricalBox)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ElectricalBox $electricalBox)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, ElectricalBox $electricalBox)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(ElectricalBox $electricalBox)
-    {
-        //
-    }
 }

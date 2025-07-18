@@ -22,7 +22,7 @@ class RoleMiddleware
                 return response()->json(['error' => 'Unauthorized'], 401);
             }
 
-            // Check if the user has any of the required roles
+
             $userRoles = $user->getRoleNames()->toArray();
             $hasRole = false;
 

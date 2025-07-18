@@ -3,59 +3,60 @@
 namespace App\Http\Controllers;
 
 use App\ApiHelper\ApiCode;
-use App\ApiHelper\ApiResponse;
+use App\ApiHelper\ApiResponses;
 use App\DTOs\UserDTO;
+use App\Events\UserApproved;
+use App\Events\UserRegistered;
+use App\Events\UserVerified;
+use App\Exceptions\AuthException;
+use App\Http\Requests\LoginRequest;
 use App\Http\Requests\UserRequest;
+use App\Http\Resources\UserResource;
 use App\Models\Area;
-use App\Services\AuthService;
+use App\Models\User;
+use App\Notifications\AccountApprovedNotification;
+use App\Notifications\AccountRejectedNotification;
+use App\Services\UserService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
-    protected $authservice;
-    public function __construct(AuthService $authservice)
+
+    public function __construct(private UserService $authservice)
     {
-        $this->authservice=$authservice;
     }
 
-    public function register(UserRequest $request){
-        $data=$request->validated();
+     public function register(UserRequest $request){
 
-        $roleName = $data['role'];
+        $user=$this->authservice->register($request->validated(),$request->role);
+         $userData=new UserResource($user);
+//        $token=JWTAuth::fromUser($user);
+        $result= $userData;
+        return ApiResponses::success($result,__('messages.user_registered'),ApiCode::OK);
+
+     }
+
+     public function login (LoginRequest $request){
+
+       $credintials = $request->only('email','password');
+
+       if (!$token=JWTAuth::attempt($credintials)){
+           throw AuthException::invalidCredentials();
+       }
+       return ApiResponses::success($token, __('messages.login_success'), ApiCode::OK);
+
+     }
+     public function logout(){
+         JWTAuth::invalidate(JWTAuth::getToken());
+         return ApiResponses::success(null, __('messages.logout'),ApiCode::OK);
+     }
 
 
-        $userData = array_diff_key($data, array_flip(['role']));
-        $userDTO = new UserDTO(...$userData);
 
-        $result = $this->authservice->register($userDTO, $roleName);
 
-        return ApiResponse::success($result, 'User registered successfully', ApiCode::CREATED);
-    }
-    public function login(Request $request)
-    {
-        try {
-            $data = $request->validate([
-                'email' => 'required|email',
-                'password' => 'required|string',
-                'secret_key' => 'nullable|string',
-            ]);
-//            logger($data);
-            $result = $this->authservice->login(
-                $data['email'],
-                $data['password'],
-                array_key_exists('secret_key', $data) ? $data['secret_key'] : null
-            );
-
-            return ApiResponse::success($result, 'Login successful');
-        } catch (\Exception $e) {
-            return ApiResponse::error($e->getMessage(), $e->getCode() ?: 401);
-        }
-    }
-
-    public function logout()
-    {
-        $this->authservice->logout();
-        return ApiResponse::success([], 'Logged out successfully');
-    }
 
 }

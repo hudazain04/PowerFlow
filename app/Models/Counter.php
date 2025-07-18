@@ -9,11 +9,12 @@ class Counter extends Model
 {
      use HasFactory;
 
-   
+
     protected $fillable = [
         'number',
         'QRCode',
-        'subscriber_id'
+        'current_spending',
+        'user_id'
     ];
 
     public function complaints()
@@ -31,5 +32,12 @@ class Counter extends Model
    public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    public function electricalBoxes()
+    {
+        return $this->belongsToMany(ElectricalBox::class, 'counter__boxes')
+            ->withPivot(['installed_at', 'removed_at'])
+            ->wherePivotNull('removed_at');
+
     }
 }

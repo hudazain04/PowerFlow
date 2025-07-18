@@ -2,28 +2,31 @@
 
 namespace App\ApiHelper;
 use Illuminate\Http\JsonResponse;
+use PhpParser\Builder\Trait_;
 
-class ApiResponse
+trait ApiResponse
 {
 
-    public static function success($data = null, $message = 'Success', $code = ApiCode::OK): JsonResponse
+    public function success($data = null, $message = 'Success', $code = ApiCode::OK): JsonResponse
     {
         return response()->json([
-
-            'code' => $code,
             'message' => $message,
             'data' => $data,
         ], $code);
     }
 
-    public static function error($message = 'An error occurred', $errorCode = ApiCode::INTERNAL_SERVER_ERROR, $data = null): JsonResponse
+    public function error($message = 'An error occurred', $errorCode = ApiCode::INTERNAL_SERVER_ERROR, $data = null): JsonResponse
     {
         return response()->json([
-
-            'code' => $errorCode,
             'message' => $message,
             'data' => $data,
         ], $errorCode);
+    }
+    public function serverError(): JsonResponse
+    {
+        return response()->json([
+            'message' => __('messages.error.server_error'),
+        ], ApiCode::INTERNAL_SERVER_ERROR);
     }
 
 }

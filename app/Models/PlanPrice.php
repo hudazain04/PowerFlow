@@ -10,8 +10,15 @@ class PlanPrice extends Model
 {
     use HasFactory;
 
+    protected $guarded=['id'];
+
     public function plan()
     {
         return $this->belongsTo(Plan::class);
+    }
+
+    public function subscriptionRequests()
+    {
+        return $this->hasMany(SubscriptionRequest::class, 'planPrice_id');
     }
 }

@@ -24,13 +24,11 @@ class UserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'first_name' => 'required_if:role,employee|string',
-            'last_name' => 'required_if:role,employee|string',
-            'name' => 'required_unless:role,employee|string',
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
             'email' => 'required|email',
             'password' => 'required|string|min:6',
-            'phone_number' => 'required|numeric',
-            'generator_id' => 'required_if:role,employee|exists:power_generators,id',
+            'phone_number' => 'required|nullable|max:10',
             'role' => ['required', 'string', Rule::in(UserTypes::$statuses)],
 
         ];

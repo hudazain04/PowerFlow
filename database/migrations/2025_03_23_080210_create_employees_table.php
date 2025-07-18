@@ -13,12 +13,10 @@ return new class extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
-            $table->string('first_name');
-            $table->string('last_name');
+            $table->string('user_name');
             $table->string('secret_key');
-            $table->string('password');
             $table->integer('phone_number');
-            $table->foreignId('generator_id')->nullable()->constrained('power_generators')->nullOnDelete();
+            $table->foreignId('generator_id')->constrained('power_generators')->cascadeOnDelete();
             $table->timestamps();
         });
     }

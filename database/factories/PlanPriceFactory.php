@@ -19,6 +19,7 @@ class PlanPriceFactory extends Factory
         return [
             'price' => $this->faker->numberBetween(10, 100),
             'period' => $this->faker->randomElement([1, 3, 6,12]),
+            'discount'=>$this->faker->randomElement(range(0,100,5)),
         ];
     }
 }
