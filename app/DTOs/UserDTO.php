@@ -29,7 +29,7 @@ class UserDTO extends Data
         public ?string $last_name = null,
         public ?string $email = null,
         public ?string $password = null,
-        public ?int    $phone_number = null,
+        public ?string    $phone_number = null,
         public ? bool $blocked,
         public ? string $role,
         public ?string $fullName,
