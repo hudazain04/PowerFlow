@@ -16,22 +16,16 @@ class AreaService
     {
         return $this->repository->createForGenerator(
             $dto->generator_id,
+            $dto->neighborhood_id,
             ['name' => $dto->name]
         );
     }
 
-    public function assignBoxToArea(AssignBoxToAreaDTO $dto)
-    {
-        return $this->repository->assignBox($dto->area_id, $dto->box_id);
-    }
 
     public function getGeneratorAreas(int $generatorId)
     {
         return $this->repository->getGeneratorAreas($generatorId);
     }
 
-    public function getAreaBoxes(int $areaId)
-    {
-        return $this->repository->getAreaBoxes($areaId);
-    }
+
 }

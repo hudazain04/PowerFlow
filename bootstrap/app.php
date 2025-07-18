@@ -1,7 +1,7 @@
 <?php
 
 use App\ApiHelper\ApiCode;
-use App\Http\Middleware\ExceptionMiddleware;
+//use App\Http\Middleware\ExceptionMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;

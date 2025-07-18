@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AreaRequest extends FormRequest
+class AreaBoxRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,9 +22,7 @@ class AreaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'generator_id'=>'required|integer',
-            'neighborhood_id'=>'required|integer',
-            'name' => 'required|string|max:255',
+            'box_id'=> 'required|exists:electrical_boxes,id'
         ];
     }
 }

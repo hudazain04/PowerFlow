@@ -2,65 +2,36 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\ApiHelper\ApiCode;
+use App\ApiHelper\ApiResponses;
 use App\Http\Controllers\Controller;
 use App\Models\Employee;
+use App\Services\Admin\EmployeeService;
 use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Employee $employee)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Employee $employee)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Employee $employee)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Employee $employee)
-    {
-        //
-    }
+//    public function __construct(private EmployeeService $service){ }
+//    public function create(array $data){
+//        $emp=$this->service->create($data);
+//        return ApiResponses::success($emp,'success',ApiCode::OK);
+//    }
+//    public function update(int $id,array $data){
+//
+//        $employee=$this->service->update($id,$data);
+//        return ApiResponses::success($employee,'success',ApiCode::OK);
+//    }
+//    public function delete(int $id){
+//
+//        $employee=$this->service->delete($id);
+//        return ApiResponses::success(null,'success',ApiCode::OK);
+//    }
+//    public function getEmployees(int $id){
+//        $emp=$this->service->getEmployees($id);
+//        return ApiResponses::success($emp,'success',ApiCode::OK);
+//    }
+//    public function getEmployee(int $id){
+//        $emp=$this->service->getEmployee($id);
+//        return ApiResponses::success($emp,'success',ApiCode::OK);
+//    }
 }

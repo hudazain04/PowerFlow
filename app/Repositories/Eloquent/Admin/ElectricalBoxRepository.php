@@ -7,50 +7,36 @@ use Illuminate\Support\Facades\DB;
 
 class ElectricalBoxRepository implements ElectricalBoxRepositoryInterface
 {
-    public function create(array $data)
+    public function createBox(array $data)
     {
-        return DB::transaction(function () use ($data) {
-            $box = ElectricalBox::create($data);
-
-            return $box;
-        });
-    }
-
-    public function assignCounter(int $boxId, int $counter_id)
-    {
-        // Close any existing assignment
-        DB::table('counter__boxes')
-            ->where('counter_id', $counter_id)
-            ->whereNull('removed_at')
-            ->update(['removed_at' => now()]);
-
-        // Create new assignment
-        return DB::table('counter__boxes')->insert([
-            'counter_id' => $counter_id,
-            'box_id' => $boxId,
-            'installed_at' => now()
+        return ElectricalBox::create([
+            'location' => $data['location'],
+            'maps' => $data['maps'],
+            'number' => $data['number'],
+            'capacity' => $data['capacity']
         ]);
     }
 
-    public function getBoxCounters(int $boxId)
+    public function getAvailableBoxes(int $areaId)
     {
-        return DB::table('counter__boxes')
-            ->where('box_id', $boxId)
-            ->whereNull('removed_at')
-            ->join('counters', 'counters.id', '=', 'counter__boxes.counter_id')
-            ->select('counters.*')
-            ->get();
-    }
+        // Get the authenticated generator's ID
+        $generatorId = auth()->user()->generator_id; // Adjust based on your auth structure
 
-    public function getAvailableBoxes(int $generatorId)
-    {
-        return ElectricalBox::whereDoesntHave('areas', function($q) use ($generatorId) {
-            $q->where('generator_id', '!=', $generatorId);
-        })
-            ->withCount(['counters' => function($q) {
-                $q->whereNull('counter__boxes.removed_at');
-            }])
-            ->havingRaw('counters_count < max_capacity')
+        return ElectricalBox::where('generator_id', $generatorId)
+            // First get the count of active counters for each box
+            ->leftJoin('counter__boxes', function($join) {
+                $join->on('electrical_boxes.id', '=', 'counter__boxes.box_id')
+                    ->whereNull('counter__boxes.removed_at');
+            })
+            ->select([
+                'electrical_boxes.*',
+                DB::raw('COUNT(counter__boxes.counter_id) as counters_count'),
+                DB::raw('(electrical_boxes.capacity - COUNT(counter__boxes.counter_id)) as available_slots')
+            ])
+            ->groupBy('electrical_boxes.id')
+            // Only show boxes with available capacity
+            ->havingRaw('(electrical_boxes.capacity - counters_count) > 0')
+            ->orderByDesc('available_slots')
             ->get();
     }
 }

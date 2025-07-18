@@ -3,38 +3,46 @@
 namespace App\Repositories\Eloquent\Admin;
 
 use App\Models\Area;
+use App\Models\Neighborhood;
+use App\Models\PowerGenerator;
 use App\Repositories\interfaces\Admin\AreaRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 
 class AreaRepository implements AreaRepositoryInterface
 {
-    public function createForGenerator(int $generator_id, array $data)
+    private $model;
+    public function __construct(Area $model)
     {
-        return Area::create($data);
+        $this->model=$model;
     }
 
-    public function assignBox(int $area_id, int $box_id)
+    public function createForGenerator(int $generator_id,int $neighborhood_id, array $data)
     {
-        return DB::table('area__boxes')->updateOrInsert(
-            ['area_id' => $area_id, 'box_id' => $box_id],
-            ['removed_at' => null]
-        );
+        $generator = PowerGenerator::findOrFail($generator_id);
+        $neighborhood = Neighborhood::findOrFail($neighborhood_id);
+
+        return $this->model->create([
+            'name' => $data['name'],
+            'neighborhood_id'=>$neighborhood->id,
+            'generator_id'=>$generator->id,
+        ]);
     }
+
+
 
     public function getGeneratorAreas(int $generator_id)
     {
         return Area::where('generator_id', $generator_id)
-            ->withCount('boxes')
             ->get();
     }
 
-    public function getAreaBoxes(int $area_id)
-    {
-        return DB::table('area__boxes')
-            ->where('area_id', $area_id)
-            ->whereNull('removed_at')
-            ->join('electrical_boxes', 'electrical_boxes.id', '=', 'area__boxes.box_id')
-            ->select('electrical_boxes.*')
-            ->get();
-    }
+//    public function getAreaBoxes(int $area_id)
+//    {
+//        return DB::table('area__boxes')
+//            ->where('area_id', $area_id)
+//            ->whereNull('removed_at')
+//            ->join('electrical_boxes', 'electrical_boxes.id', '=', 'area__boxes.box_id')
+//            ->select('electrical_boxes.*')
+//            ->get();
+//    }
 }

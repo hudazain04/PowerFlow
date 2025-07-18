@@ -6,16 +6,14 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticate;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Laravel\Sanctum\HasApiTokens;
+//use Laravel\Sanctum\HasApiTokens;
 
 
 class Employee extends Authenticate
 {
-<<<<<<< HEAD
-        use HasFactory;
-=======
-        use HasFactory,HasApiTokens;
->>>>>>> origin/huda
+
+    use HasFactory;
+
 
     protected $fillable = [
         'phone_number',

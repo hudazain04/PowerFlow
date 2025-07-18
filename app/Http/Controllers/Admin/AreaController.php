@@ -22,22 +22,12 @@ class AreaController extends Controller
         return ApiResponses::success($area,'success',ApiCode::OK);
     }
 
-    public function assignBox(AssignBoxToAreaRequest $request)
-    {
-        $dto = new AssignBoxToAreaDTO(
-            $request->box_id,
-            $request->area_id
-        );
 
-        $this->service->assignBoxToArea($dto);
-
-        return response()->json(['message' => 'Box assigned to area successfully']);
-    }
     public function index()
     {
-        $generatorId = auth()->user()->powerGenerator->id;
+        $generatorId = auth()->user()->id;
         $areas = $this->service->getGeneratorAreas($generatorId);
-        return response()->json($areas);
+        return  ApiResponses::success($areas,'success',ApiCode::OK);
     }
 
     public function boxes($id)

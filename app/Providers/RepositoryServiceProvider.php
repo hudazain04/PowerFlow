@@ -2,10 +2,13 @@
 
 namespace App\Providers;
 
+use App\Http\Controllers\Admin\CounterBoxController;
 use App\Notifications\VerifyEmailNotification;
 use App\Repositories\Eloquent\Admin\AreaRepository;
+use App\Repositories\Eloquent\Admin\CounterBoxRepository;
 use App\Repositories\Eloquent\Admin\CounterRepository;
 use App\Repositories\Eloquent\Admin\ElectricalBoxRepository;
+use App\Repositories\Eloquent\Admin\EmployeeRepository;
 use App\Repositories\Eloquent\FaqRepository;
 use App\Repositories\Eloquent\SuperAdmin\GeneratorRequestRepository;
 use App\Repositories\Eloquent\SuperAdmin\NeighborhoodRepository;
@@ -13,8 +16,10 @@ use App\Repositories\Eloquent\User\CustomerRequestRepository;
 use App\Repositories\Eloquent\User\PasswordResetRepository;
 use App\Repositories\Eloquent\User\VerificationRepository;
 use App\Repositories\interfaces\Admin\AreaRepositoryInterface;
+use App\Repositories\interfaces\Admin\CounterBoxRepositoryInterface;
 use App\Repositories\interfaces\Admin\CounterRepositoryInterface;
 use App\Repositories\interfaces\Admin\ElectricalBoxRepositoryInterface;
+use App\Repositories\interfaces\Admin\EmployeeRepositoryInterface;
 use App\Repositories\interfaces\FaqRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\GeneratorRequestRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\NeighborhoodRepositoryInterface;
@@ -41,6 +46,8 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(NeighborhoodRepositoryInterface::class,NeighborhoodRepository::class);
         $this->app->bind(AreaRepositoryInterface::class,AreaRepository::class);
         $this->app->bind(ElectricalBoxRepositoryInterface::class,ElectricalBoxRepository::class);
+        $this->app->bind(CounterBoxRepositoryInterface::class,CounterBoxRepository::class);
+        $this->app->bind(EmployeeRepositoryInterface::class,EmployeeRepository::class);
 
     }
 

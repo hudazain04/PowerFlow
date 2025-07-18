@@ -33,4 +33,11 @@ class Counter extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function electricalBoxes()
+    {
+        return $this->belongsToMany(ElectricalBox::class, 'counter__boxes')
+            ->withPivot(['installed_at', 'removed_at'])
+            ->wherePivotNull('removed_at');
+
+    }
 }

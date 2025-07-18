@@ -17,6 +17,9 @@ use \App\Http\Controllers\User\CustomerRequestController;
 use \App\Http\Controllers\SuperAdmin\NeighborhoodController;
 use \App\Http\Controllers\Admin\AreaController;
 use \App\Http\Controllers\Admin\ElectricalBoxController;
+use \App\Http\Controllers\Admin\AreaBoxController;
+use \App\Http\Controllers\Admin\CounterBoxController;
+use \App\Http\Controllers\Admin\EmployeeController;
 //Route::get('/ping', function () {
 //    return response()->json(['message' => 'pong']);
 //
@@ -81,21 +84,33 @@ Route::prefix('neighborhood')->middleware(['auth:api'])->group(function () {
 
 // Generator Admin routes
 Route::middleware(['auth:api'])->prefix('generator')->group(function () {
-    // Areas
+    // Areas//////
     Route::post('areas', [AreaController::class, 'store']);
-    Route::post('areas/assign-box', [AreaController::class, 'assignBox']);
-    Route::get('generator/areas', [AreaController::class, 'index']);
-    Route::get('generator/areas/{id}/boxes', [AreaController::class, 'boxes']);
+    Route::get('getareas', [AreaController::class, 'index']);
+
+    // Box assignment to areas////
+    Route::post('/areas/{area_id}/boxes', [AreaBoxController::class, 'assignBox']);
+    Route::delete('/areas/{area}/boxes/{box}', [AreaBoxController::class, 'removeBoxFromArea']);
+    Route::get('/areas/{area_id}/boxes/available', [AreaBoxController::class, 'getAvailableBoxes']);
+    Route::get('/areas/{area_id}/boxes', [AreaBoxController::class, 'getAreaBoxes']);
+
+// Box management////////
+
+        Route::post('/boxes', [ElectricalBoxController::class, 'store']);
+
+// counter with boxes assignment///////
+    Route::post('/counters/assign-box', [CounterBoxController::class, 'assignCounter']);
+    Route::get('/boxes/{box_id}/counters', [CounterBoxController::class, 'getBoxCounters']);
+    Route::get('/counters/{counter_id}/current-box', [CounterBoxController::class, 'getCurrentCounter']);
+    Route::delete('/counters/remove-box', [CounterBoxController::class, 'removeCounter']);
+    // employee creation/////////
+    Route::post('/createEmp',[EmployeeController::class,'create']);
+    Route::patch('/updateEmp/{id}',[EmployeeController::class,'update']);
+    Route::delete('/deleteEmp/{id}',[EmployeeController::class,'delete']);
+    Route::get('/getEmps/{generator_id}',[EmployeeController::class,'getEmployees']);
+    Route::get('/getEmp/{id}',[EmployeeController::class,'getEmployee']);
 
 
-
-
-    // Boxes
-
-    Route::post('boxes', [ElectricalBoxController::class, 'store']);
-    Route::post('boxes/assign-counter', [ElectricalBoxController::class, 'assignCounter']);
-    Route::get('generator/boxes/{id}/counters', [ElectricalBoxController::class, 'counters']);
-    Route::get('generator/boxes/available', [ElectricalBoxController::class, 'available']);
 });
 
 

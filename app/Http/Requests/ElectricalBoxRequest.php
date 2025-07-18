@@ -22,9 +22,10 @@ class ElectricalBoxRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'number'=>'required|integer',
-            'max_capacity' => 'required|integer|min:1',
-            'location'=>'required|string|max:500'
+            'number'=>'required|unique:electrical_boxes',
+            'capacity' => 'required|integer|min:1',
+            'location'=>'required|string|max:500',
+            'maps'=>'required|string'
         ];
     }
 }

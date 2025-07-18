@@ -9,8 +9,9 @@ class Area extends Model
 {
      use HasFactory;
     protected $fillable = [
-        'area_id',
-        'box_id'
+        'name',
+        'neighborhood_id',
+        'generator_id'
     ];
 
     public function electricalbox()
@@ -23,5 +24,7 @@ class Area extends Model
         return $this->belongsTo(Neighborhood::class);
     }
 
-   
+    public function powerGenerator(){
+        return $this->belongsTo(PowerGenerator::class);
+    }
 }

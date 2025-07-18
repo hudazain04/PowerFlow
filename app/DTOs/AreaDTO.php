@@ -8,6 +8,7 @@ class AreaDTO extends Data
 {
 public function __construct(
     public  int $generator_id,
+    public int $neighborhood_id,
     public  string $name,
 ){
 

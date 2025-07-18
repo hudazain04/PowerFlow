@@ -34,8 +34,8 @@ class AuthController extends Controller
 
         $user=$this->authservice->register($request->validated(),$request->role);
          $userData=new UserResource($user);
-        $token=JWTAuth::fromUser($user);
-        $result=[...[$userData,'token'=>$token]];
+//        $token=JWTAuth::fromUser($user);
+        $result= $userData;
         return ApiResponses::success($result,__('messages.user_registered'),ApiCode::OK);
 
      }
