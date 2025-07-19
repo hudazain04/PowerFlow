@@ -19,10 +19,10 @@ class EmployeeFactory extends Factory
     {
         return [
             'phone_number' => $this->faker->numerify('07########'),
-            'first_name' => $this->faker->firstName,
-            'last_name' => $this->faker->lastName,
+            'user_name' => $this->faker->name,
+//            'last_name' => $this->faker->lastName,
             'secret_key' => Str::random(10),
-            'password' => bcrypt('employee123'),
+//            'password' => bcrypt('employee123'),
             ];
     }
 }
