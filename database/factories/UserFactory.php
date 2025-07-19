@@ -25,13 +25,13 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'remember_token' => Str::random(10),
+//            'remember_token' => Str::random(10),
             'first_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
             'email' => $this->faker->unique()->safeEmail,
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
-            'role' => $this->faker->randomElement(array_values((new \ReflectionClass(UserTypes::class))->getConstants())),
+//            'role' => $this->faker->randomElement(array_values((new \ReflectionClass(UserTypes::class))->getConstants())),
             'phone_number' => $this->faker->numerify('09########'),
             'blocked'=>$this->faker->boolean,
         ];
