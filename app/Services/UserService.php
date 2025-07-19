@@ -13,7 +13,7 @@ use App\Repositories\interfaces\UserRepositoryInterface;
 use App\Types\UserTypes;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use mysql_xdevapi\Exception;
+
 use PhpParser\Node\Expr\Throw_;
 use \Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
@@ -40,6 +40,7 @@ class UserService
             }
             $user=$this->authRepository->createUser($data);
             $this->authRepository->assignRole($user,$role);
+            DB::commit();
             return $user;
         }
         catch (\Throwable $exception){
