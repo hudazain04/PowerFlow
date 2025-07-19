@@ -11,6 +11,11 @@ class AuthException extends Exception
     {
         return new self('The specified role is invalid.', 400);
     }
+    public static function ServerError():self
+    {
+        return new self('Roll Back.', 500);
+
+    }
 
     public static function roleNotFound(): self
     {

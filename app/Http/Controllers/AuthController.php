@@ -16,6 +16,7 @@ use App\Models\Area;
 use App\Models\User;
 use App\Notifications\AccountApprovedNotification;
 use App\Notifications\AccountRejectedNotification;
+use App\Services\User\VerificationService;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -26,7 +27,8 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 class AuthController extends Controller
 {
 
-    public function __construct(private UserService $authservice)
+    public function __construct(private UserService $authservice,
+    private VerificationService $verification)
     {
     }
 
@@ -34,6 +36,7 @@ class AuthController extends Controller
 
         $user=$this->authservice->register($request->validated(),$request->role);
          $userData=new UserResource($user);
+         $not=$this->verification->sendVerificationEmail($user);
 //        $token=JWTAuth::fromUser($user);
         $result= $userData;
         return ApiResponses::success($result,__('messages.user_registered'),ApiCode::OK);
