@@ -30,23 +30,23 @@ class UserService
 
     public function register(array $dto,string $role){
 
-       DB::beginTransaction();
-        try {
             $data=UserDTO::from($dto);
 
             $exist= $this->authRepository->findUserByEmail($data->email);
             if ($exist){
                 throw  AuthException::emailExists();
             }
-            $user=$this->authRepository->createUser($data);
-            $this->authRepository->assignRole($user,$role);
+        DB::beginTransaction();
+        try {
+            $user = $this->authRepository->createUser($data);
+            $this->authRepository->assignRole($user, $role);
             DB::commit();
             return $user;
-        }
-        catch (\Throwable $exception){
+        } catch (\Throwable $exception) {
             DB::rollBack();
             throw AuthException::ServerError();
         }
+
 
     }
 
@@ -66,7 +66,10 @@ class UserService
         }
         return $this->authRepository->delete($user);
     }
-
+    public function findUser(string $email){
+        $user=$this->authRepository->findUserByEmail($email);
+        return $user;
+    }
 
 }
 

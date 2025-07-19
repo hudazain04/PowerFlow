@@ -5,6 +5,7 @@ namespace App\Repositories\Eloquent;
 
 use AllowDynamicProperties;
 use App\DTOs\UserDTO;
+use App\Models\User;
 use App\Models\User as UserModel;
 use App\Repositories\interfaces\UserRepositoryInterface;
 use Illuminate\Support\Facades\Hash;
@@ -24,6 +25,9 @@ class UserRepository implements UserRepositoryInterface
     public function findUserByEmail(string $email): ?UserModel
     {
         return $this->model->where('email',$email)->first();
+    }
+    public function findUserBy(string $email){
+
     }
 
     public function findById(int $id): ?UserModel

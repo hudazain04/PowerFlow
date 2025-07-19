@@ -43,8 +43,7 @@ Route::middleware('auth:api')->group(function () {
 
         Route::post('/send-verification', [VerificationController::class, 'send'])
             ->name('verification.send');
-        Route::get('/verify/{id}/{hash}', [VerificationController::class, 'verify'])
-            ->name('verification.verify');
+
         Route::post('/resend', [VerificationController::class, 'resend'])
             ->middleware('throttle:3,1')
             ->name('verification.resend');
@@ -199,4 +198,5 @@ Route::prefix('powerGenerator')->group(function (){
 
 Route::get('visitLandingPage',[SuperAdminStatisticsController::class,'visitLandingPage']);
 
-
+Route::get('/verify/{id}/{hash}', [VerificationController::class, 'verify'])
+    ->name('verification.verify');
