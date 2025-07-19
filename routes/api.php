@@ -43,7 +43,7 @@ Route::middleware('auth:api')->group(function () {
 
         Route::post('/send-verification', [VerificationController::class, 'send'])
             ->name('verification.send');
-        Route::post('/verify/{id}/{hash}', [VerificationController::class, 'verify'])
+        Route::get('/verify/{id}/{hash}', [VerificationController::class, 'verify'])
             ->name('verification.verify');
         Route::post('/resend', [VerificationController::class, 'resend'])
             ->middleware('throttle:3,1')
