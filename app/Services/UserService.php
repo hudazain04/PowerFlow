@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Repositories\Eloquent\UserRepository;
 use App\Repositories\interfaces\UserRepositoryInterface;
 use App\Types\UserTypes;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use mysql_xdevapi\Exception;
 use PhpParser\Node\Expr\Throw_;
@@ -29,15 +30,23 @@ class UserService
 
     public function register(array $dto,string $role){
 
-        $data=UserDTO::from($dto);
+       DB::beginTransaction();
+        try {
+            $data=UserDTO::from($dto);
 
-        $exist= $this->authRepository->findUserByEmail($data->email);
-        if ($exist){
-            throw  AuthException::emailExists();
+            $exist= $this->authRepository->findUserByEmail($data->email);
+            if ($exist){
+                throw  AuthException::emailExists();
+            }
+            $user=$this->authRepository->createUser($data);
+            $this->authRepository->assignRole($user,$role);
+            return $user;
         }
-        $user=$this->authRepository->createUser($data);
-       $this->authRepository->assignRole($user,$role);
-        return $user;
+        catch (\Throwable $exception){
+            DB::rollBack();
+            throw AuthException::ServerError();
+        }
+
     }
 
     public function update(int $id,array $data){
