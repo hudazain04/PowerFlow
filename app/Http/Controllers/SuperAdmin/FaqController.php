@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\SuperAdmin;
 
 use App\ApiHelper\ApiCode;
 use App\ApiHelper\ApiResponses;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\FaqRequest;
 use App\Http\Resources\FaqResource;
 use App\Models\Faq;

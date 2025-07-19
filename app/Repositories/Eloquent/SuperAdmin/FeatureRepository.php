@@ -23,7 +23,7 @@ class FeatureRepository implements FeatureRepositoryInterface
 
     }
 
-    public function find(int $id): FeatureModel
+    public function find(int $id): ?FeatureModel
     {
         $feature=FeatureModel::find($id);
         return $feature;

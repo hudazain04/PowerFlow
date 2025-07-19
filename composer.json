@@ -9,7 +9,6 @@
         "php": "^8.2",
 
         "ext-pdo": "*",
-        "laravel/framework": "^12.0",
         "laravel/reverb": "^1.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.10.1",
@@ -18,10 +17,7 @@
         "spatie/laravel-permission": "^6.17",
         "tymon/jwt-auth": "^2.2",
         "laravel/framework": "^11.0",
-        "laravel/sanctum": "^4.0",
-        "laravel/tinker": "^2.10.1",
         "predis/predis": "^3.0",
-
         "wendelladriel/laravel-validated-dto": "^4.1"
     },
     "require-dev": {

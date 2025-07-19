@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Types\ComplaintStatusTypes;
+use App\Types\ComplaintTypes;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

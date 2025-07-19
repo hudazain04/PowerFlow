@@ -17,7 +17,7 @@ class Plan_FeatureFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'value'=>$this->faker->randomNumber(),
         ];
     }
 }

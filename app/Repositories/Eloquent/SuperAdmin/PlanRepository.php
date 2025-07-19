@@ -34,7 +34,7 @@ class PlanRepository implements PlanRepositoryInterface
         return PlanModel::all($columns);
     }
 
-    public function find(int $id): PlanModel
+    public function find(int $id): ?PlanModel
     {
         $plan=PlanModel::find($id);
         return $plan;

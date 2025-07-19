@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\SuperAdmin;
 
 use App\DTOs\FeatureDTO;
 use App\DTOs\Plan_FeatureDTO;
 use App\DTOs\PlanDTO;
 use App\DTOs\PlanPriceDTO;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Plan\AddFeatureRequest;
 use App\Http\Requests\Plan\CreatePlanRequest;
 use App\Http\Requests\Plan\DeleteFeatureRequest;

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Http\Controllers\User\complaintcontroller;
 use App\Models\Area;
 use App\Models\Area_Box;
 use App\Models\Complaint;
@@ -22,6 +23,7 @@ use App\Models\Subscription;
 use App\Models\SubscriptionRequest;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Types\ComplaintTypes;
 use Faker\Factory;
 use Illuminate\Database\Seeder;
 
@@ -38,11 +40,11 @@ class DatabaseSeeder extends Seeder
             FaqSeeder::class
         ]);
 
-//        User::factory()->create([
-//            'first_name' => 'Admin',
-//            'email' => 'huda1812zain@gmail.com',
-////            'role'=>'Admin'
-//        ]);
+       User::factory()->create([
+           'first_name' => 'Admin',
+           'email' => 'huda1812zain@gmail.com',
+//            'role'=>'Admin'
+       ]);
 
         // Create 10 Users with role 'user'
         $users = User::factory()
@@ -130,8 +132,16 @@ class DatabaseSeeder extends Seeder
 
             Spending::factory()->count(3)->for($counter)->create();
             Payment::factory()->count(2)->for($counter)->create();
-            Complaint::factory()->count(1)->for($counter)->create();
+            Complaint::factory()->count(1)->for($counter)->create([
+                'type'=>ComplaintTypes::Cut,
+                'user_id'=>$users->random()->id,
+            ]);
+
         }
+        Complaint::factory()->count(5)->create([
+            'type'=>ComplaintTypes::App,
+            'user_id'=>$users->random()->id,
+        ]);
 
         // Subscription Requests
         foreach ($users as $user) {
