@@ -40,6 +40,7 @@ class UserService
             }
             $user=$this->authRepository->createUser($data);
             $this->authRepository->assignRole($user,$role);
+            DB::commit();
             return $user;
         }
         catch (\Throwable $exception){
