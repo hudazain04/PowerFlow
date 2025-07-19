@@ -102,8 +102,6 @@ Route::middleware('auth:api')->group(function () {
         Route::delete('/deleteEmp/{id}', [EmployeeController::class, 'delete']);
         Route::get('/getEmps/{generator_id}', [EmployeeController::class, 'getEmployees']);
         Route::get('/getEmp/{id}', [EmployeeController::class, 'getEmployee']);
-
-
     });
 
 
