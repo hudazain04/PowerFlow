@@ -22,6 +22,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Psy\Readline\Hoa\Event;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
@@ -39,6 +40,7 @@ class AuthController extends Controller
         $user=$this->authservice->register($request->validated(),$request->role);
          $userData=new UserResource($user);
          $not=$this->verification->sendVerificationEmail($user);
+         $event=
 //        $token=JWTAuth::fromUser($user);
         $result= $userData;
         return ApiResponses::success($result,__('messages.user_registered'),ApiCode::OK);

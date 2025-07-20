@@ -31,7 +31,7 @@ class PasswordController extends Controller
     {
        $this->service->verify($request->token);
 
-      return ApiResponses::success(null,__('password.verify'),ApiCode::OK);
+         return view('password');
     }
 
 

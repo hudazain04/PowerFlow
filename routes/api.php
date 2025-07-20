@@ -51,10 +51,11 @@ Route::middleware('auth:api')->group(function () {
 
     Route::prefix('/password')->group(function () {
         Route::post('/request', [PasswordController::class, 'request']);
-        Route::post('/verify', [PasswordController::class, 'verify']);
+
         Route::post('/resend', [PasswordController::class, 'resend']);
         Route::post('/reset', [PasswordController::class, 'reset']);
     });
+    Route::get('/verify', [PasswordController::class, 'verify'])->name('verification.pass');
 
     Route::post('request', [GeneratorRequestController::class, 'store'])->middleware('role:user');
     Route::prefix('/gen')->middleware('role:super admin')->group(function () {

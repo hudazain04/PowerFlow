@@ -7,6 +7,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\URL;
 
 class PasswordResetNotification extends Notification
 {
@@ -20,6 +21,18 @@ class PasswordResetNotification extends Notification
     )
     {
         //
+    }
+    public function verification($notifiable){
+        URL::forceRootUrl('http://localhost:8000');
+        return URL::temporarySignedRoute('verification.pass',
+            now()->addMinutes(config('app.url').'/reset-password?token='.$this->token),
+            [
+                'id' => $notifiable->getKey(),
+//                'hash' => sha1($notifiable->getEmailForVerification()),
+                 'token'=>$this->token
+            ]
+        );
+
     }
 
     /**
@@ -37,12 +50,12 @@ class PasswordResetNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        $url = url(config('app.url').'/reset-password?token='.$this->token);
-
+//        $url = url(config('app.url').'/reset-password?token='.$this->token);
+        $verificationUrl = $this->verification($notifiable);
         return (new MailMessage)
             ->subject('Reset Your Password')
             ->line('You are receiving this email because we received a password reset request for your account.')
-            ->action('Reset Password', $url)
+            ->action('Reset Password', $verificationUrl)
             ->line('This password reset link will expire in 60 minutes.')
             ->line('If you did not request a password reset, no further action is required.');
     }
@@ -55,7 +68,7 @@ class PasswordResetNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            'id'=>$this->id,
         ];
     }
 }
