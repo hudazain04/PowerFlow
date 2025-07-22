@@ -12,7 +12,8 @@ The shared activation code you used has already been utilized to activate course
 The activation code you provided for the course has expired. Please obtain a new activation code and try again. If you have any questions or need further assistance, please contact support.",
         "admin_permission" => "Sorry, you do not have sufficient permissions to access requested resource",
         "blocked_account" => "🚫 Uh-oh! It seems we've hit a temporary roadblock. 🛑 Don't worry though, every blockade has a solution! Please reach out to our admin team to iron out this hiccup and get back on track. Your patience is appreciated! 🌟",
-        "unknown_lesion_type" => "⚠️ Error: Invalid lesson type! ⚠️ The lesson could not be created because the provided file type is not supported. Accepted file types are PDF and video. Please upload a valid file and try again. Thank you!"
+        "unknown_lesion_type" => "⚠️ Error: Invalid lesson type! ⚠️ The lesson could not be created because the provided file type is not supported. Accepted file types are PDF and video. Please upload a valid file and try again. Thank you!",
+        'blocked_generator'=>"Your power generator account is blocked,you can't proceed your operation"
     ],
     "activation_code_controller" => [
         "error" => [

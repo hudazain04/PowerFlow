@@ -11,7 +11,7 @@ interface Plan_FeatureRepositoryInterface
 {
     public function all() : Collection;
 
-    public function find(int $id) : Plan_FeatureModel;
+    public function find(int $id) : ?Plan_FeatureModel;
 
     public function create(array $data) : Plan_FeatureModel;
 

@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\SuperAdmin;
 
 use App\DTOs\PlanPriceDTO;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\PlanPrice\CreatePlanPriceRequest;
 use App\Http\Requests\PlanPrice\UpdatePlanPriceRequest;
 use App\Services\SuperAdmin\PlanPriceService;

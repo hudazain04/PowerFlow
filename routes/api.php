@@ -1,22 +1,24 @@
 <?php
 
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\Admin\AreaBoxController;
 use App\Http\Controllers\Admin\AreaController;
 use App\Http\Controllers\Admin\CounterBoxController;
 use App\Http\Controllers\Admin\ElectricalBoxController;
 use App\Http\Controllers\Admin\EmployeeController;
-use App\Http\Controllers\AppInfoController;
+use App\Http\Controllers\Admin\PowerGeneratorController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\FaqController;
-use App\Http\Controllers\FeatureController;
-use App\Http\Controllers\PlanController;
-use App\Http\Controllers\PlanPriceController;
-use App\Http\Controllers\PowerGeneratorController;
-use App\Http\Controllers\SubscriptionRequestController;
+use App\Http\Controllers\SuperAdmin\AppInfoController;
+use App\Http\Controllers\SuperAdmin\FaqController;
+use App\Http\Controllers\SuperAdmin\FeatureController;
 use App\Http\Controllers\SuperAdmin\GeneratorRequestController;
 use App\Http\Controllers\SuperAdmin\NeighborhoodController;
-use App\Http\Controllers\SuperAdminStatisticsController;
+use App\Http\Controllers\SuperAdmin\PlanController;
+use App\Http\Controllers\SuperAdmin\PlanPriceController;
+use App\Http\Controllers\SuperAdmin\SubscriptionRequestController;
+use App\Http\Controllers\SuperAdmin\SuperAdminStatisticsController;
+use App\Http\Controllers\User\complaintcontroller;
 use App\Http\Controllers\User\CustomerRequestController;
 use App\Http\Controllers\User\PasswordController;
 use App\Http\Controllers\User\VerificationController;
@@ -105,8 +107,6 @@ Route::middleware('auth:api')->group(function () {
         Route::delete('/deleteEmp/{id}', [EmployeeController::class, 'delete']);
         Route::get('/getEmps/{generator_id}', [EmployeeController::class, 'getEmployees']);
         Route::get('/getEmp/{id}', [EmployeeController::class, 'getEmployee']);
-
-
     });
 
 
@@ -193,6 +193,24 @@ Route::middleware('auth:api')->group(function () {
         Route::get('getTermsAndConditions',[AppInfoController::class,'getTermsAndConditions']);
         Route::get('getPrivacyPolicy',[AppInfoController::class,'getPrivacyPolicy']);
 
+    });
+
+    Route::prefix('complaint')->group(function (){
+        Route::post('createCutComplaint',[ComplaintController::class,'createCutComplaint'])->middleware('block');
+        Route::patch('updateCutComplaint/{complaint_id}',[complaintcontroller::class,'updateCutComplaint'])->middleware('role:employee');
+        Route::post('createComplaint',[complaintcontroller::class,'createComplaint']);
+        Route::delete('deleteComplaint/{complaint_id}',[complaintcontroller::class,'deleteComplaint']);
+        Route::get('getComplaints',[complaintcontroller::class,'getComplaints'])->middleware('role:admin,super admin, employee');
+    });
+
+    Route::prefix('subscriptionRequest')->group(function (){
+        Route::get('getLastFive',[SubscriptionRequestController::class,'getLastFive'])->middleware('role:super admin');
+    });
+
+    Route::prefix('account')->group(function (){
+        Route::get('getProfile',[AccountController::class,'getProfile']);
+        Route::patch('updateProfile',[AccountController::class,'updateProfile']);
+        Route::get('blocking/{id}',[AccountController::class,'blocking'])->middleware('role:super admin');
     });
 });
 

@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Repositories\Eloquent\AuthRepository;
+use App\Repositories\Eloquent\User\ComplaintRepository;
+use App\Repositories\interfaces\AuthRepositoryInterface;
 
 //use App\Events\UserApproved;
 //use App\Events\UserRegistered;
@@ -18,10 +21,7 @@ use App\Repositories\Eloquent\SuperAdmin\PlanPriceRepository;
 use App\Repositories\Eloquent\SuperAdmin\PlanRepository;
 use App\Repositories\Eloquent\SuperAdmin\SubscriptionRepository;
 use App\Repositories\Eloquent\SuperAdmin\SubscriptionRequestRepository;
-
 use App\Repositories\Eloquent\SuperAdmin\VisitorRepository;
-
-
 use App\Repositories\interfaces\Admin\PowerGeneratorRepositoryInterface;
 use App\Repositories\interfaces\AppInfoRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\FeatureRepositoryInterface;
@@ -35,6 +35,7 @@ use App\Repositories\interfaces\SuperAdmin\SubscriptionRequestRepositoryInterfac
 
 use App\Repositories\interfaces\SuperAdmin\VisitorRepositoryInterface;
 
+use App\Repositories\interfaces\User\ComplaintRepositoryInterface;
 use App\Repositories\interfaces\UserRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
@@ -46,6 +47,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->app->bind(AuthRepositoryInterface::class, AuthRepository::class);
 
 
         $this->app->bind(FeatureRepositoryInterface::class, FeatureRepository::class);
@@ -56,12 +58,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(PowerGeneratorRepositoryInterface::class,PowerGeneratorRepository::class);
         $this->app->bind(SubscriptionRequestRepositoryInterface::class,SubscriptionRequestRepository::class);
         $this->app->bind(SubscriptionRepositoryInterface::class,SubscriptionRepository::class);
-
-
-
-
         $this->app->bind(AppInfoRepositoryInterface::class,AppInfoRepository::class);
         $this->app->bind(VisitorRepositoryInterface::class,VisitorRepository::class);
+        $this->app->bind(ComplaintRepositoryInterface::class,ComplaintRepository::class);
+
 
     }
 

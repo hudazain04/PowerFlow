@@ -25,7 +25,7 @@ class PlanPriceRepository implements PlanPriceRepositoryInterface
         return $planPrices;
     }
 
-    public function find(int $id): PlanPriceModel
+    public function find(int $id): ?PlanPriceModel
     {
         $planPrice=PlanPriceModel::find($id);
         return $planPrice;

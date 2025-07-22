@@ -15,9 +15,11 @@ return new class extends Migration
         Schema::create('complaints', function (Blueprint $table) {
             $table->id();
             $table->string('description');
+            $table->enum('type',array_values((new ReflectionClass(\App\Types\ComplaintTypes::class))->getConstants()));
             $table->enum('status',array_values((new \ReflectionClass(ComplaintStatusTypes::class))->getConstants()));
-            $table->foreignId('counter_id')->constrained('counters')->cascadeOnDelete();
+            $table->foreignId('counter_id')->nullable()->constrained('counters')->cascadeOnDelete();
             $table->foreignId('employee_id')->nullable()->constrained('employees')->nullOnDelete();
+            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
         });
     }

@@ -4,25 +4,22 @@ namespace App\DTOs;
 
 use Illuminate\Support\Facades\Hash;
 use Spatie\LaravelData\Data;
+use WendellAdriel\ValidatedDTO\Casting\BooleanCast;
+use WendellAdriel\ValidatedDTO\SimpleDTO;
 
 
-//=======
-
-//use WendellAdriel\ValidatedDTO\Casting\BooleanCast;
-//use WendellAdriel\ValidatedDTO\SimpleDTO;
-
-class UserDTO extends Data
+class UserDTO extends simpleDTO
 
 {
-//    public ?int $id;
-//    public string $first_name;
-//    public string $last_name;
-//    public ?string $fullName;
-//    public string $email;
-//    public int $phone_number;
-//    public string $password;
-//    public ? string $role;
-//    public ? bool $blocked;
+    public ?int $id;
+    public string $first_name;
+    public string $last_name;
+    public ?string $fullName;
+    public string $email;
+    public int $phone_number;
+    public ?string $password;
+    public ? string $role;
+    public ? bool $blocked;
 
     public function __construct(
         public ?string  $first_name = null,

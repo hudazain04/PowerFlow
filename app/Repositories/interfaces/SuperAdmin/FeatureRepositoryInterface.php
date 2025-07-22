@@ -10,7 +10,7 @@ interface FeatureRepositoryInterface
 {
     public function all(?array $filters) : Collection;
 
-    public function find(int $id) : FeatureModel;
+    public function find(int $id) : ?FeatureModel;
 
     public function create(array $data) : FeatureModel;
 

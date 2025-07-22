@@ -23,7 +23,7 @@ class Plan_FeatureRepository implements Plan_FeatureRepositoryInterface
         return $Plan_features;
     }
 
-    public function find(int $id): Plan_FeatureModel
+    public function find(int $id): ?Plan_FeatureModel
     {
         $Plan_feature=Plan_FeatureModel::find($id);
         return $Plan_feature;
