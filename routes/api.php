@@ -189,6 +189,24 @@ Route::middleware('auth:api')->group(function () {
         Route::get('getPrivacyPolicy',[AppInfoController::class,'getPrivacyPolicy']);
 
     });
+
+    Route::prefix('complaint')->group(function (){
+        Route::post('createCutComplaint',[ComplaintController::class,'createCutComplaint'])->middleware('block');
+        Route::patch('updateCutComplaint/{complaint_id}',[complaintcontroller::class,'updateCutComplaint'])->middleware('role:employee');
+        Route::post('createComplaint',[complaintcontroller::class,'createComplaint']);
+        Route::delete('deleteComplaint/{complaint_id}',[complaintcontroller::class,'deleteComplaint']);
+        Route::get('getComplaints',[complaintcontroller::class,'getComplaints'])->middleware('role:admin,super admin, employee');
+    });
+
+    Route::prefix('subscriptionRequest')->group(function (){
+        Route::get('getLastFive',[SubscriptionRequestController::class,'getLastFive'])->middleware('role:super admin');
+    });
+
+    Route::prefix('account')->group(function (){
+        Route::get('getProfile',[AccountController::class,'getProfile']);
+        Route::patch('updateProfile',[AccountController::class,'updateProfile']);
+        Route::get('blocking/{id}',[AccountController::class,'blocking'])->middleware('role:super admin');
+    });
 });
 
 Route::prefix('powerGenerator')->group(function (){
