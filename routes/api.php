@@ -1,22 +1,24 @@
 <?php
 
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\Admin\AreaBoxController;
 use App\Http\Controllers\Admin\AreaController;
 use App\Http\Controllers\Admin\CounterBoxController;
 use App\Http\Controllers\Admin\ElectricalBoxController;
 use App\Http\Controllers\Admin\EmployeeController;
-use App\Http\Controllers\AppInfoController;
+use App\Http\Controllers\Admin\PowerGeneratorController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\FaqController;
-use App\Http\Controllers\FeatureController;
-use App\Http\Controllers\PlanController;
-use App\Http\Controllers\PlanPriceController;
-use App\Http\Controllers\PowerGeneratorController;
-use App\Http\Controllers\SubscriptionRequestController;
+use App\Http\Controllers\SuperAdmin\AppInfoController;
+use App\Http\Controllers\SuperAdmin\FaqController;
+use App\Http\Controllers\SuperAdmin\FeatureController;
 use App\Http\Controllers\SuperAdmin\GeneratorRequestController;
 use App\Http\Controllers\SuperAdmin\NeighborhoodController;
-use App\Http\Controllers\SuperAdminStatisticsController;
+use App\Http\Controllers\SuperAdmin\PlanController;
+use App\Http\Controllers\SuperAdmin\PlanPriceController;
+use App\Http\Controllers\SuperAdmin\SubscriptionRequestController;
+use App\Http\Controllers\SuperAdmin\SuperAdminStatisticsController;
+use App\Http\Controllers\User\complaintcontroller;
 use App\Http\Controllers\User\CustomerRequestController;
 use App\Http\Controllers\User\PasswordController;
 use App\Http\Controllers\User\VerificationController;
@@ -132,7 +134,7 @@ Route::middleware('auth:api')->group(function () {
         });
 
         Route::prefix('superAdminStatistics')->group(function () {
-            Route::get('homeStatistics', [SuperAdminSgit pull tatisticsController::class, 'homeStatistics']);
+            Route::get('homeStatistics', [SuperAdminStatisticsController::class, 'homeStatistics']);
             Route::get('getSubscriptionDistributionByPlan/{year}', [SuperAdminStatisticsController::class, 'getSubscriptionDistributionByPlan']);
             Route::get('subscriptionsPerPlans', [SuperAdminStatisticsController::class, 'subscriptionsPerPlans']);
             Route::get('subscriptionRequestsPerPlans', [SuperAdminStatisticsController::class, 'subscriptionRequestsPerPlans']);
