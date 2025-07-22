@@ -4,16 +4,19 @@ namespace App\Services\User;
 
 use App\DTOs\PasswordDto;
 use App\DTOs\PasswordEmailDTO;
+use App\Events\PasswordEvent;
 use App\Exceptions\AuthException;
 use App\Models\User;
 use App\Notifications\PasswordResetNotification;
 use App\Repositories\interfaces\User\PasswordResetRepositoryInterface;
+use App\Repositories\interfaces\UserRepositoryInterface;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class PasswordResetService
 {
-  public function __construct(protected PasswordResetRepositoryInterface $passwordrepository){
+  public function __construct(protected PasswordResetRepositoryInterface $passwordrepository,
+  private  UserRepositoryInterface $repository){
   }
 
   public function sendLink(PasswordEmailDTO $dto):void
@@ -24,6 +27,7 @@ class PasswordResetService
     }
     $token=$this->generateResetToken($user);
     $user->notify(new PasswordResetNotification($token));
+
 
 
   }
@@ -38,6 +42,11 @@ class PasswordResetService
        } catch (JWTException $e) {
            throw  AuthException::InvalidResetTokenException();
        }
+       $userId = $payload->get('sub');
+       $user=User::find($userId);
+
+
+       event(new PasswordEvent($token,$user,$userId));
      }
     public function resetPassword(PasswordDto $dto): void
     {

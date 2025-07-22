@@ -22,14 +22,17 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Psy\Readline\Hoa\Event;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
 
+
     public function __construct(private UserService $authservice,
     private VerificationService $verification)
     {
+
     }
 
      public function register(UserRequest $request){
@@ -37,6 +40,7 @@ class AuthController extends Controller
         $user=$this->authservice->register($request->validated(),$request->role);
          $userData=new UserResource($user);
          $not=$this->verification->sendVerificationEmail($user);
+         $event=
 //        $token=JWTAuth::fromUser($user);
         $result= $userData;
         return ApiResponses::success($result,__('messages.user_registered'),ApiCode::OK);
@@ -50,7 +54,10 @@ class AuthController extends Controller
        if (!$token=JWTAuth::attempt($credintials)){
            throw AuthException::invalidCredentials();
        }
-       return ApiResponses::success($token, __('messages.login_success'), ApiCode::OK);
+         $user=$this->authservice->findUser($request->email);
+       $User=UserResource::make($user);
+       $result=["user:"=>$User,"token:"=>$token];
+       return ApiResponses::success($result, __('messages.login_success'), ApiCode::OK);
 
      }
      public function logout(){

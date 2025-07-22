@@ -17,7 +17,7 @@ class VerificationController extends Controller
     public function verify(Request $request, $id, $hash)
     {
        $data= $this->verificationService->verifyUser($id, $hash);
-       return ApiResponses::success(null,__('verification.verify'),ApiCode::OK);
+       return view("verified");
     }
 
     public function send(Request $request)

@@ -13,7 +13,7 @@ use App\Repositories\interfaces\UserRepositoryInterface;
 use App\Types\UserTypes;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use mysql_xdevapi\Exception;
+
 use PhpParser\Node\Expr\Throw_;
 use \Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
@@ -30,22 +30,23 @@ class UserService
 
     public function register(array $dto,string $role){
 
-       DB::beginTransaction();
-        try {
             $data=UserDTO::from($dto);
 
             $exist= $this->authRepository->findUserByEmail($data->email);
             if ($exist){
                 throw  AuthException::emailExists();
             }
-            $user=$this->authRepository->createUser($data);
-            $this->authRepository->assignRole($user,$role);
+        DB::beginTransaction();
+        try {
+            $user = $this->authRepository->createUser($data);
+            $this->authRepository->assignRole($user, $role);
+            DB::commit();
             return $user;
-        }
-        catch (\Throwable $exception){
+        } catch (\Throwable $exception) {
             DB::rollBack();
             throw AuthException::ServerError();
         }
+
 
     }
 
@@ -65,7 +66,10 @@ class UserService
         }
         return $this->authRepository->delete($user);
     }
-
+    public function findUser(string $email){
+        $user=$this->authRepository->findUserByEmail($email);
+        return $user;
+    }
 
 }
 

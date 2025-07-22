@@ -2,12 +2,14 @@
 
 namespace App\Services\User;
 
+use App\Events\registerEvent;
 use App\Exceptions\AuthException;
 use App\Exceptions\VerificationException;
 use App\Models\User;
 use App\Repositories\interfaces\User\VerificationRepositoryInterface;
 use App\Repositories\interfaces\UserRepositoryInterface;
 use Illuminate\Auth\Events\Verified;
+use Illuminate\Support\Facades\Log;
 
 class VerificationService
 {
@@ -38,8 +40,9 @@ class VerificationService
         }
 
         $this->userRepository->markEmailAsVerified($user);
-            event(new Verified($user));
-
+//            event(new Verified($user));
+            event(new registerEvent($userId,$user) );
+        Log::info("registerEvent fired for user {$userId}");
 
 
     }
