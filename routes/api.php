@@ -132,7 +132,7 @@ Route::middleware('auth:api')->group(function () {
         });
 
         Route::prefix('superAdminStatistics')->group(function () {
-            Route::get('homeStatistics', [SuperAdminStatisticsController::class, 'homeStatistics']);
+            Route::get('homeStatistics', [SuperAdminSgit pull tatisticsController::class, 'homeStatistics']);
             Route::get('getSubscriptionDistributionByPlan/{year}', [SuperAdminStatisticsController::class, 'getSubscriptionDistributionByPlan']);
             Route::get('subscriptionsPerPlans', [SuperAdminStatisticsController::class, 'subscriptionsPerPlans']);
             Route::get('subscriptionRequestsPerPlans', [SuperAdminStatisticsController::class, 'subscriptionRequestsPerPlans']);
