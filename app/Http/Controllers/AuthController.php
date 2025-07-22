@@ -9,6 +9,7 @@ use App\Events\UserApproved;
 use App\Events\UserRegistered;
 use App\Events\UserVerified;
 use App\Exceptions\AuthException;
+use App\Exceptions\VerificationException;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
@@ -24,6 +25,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Psy\Readline\Hoa\Event;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use function PHPUnit\Framework\isNull;
 
 class AuthController extends Controller
 {
@@ -54,7 +56,13 @@ class AuthController extends Controller
        if (!$token=JWTAuth::attempt($credintials)){
            throw AuthException::invalidCredentials();
        }
+
          $user=$this->authservice->findUser($request->email);
+        if(is_null($user->email_verified_at)){
+
+         $this->verification->sendVerificationEmail($user);
+            throw VerificationException::emailNotVerfied();
+        }
        $User=UserResource::make($user);
        $result=["user:"=>$User,"token:"=>$token];
        return ApiResponses::success($result, __('messages.login_success'), ApiCode::OK);

@@ -29,6 +29,17 @@ Route::prefix('auth')->group(function () {
     Route::post('login', [AuthController::class, 'login']);
     Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:api');
 });
+Route::get('/verify/{id}/{hash}', [VerificationController::class, 'verify'])
+    ->name('verification.verify');
+Route::prefix('email')->group(function () {
+
+    Route::post('/send-verification', [VerificationController::class, 'send'])
+        ->name('verification.send');
+
+    Route::post('/resend', [VerificationController::class, 'resend'])
+        ->middleware('throttle:3,1')
+        ->name('verification.resend');
+});
 
 Route::middleware('auth:api')->group(function () {
     Route::prefix('faq')->group(function () {
@@ -39,20 +50,12 @@ Route::middleware('auth:api')->group(function () {
         });
         Route::get('get/{category}', [FaqController::class, 'getFaqByRole']);
     });
-    Route::prefix('email')->group(function () {
 
-        Route::post('/send-verification', [VerificationController::class, 'send'])
-            ->name('verification.send');
-
-        Route::post('/resend', [VerificationController::class, 'resend'])
-            ->middleware('throttle:3,1')
-            ->name('verification.resend');
-    });
 
     Route::prefix('/password')->group(function () {
         Route::post('/request', [PasswordController::class, 'request']);
 
-        Route::post('/resend', [PasswordController::class, 'resend']);
+        Route::post('/resend', [PasswordController::class, 'resend'])->middleware('throttle:3,1');
         Route::post('/reset', [PasswordController::class, 'reset']);
     });
     Route::get('/verify', [PasswordController::class, 'verify'])->name('verification.pass');
@@ -199,5 +202,4 @@ Route::prefix('powerGenerator')->group(function (){
 
 Route::get('visitLandingPage',[SuperAdminStatisticsController::class,'visitLandingPage']);
 
-Route::get('/verify/{id}/{hash}', [VerificationController::class, 'verify'])
-    ->name('verification.verify');
+

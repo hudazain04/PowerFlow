@@ -8,6 +8,7 @@ use App\DTOs\PasswordDto;
 use App\DTOs\PasswordEmailDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PasswordRequest;
+use App\Http\Requests\resendRequest;
 use App\Services\User\PasswordResetService;
 use Illuminate\Http\Request;
 
@@ -45,9 +46,10 @@ class PasswordController extends Controller
     }
 
 
-    public function resend(Request $request)
+    public function resend(resendRequest $request)
     {
-        $dto = new PasswordEmailDTO($request->email);
+        $email=$request->input('email');
+        $dto = new PasswordEmailDTO($email);
         $this->service->sendLink($dto);
 
         return ApiResponses::success(null,__('password.resend'),ApiCode::OK);

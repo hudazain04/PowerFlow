@@ -49,6 +49,7 @@ class VerificationService
 
     public function resendVerificationEmail(User $user)
     {
+
         if ($this->userRepository->hasVerifiedEmail($user)) {
             throw VerificationException::emailVerified();
         }
