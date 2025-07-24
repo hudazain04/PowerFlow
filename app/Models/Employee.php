@@ -16,12 +16,10 @@ class Employee extends Authenticate
 
 
     protected $fillable = [
-        'phone_number',
-        'first_name',
-        'last_name',
+        'user_name',
         'secret_key',
         'generator_id',
-        'user_id',
+        'phone_number',
     ];
     public function powergenerator()
     {

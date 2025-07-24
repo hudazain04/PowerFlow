@@ -13,15 +13,15 @@ class EmployeeRepository implements EmployeeRepositoryInterface
 
     public function create(array $data)
     {
-//        return Employee::create([$data,
-//           'secret_key'=>$this->model->generateSecretKey()]);
+        return Employee::create([$data,
+           'secret_key'=>$this->model->generateSecretKey()]);
 
     }
 
     public function update(int $id, array $data)
     {
-//       $emp=$this->findEmployee($id);
-//       return Employee::update($emp,$data);
+       $emp=$this->findEmployee($id);
+       return Employee::update($emp,$data);
     }
 
     public function findEmployee(int $id)
@@ -37,7 +37,7 @@ class EmployeeRepository implements EmployeeRepositoryInterface
     }
     public function getEmployees(int $id)
     {
-//        $emp=Employee::where('generator_id',$id)->get();
-//        return $emp;
+        $emp=Employee::where('generator_id',$id)->get();
+        return $emp;
     }
 }

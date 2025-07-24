@@ -36,7 +36,7 @@ class registerEvent implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new Channel('user'.$this->userId),
+            new Channel('user.'.$this->userId),
         ];
     }
 
