@@ -48,27 +48,30 @@ class PasswordResetService
      }
     public function resetPassword(PasswordDto $dto): void
     {
-        $user=request()->user();
+        try {
+            logger()->debug('Reset password token:', ['token' => $dto->token]);
 
-        $this->passwordrepository->updatePassword($user ,$dto->password);
+            $payload = JWTAuth::setToken($dto->token)->getPayload();
+            logger()->debug('Token payload:', $payload->toArray());
 
-//        try {
-//            $payload = JWTAuth::setToken($dto->token)->getPayload();
-//
-//            if ($payload->get('type') !== 'password_reset') {
-//                throw AuthException::InvalidResetTokenException();
-//            }
-//
-//            $user = $this->passwordrepository->findEmail($payload->get('email'));
-//
-//            if (!$user) {
-//                throw AuthException::usernotExists();
-//            }
+            if ($payload->get('type') !== 'password_reset') {
+                throw AuthException::InvalidResetTokenException();
+            }
 
-//
-//        } catch (JWTException $e) {
-//            throw AuthException::InvalidResetTokenException();
-//        }
+            $user = $this->passwordrepository->findEmail($payload->get('email'));
+
+            if (!$user) {
+                throw AuthException::usernotExists();
+            }
+
+
+            $this->passwordrepository->updatePassword($user, $dto->password);
+
+            JWTAuth::invalidate($dto->token);
+
+        } catch (JWTException $e) {
+            throw AuthException::InvalidResetTokenException();
+        }
     }
 
     protected function generateResetToken(User $user): string

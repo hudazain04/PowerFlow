@@ -9,6 +9,8 @@ use App\DTOs\PasswordEmailDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PasswordRequest;
 use App\Http\Requests\resendRequest;
+use App\Http\Resources\UserResource;
+use App\Models\User;
 use App\Services\User\PasswordResetService;
 use Illuminate\Http\Request;
 
@@ -22,15 +24,20 @@ class PasswordController extends Controller
     public function request(Request $request)
     {
         $dto = new PasswordEmailDTO($request->email);
-        $this->service->sendLink($dto);
+         $this->service->sendLink($dto);
+          $user=User::where('email',$request->email)->first();
+          $data=UserResource::make($user);
 
-        return ApiResponses::success(null,__('password.request'),ApiCode::OK);
+       return ApiResponses::success($data,__('password.request'),ApiCode::OK);
     }
 
 
     public function verify(Request $request)
     {
-       $this->service->verify($request->token);
+        $fullToken = $request->token;
+        $cleanToken = explode('&', $fullToken)[0];
+
+        $this->service->verify($cleanToken);
 
          return view('password');
     }
@@ -38,10 +45,15 @@ class PasswordController extends Controller
 
     public function reset(PasswordRequest $request)
     {
-        $dto = new PasswordDto(...$request->validated());
+        $cleanToken = head(explode('&', $request->token));
+
+        $dto = new PasswordDto(...[
+            'token' => $cleanToken,
+            'password' => $request->password,
+            'password_confirmation' => $request->password_confirmation
+        ]);
 
         $this->service->resetPassword($dto);
-
        return ApiResponses::success(null,__('password.reset'),ApiCode::OK);
     }
 
