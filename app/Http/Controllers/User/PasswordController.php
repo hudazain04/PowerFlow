@@ -22,9 +22,9 @@ class PasswordController extends Controller
     public function request(Request $request)
     {
         $dto = new PasswordEmailDTO($request->email);
-         $this->service->sendLink($dto);
+        $this->service->sendLink($dto);
 
-       return ApiResponses::success(null,__('password.request'),ApiCode::OK);
+        return ApiResponses::success(null,__('password.request'),ApiCode::OK);
     }
 
 

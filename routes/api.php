@@ -43,6 +43,15 @@ Route::prefix('email')->group(function () {
         ->name('verification.resend');
 });
 
+
+Route::prefix('/password')->group(function () {
+    Route::post('/request', [PasswordController::class, 'request']);
+
+    Route::post('/resend', [PasswordController::class, 'resend'])->middleware('throttle:3,1');
+    Route::post('/reset', [PasswordController::class, 'reset']);
+});
+Route::get('/verify', [PasswordController::class, 'verify'])->name('verification.pass');
+
 Route::middleware('auth:api')->group(function () {
     Route::prefix('faq')->group(function () {
         Route::middleware('role:super admin')->group(function () {
@@ -54,13 +63,7 @@ Route::middleware('auth:api')->group(function () {
     });
 
 
-    Route::prefix('/password')->group(function () {
-        Route::post('/request', [PasswordController::class, 'request']);
 
-        Route::post('/resend', [PasswordController::class, 'resend'])->middleware('throttle:3,1');
-        Route::post('/reset', [PasswordController::class, 'reset']);
-    });
-    Route::get('/verify', [PasswordController::class, 'verify'])->name('verification.pass');
 
     Route::post('request', [GeneratorRequestController::class, 'store'])->middleware('role:user');
     Route::prefix('/gen')->middleware('role:super admin')->group(function () {
