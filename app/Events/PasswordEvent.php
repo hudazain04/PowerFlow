@@ -52,6 +52,6 @@ class PasswordEvent implements ShouldBroadcastNow
     }
     public function broadcastAs()
     {
-        return 'user.password';
+        return 'user Password';
     }
 }
