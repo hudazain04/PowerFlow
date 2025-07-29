@@ -22,7 +22,7 @@ class registerEvent implements ShouldBroadcastNow
      */
     public $user;
     public $userId;
-    public function __construct($userId,User $user)
+    public function __construct($userId,User $user , protected  $token)
     {
         $this->userId = $userId;
         $this->user=$user;
@@ -40,19 +40,21 @@ class registerEvent implements ShouldBroadcastNow
         ];
     }
 
-      public function broadcastWith(): array
-      {
-          return [
-              'id'=>$this->user->id,
-              'first_name'=>$this->user->first_name,
-              'last_name'=>$this->user->last_name,
-              'email'=>$this->user->email,
-              'phone_number'=>$this->user->phone_number
-
-          ];
-      }
+    public function broadcastWith(): array
+    {
+        return [
+            "user" => [
+                'id'=>$this->user->id,
+                'first_name'=>$this->user->first_name,
+                'last_name'=>$this->user->last_name,
+                'email'=>$this->user->email,
+                'phone_number'=>$this->user->phone_number
+            ],
+            "token" => $this->token
+        ];
+    }
     public function broadcastAs()
     {
-        return 'user.register';
+        return 'user.verified';
     }
 }
