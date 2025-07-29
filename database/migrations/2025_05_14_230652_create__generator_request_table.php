@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('generator_name');
             $table->string('generator_location');
-            $table->integer('phone');
+            $table->string('phone');
             $table->string('status')->default(GeneratorRequests::PENDING);
             $table->timestamps();
         });

@@ -25,7 +25,7 @@ class VerificationController extends Controller
 
     public function send(Request $request)
     {
-     $this->verificationService->sendVerificationEmail($request->user());
+        $this->verificationService->sendVerificationEmail($request->user());
         return ApiResponses::success(null,__('verification.send_verification'),ApiCode::OK);
     }
 

@@ -13,12 +13,14 @@ use App\Exceptions\VerificationException;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
+use App\Jobs\SendEmailJob;
 use App\Models\Area;
 use App\Models\User;
 use App\Notifications\AccountApprovedNotification;
 use App\Notifications\AccountRejectedNotification;
 use App\Services\User\VerificationService;
 use App\Services\UserService;
+use App\Types\UserTypes;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -39,10 +41,11 @@ class AuthController extends Controller
 
      public function register(UserRequest $request){
 
-        $user=$this->authservice->register($request->validated(),$request->role);
+        $user=$this->authservice->register($request->validated(),UserTypes::USER);
          $userData=new UserResource($user);
-         $not=$this->verification->sendVerificationEmail($user);
-         $event=
+//         $this->verification->sendVerificationEmail($user);
+         SendEmailJob::dispatchAfterResponse($user);
+//         $event=
 //        $token=JWTAuth::fromUser($user);
         $result= $userData;
         return ApiResponses::success($result,__('messages.user_registered'),ApiCode::OK);

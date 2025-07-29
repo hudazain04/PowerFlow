@@ -50,6 +50,8 @@ class GeneratorRequestService
                 'user_id' => $request->id
             ]);
 
+            $user=
+
             event(new GeneratorApproved($request->user_id, $generator));
 
             return $generator;

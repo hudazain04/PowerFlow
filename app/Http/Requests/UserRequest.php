@@ -29,7 +29,7 @@ class UserRequest extends FormRequest
             'email' => 'required|email',
             'password' => 'required|string|min:6',
             'phone_number' => 'required|nullable|max:10',
-            'role' => ['required', 'string', Rule::in(UserTypes::$statuses)],
+//            'role' => ['required', 'string', Rule::in(UserTypes::$statuses)],
 
         ];
     }
