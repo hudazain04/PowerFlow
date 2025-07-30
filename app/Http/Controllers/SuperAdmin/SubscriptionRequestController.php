@@ -27,9 +27,7 @@ class SubscriptionRequestController extends Controller
     {
         $requestDTO=SubscriptionRequestDTO::fromRequest($request);
         $requestDTO->user_id=$request->user()->id;
-        if (! $request->user()->hasRole('admin')){
-            $requestDTO->type=SubscriptionTypes::NewPlan;
-        }
+        $requestDTO->type=SubscriptionTypes::NewPlan;
         return $this->subscriptionRequestService->store($requestDTO);
     }
 
