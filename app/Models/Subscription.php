@@ -16,7 +16,9 @@ class Subscription extends Model
         'provider_id',
         'start_time',
         'price',
-        'period'
+        'period',
+        'planPrice_id',
+        'generator_id',
     ];
 
     protected $casts=[

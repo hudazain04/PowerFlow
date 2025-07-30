@@ -154,6 +154,11 @@ Route::middleware('auth:api')->group(function () {
 
         Route::prefix('subscriptionRequest')->group(function () {
             Route::get('getLastFive', [SubscriptionRequestController::class, 'getLastFive']);
+            Route::get('getAll',[SubscriptionRequestController::class,'getAll']);
+            Route::get('approve/{id}',[SubscriptionRequestController::class,'approve']);
+            Route::get('reject/{id}',[SubscriptionRequestController::class,'reject']);
+
+
         });
 
         Route::prefix('AppInfo')->group(function () {
@@ -171,6 +176,15 @@ Route::middleware('auth:api')->group(function () {
 
     });
 
+    Route::middleware('role:admin')->group(function (){
+        Route::prefix('subscriptionRequest')->group(function () {
+            Route::post('renew', [SubscriptionRequestController::class, 'renew']);
+        });
+    });
+
+    Route::prefix('subscriptionRequest')->group(function () {
+        Route::post('create', [SubscriptionRequestController::class, 'store']);
+    });
     Route::prefix('planPrice')->group(function () {
         Route::get('getAll/{plan_id}', [PlanPriceController::class, 'index']);
         Route::get('findById/{id}', [PlanPriceController::class, 'findById']);
@@ -206,9 +220,10 @@ Route::middleware('auth:api')->group(function () {
         Route::get('getComplaints',[complaintcontroller::class,'getComplaints'])->middleware('role:admin,super admin, employee');
     });
 
-    Route::prefix('subscriptionRequest')->group(function (){
-        Route::get('getLastFive',[SubscriptionRequestController::class,'getLastFive'])->middleware('role:super admin');
+    Route::prefix('spending')->group(function (){
+       Route::post('createSpending',[]);
     });
+
 
     Route::prefix('account')->group(function (){
         Route::get('getProfile',[AccountController::class,'getProfile']);

@@ -143,13 +143,14 @@ class DatabaseSeeder extends Seeder
             'user_id'=>$users->random()->id,
         ]);
 
-        // Subscription Requests
+        $planPrices = PlanPrice::all();
         foreach ($users as $user) {
-            SubscriptionRequest::factory()->count(1)->for($user)->create();
+            SubscriptionRequest::factory()->count(1)->for($user)->create([
+                'planPrice_id'=>$planPrices->random()->id,
+            ]);
         }
 
-        // Subscriptions (linking a generator to a plan price)
-        $planPrices = PlanPrice::all();
+
         foreach ($generators as $generator) {
             Subscription::factory()->create([
                 'generator_id' => $generator->id,

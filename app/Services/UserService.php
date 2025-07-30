@@ -3,13 +3,20 @@
 namespace App\Services;
 
 use AllowDynamicProperties;
+use App\ApiHelper\ApiCode;
+use App\ApiHelper\ApiResponses;
 use App\DTOs\UserDTO;
 use App\Exceptions\AuthException;
+use App\Exceptions\VerificationException;
+use App\Http\Requests\LoginRequest;
+use App\Http\Resources\UserResource;
+use App\Jobs\SendEmailJob;
 use App\Models\Employee;
 use App\Models\PowerGenerator;
 use App\Models\User;
 use App\Repositories\Eloquent\UserRepository;
 use App\Repositories\interfaces\UserRepositoryInterface;
+use App\Services\User\VerificationService;
 use App\Types\UserTypes;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -23,7 +30,9 @@ use Illuminate\Support\Facades\Log;
 class UserService
 {
 //   protected $authRepository;
-    public function __construct(private UserRepositoryInterface $authRepository){
+    public function __construct(private UserRepositoryInterface $authRepository,
+    protected VerificationService $verificationService,
+    ){
 //        return $this->authRepository=$authRepository;
 
     }
@@ -36,18 +45,52 @@ class UserService
             if ($exist){
                 throw  AuthException::emailExists();
             }
-        DB::beginTransaction();
-        try {
-            $user = $this->authRepository->createUser($data);
-            $this->authRepository->assignRole($user, $role);
-            DB::commit();
-            return $user;
-        } catch (\Throwable $exception) {
-            DB::rollBack();
+            DB::beginTransaction();
+            try {
+                $user = $this->authRepository->createUser($data);
+                $this->authRepository->assignRole($user, $role);
+                DB::commit();
+                $userData=new UserResource($user);
+                //         $this->verification->sendVerificationEmail($user);
+                SendEmailJob::dispatchAfterResponse($user);
+                //         $event=
+                //        $token=JWTAuth::fromUser($user);
+                $result= $userData;
+                return ApiResponses::success($result,__('messages.user_registered'),ApiCode::OK);
+            } catch (\Throwable $exception) {
+                DB::rollBack();
+                throw AuthException::ServerError();
+            }
+
+
+
+
+    }
+
+
+    public function login(LoginRequest $request)
+    {
+        try{
+            $credintials = $request->only('email', 'password');
+
+            if (!$token = JWTAuth::attempt($credintials)) {
+                throw AuthException::invalidCredentials();
+            }
+
+            $user = $this->findUser($request->email);
+            if (is_null($user->email_verified_at)) {
+                $this->verificationService->sendVerificationEmail($user);
+                throw VerificationException::emailNotVerfied();
+            }
+            $User = UserResource::make($user);
+            $result = ["user:" => $User, "token:" => $token];
+            return ApiResponses::success($result, __('messages.login_success'), ApiCode::OK);
+        }
+        catch (\Throwable $exception)
+        {
+//            return ApiResponses::error($exception->getMessage(),500);
             throw AuthException::ServerError();
         }
-
-
     }
 
     public function update(int $id,array $data){

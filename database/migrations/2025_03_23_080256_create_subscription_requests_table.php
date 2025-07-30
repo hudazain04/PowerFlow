@@ -17,8 +17,10 @@ return new class extends Migration
             $table->integer('period');
             $table->enum('type',array_values((new \ReflectionClass(SubscriptionTypes::class))->getConstants()));
             $table->string('location');
+            $table->string('name');
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('planPrice_id')->nullable()->constrained('plan_prices')->nullOnDelete();
+            $table->enum('status',array_values((new ReflectionClass(\App\Types\GeneratorRequests::class))->getConstants()));
             $table->timestamps();
         });
     }

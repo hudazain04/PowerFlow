@@ -44,8 +44,8 @@ class VerificationService
 
         $token=JWTAuth::fromUser($user);
 
-//            event(new Verified($user));
-            event(new registerEvent($userId,$user , $token) );
+//      event(new Verified($user));
+        event(new registerEvent($userId,$user , $token) );
         Log::info("registerEvent fired for user {$userId}");
 
 

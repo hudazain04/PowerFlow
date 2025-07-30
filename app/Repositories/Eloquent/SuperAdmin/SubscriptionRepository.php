@@ -36,4 +36,10 @@ class SubscriptionRepository implements SubscriptionRepositoryInterface
         $subscriptions=SubscriptionModel::filter($type)->whereRelation('planPrice','plan_id',$plan_id)->get();
         return $subscriptions;
     }
+
+    public function create(array $data) : SubscriptionModel
+    {
+        $subscription=SubscriptionModel::create($data);
+        return  $subscription;
+    }
 }
