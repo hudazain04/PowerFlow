@@ -85,7 +85,7 @@ class UserService
                 throw  new ErrorException(__('messages.error.notVerified'),ApiCode::UNAUTHORIZED,['verified'=>false,'user'=>$user]);
             }
             $User = UserResource::make($user);
-            $result = ["user:" => $User, "token:" => $token];
+            $result = ["user" => $User, "token" => $token];
             return ApiResponses::success($result, __('messages.login_success'), ApiCode::OK);
     }
 

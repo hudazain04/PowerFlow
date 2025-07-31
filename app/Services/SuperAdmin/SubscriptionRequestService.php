@@ -12,10 +12,12 @@ use App\DTOs\SubscriptionRequestDTO;
 use App\DTOs\UserDTO;
 use App\Exceptions\ErrorException;
 use App\Http\Resources\SubscriptionRequestResource;
+use App\Models\User as UserModel;
 use App\Repositories\interfaces\Admin\PowerGeneratorRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\PlanPriceRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\SubscriptionRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\SubscriptionRequestRepositoryInterface;
+use App\Repositories\interfaces\UserRepositoryInterface;
 use App\Types\GeneratorRequests;
 use App\Types\UserTypes;
 use Carbon\Carbon;
@@ -32,6 +34,7 @@ class SubscriptionRequestService
         protected PlanPriceRepositoryInterface $planPriceRepository,
         protected PowerGeneratorRepositoryInterface $powerGeneratorRepository,
         protected SubscriptionRepositoryInterface $subscriptionRepository,
+        protected UserRepositoryInterface $userRepository,
     )
     {
     }
@@ -103,8 +106,21 @@ class SubscriptionRequestService
 
     }
 
-    public function renew()
+    public function renew(SubscriptionRequestDTO $subscriptionRequestDTO)
     {
+        $user=$this->userRepository->findById($subscriptionRequestDTO->user_id);
+        if (!$user)
+        {
+            throw new ErrorException(__('auth.userNotFound'),ApiCode::NOT_FOUND);
+        }
+        $user=$this->userRepository->getRelations(['powerGenerator','planPrice']);
+        $subscriptionRequestDTO->name=$user->powerGenerator()->name;
+        $subscriptionRequestDTO->location=$user->powerGenerator()->location;
+        $subscriptionRequestDTO->period=$user->planPrice()->period;
+        $subscriptionRequest=$this->subscriptionRequestRepository->create($subscriptionRequestDTO->toArray());
+        return $this->success(null,__('subscriptionRequest.create'));
 
     }
+
+
 }

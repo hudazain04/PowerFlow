@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ElectricalBoxController;
 use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\PowerGeneratorController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\SuperAdmin\AppInfoController;
 use App\Http\Controllers\SuperAdmin\FaqController;
 use App\Http\Controllers\SuperAdmin\FeatureController;
@@ -184,8 +185,14 @@ Route::middleware('auth:api')->group(function () {
 
     Route::prefix('subscriptionRequest')->group(function () {
         Route::post('create', [SubscriptionRequestController::class, 'store']);
-        Route::post('renew',[SubscriptionRequestController::class,'renew']);
+        Route::post('renew',[SubscriptionRequestController::class,'renew'])->middleware('role:admin');
     });
+
+    Route::prefix('subscription')->group(function () {
+        Route::post('cancel',[SubscriptionController::class,''])->middleware('role:admin');
+    });
+
+
     Route::prefix('planPrice')->group(function () {
         Route::get('getAll/{plan_id}', [PlanPriceController::class, 'index']);
         Route::get('findById/{id}', [PlanPriceController::class, 'findById']);
