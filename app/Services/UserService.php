@@ -79,7 +79,8 @@ class UserService
 
             $user = $this->findUser($request->email);
             if (is_null($user->email_verified_at)) {
-                $this->verificationService->sendVerificationEmail($user);
+                SendEmailJob::dispatchAfterResponse($user);
+//                $this->verificationService->sendVerificationEmail($user);
 //                throw VerificationException::emailNotVerfied(['verified'=>false]);
                 throw  new ErrorException(__('messages.error.notVerified'),ApiCode::UNAUTHORIZED,['verified'=>false]);
             }
