@@ -38,57 +38,77 @@ class UserService
 
     }
 
+//    public function register(array $dto,string $role){
+//
+//            $data=UserDTO::from($dto);
+//
+//            $exist= $this->authRepository->findUserByEmail($data->email);
+//            if ($exist){
+//                throw  AuthException::emailExists();
+//            }
+//            DB::beginTransaction();
+//            try {
+//                $user = $this->authRepository->createUser($data);
+//                $this->authRepository->assignRole($user, $role);
+//                DB::commit();
+//                $userData=new UserResource($user);
+//                //         $this->verification->sendVerificationEmail($user);
+//                SendEmailJob::dispatchAfterResponse($user);
+//                //         $event=
+//                //        $token=JWTAuth::fromUser($user);
+//                $result= $userData;
+//                return ApiResponses::success($result,__('messages.user_registered'),ApiCode::OK);
+//            } catch (\Throwable $exception) {
+//                DB::rollBack();
+//                throw AuthException::ServerError();
+//            }
+//
+//
+//
+//
+//    }
+//
+//
+//    public function login(LoginRequest $request)
+//    {
+//            $credintials = $request->only('email', 'password');
+//
+//            if (!$token = JWTAuth::attempt($credintials)) {
+//                throw AuthException::invalidCredentials();
+//            }
+//
+//            $user = $this->findUser($request->email);
+//            if (is_null($user->email_verified_at)) {
+//                SendEmailJob::dispatchAfterResponse($user);
+////                $this->verificationService->sendVerificationEmail($user);
+////                throw VerificationException::emailNotVerfied(['verified'=>false]);
+//                throw  new ErrorException(__('messages.error.notVerified'),ApiCode::UNAUTHORIZED,['verified'=>false,'user'=>$user]);
+//            }
+//            $User = UserResource::make($user);
+//            $result = ["user" => $User, "token" => $token];
+//            return ApiResponses::success($result, __('messages.login_success'), ApiCode::OK);
+//    }
     public function register(array $dto,string $role){
 
-            $data=UserDTO::from($dto);
+        $data=UserDTO::from($dto);
 
-            $exist= $this->authRepository->findUserByEmail($data->email);
-            if ($exist){
-                throw  AuthException::emailExists();
-            }
-            DB::beginTransaction();
-            try {
-                $user = $this->authRepository->createUser($data);
-                $this->authRepository->assignRole($user, $role);
-                DB::commit();
-                $userData=new UserResource($user);
-                //         $this->verification->sendVerificationEmail($user);
-                SendEmailJob::dispatchAfterResponse($user);
-                //         $event=
-                //        $token=JWTAuth::fromUser($user);
-                $result= $userData;
-                return ApiResponses::success($result,__('messages.user_registered'),ApiCode::OK);
-            } catch (\Throwable $exception) {
-                DB::rollBack();
-                throw AuthException::ServerError();
-            }
-
-
+        $exist= $this->authRepository->findUserByEmail($data->email);
+        if ($exist){
+            throw  AuthException::emailExists();
+        }
+        DB::beginTransaction();
+        try {
+            $user = $this->authRepository->createUser($data);
+            $this->authRepository->assignRole($user, $role);
+            DB::commit();
+            return $user;
+        } catch (\Throwable $exception) {
+            DB::rollBack();
+            throw AuthException::ServerError();
+        }
 
 
     }
-
-
-    public function login(LoginRequest $request)
-    {
-            $credintials = $request->only('email', 'password');
-
-            if (!$token = JWTAuth::attempt($credintials)) {
-                throw AuthException::invalidCredentials();
-            }
-
-            $user = $this->findUser($request->email);
-            if (is_null($user->email_verified_at)) {
-                SendEmailJob::dispatchAfterResponse($user);
-//                $this->verificationService->sendVerificationEmail($user);
-//                throw VerificationException::emailNotVerfied(['verified'=>false]);
-                throw  new ErrorException(__('messages.error.notVerified'),ApiCode::UNAUTHORIZED,['verified'=>false,'user'=>$user]);
-            }
-            $User = UserResource::make($user);
-            $result = ["user" => $User, "token" => $token];
-            return ApiResponses::success($result, __('messages.login_success'), ApiCode::OK);
-    }
-
     public function update(int $id,array $data){
 
         $user=$this->authRepository->findById($id);
