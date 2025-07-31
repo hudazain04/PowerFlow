@@ -31,4 +31,6 @@ interface UserRepositoryInterface
 
   public function getRelations(UserModel $user , array $relations) : UserModel;
 
+  public function updateRole(UserModel $user, string $role) : void;
+
 }

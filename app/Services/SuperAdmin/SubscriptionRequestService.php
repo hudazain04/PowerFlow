@@ -77,6 +77,8 @@ class SubscriptionRequestService
             $powerGeneratorDTO->location = $request->location;
             $powerGeneratorDTO->user_id = $request->user_id;
             $generator = $this->powerGeneratorRepository->create($powerGeneratorDTO->toArray());
+            $user=$this->userRepository->findById($request->user_id);
+            $this->userRepository->updateRole($user,UserTypes::ADMIN);
             $planPrice = $this->subscriptionRequestRepository->getRelations($request, ['planprice'])->planPrice;
             $subscriptionDTO = new SubscriptionDTO();
             $subscriptionDTO->start_time = Carbon::now();

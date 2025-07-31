@@ -73,4 +73,9 @@ class UserRepository implements UserRepositoryInterface
         $user->load($relations);
         return $user;
     }
+
+    public function updateRole(UserModel $user, string $role): void
+    {
+        $user->syncRoles([$role]);
+    }
 }
