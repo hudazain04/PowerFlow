@@ -11,7 +11,7 @@ use Throwable;
 class VerificationException extends Exception
 {
     public $data;
-    public function __construct($message = "", $code = 500,  $data)
+    public function __construct($message = "", $code = 500,$data)
     {
         parent::__construct($message, $code);
         $this->data=$data;

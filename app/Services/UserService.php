@@ -7,6 +7,7 @@ use App\ApiHelper\ApiCode;
 use App\ApiHelper\ApiResponses;
 use App\DTOs\UserDTO;
 use App\Exceptions\AuthException;
+use App\Exceptions\ErrorException;
 use App\Exceptions\VerificationException;
 use App\Http\Requests\LoginRequest;
 use App\Http\Resources\UserResource;
@@ -79,7 +80,8 @@ class UserService
             $user = $this->findUser($request->email);
             if (is_null($user->email_verified_at)) {
                 $this->verificationService->sendVerificationEmail($user);
-                throw VerificationException::emailNotVerfied(['verified'=>false]);
+//                throw VerificationException::emailNotVerfied(['verified'=>false]);
+                throw  new ErrorException(__('messages.error.notVerified'),ApiCode::UNAUTHORIZED,['verified'=>false]);
             }
             $User = UserResource::make($user);
             $result = ["user:" => $User, "token:" => $token];
