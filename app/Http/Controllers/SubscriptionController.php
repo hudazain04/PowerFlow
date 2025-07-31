@@ -13,9 +13,9 @@ class SubscriptionController extends Controller
     {
     }
 
-    public function cancel()
+    public function cancel(Request $request)
     {
-
+        return $this->subscriptionService->cancel($request->user());
     }
 
 }

@@ -16,4 +16,6 @@ interface SubscriptionRepositoryInterface
 
     public function create(array $data) : SubscriptionModel;
 
+    public function getLastForUser(int $user_id) : SubscriptionModel;
+
 }

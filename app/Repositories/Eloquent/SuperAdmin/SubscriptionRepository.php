@@ -42,4 +42,15 @@ class SubscriptionRepository implements SubscriptionRepositoryInterface
         $subscription=SubscriptionModel::create($data);
         return  $subscription;
     }
+
+    public function getLastForUser(int $user_id): SubscriptionModel
+    {
+        $subscription=SubscriptionModel::where('user_id',$user_id)->get()
+            ->filter(function ($subscription){
+                return $subscription->start_time->addMonths($subscription->period)->gt(now());
+
+            })
+            ->sortByDesc('start_time')->fisrt();
+        return $subscription;
+    }
 }
