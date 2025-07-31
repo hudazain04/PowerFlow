@@ -53,4 +53,17 @@ class SubscriptionRepository implements SubscriptionRepositoryInterface
             ->sortByDesc('start_time')->fisrt();
         return $subscription;
     }
+
+    public function update(SubscriptionModel $subscription, array $data): SubscriptionModel
+    {
+       $subscription->update($data);
+       $subscription->save();
+       return  $subscription;
+    }
+
+    public function softDelete(SubscriptionModel $subscription): bool
+    {
+        return  $subscription->delete();
+    }
 }
+

@@ -18,4 +18,8 @@ interface SubscriptionRepositoryInterface
 
     public function getLastForUser(int $user_id) : SubscriptionModel;
 
+    public function update(SubscriptionModel $subscription, array $data) : SubscriptionModel;
+
+    public function softDelete(SubscriptionModel $subscription) : bool;
+
 }
