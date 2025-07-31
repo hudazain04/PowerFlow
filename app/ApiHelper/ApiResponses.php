@@ -19,7 +19,6 @@ class ApiResponses
     public static function error($message = 'An error occurred', $errorCode = ApiCode::INTERNAL_SERVER_ERROR, $data = null): JsonResponse
     {
         return response()->json([
-
             'code' => $errorCode,
             'message' => $message,
             'data' => $data,

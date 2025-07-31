@@ -79,7 +79,7 @@ class UserService
             $user = $this->findUser($request->email);
             if (is_null($user->email_verified_at)) {
                 $this->verificationService->sendVerificationEmail($user);
-                throw VerificationException::emailNotVerfied();
+                throw VerificationException::emailNotVerfied(['verified'=>false]);
             }
             $User = UserResource::make($user);
             $result = ["user:" => $User, "token:" => $token];
