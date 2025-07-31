@@ -102,4 +102,9 @@ class SubscriptionRequestService
         return $this->success(null,__('subscriptionRequest.reject'));
 
     }
+
+    public function renew()
+    {
+
+    }
 }

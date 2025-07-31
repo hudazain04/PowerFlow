@@ -5,6 +5,7 @@ namespace App\Http\Controllers\SuperAdmin;
 use App\DTOs\SubscriptionRequestDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SubscriptionRequest\CreateSubscriptionRequestRequest;
+use App\Http\Requests\SubscriptionRequest\RenewRequest;
 use App\Services\SuperAdmin\SubscriptionRequestService;
 use App\Types\SubscriptionTypes;
 use App\Types\UserTypes;
@@ -47,9 +48,14 @@ class SubscriptionRequestController extends Controller
 
     }
 
-    public function renew()
+    public function renew(RenewRequest $request)
     {
+        $subscriptionRequestDTO=SubscriptionRequestDTO::fromRequest($request);
+        $subscriptionRequestDTO->type=SubscriptionTypes::Renew;
+        $subscriptionRequestDTO->user_id=$request->user()->id;
 
+
+        return $this->subscriptionRequestService->renew();
     }
 
 }

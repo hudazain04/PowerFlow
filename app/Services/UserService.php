@@ -82,7 +82,7 @@ class UserService
                 SendEmailJob::dispatchAfterResponse($user);
 //                $this->verificationService->sendVerificationEmail($user);
 //                throw VerificationException::emailNotVerfied(['verified'=>false]);
-                throw  new ErrorException(__('messages.error.notVerified'),ApiCode::UNAUTHORIZED,['verified'=>false]);
+                throw  new ErrorException(__('messages.error.notVerified'),ApiCode::UNAUTHORIZED,['verified'=>false,'user'=>$user]);
             }
             $User = UserResource::make($user);
             $result = ["user:" => $User, "token:" => $token];
