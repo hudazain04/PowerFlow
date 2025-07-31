@@ -68,7 +68,7 @@ class UserRepository implements UserRepositoryInterface
 
     }
 
-    public function getRelations(User $user, array $relations): User
+    public function getRelations(User $user, array $relations): UserModel
     {
         $user->load($relations);
         return $user;

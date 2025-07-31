@@ -189,7 +189,7 @@ Route::middleware('auth:api')->group(function () {
     });
 
     Route::prefix('subscription')->group(function () {
-//        Route::post('cancel',[SubscriptionController::class,''])->middleware('role:admin');
+        Route::post('cancel',[SubscriptionController::class,'cancel'])->middleware('role:admin');
     });
 
 
