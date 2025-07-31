@@ -13,7 +13,7 @@ class AuthException extends Exception
     }
     public static function ServerError():self
     {
-        return new self('Roll Back.', 500);
+        return new self('Server Error', 500);
 
     }
 

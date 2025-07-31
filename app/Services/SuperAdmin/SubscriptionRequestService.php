@@ -45,7 +45,7 @@ class SubscriptionRequestService
     public function store(SubscriptionRequestDTO $requestDTO)
     {
         $planPrice=$this->planPriceRepository->find($requestDTO->planPrice_id);
-        if (! $planPrice)
+        if (!$planPrice)
         {
             throw new ErrorException(__('planPrice.notFound'),ApiCode::NOT_FOUND);
         }
@@ -58,17 +58,16 @@ class SubscriptionRequestService
     {
         $requests=$this->subscriptionRequestRepository->getAll([ 'status' => $request->query('status')]);
         return $this->success(SubscriptionRequestResource::collection($requests),__('messages.success'));
-
     }
 
     public function approve( int $requestId)
     {
         try{
+            DB::beginTransaction();
             $request = $this->subscriptionRequestRepository->find($requestId);
             if (!$request) {
                 throw new ErrorException(__('subscriptionRequest.notFound'), ApiCode::NOT_FOUND);
             }
-            DB::beginTransaction();
             $request = $this->subscriptionRequestRepository->update($request, ['status' => GeneratorRequests::APPROVED]);
             $powerGeneratorDTO = new PowerGeneratorDTO();
             $powerGeneratorDTO->name = $request->name;

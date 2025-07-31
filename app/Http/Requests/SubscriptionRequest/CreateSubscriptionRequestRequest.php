@@ -30,20 +30,6 @@ class CreateSubscriptionRequestRequest extends FormRequest
 //            'period'       => 'required|integer',
             'planPrice_id' => 'required|exists:plan_prices,id',
         ];
-        if ( $this->user()->hasRole('admin')) {
-            $rules['type'] = [
-                'required',
-                'string',
-                Rule::in((new \ReflectionClass(SubscriptionTypes::class))->getConstants()),
-            ];
-        } else {
-            $rules['type'] = [
-                'nullable',
-                'string',
-                Rule::in((new \ReflectionClass(SubscriptionTypes::class))->getConstants()),
-            ];
-        }
-
         return $rules;
     }
 }

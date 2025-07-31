@@ -70,7 +70,6 @@ class UserService
 
     public function login(LoginRequest $request)
     {
-        try{
             $credintials = $request->only('email', 'password');
 
             if (!$token = JWTAuth::attempt($credintials)) {
@@ -85,12 +84,6 @@ class UserService
             $User = UserResource::make($user);
             $result = ["user:" => $User, "token:" => $token];
             return ApiResponses::success($result, __('messages.login_success'), ApiCode::OK);
-        }
-        catch (\Throwable $exception)
-        {
-//            return ApiResponses::error($exception->getMessage(),500);
-            throw AuthException::ServerError();
-        }
     }
 
     public function update(int $id,array $data){
