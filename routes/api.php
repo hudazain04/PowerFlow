@@ -184,6 +184,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::prefix('subscriptionRequest')->group(function () {
         Route::post('create', [SubscriptionRequestController::class, 'store']);
+        Route::post('renew',[SubscriptionRequestController::class,'renew']);
     });
     Route::prefix('planPrice')->group(function () {
         Route::get('getAll/{plan_id}', [PlanPriceController::class, 'index']);
