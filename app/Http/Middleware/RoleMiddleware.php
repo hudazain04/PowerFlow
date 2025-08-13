@@ -25,7 +25,7 @@ class RoleMiddleware
 
             $userRoles = $user->getRoleNames()->toArray();
             $hasRole = false;
-            dd($roles);
+//            dd($roles);
             foreach ($roles as $role) {
                 if (in_array($role, $userRoles)) {
                     $hasRole = true;
