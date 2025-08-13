@@ -53,7 +53,7 @@ class AuthController extends Controller
 
         public function register(UserRequest $request){
 
-            $user=$this->authservice->register($request->validated(),$request->role);
+            $user=$this->authservice->register($request->validated());
             $userData=new UserResource($user);
             SendEmailJob::dispatchAfterResponse($user);
 //            $not=$this->verification->sendVerificationEmail($user);

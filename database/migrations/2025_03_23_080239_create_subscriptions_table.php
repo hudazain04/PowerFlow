@@ -18,6 +18,8 @@ return new class extends Migration
             $table->integer('price');
             $table->foreignId('planPrice_id')->nullable()->constrained('plan_prices')->nullOnDelete();
             $table->foreignId('generator_id')->nullable()->constrained('power_generators')->nullOnDelete();
+            $table->boolean('expired_at')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

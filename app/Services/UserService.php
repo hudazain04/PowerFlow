@@ -88,7 +88,7 @@ class UserService
 //            $result = ["user" => $User, "token" => $token];
 //            return ApiResponses::success($result, __('messages.login_success'), ApiCode::OK);
 //    }
-    public function register(array $dto,string $role){
+    public function register(array $dto){
 
         $data=UserDTO::from($dto);
 
@@ -99,7 +99,7 @@ class UserService
         DB::beginTransaction();
         try {
             $user = $this->authRepository->createUser($data);
-            $this->authRepository->assignRole($user, $role);
+            $this->authRepository->assignRole($user, UserTypes::USER);
             DB::commit();
             return $user;
         } catch (\Throwable $exception) {

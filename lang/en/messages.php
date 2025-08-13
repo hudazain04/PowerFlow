@@ -15,6 +15,10 @@ The activation code you provided for the course has expired. Please obtain a new
         "unknown_lesion_type" => "⚠️ Error: Invalid lesson type! ⚠️ The lesson could not be created because the provided file type is not supported. Accepted file types are PDF and video. Please upload a valid file and try again. Thank you!",
         'blocked_generator'=>"Your power generator account is blocked,you can't proceed your operation",
         'notVerified'=>'email registered but did not verify the account',
+        'tokenExpired'=>'Token has expired',
+        'tokenInvalid'=>'Token is invalid',
+        'tokenMissing'=> 'Token is missing or invalid',
+        'unauthenticated'=>'Unauthenticated',
     ],
     "activation_code_controller" => [
         "error" => [

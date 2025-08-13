@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\DTOs\SubscriptionRequestDTO;
+use App\Http\Requests\Subscription\UpgradeRequest;
+use App\Http\Requests\SubscriptionRequest\RenewRequest;
 use App\Services\SuperAdmin\SubscriptionService;
+use App\Types\SubscriptionTypes;
 use Illuminate\Http\Request;
 
 class SubscriptionController extends Controller
@@ -18,4 +22,20 @@ class SubscriptionController extends Controller
         return $this->subscriptionService->cancel($request->user());
     }
 
+    public function renew(RenewRequest $request)
+    {
+        $subscriptionRequestDTO=SubscriptionRequestDTO::fromRequest($request);
+        $subscriptionRequestDTO->type=SubscriptionTypes::Renew;
+        $subscriptionRequestDTO->user_id=$request->user()->id;
+        return $this->subscriptionService->renew($subscriptionRequestDTO);
+    }
+
+    public function upgrade(RenewRequest $request)
+    {
+        $subscriptionRequestDTO=SubscriptionRequestDTO::fromRequest($request);
+        $subscriptionRequestDTO->user_id=$request->user()->id;
+        $subscriptionRequestDTO->type=SubscriptionTypes::Renew;
+        return  $this->subscriptionService->upgrade($subscriptionRequestDTO);
+    }
 }
+

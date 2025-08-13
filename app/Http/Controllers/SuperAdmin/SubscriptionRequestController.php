@@ -48,17 +48,5 @@ class SubscriptionRequestController extends Controller
 
     }
 
-    public function renew(RenewRequest $request)
-    {
-        $subscriptionRequestDTO=SubscriptionRequestDTO::fromRequest($request);
-        $subscriptionRequestDTO->type=SubscriptionTypes::Renew;
-        $subscriptionRequestDTO->user_id=$request->user()->id;
-        return $this->subscriptionRequestService->renew($subscriptionRequestDTO);
-    }
-
-    public function cancel(Request $request)
-    {
-        return $this->subscriptionRequestService->cancel($request->user());
-    }
 
 }

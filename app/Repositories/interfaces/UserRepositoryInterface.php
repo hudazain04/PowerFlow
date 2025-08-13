@@ -4,7 +4,6 @@ namespace App\Repositories\interfaces;
 
 use App\DTOs\UserDTO;
 use App\Models\User as UserModel;
-use http\Client\Curl\User;
 use Spatie\Permission\Models\Role;
 
 interface UserRepositoryInterface

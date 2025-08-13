@@ -25,16 +25,24 @@ return Application::configure(basePath: dirname(__DIR__))
 
     })
     ->withExceptions(function (Exceptions $exceptions) {
+
         $exceptions->render(function (\App\Exceptions\ErrorException $e, Request $request) {
             return response()->json(['message'=> $e->message,'data'=>$e->data],$e->errorCode);
         });
-        $exceptions->render(function (Exception $e, Request $request) {
-            return response()->json([
-                'message' => $e->getMessage()
-//                    'message' => __('messages.error.server_error')
-            ], ApiCode::INTERNAL_SERVER_ERROR);
+//        $exceptions->render(function (\Illuminate\Auth\AuthenticationException $exception , Request $request){
+//            return  response()->json([
+//                'message' => __('messages.error.unauthenticated')
+////                    'message' => __('messages.error.server_error')
+//            ], ApiCode::UNAUTHORIZED);
+//        });
+//        $exceptions->render(function (Exception $e, Request $request) {
+//            return response()->json([
+//                'message' => $e->getMessage()
+////                    'message' => __('messages.error.server_error')
+//            ], ApiCode::INTERNAL_SERVER_ERROR);
+//
+//        });
 
-        });
     })
 
     ->create();

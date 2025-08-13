@@ -43,14 +43,14 @@ class SubscriptionRepository implements SubscriptionRepositoryInterface
         return  $subscription;
     }
 
-    public function getLastForUser(int $user_id): SubscriptionModel
+    public function getLastForGenerator(int $generator_id): SubscriptionModel
     {
-        $subscription=SubscriptionModel::where('user_id',$user_id)->get()
+        $subscription=SubscriptionModel::where(['generator_id'=>$generator_id,'expired_at'=>null])->get()
             ->filter(function ($subscription){
                 return $subscription->start_time->addMonths($subscription->period)->gt(now());
 
             })
-            ->sortByDesc('start_time')->fisrt();
+            ->sortByDesc('start_time')->first();
         return $subscription;
     }
 
@@ -61,9 +61,5 @@ class SubscriptionRepository implements SubscriptionRepositoryInterface
        return  $subscription;
     }
 
-    public function softDelete(SubscriptionModel $subscription): bool
-    {
-        return  $subscription->delete();
-    }
 }
 
