@@ -37,6 +37,9 @@ use App\Repositories\interfaces\SuperAdmin\VisitorRepositoryInterface;
 
 use App\Repositories\interfaces\User\ComplaintRepositoryInterface;
 use App\Repositories\interfaces\UserRepositoryInterface;
+use Dedoc\Scramble\Scramble;
+use Dedoc\Scramble\Support\Generator\OpenApi;
+use Dedoc\Scramble\Support\Generator\SecurityScheme;
 use Illuminate\Support\ServiceProvider;
 
 
@@ -70,7 +73,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Scramble::configure()
+            ->withDocumentTransformers(function (OpenApi $openApi) {
+                // Add HTTP Bearer security scheme
+                $openApi->secure(
+                    SecurityScheme::http('bearer')
+                );
+            });
     }
 //    protected $listen = [
 //        UserRegistered::class => [
