@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 use App\ApiHelper\ApiResponse;
+use App\ApiHelper\ApiResponses;
 use Exception;
 class FaqException extends Exception
 {
@@ -12,6 +13,6 @@ class FaqException extends Exception
 
     public function render($request)
     {
-        return ApiResponse::error($this->getMessage(), $this->getCode());
+        return ApiResponses::error($this->getMessage(), $this->getCode());
     }
 }
