@@ -45,6 +45,7 @@ class DatabaseSeeder extends Seeder
            'email' => 'huda1812zain@gmail.com',
 'password'=>12345678,
 //            'role'=>'Admin'
+            "password" => "123123123"
        ]);
         $user->assignRole('superAdmin');
 
