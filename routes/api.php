@@ -114,7 +114,7 @@ Route::middleware('auth:api')->group(function () {
     });
 
 
-    Route::middleware('role:super admin')->group(function () {
+    Route::middleware('role:superadmin')->group(function () {
         Route::prefix('feature')->group(function () {
             Route::get('getAll', [FeatureController::class, 'index']);
             Route::get('findById/{id}', [FeatureController::class, 'findById']);
