@@ -16,7 +16,9 @@ class GeneratorRequest extends Model
         'generator_name',
         'generator_location',
         'phone',
-        'status'
+        'status',
+        'user_id'
+
     ];
     public function user()
     {

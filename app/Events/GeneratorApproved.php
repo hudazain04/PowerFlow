@@ -7,10 +7,11 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class GeneratorApproved
+class GeneratorApproved implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -19,12 +20,12 @@ class GeneratorApproved
      */
 
     public $userId;
-    public $generatorName;
+    public $generator;
 
-    public function __construct($userId, $generatorName)
+    public function __construct($userId, $generator)
     {
         $this->userId = $userId;
-        $this->generatorName = $generatorName;
+        $this->generator = $generator;
     }
 
     /**
@@ -35,15 +36,22 @@ class GeneratorApproved
     public function broadcastOn(): array
     {
         return [
-            new Channel('user.' . $this->userId)
+            new Channel('user.'.$this->userId)
         ];
     }
     public function broadcastWith():array {
         return [
-            'message' => "Your generator '{$this->generatorName}' has been approved!",
-            'generator_name' => $this->generatorName,
+            'message' => "Your generator '{$this->generator->name}' has been approved!",
+            'generator_name' => $this->generator->name,
+            'generator_location'=>$this->generator->location,
+            'generator_user_id'=>$this->generator->user_id,
             'timestamp' => now()->toDateTimeString(),
 
         ];
     }
+    public function broadcastAs()
+    {
+        return 'generator approved';
+    }
+
 }

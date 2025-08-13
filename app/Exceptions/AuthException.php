@@ -52,6 +52,9 @@ class AuthException extends Exception
     public static function InvalidResetTokenException():self{
         return new self('invalid Token',400);
     }
+    public static function alreadySent(){
+        return new self('already sent a request',400);
+    }
 
     public function render($request)
     {

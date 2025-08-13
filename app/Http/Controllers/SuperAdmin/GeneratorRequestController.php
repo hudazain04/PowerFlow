@@ -33,14 +33,14 @@ class GeneratorRequestController extends Controller
     {
         $generator = $this->service->approveRequest($id);
 
-        return ApiResponses::success(null,__('generatorRequest.approve'),ApiCode::OK);
+        return ApiResponses::success($generator,__('generatorRequest.approve'),ApiCode::OK);
 
     }
 
     public function reject(int $id)
     {
         $this->service->rejectRequest($id);
-        return ApiResponses::success(null,'sucess',ApiCode::OK);
+        return ApiResponses::success(null,'success',ApiCode::OK);
     }
 
 }

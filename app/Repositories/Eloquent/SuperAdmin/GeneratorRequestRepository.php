@@ -22,7 +22,7 @@ class GeneratorRequestRepository implements GeneratorRequestRepositoryInterface
 
     public function find(int $id): ?GeneratorRequest
     {
-        return $this->model->find($id)->first();
+        return $this->model->find($id);
     }
 
     public function update(int $id, array $data): bool

@@ -42,13 +42,14 @@ class NewGeneratorRequest implements ShouldBroadcastNow
     {
         return [
             'id'=>$this->generator->id,
+            'user_id'=>$this->generator->user_id,
             'generator_name'=>$this->generator->generator_name,
 
                ];
     }
     public function broadcastAs()
     {
-        return 'generator.request.created';
+        return 'generator request created';
     }
 
 }

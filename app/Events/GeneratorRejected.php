@@ -7,10 +7,11 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class GeneratorRejected
+class GeneratorRejected implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -33,7 +34,7 @@ class GeneratorRejected
     public function broadcastOn(): array
     {
         return [
-             new Channel('user.' . $this->userId)
+             new Channel('user.'.$this->userId)
         ];
     }
     public function broadcastWith()
@@ -43,5 +44,9 @@ class GeneratorRejected
             'generator_name' => $this->generatorName,
             'timestamp' => now()->toDateTimeString(),
         ];
+    }
+    public function broadcastAs()
+    {
+        return 'generator reject';
     }
 }
