@@ -25,14 +25,13 @@ class RoleMiddleware
 
             $userRoles = $user->getRoleNames()->toArray();
             $hasRole = false;
-
+            dd($roles);
             foreach ($roles as $role) {
                 if (in_array($role, $userRoles)) {
                     $hasRole = true;
                     break;
                 }
             }
-
             if (!$hasRole) {
                 return response()->json(['error' => 'Unauthorized'], 403);
             }
