@@ -56,7 +56,7 @@ Route::get('/verify', [PasswordController::class, 'verify'])->name('verification
 
 Route::middleware('auth:api')->group(function () {
     Route::prefix('faq')->group(function () {
-        Route::middleware('role:super admin')->group(function () {
+        Route::middleware('role:superAdmin')->group(function () {
             Route::put('/update/{id}', [FaqController::class, 'updateFaq']);
             Route::delete('delete/{id}', [FaqController::class, 'deleteFaq']);
             Route::post('/store', [FaqController::class, 'createFaq']);
@@ -68,7 +68,7 @@ Route::middleware('auth:api')->group(function () {
 
 
     Route::post('request', [GeneratorRequestController::class, 'store'])->middleware('role:user');
-    Route::prefix('/gen')->middleware('role:super admin')->group(function () {
+    Route::prefix('/gen')->middleware('role:superAdmin')->group(function () {
         Route::post('approve/{id}', [GeneratorRequestController::class, 'approve']);
         Route::post('reject/{id}', [GeneratorRequestController::class, 'reject']);
         Route::get('get', [GeneratorRequestController::class, 'pendingRequests']);
@@ -80,7 +80,7 @@ Route::middleware('auth:api')->group(function () {
         Route::post('reject/{id}', [CustomerRequestController::class, 'rejectRequest']);
 
     });
-    Route::prefix('neighborhood')->middleware('role:super admin')->group(function () {
+    Route::prefix('neighborhood')->middleware('role:superAdmin')->group(function () {
         Route::post('store', [NeighborhoodController::class, 'store']);
         Route::get('all', [NeighborhoodController::class, 'index']);
         Route::get('show/{id}', [NeighborhoodController::class, 'show']);
@@ -226,7 +226,7 @@ Route::middleware('auth:api')->group(function () {
         Route::patch('updateCutComplaint/{complaint_id}',[complaintcontroller::class,'updateCutComplaint'])->middleware('role:employee');
         Route::post('createComplaint',[complaintcontroller::class,'createComplaint']);
         Route::delete('deleteComplaint/{complaint_id}',[complaintcontroller::class,'deleteComplaint']);
-        Route::get('getComplaints',[complaintcontroller::class,'getComplaints'])->middleware('role:admin,super admin, employee');
+        Route::get('getComplaints',[complaintcontroller::class,'getComplaints'])->middleware('role:admin,superAdmin, employee');
     });
 
     Route::prefix('spending')->group(function (){
@@ -237,7 +237,7 @@ Route::middleware('auth:api')->group(function () {
     Route::prefix('account')->group(function (){
         Route::get('getProfile',[AccountController::class,'getProfile']);
         Route::patch('updateProfile',[AccountController::class,'updateProfile']);
-        Route::get('blocking/{id}',[AccountController::class,'blocking'])->middleware('role:super admin');
+        Route::get('blocking/{id}',[AccountController::class,'blocking'])->middleware('role:superAdmin');
     });
 });
 
