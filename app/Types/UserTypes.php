@@ -11,7 +11,7 @@ class UserTypes
     public const EMPLOYEE = 'employee';
     public const USER = 'user';
     public const ADMIN = 'admin';
-    public const SUPER_ADMIN = 'super admin';
+    public const SUPER_ADMIN = 'superAdmin';
 
     public static array $statuses = [
         self::EMPLOYEE,
