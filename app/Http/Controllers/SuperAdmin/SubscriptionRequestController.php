@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
+use App\DTOs\SubscriptionRequestDTO;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SubscriptionRequest\CreateSubscriptionRequestRequest;
+use App\Http\Requests\SubscriptionRequest\RenewRequest;
 use App\Services\SuperAdmin\SubscriptionRequestService;
+use App\Types\SubscriptionTypes;
+use App\Types\UserTypes;
 use Illuminate\Http\Request;
 
 class SubscriptionRequestController extends Controller
@@ -18,4 +23,42 @@ class SubscriptionRequestController extends Controller
     {
         return $this->subscriptionRequestService->getLastFive();
     }
+
+    public function store(CreateSubscriptionRequestRequest $request)
+    {
+        $requestDTO=SubscriptionRequestDTO::fromRequest($request);
+        $requestDTO->user_id=$request->user()->id;
+        $requestDTO->type=SubscriptionTypes::NewPlan;
+        return $this->subscriptionRequestService->store($requestDTO);
+    }
+
+    public function getAll(Request $request)
+    {
+        return $this->subscriptionRequestService->getAll($request);
+    }
+
+    public function approve(int $requestId)
+    {
+        return $this->subscriptionRequestService->approve($requestId);
+    }
+
+    public function reject(int $requestId)
+    {
+        return $this->subscriptionRequestService->reject($requestId);
+
+    }
+
+    public function renew(RenewRequest $request)
+    {
+        $subscriptionRequestDTO=SubscriptionRequestDTO::fromRequest($request);
+        $subscriptionRequestDTO->type=SubscriptionTypes::Renew;
+        $subscriptionRequestDTO->user_id=$request->user()->id;
+        return $this->subscriptionRequestService->renew($subscriptionRequestDTO);
+    }
+
+    public function cancel(Request $request)
+    {
+        return $this->subscriptionRequestService->cancel($request->user());
+    }
+
 }

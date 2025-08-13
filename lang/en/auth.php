@@ -18,4 +18,5 @@ return [
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
     'blocked'=>'This account is  blocked',
     'updateProfile'=>'Profile updated successfully',
+    'userNotFound'=>'user not Found',
 ];

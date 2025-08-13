@@ -28,7 +28,6 @@ class AccountService
     public function getProfile()
     {
         $user=Auth::user();
-        $userDTO=UserDTO::fromJson($user);
         return $this->success(ProfileResource::make($user),__('messages.success'));
     }
 

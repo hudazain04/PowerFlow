@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Types\GeneratorRequests;
 use App\Types\SubscriptionTypes;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -21,7 +22,8 @@ class SubscriptionRequestFactory extends Factory
             'type' => $this->faker->randomElement(array_values((new \ReflectionClass(SubscriptionTypes::class))->getConstants())),
             'period' => $this->faker->randomElement([1,3,6,12]),
             'location' => $this->faker->address,
-
+            'status'=>$this->faker->randomElement(array_values((new \ReflectionClass(GeneratorRequests::class))->getConstants())),
+            'name'=>$this->faker->name,
         ];
     }
 }

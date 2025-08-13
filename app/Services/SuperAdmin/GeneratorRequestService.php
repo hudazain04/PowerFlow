@@ -57,9 +57,11 @@ class GeneratorRequestService
                 'user_id'=>$request->user_id
             ]);
 
+
             $user=$request->user;
             $user->syncRoles([]);
             $user->assignRole('admin');
+
 
             event(new GeneratorApproved($request->user_id, $generator));
 

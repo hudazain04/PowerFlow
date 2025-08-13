@@ -30,6 +30,8 @@ class PasswordResetService
 
 
 
+
+
   }
    public function verify(string $token){
        try {
@@ -44,8 +46,6 @@ class PasswordResetService
        }
        $userId = $payload->get('sub');
        $user=User::find($userId);
-
-
        event(new PasswordEvent($token,$user,$userId));
      }
     public function resetPassword(PasswordDto $dto): void

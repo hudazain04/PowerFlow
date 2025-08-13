@@ -24,7 +24,7 @@ class SubscriptionRequestRepository implements SubscriptionRequestRepositoryInte
 
     public function getLastFive() : Collection
     {
-        return SubscriptionRequestModel::latest()->take(5)->get();
+        return SubscriptionRequestModel::with(['user.powerGenerator','planPrice.plan'])->latest()->take(5)->get();
     }
 
     public function getAllWithPlan() : Collection
@@ -44,5 +44,35 @@ class SubscriptionRequestRepository implements SubscriptionRequestRepositoryInte
     {
         $requests=SubscriptionRequestModel::filter($type)->whereRelation('planPrice','plan_id',$plan_id)->get();
         return $requests;
+    }
+
+    public function create(array $data): SubscriptionRequestModel
+    {
+        $subscriptionRequest=SubscriptionRequestModel::create($data);
+        return $subscriptionRequest;
+    }
+
+    public function getAll(array $filters=[]): Collection
+    {
+        $requests=SubscriptionRequestModel::status($filters)->with(['user.powerGenerator','planPrice.plan'])->get();
+        return $requests;
+    }
+
+    public function find(int $id): SubscriptionRequestModel
+    {
+        $request=SubscriptionRequestModel::find($id);
+        return $request;
+    }
+
+    public function update(SubscriptionRequestModel $subscriptionRequest, array $data): SubscriptionRequestModel
+    {
+        $subscriptionRequest->update($data);
+        $subscriptionRequest->save();
+        return $subscriptionRequest;
+    }
+
+    public function getRelations(SubscriptionRequestModel $subscriptionRequest , array $relations): SubscriptionRequestModel
+    {
+        return $subscriptionRequest->load($relations);
     }
 }

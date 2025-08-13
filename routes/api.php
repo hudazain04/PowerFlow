@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ElectricalBoxController;
 use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\PowerGeneratorController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\SuperAdmin\AppInfoController;
 use App\Http\Controllers\SuperAdmin\FaqController;
 use App\Http\Controllers\SuperAdmin\FeatureController;
@@ -43,6 +44,15 @@ Route::prefix('email')->group(function () {
         ->name('verification.resend');
 });
 
+
+Route::prefix('/password')->group(function () {
+    Route::post('/request', [PasswordController::class, 'request']);
+
+    Route::post('/resend', [PasswordController::class, 'resend'])->middleware('throttle:3,1');
+    Route::post('/reset', [PasswordController::class, 'reset']);
+});
+Route::get('/verify', [PasswordController::class, 'verify'])->name('verification.pass');
+
 Route::middleware('auth:api')->group(function () {
     Route::prefix('faq')->group(function () {
         Route::middleware('role:super admin')->group(function () {
@@ -54,13 +64,7 @@ Route::middleware('auth:api')->group(function () {
     });
 
 
-    Route::prefix('/password')->group(function () {
-        Route::post('/request', [PasswordController::class, 'request']);
 
-        Route::post('/resend', [PasswordController::class, 'resend'])->middleware('throttle:3,1');
-        Route::post('/reset', [PasswordController::class, 'reset']);
-    });
-    Route::get('/verify', [PasswordController::class, 'verify'])->name('verification.pass');
 
     Route::post('request', [GeneratorRequestController::class, 'store'])->middleware('role:user');
     Route::prefix('/gen')->middleware('role:super admin')->group(function () {
@@ -151,6 +155,11 @@ Route::middleware('auth:api')->group(function () {
 
         Route::prefix('subscriptionRequest')->group(function () {
             Route::get('getLastFive', [SubscriptionRequestController::class, 'getLastFive']);
+            Route::get('getAll',[SubscriptionRequestController::class,'getAll']);
+            Route::get('approve/{id}',[SubscriptionRequestController::class,'approve']);
+            Route::get('reject/{id}',[SubscriptionRequestController::class,'reject']);
+
+
         });
 
         Route::prefix('AppInfo')->group(function () {
@@ -167,6 +176,22 @@ Route::middleware('auth:api')->group(function () {
         });
 
     });
+
+    Route::middleware('role:admin')->group(function (){
+        Route::prefix('subscriptionRequest')->group(function () {
+            Route::post('renew', [SubscriptionRequestController::class, 'renew']);
+        });
+    });
+
+    Route::prefix('subscriptionRequest')->group(function () {
+        Route::post('create', [SubscriptionRequestController::class, 'store']);
+        Route::post('renew',[SubscriptionRequestController::class,'renew'])->middleware('role:admin');
+    });
+
+    Route::prefix('subscription')->group(function () {
+        Route::post('cancel',[SubscriptionController::class,'cancel'])->middleware('role:admin');
+    });
+
 
     Route::prefix('planPrice')->group(function () {
         Route::get('getAll/{plan_id}', [PlanPriceController::class, 'index']);
@@ -203,9 +228,10 @@ Route::middleware('auth:api')->group(function () {
         Route::get('getComplaints',[complaintcontroller::class,'getComplaints'])->middleware('role:admin,super admin, employee');
     });
 
-    Route::prefix('subscriptionRequest')->group(function (){
-        Route::get('getLastFive',[SubscriptionRequestController::class,'getLastFive'])->middleware('role:super admin');
+    Route::prefix('spending')->group(function (){
+       Route::post('createSpending',[]);
     });
+
 
     Route::prefix('account')->group(function (){
         Route::get('getProfile',[AccountController::class,'getProfile']);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\SuperAdmin;
 
 use App\ApiHelper\ApiCode;
 use App\ApiHelper\ApiResponses;
+use App\DTOs\FaqDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FaqRequest;
 use App\Http\Resources\FaqResource;
@@ -32,9 +33,8 @@ class FaqController extends Controller
      }
 
      public function createFaq(FaqRequest $request){
-        $faq = $this->faqService->createFaq($request->validated());
-        $faqData=FaqResource::make($faq);
-        return ApiResponses::success($faqData,__('Faqmessages.Faq_created'),ApiCode::OK);
+        $dto = FaqDTO::from($request->validated());
+        return $this->faqService->createFaq($dto);
      }
 
      public function updateFaq(int $id,FaqRequest $request){

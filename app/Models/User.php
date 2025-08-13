@@ -47,7 +47,7 @@ class User extends Authenticatable implements JWTSubject,MustVerifyEmail
     }
     public function powerGenerator()
     {
-        return $this->BelongsTo(PowerGenerator::class);
+        return $this->hasOne(PowerGenerator::class);
     }
 
     /**

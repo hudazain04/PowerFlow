@@ -6,6 +6,7 @@ use App\Events\registerEvent;
 use App\Exceptions\AuthException;
 use App\Exceptions\VerificationException;
 use App\Models\User;
+use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Repositories\interfaces\User\VerificationRepositoryInterface;
 use App\Repositories\interfaces\UserRepositoryInterface;
 use Illuminate\Auth\Events\Verified;
@@ -40,8 +41,11 @@ class VerificationService
         }
 
         $this->userRepository->markEmailAsVerified($user);
-//            event(new Verified($user));
-            event(new registerEvent($userId,$user) );
+
+        $token=JWTAuth::fromUser($user);
+
+//      event(new Verified($user));
+        event(new registerEvent($userId,$user , $token) );
         Log::info("registerEvent fired for user {$userId}");
 
 

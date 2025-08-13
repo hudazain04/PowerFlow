@@ -14,7 +14,7 @@ class ErrorException extends Exception
     public $data;
     public $errorCode;
 
-    public function __construct($message =null, $errorCode = ApiCode::INTERNAL_SERVER_ERROR,Throwable $previous = null,$data=null)
+    public function __construct($message =null, $errorCode = ApiCode::INTERNAL_SERVER_ERROR,$data=null,Throwable $previous = null)
     {
         parent::__construct($message, $errorCode, $previous);
         $this->message=$message ?? __('messages.error.server_error');

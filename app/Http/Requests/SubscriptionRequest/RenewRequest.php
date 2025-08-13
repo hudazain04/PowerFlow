@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\SubscriptionRequest;
 
-use App\Types\UserTypes;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class UserRequest extends FormRequest
+class RenewRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,13 +22,7 @@ class UserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-            'email' => 'required|email',
-            'password' => 'required|string|min:6',
-            'phone_number' => 'required|nullable|max:10',
-//            'role' => ['required', 'string', Rule::in(UserTypes::$statuses)],
-
+            'planPrice_id'=>'required',
         ];
     }
 }

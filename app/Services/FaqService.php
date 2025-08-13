@@ -2,8 +2,11 @@
 
 namespace App\Services;
 
+use App\ApiHelper\ApiCode;
+use App\ApiHelper\ApiResponses;
 use App\DTOs\FaqDTO;
 use App\Exceptions\FaqException;
+use App\Http\Resources\FaqResource;
 use App\Models\Faq;
 use App\Repositories\interfaces\FaqRepositoryInterface;
 
@@ -20,9 +23,10 @@ class FaqService
         return $faqs;
     }
 
-    public function createFaq(array $data){
-      $dto = FaqDTO::from($data);
-      return $this->faqRepository->createFaq($dto);
+    public function createFaq(FaqDTO $dto){
+      $faq= $this->faqRepository->createFaq($dto);
+      $faqData=FaqResource::make($faq);
+      return ApiResponses::success($faqData,__('Faqmessages.Faq_created'),ApiCode::OK);
     }
 
     public function update(int $id , array $data){

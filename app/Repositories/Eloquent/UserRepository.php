@@ -67,4 +67,15 @@ class UserRepository implements UserRepositoryInterface
         return UserModel::where('blocked',true)->count();
 
     }
+
+    public function getRelations(User $user, array $relations): UserModel
+    {
+        $user->load($relations);
+        return $user;
+    }
+
+    public function updateRole(UserModel $user, string $role): void
+    {
+        $user->syncRoles([$role]);
+    }
 }

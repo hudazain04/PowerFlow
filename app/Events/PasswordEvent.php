@@ -36,7 +36,7 @@ class PasswordEvent implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new Channel('user'.$this->userId),
+            new Channel('user.'.$this->userId),
         ];
     }
     public function broadcastWith(): array
@@ -52,6 +52,6 @@ class PasswordEvent implements ShouldBroadcastNow
     }
     public function broadcastAs()
     {
-        return 'user Password';
+        return 'user.password';
     }
 }

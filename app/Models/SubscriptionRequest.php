@@ -15,6 +15,9 @@ class SubscriptionRequest extends Model
         'period',
         'user_id',
         'planPrice_id',
+        'location',
+        'name',
+        'status',
     ];
 
 
@@ -30,10 +33,19 @@ class SubscriptionRequest extends Model
 
     public function scopeFilter($query,?string $type=null)
     {
-        if(!$type)
+        if($type)
         {
-            return $query;
+            return $query->where('type',$type);
         }
-        return $query->where('type',$type);
+        return $query;
+
+    }
+    public function scopeStatus($query,array $filters)
+    {
+//        dd($filters['type']);
+        $query->when($filters['status'] ?? false , function ($query) use ($filters){
+            $query->where('status',$filters['status']);
+        });
+        return $query;
     }
 }

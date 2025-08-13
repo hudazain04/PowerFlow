@@ -9,19 +9,23 @@ use App\Events\UserApproved;
 use App\Events\UserRegistered;
 use App\Events\UserVerified;
 use App\Exceptions\AuthException;
+use App\Exceptions\ErrorException;
 use App\Exceptions\VerificationException;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
+use App\Jobs\SendEmailJob;
 use App\Models\Area;
 use App\Models\User;
 use App\Notifications\AccountApprovedNotification;
 use App\Notifications\AccountRejectedNotification;
 use App\Services\User\VerificationService;
 use App\Services\UserService;
+use App\Types\UserTypes;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Psy\Readline\Hoa\Event;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -37,41 +41,54 @@ class AuthController extends Controller
 
     }
 
-     public function register(UserRequest $request){
+//     public function register(UserRequest $request)
+//     {
+//        return $this->authservice->register($request->validated(),UserTypes::USER);
+//     }
+//
+//     public function login (LoginRequest $request)
+//     {
+//         return $this->authservice->login($request);
+//     }
 
-        $user=$this->authservice->register($request->validated(),$request->role);
-         $userData=new UserResource($user);
-         $not=$this->verification->sendVerificationEmail($user);
-         $event=
-//        $token=JWTAuth::fromUser($user);
-        $result= $userData;
-        return ApiResponses::success($result,__('messages.user_registered'),ApiCode::OK);
+        public function register(UserRequest $request){
 
-     }
+            $user=$this->authservice->register($request->validated(),$request->role);
+            $userData=new UserResource($user);
+            SendEmailJob::dispatchAfterResponse($user);
+//            $not=$this->verification->sendVerificationEmail($user);
+            $event=
+    //        $token=JWTAuth::fromUser($user);
+            $result= $userData;
+            return ApiResponses::success($result,__('messages.user_registered'),ApiCode::OK);
 
-     public function login (LoginRequest $request){
-
-       $credintials = $request->only('email','password');
-
-       if (!$token=JWTAuth::attempt($credintials)){
-           throw AuthException::invalidCredentials();
-       }
-
-         $user=$this->authservice->findUser($request->email);
-        if(is_null($user->email_verified_at)){
-
-         $this->verification->sendVerificationEmail($user);
-            throw VerificationException::emailNotVerfied();
         }
-       $User=UserResource::make($user);
-       $result=["user:"=>$User,"token:"=>$token];
-       return ApiResponses::success($result, __('messages.login_success'), ApiCode::OK);
 
-     }
-     public function logout(){
-         JWTAuth::invalidate(JWTAuth::getToken());
-         return ApiResponses::success(null, __('messages.logout'),ApiCode::OK);
-     }
+        public function login (LoginRequest $request){
+
+            $credintials = $request->only('email','password');
+
+            if (!$token=JWTAuth::attempt($credintials)){
+                throw AuthException::invalidCredentials();
+            }
+
+            $user=$this->authservice->findUser($request->email);
+            if(is_null($user->email_verified_at)){
+                SendEmailJob::dispatchAfterResponse($user);
+//                $this->verification->sendVerificationEmail($user);
+                throw new ErrorException(__('messages.error.notVerified'),ApiCode::UNAUTHORIZED,['verified'=>false,'user'=>$user]);
+//                throw VerificationException::emailNotVerfied();
+            }
+            $User=UserResource::make($user);
+            $result=["user"=>$User,"token"=>$token];
+            return ApiResponses::success($result, __('messages.login_success'), ApiCode::OK);
+
+        }
+
+         public function logout(){
+             JWTAuth::invalidate(JWTAuth::getToken());
+             return ApiResponses::success(null, __('messages.logout'),ApiCode::OK);
+         }
 
 
 

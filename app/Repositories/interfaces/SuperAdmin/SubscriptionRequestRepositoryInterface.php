@@ -18,4 +18,13 @@ interface SubscriptionRequestRepositoryInterface
 
     public function getRequestsForPlan(int $plan_id ,  ?string $type) : Collection;
 
+    public function create(array $data) : SubscriptionRequestModel;
+
+    public function getAll(array $filters=[]) : Collection;
+
+    public function find(int $id) : SubscriptionRequestModel;
+
+    public function update(SubscriptionRequestModel $subscriptionRequest, array $data) : SubscriptionRequestModel;
+
+    public function getRelations(SubscriptionRequestModel $subscriptionRequest , array $realtions) : SubscriptionRequestModel;
 }
