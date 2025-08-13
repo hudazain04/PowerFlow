@@ -81,7 +81,7 @@ Route::middleware('auth:api')->group(function () {
         Route::get('show/{id}', [NeighborhoodController::class, 'show']);
     });
 
-    Route::prefix('generator')->group(function () {
+    Route::prefix('generator')->middleware('role:admin')->group(function () {
         // Areas//////
         Route::post('areas', [AreaController::class, 'store']);
         Route::get('getareas', [AreaController::class, 'index']);
