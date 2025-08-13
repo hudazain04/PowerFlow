@@ -40,11 +40,12 @@ class DatabaseSeeder extends Seeder
             FaqSeeder::class
         ]);
 
-       User::factory()->create([
+      $user= User::factory()->create([
            'first_name' => 'Admin',
            'email' => 'huda1812zain@gmail.com',
 //            'role'=>'Admin'
        ]);
+        $user->assignRole('superAdmin');
 
         // Create 10 Users with role 'user'
         $users = User::factory()
