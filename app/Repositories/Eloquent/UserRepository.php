@@ -8,6 +8,7 @@ use App\DTOs\UserDTO;
 use App\Models\User;
 use App\Models\User as UserModel;
 use App\Repositories\interfaces\UserRepositoryInterface;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
 
 class UserRepository implements UserRepositoryInterface
@@ -77,5 +78,11 @@ class UserRepository implements UserRepositoryInterface
     public function updateRole(UserModel $user, string $role): void
     {
         $user->syncRoles([$role]);
+    }
+
+    public function getAll(array $filters): Collection
+    {
+        $users=UserModel::filter($filters)->get();
+        return $users;
     }
 }

@@ -157,8 +157,8 @@ Route::middleware('auth:api')->group(function () {
         Route::prefix('subscriptionRequest')->group(function () {
             Route::get('getLastFive', [SubscriptionRequestController::class, 'getLastFive']);
             Route::get('getAll',[SubscriptionRequestController::class,'getAll']);
-            Route::get('approve/{id}',[SubscriptionRequestController::class,'approve']);
-            Route::get('reject/{id}',[SubscriptionRequestController::class,'reject']);
+            Route::post('approve/{id}',[SubscriptionRequestController::class,'approve']);
+            Route::post('reject/{id}',[SubscriptionRequestController::class,'reject']);
 
 
         });
@@ -237,12 +237,16 @@ Route::middleware('auth:api')->group(function () {
     Route::prefix('account')->group(function (){
         Route::get('getProfile',[AccountController::class,'getProfile']);
         Route::patch('updateProfile',[AccountController::class,'updateProfile']);
-        Route::get('blocking/{id}',[AccountController::class,'blocking'])->middleware('role:superAdmin');
+        Route::post('blocking/{id}',[AccountController::class,'blocking'])->middleware('role:superAdmin');
+        Route::get('getAll',[AccountController::class,'getAll'])->middleware('role:superAdmin');
+
     });
 });
 
 Route::prefix('powerGenerator')->group(function (){
     Route::get('getForPlan/{id}',[PowerGeneratorController::class,'getForPlan']);
+    Route::get('getAll',[PowerGeneratorController::class,'getAll']);
+
 });
 
 Route::get('visitLandingPage',[SuperAdminStatisticsController::class,'visitLandingPage']);

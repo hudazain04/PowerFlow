@@ -4,6 +4,7 @@ namespace App\Repositories\interfaces;
 
 use App\DTOs\UserDTO;
 use App\Models\User as UserModel;
+use Illuminate\Support\Collection;
 use Spatie\Permission\Models\Role;
 
 interface UserRepositoryInterface
@@ -31,5 +32,7 @@ interface UserRepositoryInterface
   public function getRelations(UserModel $user , array $relations) : UserModel;
 
   public function updateRole(UserModel $user, string $role) : void;
+
+  public function getAll(array $filters) : Collection;
 
 }

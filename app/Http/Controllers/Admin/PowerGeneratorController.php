@@ -18,4 +18,10 @@ class PowerGeneratorController extends Controller
     {
         return $this->powerGeneratorService->getForPlan($plan_id, $request->query());
     }
+
+    public function getAll(Request $request)
+    {
+        return $this->powerGeneratorService->getAll( $request->query());
+
+    }
 }

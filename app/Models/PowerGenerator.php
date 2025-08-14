@@ -74,4 +74,28 @@ class PowerGenerator extends Model
         });
         return $query;
     }
+
+
+    public function scopeFilter($query,array $filters)
+    {
+        $query->when($filters['search'] ?? false ,function ($query) use ($filters){
+            $search=$filters['search'];
+            $query->where(function ($query) use ($search){
+                foreach ($this->getFillable() as $column)
+                {
+                    ($query->orWhere($column,'like',"%$search%"));
+                }
+
+                $query->orWhereHas('user', function ($q) use ($search) {
+                    $q->where('phone_number', 'like', "%$search%");
+                });
+
+                $query->orWhereHas('subscriptions', function ($q) use ($search) {
+                    $q->whereRaw("DATE_FORMAT(DATE_ADD(start_time, INTERVAL period MONTH), '%Y-%m-%d') LIKE ?", ["%$search%"]);
+                });
+            });
+        });
+
+        return $query;
+    }
 }
