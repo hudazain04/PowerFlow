@@ -19,7 +19,9 @@ class FeatureResource extends JsonResource
           'id'=>$this->id,
             'key'=>$this->key,
             'value'=> $this->value,
-          'description'=>str_replace('{}',' '.$this->value.' ', $this->description),
+            'description' => $this->value !== null
+                ? str_replace('{}', ' ' . $this->value . ' ', $this->description)
+                : str_replace('{}', '' , $this->description),
         ];
     }
 }

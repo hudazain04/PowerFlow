@@ -28,7 +28,7 @@ class CreatePlanRequest extends FormRequest
             'monthlyPrice'=>'int|required',
             'image'=>'image|sometimes',
             'features'=>'array|required',
-            'features.*.value'=>'required|int',
+            'features.*.value'=>'nullable|int',
             'features.*.id'=>'required|exists:features',
             'planPrices'=>'array|required',
             'planPrices.*.period'=>'int|required',

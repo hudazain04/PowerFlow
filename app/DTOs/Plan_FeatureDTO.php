@@ -23,6 +23,7 @@ class Plan_FeatureDTO extends SimpleDTO
             'plan_id'=>new IntegerCast(),
             'feature_id'=>new IntegerCast(),
             'value'=>new IntegerCast(),
+//            'value'      => fn($v) => $v === null ? null : (int)$v,
         ];
     }
 
