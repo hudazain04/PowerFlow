@@ -93,7 +93,8 @@ class SubscriptionService
         {
             throw new ErrorException(__('planPrice.notFound'),ApiCode::NOT_FOUND);
         }
-        $user=$this->userRepository->getRelations(['powerGenerator']);
+        $user=$this->userRepository->getRelations($user,['powerGenerator']);
+//        dd($user->powerGenerator);
         $subscriptionRequestDTO->name=$user->powerGenerator->name;
         $subscriptionRequestDTO->location=$user->powerGenerator->location;
         $subscriptionRequestDTO->period=$planPrice->period;
