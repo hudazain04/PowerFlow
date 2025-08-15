@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
+use App\ApiHelper\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Services\SuperAdmin\StatisticsService;
 use Illuminate\Http\Request;
 
 class SuperAdminStatisticsController extends Controller
 {
+    use ApiResponse;
+
     public function __construct(protected StatisticsService $statisticsService)
     {
     }
@@ -34,7 +37,8 @@ class SuperAdminStatisticsController extends Controller
 
     public function topRequestedPlan()
     {
-        return $this->statisticsService->topRequestedPlan();
+        $topRequestedPlan=$this->statisticsService->topRequestedPlan();
+        return $this->success(['topRequestedPlan'=>$topRequestedPlan],__('messages.success'));
     }
 
     public function visitLandingPage()

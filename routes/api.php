@@ -179,14 +179,13 @@ Route::middleware('auth:api')->group(function () {
     });
 
     Route::middleware('role:admin')->group(function (){
-        Route::prefix('subscriptionRequest')->group(function () {
-            Route::post('renew', [SubscriptionRequestController::class, 'renew']);
+        Route::prefix('Subscription')->group(function () {
+            Route::post('renew', [SubscriptionController::class, 'renew']);
         });
     });
 
     Route::prefix('subscriptionRequest')->group(function () {
         Route::post('create', [SubscriptionRequestController::class, 'store']);
-        Route::post('renew',[SubscriptionRequestController::class,'renew'])->middleware('role:admin');
     });
 
     Route::prefix('subscription')->group(function () {

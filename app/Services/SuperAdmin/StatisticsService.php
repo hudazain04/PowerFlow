@@ -119,7 +119,7 @@ class StatisticsService
             return $plan;
         });
         $topRequestedPlan = $data->sortByDesc('subscriptionRequestCount')->first();
-        return $this->success($topRequestedPlan,__('messages.success'));
+        return $topRequestedPlan;
 
     }
 

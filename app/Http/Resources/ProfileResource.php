@@ -19,6 +19,7 @@ class ProfileResource extends JsonResource
             'last_name'=>$this->last_name,
             'email'=>$this->email,
             'phone'=>$this->phone_number,
+            'role'=>$this->getRoleNames()->join(','),
         ];
     }
 }
