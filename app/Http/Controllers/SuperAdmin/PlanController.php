@@ -34,7 +34,10 @@ class PlanController extends Controller
            return $planPriceDTO=PlanPriceDTO::fromArray($planPrice);
         });
         $planDTO->features=collect($request->features)->map(function ($feature){
-           return $featureDTO=Plan_FeatureDTO::fromArray(['feature_id'=>$feature['id'],'value'=>$feature['value']]);
+//            dd($feature['value']);
+           $featureDTO= $featureDTO=Plan_FeatureDTO::fromArray(['feature_id'=>$feature['id'],'value'=>$feature['value'] ?? null]);
+//           dd($featureDTO);
+            return $featureDTO;
         });
         return $this->planService->create($planDTO);
     }
