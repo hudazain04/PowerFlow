@@ -181,6 +181,7 @@ Route::middleware('auth:api')->group(function () {
     Route::middleware('role:admin')->group(function (){
         Route::prefix('Subscription')->group(function () {
             Route::post('renew', [SubscriptionController::class, 'renew']);
+            Route::get('cancel',[SubscriptionController::class,'cancel']);
         });
     });
 
@@ -188,9 +189,6 @@ Route::middleware('auth:api')->group(function () {
         Route::post('create', [SubscriptionRequestController::class, 'store']);
     });
 
-    Route::prefix('subscription')->group(function () {
-        Route::get('cancel',[SubscriptionController::class,'cancel'])->middleware('role:admin');
-    });
 
 
     Route::prefix('planPrice')->group(function () {
@@ -245,6 +243,7 @@ Route::middleware('auth:api')->group(function () {
 Route::prefix('powerGenerator')->group(function (){
     Route::get('getForPlan/{id}',[PowerGeneratorController::class,'getForPlan']);
     Route::get('getAll',[PowerGeneratorController::class,'getAll']);
+    Route::get('getLastSubscription/{id}',[SubscriptionController::class,'getLastSubscription']);
 
 });
 

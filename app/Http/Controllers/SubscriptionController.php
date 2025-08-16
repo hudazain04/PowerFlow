@@ -43,5 +43,10 @@ class SubscriptionController extends Controller
         $subscriptionRequestDTO->type=SubscriptionTypes::Renew;
         return  $this->subscriptionService->upgrade($subscriptionRequestDTO);
     }
+
+    public function getLastSubscription($generator_id)
+    {
+        return $this->subscriptionService->getLastSubscription($generator_id);
+    }
 }
 

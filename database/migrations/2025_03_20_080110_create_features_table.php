@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('key');
             $table->string('description');
+            $table->boolean('hasValue')->default(false);
             $table->timestamps();
         });
     }
