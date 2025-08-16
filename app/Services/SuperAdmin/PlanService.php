@@ -11,12 +11,14 @@ use App\DTOs\PlanDTO;
 use App\DTOs\PlanPriceDTO;
 use App\Exceptions\ErrorException;
 use App\Http\Requests\Plan\UpdateFeatureRequest;
+use App\Models\Plan;
 use App\Models\PlanPrice;
 use App\Repositories\interfaces\SuperAdmin\Plan_FeatureRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\PlanPriceRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\PlanRepositoryInterface;
 use App\Http\Requests\Plan\CreatePlanRequest;
 use App\Http\Resources\PlanResource;
+use Illuminate\Support\Facades\DB;
 
 class PlanService
 {
@@ -217,6 +219,17 @@ class PlanService
         }
         $plan_Feature=$this->plan_FeatureRepository->update($plan_Feature,$plan_FeatureDTO->toArray());
         return $this->success(null,__('feature.update'));
+    }
+    public function getPlanFeatureValues($generator_id)
+    {
+        return DB::table('plan__features')
+            ->select('features.key', 'plan__features.value')
+            ->join('plans', 'plan__features.plan_id', '=', 'plans.id')
+            ->join('plan_prices', 'plan_prices.plan_id', '=', 'plans.id')
+            ->join('subscriptions', 'subscriptions.planPrice_id', '=', 'plan_prices.id')
+            ->join('features', 'plan__features.feature_id', '=', 'features.id')
+            ->where('subscriptions.generator_id', $generator_id)
+            ->get();
     }
 
 

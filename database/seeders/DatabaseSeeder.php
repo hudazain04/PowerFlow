@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+         User::factory(10)->create();
         $this->call([
             RoleSeeder::class,
             FaqSeeder::class
@@ -49,7 +49,7 @@ class DatabaseSeeder extends Seeder
        ]);
         $user->assignRole('superAdmin');
 
-        // Create 10 Users with role 'user'
+//         Create 10 Users with role 'user'
         $users = User::factory()
             ->count(10)
 //            ->state(['role' => 'Customer'])

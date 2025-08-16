@@ -23,6 +23,7 @@ use App\Http\Controllers\SuperAdmin\SuperAdminStatisticsController;
 use App\Http\Controllers\User\complaintcontroller;
 use App\Http\Controllers\User\CustomerRequestController;
 use App\Http\Controllers\User\PasswordController;
+use \App\Http\Controllers\Admin\CounterController;
 use App\Http\Controllers\User\VerificationController;
 use Illuminate\Support\Facades\Route;
 
@@ -90,6 +91,7 @@ Route::middleware('auth:api')->group(function () {
         // Areas//////
         Route::post('areas', [AreaController::class, 'store']);
         Route::get('getareas', [AreaController::class, 'index']);
+
 
         // Box assignment to areas////
         Route::post('/areas/{area_id}/boxes', [AreaBoxController::class, 'assignBox']);
@@ -175,6 +177,16 @@ Route::middleware('auth:api')->group(function () {
             Route::delete('deletePrivacyPolicy', [AppInfoController::class, 'deletePrivacyPolicy']);
 
         });
+        Route::prefix('admin')->group(function (){
+            Route::get('getareas/{id}',[AreaController::class,'getAreas']);
+            Route::get('getboxes/{id}',[ElectricalBoxController::class,'getBoxes']);
+            Route::get('getcounters/{id}',[CounterController::class,'index']);
+        });
+
+        Route::get('/generators/{generator}/statistics', [SuperAdminStatisticsController::class
+            , 'getGeneratorStatistics']);
+        Route::get('/generators/{id}/info', [SuperAdminStatisticsController::class, 'getGenInfo']);
+        Route::delete('/generators/{id}/',[GeneratorRequestController::class,'delete']);
 
     });
 

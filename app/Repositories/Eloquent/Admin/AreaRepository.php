@@ -45,4 +45,8 @@ class AreaRepository implements AreaRepositoryInterface
 //            ->select('electrical_boxes.*')
 //            ->get();
 //    }
+    public function getAreas(int $generator_id)
+    {
+        return Area::where('generator_id',$generator_id)->count();
+    }
 }

@@ -88,4 +88,27 @@ class GeneratorRequestService
     {
         return $this->repository->getPendingRequests();
     }
+
+    public function getGenInfo(int $generator_id){
+        $generator = $this->repository->getGenInfo($generator_id);
+
+        return [
+            'name' => $generator->name,
+            'phone' => $generator->phones->first()->number,
+            'email' => $generator->user->email,
+            'location' => $generator->location,
+            'date' => $generator->created_at->format('n/j/Y'),
+            'current_plan' => $generator->subscriptions->first()->planPrice->plan->name ?? 'N/A',
+            'current_price' => $generator->subscriptions->first()->price?? 'ΘN/a'
+        ];
+    }
+
+    public function delete(int $generator_id){
+      $generator=PowerGenerator::find($generator_id);
+        if(!$generator){
+            throw AuthException::usernotExists();
+        }
+        $generator= $this->repository->delete($generator_id);
+        return $generator;
+    }
 }

@@ -4,6 +4,8 @@ namespace App\Services\Admin;
 
 use App\DTOs\AreaDTO;
 use App\DTOs\AssignBoxToAreaDTO;
+use App\Exceptions\GeneralException;
+use App\Models\Area;
 use App\Repositories\interfaces\Admin\AreaRepositoryInterface;
 
 class AreaService
@@ -25,6 +27,12 @@ class AreaService
     public function getGeneratorAreas(int $generatorId)
     {
         return $this->repository->getGeneratorAreas($generatorId);
+    }
+    public function getAreas(int $generator_id){
+//        if(! Area::where('generator_id',$generator_id)->first()){
+//            throw GeneralException::areas();
+//        }
+        return $this->repository->getAreas($generator_id);
     }
 
 

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6338d058b5723a788ee81b7330fa31a2",
+    "content-hash": "af6e08fad7d67a284654e83aa679e33b",
     "packages": [
         {
             "name": "amphp/amp",
@@ -1119,16 +1119,16 @@
         },
         {
             "name": "dedoc/scramble",
-            "version": "v0.12.29",
+            "version": "v0.12.30",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dedoc/scramble.git",
-                "reference": "b1fecfa9f6dc0094cf716d609975b933c5d522f0"
+                "reference": "2138ec1acac0077ddcd74e8570c54d4209074261"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dedoc/scramble/zipball/b1fecfa9f6dc0094cf716d609975b933c5d522f0",
-                "reference": "b1fecfa9f6dc0094cf716d609975b933c5d522f0",
+                "url": "https://api.github.com/repos/dedoc/scramble/zipball/2138ec1acac0077ddcd74e8570c54d4209074261",
+                "reference": "2138ec1acac0077ddcd74e8570c54d4209074261",
                 "shasum": ""
             },
             "require": {
@@ -1187,7 +1187,7 @@
             ],
             "support": {
                 "issues": "https://github.com/dedoc/scramble/issues",
-                "source": "https://github.com/dedoc/scramble/tree/v0.12.29"
+                "source": "https://github.com/dedoc/scramble/tree/v0.12.30"
             },
             "funding": [
                 {
@@ -1195,7 +1195,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-08-12T12:17:56+00:00"
+            "time": "2025-08-14T13:13:18+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
@@ -11371,13 +11371,13 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^8.2",
         "ext-pdo": "*"
     },
-    "platform-dev": {},
+    "platform-dev": [],
     "plugin-api-version": "2.6.0"
 }
