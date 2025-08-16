@@ -20,4 +20,6 @@ interface SubscriptionRepositoryInterface
 
     public function update(SubscriptionModel $subscription, array $data) : SubscriptionModel;
 
+    public function getRelations(SubscriptionModel $subscription , array $relations) : SubscriptionModel;
+
 }
