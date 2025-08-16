@@ -24,7 +24,7 @@ class FeatureResource extends JsonResource
 //            'description' => $this->value !== null
 //                ? str_replace('{}', ' ' . $this->value . ' ', $this->description)
 //                : str_replace('{}', '' , $this->description),
-            'description' => str_contains(Route::current()->uri(), 'api/feature/findById/{id}')
+            'description' => str_contains(Route::current()->uri(), 'api/feature')
                 ? $this->description
                 : ( $this->value !== null
                     ? str_replace('{}', ' ' . $this->value . ' ', $this->description)
