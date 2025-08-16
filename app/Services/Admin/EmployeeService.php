@@ -34,5 +34,8 @@ class EmployeeService
         $emp=$this->repository->findEmployee($id);
         return $emp;
     }
+    public function getEmp(int $generator_id){
+         return $this->repository->getEmp($generator_id);
+    }
 
 }

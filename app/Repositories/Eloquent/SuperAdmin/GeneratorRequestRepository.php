@@ -4,6 +4,7 @@ namespace App\Repositories\Eloquent\SuperAdmin;
 
 use App\DTOs\GeneratorDTO;
 use App\Models\GeneratorRequest;
+use App\Models\PowerGenerator;
 use App\Models\User;
 use App\Repositories\interfaces\SuperAdmin\GeneratorRequestRepositoryInterface;
 use App\Types\GeneratorRequests;
@@ -58,4 +59,24 @@ class GeneratorRequestRepository implements GeneratorRequestRepositoryInterface
         ])->save();
     }
 
+    public function getGenInfo(int $generator_id)
+    {
+
+        return PowerGenerator::with([
+            'plan',
+            'phones',
+            'user',
+            'subscriptions'
+        ])->findOrFail($generator_id);
+
+    }
+
+
+    public function delete(int $generator_id)
+    {
+        $generator= PowerGenerator::where('id',$generator_id)->first();
+
+     return $generator->delete();
+  }
 }
+

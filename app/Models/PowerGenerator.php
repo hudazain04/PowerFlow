@@ -26,7 +26,7 @@ class PowerGenerator extends Model
     }
     public function phones()
     {
-        return $this->hasMany(Phone::class);
+        return $this->hasMany(Phone::class, 'generator_id');
     }
     public function areas()
     {
@@ -36,6 +36,10 @@ class PowerGenerator extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    public function plan()
+    {
+        return $this->belongsTo(Plan::class);
     }
 
     public function scopePlanGenerators($query,array $filters)

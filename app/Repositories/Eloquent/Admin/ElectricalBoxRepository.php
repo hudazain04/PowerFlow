@@ -39,4 +39,9 @@ class ElectricalBoxRepository implements ElectricalBoxRepositoryInterface
             ->orderByDesc('available_slots')
             ->get();
     }
+
+    public function getBoxes(int $generator_id)
+    {
+        return ElectricalBox::where('generator_id',$generator_id)->count();
+    }
 }

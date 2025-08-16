@@ -8,7 +8,7 @@
     "require": {
         "php": "^8.2",
         "ext-pdo": "*",
-        "dedoc/scramble": "^0.12.29",
+        "dedoc/scramble": "^0.12.30",
         "laravel/framework": "^11.0",
         "laravel/reverb": "^1.0",
         "laravel/sanctum": "^4.0",

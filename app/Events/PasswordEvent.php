@@ -42,11 +42,14 @@ class PasswordEvent implements ShouldBroadcastNow
     public function broadcastWith(): array
     {
         return [
-            'id'=>$this->user->id,
-            'first_name'=>$this->user->first_name,
-            'last_name'=>$this->user->last_name,
-            'email'=>$this->user->email,
-            'phone_number'=>$this->user->phone_numbe
+            "user" => [
+                'id'=>$this->user->id,
+                'first_name'=>$this->user->first_name,
+                'last_name'=>$this->user->last_name,
+                'email'=>$this->user->email,
+                'phone_number'=>$this->user->phone_number
+            ],
+            "token" => $this->token
         ];
 
     }

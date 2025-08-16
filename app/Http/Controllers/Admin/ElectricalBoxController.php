@@ -20,10 +20,13 @@ class ElectricalBoxController extends Controller
     public function store(ElectricalBoxRequest $request)
     {
 
-
         $box = $this->service->createBox($request->validated());
 
-        return ApiResponses::success($box,'sucess',ApiCode::OK);
+        return ApiResponses::success($box,'success',ApiCode::OK);
+    }
+    public function getBoxes(int $generator_id){
+        $Boxes=$this->service->getBoxes($generator_id);
+        return ApiResponses::success($Boxes,'total boxes',ApiCode::OK);
     }
 
 }
