@@ -23,7 +23,7 @@ class StripeController extends Controller
                     'product_data' => [
                         'name' => 'Subscription Plan',
                     ],
-                    'unit_amount' => 1000, // in cents = $10.00
+                    'unit_amount' => 1000,
                 ],
                 'quantity' => 1,
             ]],
@@ -48,8 +48,6 @@ class StripeController extends Controller
 
         $session = Session::retrieve($session_id);
 
-        // You can use $session->customer_email or metadata to link to your user
-        // Then create a SubscriptionRequest or mark as paid
         return response()->json([
             'message' => 'Payment successful',
             'session_id' => $session_id,
