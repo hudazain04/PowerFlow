@@ -10,6 +10,8 @@ class FeatureDTO extends SimpleDTO
     public ?int $id;
     public string $key;
     public ?int $value;
+    public ?bool  $hasValue=false;
+    public ?string $event;
     public string $description;
 
     protected function defaults(): array

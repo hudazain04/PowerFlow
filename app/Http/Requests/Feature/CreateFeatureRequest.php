@@ -22,7 +22,7 @@ class CreateFeatureRequest extends FormRequest
 
     public function rules(): array
     {       return [
-            'key'=>'required|string',
+        'key'=>'required|string',
         'description'=>'required|string'
 
         ];
