@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProfileResource extends JsonResource
+class PowerGeneratorResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,11 +15,12 @@ class ProfileResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'first_name'=>$this->first_name,
-            'last_name'=>$this->last_name,
+            'id'=>$this->id,
+            'generatorName'=>$this->name,
             'email'=>$this->email,
-            'phone'=>$this->phone_number,
-            'role'=>$this->getRoleNames()->join(','),
+            'phone'=>$this->phone,
+            'location'=>$this->location,
+            'expired_at'=>$this->expired_at->format('Y-m-d'),
         ];
     }
 }

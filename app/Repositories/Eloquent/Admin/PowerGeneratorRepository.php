@@ -35,4 +35,9 @@ class PowerGeneratorRepository implements PowerGeneratorRepositoryInterface
         return $generators;
     }
 
+    public function getAll(array $filters): Collection
+    {
+        $generators=PowerGeneratorModel::filter($filters)->with(['user','subscriptions'])->get();
+        return $generators;
+    }
 }

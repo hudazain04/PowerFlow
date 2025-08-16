@@ -103,4 +103,19 @@ class User extends Authenticatable implements JWTSubject,MustVerifyEmail
             'roles' => $this->getRoleNames()->toArray(),
         ];
     }
+
+     public function scopeFilter($query,array $filters)
+     {
+         $query->when($filters['search'] ?? false ,function ($query) use ($filters){
+             $search=$filters['search'];
+             $query->where(function ($query) use ($search){
+                 foreach ($this->getFillable() as $column)
+                 {
+                     ($query->orWhere($column,'like',"%$search%"));
+                 }
+             });
+         });
+
+         return $query;
+     }
 }

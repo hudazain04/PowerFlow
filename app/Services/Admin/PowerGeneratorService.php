@@ -3,8 +3,10 @@
 namespace App\Services\Admin;
 
 use App\ApiHelper\ApiResponse;
+use App\DTOs\PowerGeneratorDTO;
 use App\DTOs\SubscribedGeneratorDTO;
 use App\DTOs\SubscriptionDTO;
+use App\Http\Resources\PowerGeneratorResource;
 use App\Http\Resources\SubscribedGeneratorResource;
 use App\Repositories\interfaces\Admin\PowerGeneratorRepositoryInterface;
 
@@ -32,5 +34,19 @@ class PowerGeneratorService
             return $generatorDTO;
         });
         return $this->success(SubscribedGeneratorResource::collection($generatorsDTOs),__('messages.success'));
+    }
+
+    public function getAll(array $filters)
+    {
+        $generators=$this->powerGeneratorRepository->getAll($filters);
+        $generatorsDTOs=$generators->map(function ($generator){
+            $generatorDTO=PowerGeneratorDTO::fromModel($generator);
+            $generatorDTO->phone=$generator->user->phone_number;
+            $generatorDTO->email=$generator->user->email;
+            $generatorDTO->expired_at=$generator->subscriptions->first()->start_time->addMonths($generator->subscriptions->first()->period);
+//            dd(gettype($generator->subscriptions->first()->start_time));
+            return $generatorDTO;
+        });
+        return $this->success(PowerGeneratorResource::collection($generatorsDTOs),__('messages.success'));
     }
 }

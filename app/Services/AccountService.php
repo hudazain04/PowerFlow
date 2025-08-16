@@ -46,4 +46,10 @@ class AccountService
         $user->save();
         return $this->success(['blocked'=>$user->blocked],__('messages.success'));
     }
+
+    public function getAll(array $filters)
+    {
+        $users=$this->userRepository->getAll($filters);
+        return $this->success(UserResource::collection($users),__('messages.success'));
+    }
 }

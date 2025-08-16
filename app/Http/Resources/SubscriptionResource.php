@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProfileResource extends JsonResource
+class SubscriptionResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,11 +15,10 @@ class ProfileResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'first_name'=>$this->first_name,
-            'last_name'=>$this->last_name,
-            'email'=>$this->email,
-            'phone'=>$this->phone_number,
-            'role'=>$this->getRoleNames()->join(','),
+            'id'=>$this->id,
+            'plan_id'=>$this->planPrice->plan->id,
+            'start_time'=>$this->start_time->format('Y-m-d'),
+            'expires_at'=>($this->start_time)->addMonths($this->period)->format('Y-m-d'),
         ];
     }
 }
