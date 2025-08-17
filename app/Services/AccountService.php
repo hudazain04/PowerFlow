@@ -9,6 +9,7 @@ use App\Http\Requests\User\UpdateProfileRequest;
 use App\Http\Resources\ProfileResource;
 use App\Http\Resources\UserResource;
 use App\Repositories\interfaces\UserRepositoryInterface;
+use App\Types\UserTypes;
 use http\Client\Curl\User;
 use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -47,9 +48,12 @@ class AccountService
         return $this->success(['blocked'=>$user->blocked],__('messages.success'));
     }
 
-    public function getAll(array $filters)
+    public function getAll(array $search)
     {
+        $filters=[$search,'roles'=>[UserTypes::USER]];
+//        dd($filters);
         $users=$this->userRepository->getAll($filters);
-        return $this->success(UserResource::collection($users),__('messages.success'));
+//        dd($users);
+        return $this->successWithPagination(UserResource::collection($users),__('messages.success'));
     }
 }

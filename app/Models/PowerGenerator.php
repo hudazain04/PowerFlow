@@ -100,6 +100,7 @@ class PowerGenerator extends Model
             });
         });
 
+
         return $query;
     }
 }
