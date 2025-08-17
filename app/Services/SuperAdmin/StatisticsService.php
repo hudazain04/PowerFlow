@@ -123,7 +123,7 @@ class StatisticsService
 
     }
 
-    public function isitLandingPage()
+    public function visitLandingPage()
     {
         $timestamp = Carbon::now()->toDateTimeString();
         $key = 'visits:' . Carbon::now()->format('Y-m-d');
