@@ -29,7 +29,7 @@ class AppInfoRepository implements AppInfoRepositoryInterface
         return $appInfo;
     }
 
-    public function find(string $type): AppInfoModel
+    public function find(string $type): ?AppInfoModel
     {
         $appInfo=AppInfoModel::where('type',$type)->first();
         return $appInfo;
