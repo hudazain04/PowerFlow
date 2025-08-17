@@ -39,7 +39,7 @@ class FeatureService
     public function create(FeatureDTO $featureDTO)
     {
         $feature= $this->featureRepository->create($featureDTO->toArray());
-        $featureDTO=FeatureDTO::fromModel($feature);
+//        dd($feature);
         return $this->success(null,__('feature.create'),ApiCode::CREATED);
     }
 

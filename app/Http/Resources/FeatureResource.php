@@ -17,19 +17,31 @@ class FeatureResource extends JsonResource
 
     public function toArray(Request $request): array
     {
-        return [
-          'id'=>$this->id,
-            'key'=>$this->key,
-            'value'=> $this->value,
-//            'description' => $this->value !== null
+        if ( str_contains(Route::current()->uri(), 'api/feature'))
+        {
+            $data= [
+                'id'=>$this->id,
+                'key'=>$this->key,
+                'value'=> $this->value,
+                'hasValue'=>$this->hasValue,
+                'description' =>$this->description,
+            ];
+        }
+        else
+            {
+                $data=[
+                    'id'=>$this->id,
+                    'key'=>$this->key,
+                    'value'=> $this->value,
+//                 'description' => $this->value !== null
 //                ? str_replace('{}', ' ' . $this->value . ' ', $this->description)
 //                : str_replace('{}', '' , $this->description),
-            'description' => str_contains(Route::current()->uri(), 'api/feature')
-                ? $this->description
-                : ( $this->value !== null
-                    ? str_replace('{}', ' ' . $this->value . ' ', $this->description)
-                    : str_replace('{}', '', $this->description)
-                ),
-        ];
+                    'description' =>$this->value !== null
+                            ? str_replace('{}', ' ' . $this->value . ' ', $this->description)
+                            : str_replace('{}', '', $this->description),
+                ];
+            }
+        return $data;
+
     }
 }
