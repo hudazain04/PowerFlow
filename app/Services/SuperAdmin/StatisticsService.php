@@ -133,6 +133,7 @@ class StatisticsService
 
     public function getTotalVisitors()
     {
+
         $visitors=$this->visitorRepository->count();
         return  $this->success($visitors,__('messages.success'));
     }

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\DTOs\SubscriptionRequestDTO;
+use App\Events\TopRequestedPlanEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SubscriptionRequest\CreateSubscriptionRequestRequest;
 use App\Http\Requests\SubscriptionRequest\RenewRequest;
+use App\Services\SuperAdmin\StatisticsService;
 use App\Services\SuperAdmin\SubscriptionRequestService;
 use App\Types\SubscriptionTypes;
 use App\Types\UserTypes;
@@ -15,6 +17,7 @@ class SubscriptionRequestController extends Controller
 {
     public function __construct(
         protected SubscriptionRequestService $subscriptionRequestService,
+        protected StatisticsService $statisticsService,
     )
     {
     }
@@ -29,7 +32,10 @@ class SubscriptionRequestController extends Controller
         $requestDTO=SubscriptionRequestDTO::fromRequest($request);
         $requestDTO->user_id=$request->user()->id;
         $requestDTO->type=SubscriptionTypes::NewPlan;
-        return $this->subscriptionRequestService->store($requestDTO);
+        $topRequestedPlan=$this->statisticsService->topRequestedPlan();
+        $response= $this->subscriptionRequestService->store($requestDTO);
+        event(new TopRequestedPlanEvent($topRequestedPlan));
+        return $response;
     }
 
     public function getAll(Request $request)
