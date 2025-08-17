@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Repositories\interfaces\Admin;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 interface PowerGeneratorRepositoryInterface
@@ -13,6 +14,6 @@ interface PowerGeneratorRepositoryInterface
 
     public function getForPlan($plan_id , array $filters) : Collection;
 
-    public function getAll(array $filters) : Collection;
+    public function getAll(array $filters) : LengthAwarePaginator;
 
 }

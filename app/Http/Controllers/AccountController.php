@@ -31,7 +31,7 @@ class AccountController extends Controller
 
     public function getAll(Request $request)
     {
-        return $this->accountService->getAll($request->query());
+        return $this->accountService->getAll([$request->query()]);
 
     }
 }
