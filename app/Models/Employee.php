@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\ApiHelper\Translatable;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticate;
@@ -13,6 +14,7 @@ class Employee extends Authenticate
 {
 
     use HasFactory;
+    use Translatable;
 
 
     protected $fillable = [
@@ -20,6 +22,9 @@ class Employee extends Authenticate
         'secret_key',
         'generator_id',
         'phone_number',
+    ];
+    public $translatable=[
+        'user_name',
     ];
     public function powergenerator()
     {

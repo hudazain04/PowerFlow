@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreignId('counter_id')->nullable()->constrained('counters')->cascadeOnDelete();
             $table->foreignId('employee_id')->nullable()->constrained('employees')->nullOnDelete();
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->json('translation')->nullable();
             $table->timestamps();
         });
     }

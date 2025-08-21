@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('question');
             $table->text('answer');
             $table->string('role')->nullable();
+            $table->json('translation')->nullable();
             $table->timestamps();
         });
     }
