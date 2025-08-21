@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+ use App\ApiHelper\Translatable;
  use App\Types\UserTypes;
  use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,6 +17,7 @@ class User extends Authenticatable implements JWTSubject,MustVerifyEmail
     /** @use HasFactory<\Database\Factories\UserFactory> */
 
     use HasFactory, Notifiable,HasRoles,\Illuminate\Auth\MustVerifyEmail;
+    use Translatable;
 
 
     /**
@@ -30,8 +32,13 @@ class User extends Authenticatable implements JWTSubject,MustVerifyEmail
         'password',
         'phone_number',
         'blocked',
+        'translations',
     ];
 
+    public $translatable=[
+        'first_name',
+        'last_name',
+    ];
 
 
     protected $guard_name = 'api';
