@@ -17,7 +17,7 @@ class User extends Authenticatable implements JWTSubject,MustVerifyEmail
     /** @use HasFactory<\Database\Factories\UserFactory> */
 
     use HasFactory, Notifiable,HasRoles,\Illuminate\Auth\MustVerifyEmail;
-    use Translatable;
+
 
 
     /**
@@ -33,11 +33,6 @@ class User extends Authenticatable implements JWTSubject,MustVerifyEmail
         'phone_number',
         'blocked',
         'translations',
-    ];
-
-    public $translatable=[
-        'first_name',
-        'last_name',
     ];
 
 

@@ -22,8 +22,6 @@ class GeneratorRequest extends Model
 
     ];
     public $translatable=[
-        'first_name',
-        'last_name',
         'generator_name',
         'generator_location',
         'status',

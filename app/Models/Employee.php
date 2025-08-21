@@ -14,17 +14,12 @@ class Employee extends Authenticate
 {
 
     use HasFactory;
-    use Translatable;
-
 
     protected $fillable = [
         'user_name',
         'secret_key',
         'generator_id',
         'phone_number',
-    ];
-    public $translatable=[
-        'user_name',
     ];
     public function powergenerator()
     {
