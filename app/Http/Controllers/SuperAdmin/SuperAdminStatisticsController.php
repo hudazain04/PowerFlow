@@ -22,20 +22,20 @@ use Illuminate\Http\Request;
 class SuperAdminStatisticsController extends Controller
 {
 
-    public function __construct(protected StatisticsService $statisticsService,
-        private AreaService $service
-        ,private ElectricalBoxService $boxService,
-       private CounterService $counterService,
-    private EmployeeService $employeeService,
-    private PlanService $planService,
-    private GeneratorRequestService $generatorRequestService)
+    public function __construct(
+        protected StatisticsService $statisticsService,
+        private AreaService $service,
+        private ElectricalBoxService $boxService,
+        private CounterService $counterService,
+        private EmployeeService $employeeService,
+        private PlanService $planService,
+        private GeneratorRequestService $generatorRequestService,
+    )
+    {
+    }
 
     use ApiResponse;
 
-    public function __construct(protected StatisticsService $statisticsService)
-
-    {
-    }
 
     public function homeStatistics()
     {
@@ -123,6 +123,6 @@ class SuperAdminStatisticsController extends Controller
     }
     public function getGenInfo($generator_id){
         $data=$this->generatorRequestService->getGenInfo($generator_id);
-        return ApiResponses::success($data,'success',ApiCode::OK);
+        return ApiResponses::success($data,__('messages.success'),ApiCode::OK);
     }
 }
