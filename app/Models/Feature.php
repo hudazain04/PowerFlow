@@ -2,13 +2,19 @@
 
 namespace App\Models;
 
+use App\ApiHelper\Translatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Feature extends Model
 {
     use HasFactory;
+    use Translatable;
     protected $guarded=['id'];
+    public $translatable=[
+        'key',
+        'description',
+    ];
 
     public function scopeFilter($query,array $filters)
     {

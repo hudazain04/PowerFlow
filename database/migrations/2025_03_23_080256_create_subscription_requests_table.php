@@ -21,6 +21,7 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('planPrice_id')->nullable()->constrained('plan_prices')->nullOnDelete();
             $table->enum('status',array_values((new ReflectionClass(\App\Types\GeneratorRequests::class))->getConstants()));
+            $table->json('translation')->nullable();
             $table->timestamps();
         });
     }

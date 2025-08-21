@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('faq_user', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('faq_id')->contrained('faqs')->onDelete('cascade');
-            $table->foreignId('user_id')->contrained('users')->onDelete('cascade');
+            $table->foreignId('faq_id')->constrained('faqs')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

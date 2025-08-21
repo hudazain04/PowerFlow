@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('user_name');
             $table->string('secret_key');
             $table->integer('phone_number');
+            $table->json('translation')->nullable();
             $table->foreignId('generator_id')->constrained('power_generators')->cascadeOnDelete();
             $table->timestamps();
         });
