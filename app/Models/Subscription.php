@@ -38,6 +38,7 @@ class Subscription extends Model
         return $this->belongsTo(PlanPrice::class,'planPrice_id');
     }
 
+
     public function scopeFilter($query, ?string $type=null)
     {
 

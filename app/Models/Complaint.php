@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\ApiHelper\Translatable;
 use App\Types\ComplaintTypes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,7 +12,7 @@ class Complaint extends Model
 {
 
     use HasFactory;
-
+    use Translatable;
     protected $fillable = [
         'description',
         'status',
@@ -19,6 +20,11 @@ class Complaint extends Model
         'user_id',
         'type',
 
+    ];
+
+    public $translatable=[
+        'description',
+        'status',
     ];
 
     public function counter()

@@ -34,31 +34,40 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        User::factory(10)->create();
         $this->call([
             RoleSeeder::class,
             FaqSeeder::class
         ]);
 
-      $user= User::factory()->create([
-           'first_name' => 'Admin',
-           'email' => 'huda1812zain@gmail.com',
-//            'password'=>12345678,
+        $user = User::factory()->create([
+            'first_name' => 'Super admin',
+            'email' => 'huda1812zain@gmail.com',
+            //            'password'=>12345678,
 //            'role'=>'Admin'
             "password" => "123123123"
-       ]);
-        $user->assignRole('superAdmin');
+        ]);
+        $user->assignRole(roles: 'superAdmin');
 
-        // Create 10 Users with role 'user'
+        $admin = User::factory()->create(attributes: [
+            'first_name' => 'Power generator',
+            'email' => 'jawadtakialdeen@gmail.com',
+            //            'password'=>12345678,
+//            'role'=>'Admin'
+            "password" => "123123123"
+        ]);
+        $admin->assignRole(roles: 'admin');
+
+        //         Create 10 Users with role 'user'
         $users = User::factory()
             ->count(10)
-//            ->state(['role' => 'Customer'])
+            //            ->state(['role' => 'Customer'])
             ->create();
 
         // Create 5 Users with role 'powergenerator' and related PowerGenerators
         $generatorUsers = User::factory()
             ->count(5)
-//            ->state(['role' => 'PowerGenerator'])
+            //            ->state(['role' => 'PowerGenerator'])
             ->create();
 
         $generators = collect();
@@ -88,7 +97,7 @@ class DatabaseSeeder extends Seeder
                 Plan_Feature::factory()->create([
                     'plan_id' => $plan->id,
                     'feature_id' => $feature->id,
-                    'value'=>rand(1,20)*50,
+                    'value' => rand(1, 20) * 50,
                 ]);
             }
         }
@@ -136,20 +145,20 @@ class DatabaseSeeder extends Seeder
             Spending::factory()->count(3)->for($counter)->create();
             Payment::factory()->count(2)->for($counter)->create();
             Complaint::factory()->count(1)->for($counter)->create([
-                'type'=>ComplaintTypes::Cut,
-                'user_id'=>$users->random()->id,
+                'type' => ComplaintTypes::Cut,
+                'user_id' => $users->random()->id,
             ]);
 
         }
         Complaint::factory()->count(5)->create([
-            'type'=>ComplaintTypes::App,
-            'user_id'=>$users->random()->id,
+            'type' => ComplaintTypes::App,
+            'user_id' => $users->random()->id,
         ]);
 
         $planPrices = PlanPrice::all();
         foreach ($users as $user) {
             SubscriptionRequest::factory()->count(1)->for($user)->create([
-                'planPrice_id'=>$planPrices->random()->id,
+                'planPrice_id' => $planPrices->random()->id,
             ]);
         }
 

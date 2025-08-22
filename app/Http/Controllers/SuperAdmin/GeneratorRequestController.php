@@ -42,5 +42,11 @@ class GeneratorRequestController extends Controller
         $this->service->rejectRequest($id);
         return ApiResponses::success(null,'success',ApiCode::OK);
     }
+    public function delete(int $generator_id){
+      $generator=$this->service->delete($generator_id);
+      return ApiResponses::success($generator,'success',ApiCode::OK);
+    }
+
+
 
 }

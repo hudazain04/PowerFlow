@@ -4,6 +4,7 @@ namespace App\Repositories\Eloquent\Admin;
 
 use App\Models\PowerGenerator as PowerGeneratorModel;
 use App\Repositories\interfaces\Admin\PowerGeneratorRepositoryInterface;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 class PowerGeneratorRepository implements PowerGeneratorRepositoryInterface
@@ -35,9 +36,9 @@ class PowerGeneratorRepository implements PowerGeneratorRepositoryInterface
         return $generators;
     }
 
-    public function getAll(array $filters): Collection
+    public function getAll(array $filters): LengthAwarePaginator
     {
-        $generators=PowerGeneratorModel::filter($filters)->with(['user','subscriptions'])->get();
+        $generators=PowerGeneratorModel::filter($filters)->with(['user','subscriptions'])->paginate(10);
         return $generators;
     }
 }

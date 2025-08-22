@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+ use App\ApiHelper\Translatable;
+ use App\Types\UserTypes;
  use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -17,6 +19,7 @@ class User extends Authenticatable implements JWTSubject,MustVerifyEmail
     use HasFactory, Notifiable,HasRoles,\Illuminate\Auth\MustVerifyEmail;
 
 
+
     /**
      * The attributes that are mass assignable.
      *
@@ -29,8 +32,8 @@ class User extends Authenticatable implements JWTSubject,MustVerifyEmail
         'password',
         'phone_number',
         'blocked',
+        'translations',
     ];
-
 
 
     protected $guard_name = 'api';
@@ -114,6 +117,11 @@ class User extends Authenticatable implements JWTSubject,MustVerifyEmail
                      ($query->orWhere($column,'like',"%$search%"));
                  }
              });
+         });
+         $query->when($filters['roles'] ?? false, function ($query) use ($filters) {
+             $roles = (array) $filters['roles'];
+             $query->role($roles);
+
          });
 
          return $query;

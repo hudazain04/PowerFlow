@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\ApiHelper\Translatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -9,12 +10,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class ElectricalBox extends Model
 {
        use  HasFactory;
+       use Translatable;
 
     protected $fillable = [
         'location',
         'maps',
         'number',
         'capacity'
+    ];
+
+    public $translatable=[
+        'location',
     ];
 
     public function counters()

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('generator_location');
             $table->string('phone');
             $table->string('status')->default(GeneratorRequests::PENDING);
+            $table->json('translation')->nullable();
             $table->timestamps();
         });
     }

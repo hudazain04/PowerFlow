@@ -8,6 +8,7 @@ use App\DTOs\UserDTO;
 use App\Models\User;
 use App\Models\User as UserModel;
 use App\Repositories\interfaces\UserRepositoryInterface;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
 
@@ -80,9 +81,9 @@ class UserRepository implements UserRepositoryInterface
         $user->syncRoles([$role]);
     }
 
-    public function getAll(array $filters): Collection
+    public function getAll(array $filters): LengthAwarePaginator
     {
-        $users=UserModel::filter($filters)->get();
+        $users=UserModel::filter($filters)->paginate(10);
         return $users;
     }
 }

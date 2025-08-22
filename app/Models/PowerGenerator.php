@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\ApiHelper\Translatable;
 use App\Types\SubscriptionExpirationTypes;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -10,11 +11,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class PowerGenerator extends Model
 {
     use HasFactory;
+    use Translatable;
 
     protected $fillable = [
         'name',
         'location',
         'user_id'
+    ];
+    public $translatable=[
+        'name',
+        'location'
     ];
     public function subscriptions()
     {
@@ -26,7 +32,7 @@ class PowerGenerator extends Model
     }
     public function phones()
     {
-        return $this->hasMany(Phone::class);
+        return $this->hasMany(Phone::class, 'generator_id');
     }
     public function areas()
     {
@@ -36,6 +42,10 @@ class PowerGenerator extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    public function plan()
+    {
+        return $this->belongsTo(Plan::class);
     }
 
     public function scopePlanGenerators($query,array $filters)
@@ -95,6 +105,7 @@ class PowerGenerator extends Model
                 });
             });
         });
+
 
         return $query;
     }

@@ -4,6 +4,7 @@ namespace App\Repositories\interfaces;
 
 use App\DTOs\UserDTO;
 use App\Models\User as UserModel;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Spatie\Permission\Models\Role;
 
@@ -33,6 +34,6 @@ interface UserRepositoryInterface
 
   public function updateRole(UserModel $user, string $role) : void;
 
-  public function getAll(array $filters) : Collection;
+  public function getAll(array $filters) : LengthAwarePaginator;
 
 }

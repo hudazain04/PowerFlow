@@ -39,7 +39,7 @@ class PowerGeneratorService
     public function getAll(array $filters)
     {
         $generators=$this->powerGeneratorRepository->getAll($filters);
-        $generatorsDTOs=$generators->map(function ($generator){
+        $generators->getCollection()->transform(function ($generator){
             $generatorDTO=PowerGeneratorDTO::fromModel($generator);
             $generatorDTO->phone=$generator->user->phone_number;
             $generatorDTO->email=$generator->user->email;
@@ -47,6 +47,7 @@ class PowerGeneratorService
 //            dd(gettype($generator->subscriptions->first()->start_time));
             return $generatorDTO;
         });
-        return $this->success(PowerGeneratorResource::collection($generatorsDTOs),__('messages.success'));
+//        dd($generatorsDTOs);
+        return $this->successWithPagination(PowerGeneratorResource::collection($generators),__('messages.success'));
     }
 }

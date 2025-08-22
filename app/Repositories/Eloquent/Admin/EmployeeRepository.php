@@ -40,4 +40,9 @@ class EmployeeRepository implements EmployeeRepositoryInterface
         $emp=Employee::where('generator_id',$id)->get();
         return $emp;
     }
+
+    public function getEmp(int $generator_id)
+    {
+        return Employee::where('generator_id',$generator_id)->count();
+    }
 }

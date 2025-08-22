@@ -13,4 +13,7 @@ interface GeneratorRequestRepositoryInterface
     public function update(int $id, array $data): bool;
     public function getPendingRequests();
     public function getByStatus(string $status);
+    public function getGenInfo(int $generator_id);
+    public function delete(int $generator_id);
+
 }

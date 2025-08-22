@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('description');
             $table->string('image')->nullable();
             $table->integer('monthlyPrice');
+            $table->json('translation')->nullable();
             $table->timestamps();
         });
     }

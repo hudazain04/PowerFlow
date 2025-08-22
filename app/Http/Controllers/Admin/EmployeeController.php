@@ -34,4 +34,8 @@ class EmployeeController extends Controller
         $emp=$this->service->getEmployee($id);
         return ApiResponses::success($emp,'success',ApiCode::OK);
     }
+    public function getEmp(int $generator_id){
+        $emp=$this->service->getEmp($generator_id);
+        return ApiResponses::success($emp,"success",ApiCode::OK);
+    }
 }

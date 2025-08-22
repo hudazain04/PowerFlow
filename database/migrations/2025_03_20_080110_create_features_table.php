@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('key');
             $table->string('description');
             $table->boolean('hasValue')->default(false);
+            $table->string('event')->nullable();
+            $table->json('translation')->nullable();
             $table->timestamps();
         });
     }

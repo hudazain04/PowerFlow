@@ -2,6 +2,7 @@
 
 namespace App\DTOs;
 
+use WendellAdriel\ValidatedDTO\Casting\BooleanCast;
 use WendellAdriel\ValidatedDTO\Casting\IntegerCast;
 use WendellAdriel\ValidatedDTO\SimpleDTO;
 
@@ -10,6 +11,8 @@ class FeatureDTO extends SimpleDTO
     public ?int $id;
     public string $key;
     public ?int $value;
+    public ?bool  $hasValue;
+    public ?string $event;
     public string $description;
 
     protected function defaults(): array
@@ -22,6 +25,7 @@ class FeatureDTO extends SimpleDTO
         return [
             'id'=>new IntegerCast(),
             'value'=>new IntegerCast(),
+            'hasValue'=>new BooleanCast(),
         ];
     }
 }
