@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
+use App\ApiHelper\ApiResponse;
 use App\DTOs\SubscriptionRequestDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SubscriptionRequest\CreateSubscriptionRequestRequest;
@@ -13,6 +14,7 @@ use Illuminate\Http\Request;
 
 class SubscriptionRequestController extends Controller
 {
+    use ApiResponse;
     public function __construct(
         protected SubscriptionRequestService $subscriptionRequestService,
     )
@@ -29,7 +31,8 @@ class SubscriptionRequestController extends Controller
         $requestDTO=SubscriptionRequestDTO::fromRequest($request);
         $requestDTO->user_id=$request->user()->id;
         $requestDTO->type=SubscriptionTypes::NewPlan;
-        return $this->subscriptionRequestService->store($requestDTO);
+        $response= $this->subscriptionRequestService->store($requestDTO);
+        return $response;
     }
 
     public function getAll(Request $request)
@@ -39,7 +42,8 @@ class SubscriptionRequestController extends Controller
 
     public function approve(int $requestId)
     {
-        return $this->subscriptionRequestService->approve($requestId);
+        $response=$this->subscriptionRequestService->approve($requestId);
+        return $this->success(null, __('subscriptionRequest.approve'));
     }
 
     public function reject(int $requestId)

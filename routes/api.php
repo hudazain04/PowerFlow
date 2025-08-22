@@ -9,7 +9,7 @@ use App\Http\Controllers\Admin\ElectricalBoxController;
 use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\PowerGeneratorController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\StripeController;
+use App\Http\Controllers\paymentController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\SuperAdmin\AppInfoController;
 use App\Http\Controllers\SuperAdmin\FaqController;
@@ -250,6 +250,7 @@ Route::prefix('powerGenerator')->group(function (){
 Route::get('visitLandingPage',[SuperAdminStatisticsController::class,'visitLandingPage']);
 
 
-Route::get('pay',[StripeController::class,'createCheckoutSession']);
-Route::get('stripe/success', [StripeController::class, 'stripeSuccess'])->name('stripe.success');
-Route::get('stripe/cancel', [StripeController::class, 'stripeCancel'])->name('stripe.cancel');
+Route::get('payStripe/{request_id}',[paymentController::class,'createStripeCheckout']);
+Route::get('payCash/{request_id}',[paymentController::class,'handleCashPayment']);
+Route::get('stripe/success', [paymentController::class, 'stripeSuccess'])->name('stripe.success');
+Route::get('stripe/cancel', [paymentController::class, 'stripeCancel'])->name('stripe.cancel');
