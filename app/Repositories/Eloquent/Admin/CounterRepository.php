@@ -4,6 +4,7 @@ namespace App\Repositories\Eloquent\Admin;
 use App\Models\Counter;
 use App\Models\ElectricalBox;
 use App\Repositories\interfaces\Admin\CounterRepositoryInterface;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 
 class CounterRepository implements CounterRepositoryInterface
@@ -61,5 +62,12 @@ class CounterRepository implements CounterRepositoryInterface
             ->join('areas', 'area__boxes.area_id', '=', 'areas.id')
             ->where('areas.generator_id', $generator_id)
             ->sum('spendings.consume');
+    }
+
+
+    public function getWhere(array $wheres): Counter
+    {
+       $counters=$this->model->where($wheres)->get();
+       return  $counters;
     }
 }

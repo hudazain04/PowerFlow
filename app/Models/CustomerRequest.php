@@ -8,13 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class CustomerRequest extends Model
 {
     use Translatable;
-    protected $fillable = [
-        'user_id',
-        'generator_id',
-        'status',
-        'user_notes',
-        'admin_notes'
-    ];
+    protected $guarded=['id'];
     public $translatable=[
         'status',
         'user_notes',
@@ -22,5 +16,9 @@ class CustomerRequest extends Model
     ];
     public function user(){
         return $this->BelongsTo(User::class);
+    }
+    public function box()
+    {
+        return $this->belongsTo(ElectricalBox::class);
     }
 }
