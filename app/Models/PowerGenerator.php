@@ -32,6 +32,9 @@ class PowerGenerator extends Model
     {
         return $this->hasMany(Area::class);
     }
+    public function electricalBoxes(){
+        return $this->hasMany(ElectricalBox::class);
+    }
 
     public function user()
     {

@@ -102,15 +102,23 @@ Route::middleware('auth:api')->group(function () {
 // Box management////////
 
         Route::post('/boxes', [ElectricalBoxController::class, 'store']);
+        Route::get('/boxes/{id}',[ElectricalBoxController::class,'get']);
+        Route::delete('/boxes', [ElectricalBoxController::class, 'destroy']);
+        Route::put('/box/update/{id}',[ElectricalBoxController::class,'update']);
+
 
 // counter with boxes assignment///////
-        Route::post('/counters/assign-box', [CounterBoxController::class, 'assignCounter']);
+        Route::post('/counters', [CounterBoxController::class, 'create']);
+        Route::put('/counter/update/{id}',[CounterBoxController::class,'update']);
+        Route::delete('counters/{id?}', [CounterBoxController::class, 'destroy']);
+
+//        Route::post('/counters/assign-box', [CounterBoxController::class, 'assignCounter']);
         Route::get('/boxes/{box_id}/counters', [CounterBoxController::class, 'getBoxCounters']);
         Route::get('/counters/{counter_id}/current-box', [CounterBoxController::class, 'getCurrentCounter']);
         Route::delete('/counters/remove-box', [CounterBoxController::class, 'removeCounter']);
         // employee creation/////////
         Route::post('/createEmp', [EmployeeController::class, 'create']);
-        Route::patch('/updateEmp/{id}', [EmployeeController::class, 'update']);
+        Route::put('/updateEmp/{id}', [EmployeeController::class, 'update']);
         Route::delete('/deleteEmp/{id}', [EmployeeController::class, 'delete']);
         Route::get('/getEmps/{generator_id}', [EmployeeController::class, 'getEmployees']);
         Route::get('/getEmp/{id}', [EmployeeController::class, 'getEmployee']);

@@ -6,8 +6,11 @@ use App\ApiHelper\ApiCode;
 use App\ApiHelper\ApiResponses;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CounterBoxRequest;
+use App\Http\Requests\CounterRequest;
+use App\Http\Requests\counterUpdateRequest;
 use App\Repositories\Eloquent\Admin\CounterBoxRepository;
 use App\Services\Admin\CounterBoxService;
+use Illuminate\Http\Request;
 
 class CounterBoxController extends Controller
 {
@@ -19,6 +22,31 @@ class CounterBoxController extends Controller
 
         return ApiResponses::success(null, 'Counter assigned to box successfully', ApiCode::OK);
     }
+    public function create(CounterRequest $request){
+        $result = $this->service->createCounter($request->validated());
+        return ApiResponses::success($result, 'Counter created', ApiCode::OK);
+    }
+    public function update(counterUpdateRequest $request, $id)
+    {
+        $result = $this->service->updateCounter($id, $request->validated());
+        return ApiResponses::success($result, 'Counter updated', ApiCode::OK);
+    }
+    public function destroy(Request $request, $id = null)
+    {
+        if ($id) {
+            $this->service->deleteCounter($id);
+            return ApiResponses::success(null, 'Counter deleted successfully', ApiCode::OK);
+        }
+
+        if ($request->has('ids')) {
+            $ids = $request->input('ids');
+            $this->service->deleteMultipleCounters($ids);
+            return ApiResponses::success(null, 'Counters deleted successfully', ApiCode::OK);
+        }
+
+        return ApiResponses::error('No counter IDs provided for deletion', ApiCode::BAD_REQUEST);
+    }
+
 
     public function getBoxCounters($boxId)
     {
