@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('app_infos', function (Blueprint $table) {
             $table->id();
             $table->enum('type',array_values((new ReflectionClass(\App\Types\AppInfoTypes::class))->getConstants()));
-            $table->text('content');
+            $table->text('content')->nullable();
             $table->json('translation')->nullable();
             $table->timestamps();
         });
