@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Eloquent\Admin;
 
+use App\Models\Counter_Box;
 use App\Repositories\interfaces\Admin\CounterBoxRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 
@@ -45,4 +46,9 @@ class CounterBoxRepository implements CounterBoxRepositoryInterface
     }
 
 
+    public function counterCount(int $box_id): int
+    {
+        $counterCount=Counter_Box::where('box_id',$box_id)->count();
+        return $counterCount;
+    }
 }

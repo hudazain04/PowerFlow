@@ -2,16 +2,32 @@
 
 namespace App\DTOs;
 
-use Spatie\LaravelData\Data;
+use WendellAdriel\ValidatedDTO\Casting\IntegerCast;
+use WendellAdriel\ValidatedDTO\SimpleDTO;
 
-class CustomerRequestDTO extends Data
+class CustomerRequestDTO extends SimpleDTO
 {
-    public function __construct(
-//        public readonly int $user_id,
-        public readonly int $generator_id,
-//        public readonly ?string $userNotes,
-//        public readonly ?string $adminNotes,
-//        public readonly ?string $address,
-//        public readonly ?float $estimatedUsage
-    ) {}
+    public ?int $user_id;
+    public ?int $generator_id;
+    public ?int $box_id;
+    public ?string $user_notes;
+    public ?string $admin_notes;
+    public ?string $spendingType;
+    public ?string $status;
+
+
+
+
+    protected function defaults(): array
+    {
+        return [];
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'generator_id'=>new IntegerCast(),
+            'box_id'=>new IntegerCast(),
+        ];
+    }
 }

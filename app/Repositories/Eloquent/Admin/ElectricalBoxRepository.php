@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Repositories\Eloquent\Admin;
-use App\Models\ElectricalBox;
+use App\Models\ElectricalBox as ElectricalBoxModel;
 use App\Repositories\interfaces\Admin\ElectricalBoxRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 
@@ -9,7 +9,7 @@ class ElectricalBoxRepository implements ElectricalBoxRepositoryInterface
 {
     public function createBox(array $data)
     {
-        return ElectricalBox::create([
+        return ElectricalBoxModel::create([
             'location' => $data['location'],
             'maps' => $data['maps'],
             'number' => $data['number'],
@@ -42,6 +42,12 @@ class ElectricalBoxRepository implements ElectricalBoxRepositoryInterface
 
     public function getBoxes(int $generator_id)
     {
-        return ElectricalBox::where('generator_id',$generator_id)->count();
+        return ElectricalBoxModel::where('generator_id',$generator_id)->count();
+    }
+
+    public function find(int $box_id): ?ElectricalBoxModel
+    {
+        $box=ElectricalBoxModel::find($box_id);
+        return $box;
     }
 }

@@ -56,7 +56,8 @@ Route::middleware('lang')->group(function (){
     });
     Route::get('/verify', [PasswordController::class, 'verify'])->name('verification.pass');
 
-    Route::middleware('auth:api')->group(function () {
+
+    Route::middleware(['auth:api'  , 'userContext'])->group(function () {
         Route::prefix('faq')->group(function () {
             Route::middleware('role:superAdmin')->group(function () {
                 Route::put('/update/{id}', [FaqController::class, 'updateFaq']);
@@ -80,6 +81,8 @@ Route::middleware('lang')->group(function (){
             Route::post('request', [CustomerRequestController::class, 'store']);
             Route::post('approve/{id}', [CustomerRequestController::class, 'approveRequest']);
             Route::post('reject/{id}', [CustomerRequestController::class, 'rejectRequest']);
+            Route::get('getPending', [CustomerRequestController::class, 'pendingRequests']);
+
 
         });
         Route::prefix('neighborhood')->middleware('role:superAdmin')->group(function () {

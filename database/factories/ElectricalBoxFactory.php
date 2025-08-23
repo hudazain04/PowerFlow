@@ -18,7 +18,8 @@ class ElectricalBoxFactory extends Factory
     {
         return [
             'location' => $this->faker->address,
-            'maps' => $this->faker->url,
+            'latitude' => $this->faker->latitude,
+            'longitude' => $this->faker->longitude,
             'number' => $this->faker->unique()->randomNumber(5),
             'capacity'=>$this->faker->numberBetween(5,50),
         ];

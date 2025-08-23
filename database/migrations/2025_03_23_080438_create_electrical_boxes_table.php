@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->integer('number');
             $table->string('location');
-            $table->string('maps');
+            $table->float('latitude');
+            $table->float('longitude');
             $table->integer('capacity');
             $table->foreignId('generator_id')->constrained('power_generators')->cascadeOnDelete();
             $table->json('translation')->nullable();

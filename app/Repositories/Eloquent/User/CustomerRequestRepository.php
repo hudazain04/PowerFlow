@@ -22,11 +22,19 @@ class CustomerRequestRepository implements CustomerRequestRepositoryInterface
       return CustomerRequest::where('id',$id)->first();
   }
 
-    public function getPending()
+    public function getPending(int $generator_id)
     {
         return CustomerRequest::with('user')
+            ->where('generator_id',$generator_id)
             ->where('status', GeneratorRequests::PENDING)
+            ->with(['user','box'])
             ->latest()
             ->get();
+    }
+
+    public function getWithRelations(CustomerRequest $request ,  array $relations=['*']): CustomerRequest
+    {
+        $request->load($relations);
+        return $request;
     }
 }

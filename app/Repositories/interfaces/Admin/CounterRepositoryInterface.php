@@ -3,6 +3,7 @@
 namespace App\Repositories\interfaces\Admin;
 
 use App\Models\Counter;
+use Illuminate\Database\Query\Builder;
 
 interface CounterRepositoryInterface
 {
@@ -13,6 +14,7 @@ interface CounterRepositoryInterface
     public function getCounters(int $generator_id);
    public function getUserCount(int $generator_id);
    public function getTotalConsumption(int $generator_id);
+   public function getWhere(array $wheres) : Counter;
 
 
 }
