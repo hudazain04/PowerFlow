@@ -3,9 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class ElectricalBoxRequest extends FormRequest
+class EmployeeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,17 +21,9 @@ class ElectricalBoxRequest extends FormRequest
      */
     public function rules(): array
     {
-        $boxId = $this->route('id');
-        $generatorId = auth()->user()->id;
         return [
-            'number' => [
-                'required',
-                Rule::unique('electrical_boxes')->ignore($boxId)
-            ],
-            'capacity' => 'required|integer|min:1',
-            'location'=>'required|string|max:500',
-            'maps'=>'required|string',
-            'area_id'=>'nullable|exists:areas,id'
+            'user_name'=>'required|string',
+            'phone_number'=>'required|max:10',
         ];
     }
 }

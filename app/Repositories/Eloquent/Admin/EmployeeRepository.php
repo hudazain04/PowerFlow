@@ -13,15 +13,18 @@ class EmployeeRepository implements EmployeeRepositoryInterface
 
     public function create(array $data)
     {
-        return Employee::create([$data,
-           'secret_key'=>$this->model->generateSecretKey()]);
-
+        return Employee::create([
+            'user_name' => $data['user_name'],
+            'phone_number' => $data['phone_number'],
+            'generator_id' => auth()->user()->powerGenerator->id,
+            'secret_key' =>$this->model->generateSecretKey()]);
     }
 
     public function update(int $id, array $data)
     {
        $emp=$this->findEmployee($id);
-       return Employee::update($emp,$data);
+
+       return $emp->update($data);
     }
 
     public function findEmployee(int $id)

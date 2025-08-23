@@ -17,8 +17,7 @@ class EmployeeService
         return $emp;
     }
     public function update(int $id,array $data){
-        $emp=$this->repository->findEmployee($id);
-        $employee=$this->repository->update($emp,$data);
+        $employee=$this->repository->update($id,$data);
         return $employee;
     }
     public function delete(int $id){

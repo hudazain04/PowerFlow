@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\ApiHelper\ApiCode;
 use App\ApiHelper\ApiResponses;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\EmployeeRequest;
 use App\Models\Employee;
 use App\Services\Admin\EmployeeService;
 use Illuminate\Http\Request;
@@ -12,14 +13,14 @@ use Illuminate\Http\Request;
 class EmployeeController extends Controller
 {
     public function __construct(private EmployeeService $service){ }
-    public function create(array $data){
-        $emp=$this->service->create($data);
+    public function create(EmployeeRequest $request){
+        $emp=$this->service->create($request->validated());
         return ApiResponses::success($emp,'success',ApiCode::OK);
     }
-    public function update(int $id,array $data){
-
-        $employee=$this->service->update($id,$data);
-        return ApiResponses::success($employee,'success',ApiCode::OK);
+    public function update(EmployeeRequest $request,int $id)
+    {
+        $employee = $this->service->update($id, $request->validated());
+        return ApiResponses::success($employee, 'Employee updated successfully', ApiCode::OK);
     }
     public function delete(int $id){
 
