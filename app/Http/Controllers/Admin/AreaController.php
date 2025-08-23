@@ -30,7 +30,7 @@ class AreaController extends Controller
 
     public function index()
     {
-        $generatorId = auth()->user()->id;
+        $generatorId = auth()->user()->powerGenerator->id;
         $areas = $this->service->getGeneratorAreas($generatorId);
         return  ApiResponses::success($areas,'success',ApiCode::OK);
     }

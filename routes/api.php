@@ -51,8 +51,46 @@ Route::middleware('lang')->group(function (){
     Route::prefix('/password')->group(function () {
         Route::post('/request', [PasswordController::class, 'request']);
 
+
+    Route::prefix('generator')->middleware('role:admin')->group(function () {
+        // Areas//////
+        Route::post('areas', [AreaController::class, 'store']);
+        Route::get('getareas', [AreaController::class, 'index']);
+
+
+        // Box assignment to areas////
+        Route::post('/areas/{area_id}/boxes', [AreaBoxController::class, 'assignBox']);
+        Route::delete('/areas/{area}/boxes/{box}', [AreaBoxController::class, 'removeBoxFromArea']);
+        Route::get('/areas/{area_id}/boxes/available', [AreaBoxController::class, 'getAvailableBoxes']);
+        Route::get('/areas/{area_id}/boxes', [AreaBoxController::class, 'getAreaBoxes']);
+
+// Box management////////
+
+        Route::post('/boxes', [ElectricalBoxController::class, 'store']);
+        Route::get('/boxes/{id}',[ElectricalBoxController::class,'get']);
+        Route::delete('/boxes', [ElectricalBoxController::class, 'destroy']);
+        Route::put('/box/update/{id}',[ElectricalBoxController::class,'update']);
+
+
+// counter with boxes assignment///////
+        Route::post('/counters', [CounterBoxController::class, 'create']);
+        Route::put('/counter/update/{id}',[CounterBoxController::class,'update']);
+        Route::delete('counters/{id?}', [CounterBoxController::class, 'destroy']);
+
+//        Route::post('/counters/assign-box', [CounterBoxController::class, 'assignCounter']);
+        Route::get('/boxes/{box_id}/counters', [CounterBoxController::class, 'getBoxCounters']);
+        Route::get('/counters/{counter_id}/current-box', [CounterBoxController::class, 'getCurrentCounter']);
+        Route::delete('/counters/remove-box', [CounterBoxController::class, 'removeCounter']);
+        // employee creation/////////
+        Route::post('/createEmp', [EmployeeController::class, 'create']);
+        Route::put('/updateEmp/{id}', [EmployeeController::class, 'update']);
+        Route::delete('/deleteEmp/{id}', [EmployeeController::class, 'delete']);
+        Route::get('/getEmps/{generator_id}', [EmployeeController::class, 'getEmployees']);
+        Route::get('/getEmp/{id}', [EmployeeController::class, 'getEmployee']);
+
         Route::post('/resend', [PasswordController::class, 'resend'])->middleware('throttle:3,1');
         Route::post('/reset', [PasswordController::class, 'reset']);
+
     });
     Route::get('/verify', [PasswordController::class, 'verify'])->name('verification.pass');
 

@@ -16,8 +16,12 @@ class ElectricalBox extends Model
         'location',
         'maps',
         'number',
-        'capacity'
+        'capacity',
+        'generator_id'
     ];
+    public function powerGenerator(){
+        return $this->BelongsTo(PowerGenerator::class);
+    }
 
     public $translatable=[
         'location',
@@ -41,6 +45,9 @@ class ElectricalBox extends Model
             ->whereNull('electrical_boxes.removed_at');
 
     }
+//    public function counter(){
+//        $this->hasMany(Counter::class);
+//    }
 
 //    public function counters()
 //    {
