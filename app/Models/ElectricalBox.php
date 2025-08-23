@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\ApiHelper\Translatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -9,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class ElectricalBox extends Model
 {
        use  HasFactory;
+       use Translatable;
 
     protected $fillable = [
         'location',
@@ -20,6 +22,10 @@ class ElectricalBox extends Model
     public function powerGenerator(){
         return $this->BelongsTo(PowerGenerator::class);
     }
+
+    public $translatable=[
+        'location',
+    ];
 
     public function counters()
     {

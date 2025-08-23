@@ -119,7 +119,7 @@ class StatisticsService
             return $plan;
         });
         $topRequestedPlan = $data->sortByDesc('subscriptionRequestCount')->first();
-        return $this->success($topRequestedPlan,__('messages.success'));
+        return $topRequestedPlan;
 
     }
 
@@ -133,6 +133,7 @@ class StatisticsService
 
     public function getTotalVisitors()
     {
+
         $visitors=$this->visitorRepository->count();
         return  $this->success($visitors,__('messages.success'));
     }

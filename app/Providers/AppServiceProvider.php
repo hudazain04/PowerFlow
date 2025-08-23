@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Repositories\Eloquent\AuthRepository;
+use App\Repositories\Eloquent\SuperAdmin\SubscriptionPaymentRepository;
 use App\Repositories\Eloquent\User\ComplaintRepository;
 use App\Repositories\interfaces\AuthRepositoryInterface;
 
@@ -28,6 +29,7 @@ use App\Repositories\interfaces\SuperAdmin\FeatureRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\Plan_FeatureRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\PlanPriceRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\PlanRepositoryInterface;
+use App\Repositories\interfaces\SuperAdmin\SubscriptionPaymentRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\SubscriptionRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\SubscriptionRequestRepositoryInterface;
 
@@ -51,8 +53,6 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(AuthRepositoryInterface::class, AuthRepository::class);
-
-
         $this->app->bind(FeatureRepositoryInterface::class, FeatureRepository::class);
         $this->app->bind(PlanRepositoryInterface::class,PlanRepository::class);
         $this->app->bind(PlanPriceRepositoryInterface::class,PlanPriceRepository::class);
@@ -64,6 +64,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(AppInfoRepositoryInterface::class,AppInfoRepository::class);
         $this->app->bind(VisitorRepositoryInterface::class,VisitorRepository::class);
         $this->app->bind(ComplaintRepositoryInterface::class,ComplaintRepository::class);
+        $this->app->bind(SubscriptionPaymentRepositoryInterface::class,SubscriptionPaymentRepository::class);
+
 
 
     }

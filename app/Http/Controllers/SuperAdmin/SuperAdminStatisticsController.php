@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
+
 use App\ApiHelper\ApiCode;
 use App\ApiHelper\ApiResponses;
+
+use App\ApiHelper\ApiResponse;
+
 use App\Http\Controllers\Controller;
 use App\Models\PowerGenerator;
 use App\Services\Admin\AreaService;
@@ -17,15 +21,21 @@ use Illuminate\Http\Request;
 
 class SuperAdminStatisticsController extends Controller
 {
-    public function __construct(protected StatisticsService $statisticsService,
-        private AreaService $service
-        ,private ElectricalBoxService $boxService,
-       private CounterService $counterService,
-    private EmployeeService $employeeService,
-    private PlanService $planService,
-    private GeneratorRequestService $generatorRequestService)
+
+    public function __construct(
+        protected StatisticsService $statisticsService,
+        private AreaService $service,
+        private ElectricalBoxService $boxService,
+        private CounterService $counterService,
+        private EmployeeService $employeeService,
+        private PlanService $planService,
+        private GeneratorRequestService $generatorRequestService,
+    )
     {
     }
+
+    use ApiResponse;
+
 
     public function homeStatistics()
     {
@@ -49,7 +59,8 @@ class SuperAdminStatisticsController extends Controller
 
     public function topRequestedPlan()
     {
-        return $this->statisticsService->topRequestedPlan();
+        $topRequestedPlan=$this->statisticsService->topRequestedPlan();
+        return $this->success(['topRequestedPlan'=>$topRequestedPlan],__('messages.success'));
     }
 
     public function visitLandingPage()
@@ -112,6 +123,6 @@ class SuperAdminStatisticsController extends Controller
     }
     public function getGenInfo($generator_id){
         $data=$this->generatorRequestService->getGenInfo($generator_id);
-        return ApiResponses::success($data,'success',ApiCode::OK);
+        return ApiResponses::success($data,__('messages.success'),ApiCode::OK);
     }
 }

@@ -1,5 +1,9 @@
 <?php
+
 return [
+    'user_registered' => 'User registered successfully',
+    'login_success' => 'Logged in successfully',
+    'logout'=>'Logged out successfully',
     'success'=>'Your request was successful',
     "error" => [
         "server_error" => "Oops! It seems like our server encountered an unexpected error. We're sorry for the inconvenience this may have caused you. Our team has been notified and is working diligently to fix it. In the meantime, you can try refreshing the page or coming back later. Thank you for your patience and understanding",
@@ -59,13 +63,13 @@ The activation code you provided for the course has expired. Please obtain a new
 
     "course_controller" => [
         "error" => [
-          "invisible_course" => "🔍 Course visibility update! 📚 The course you're trying to access is currently invisible. If you believe this is a mistake or have any questions, please reach out to the administrator for further assistance.",
-          "user_already_enrolled" => "⚠️ Enrollment Failed! ⚠️
+            "invisible_course" => "🔍 Course visibility update! 📚 The course you're trying to access is currently invisible. If you believe this is a mistake or have any questions, please reach out to the administrator for further assistance.",
+            "user_already_enrolled" => "⚠️ Enrollment Failed! ⚠️
 You are already enrolled in the course :course_name Duplicate enrollments are not allowed. If you have any questions or concerns, please contact support for assistance.",
-          "already_enrolled" => "🛑 Duplicate enrollment detected! 📚 The user :username is already enrolled in :course_name. Please review enrollment records to avoid duplications. ",
-          "one_category_at_least" => "⚠️ Error: Course creation failed! ⚠️ To proceed, please provide at least one category for the new course. Categories are essential for organizing our educational content. Please try again with the necessary information. Thank you! ",
-          "one_teacher_at_least" => "⚠️ Error: Course creation failed! ⚠️ To proceed, please assign at least one teacher to the new course. Teachers are essential for guiding our students' learning journeys. Please try again with the necessary information. Thank you! ",
-          "wrong_match_course_with_code" => "⚠️ Activation Failed! ⚠️
+            "already_enrolled" => "🛑 Duplicate enrollment detected! 📚 The user :username is already enrolled in :course_name. Please review enrollment records to avoid duplications. ",
+            "one_category_at_least" => "⚠️ Error: Course creation failed! ⚠️ To proceed, please provide at least one category for the new course. Categories are essential for organizing our educational content. Please try again with the necessary information. Thank you! ",
+            "one_teacher_at_least" => "⚠️ Error: Course creation failed! ⚠️ To proceed, please assign at least one teacher to the new course. Teachers are essential for guiding our students' learning journeys. Please try again with the necessary information. Thank you! ",
+            "wrong_match_course_with_code" => "⚠️ Activation Failed! ⚠️
 The activation code you provided cannot be used to activate the requested course. Please ensure you have entered the correct code or contact support for assistance. Thank you for your understanding.",
         ],
         "create" => "📚 New course created! 🚀 The course :course_name has been successfully created. It's time to shape minds and inspire learning! ",
@@ -150,7 +154,7 @@ Congratulations! You have been successfully enrolled in the course :course_name 
         "List_Advertisements" => "List Advertisements",
     ],
 
-"BranchController" => [
+    "BranchController" => [
         "Branch_Added_Successfully" => "Branch Added Successfully",
         "Branch_Updated_Successfully" => "Branch Updated Successfully",
         "Branch_Deleted_Successfully" => "Branch Deleted Successfully",

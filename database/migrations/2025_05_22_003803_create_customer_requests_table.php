@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('status')->default(GeneratorRequests::PENDING);
             $table->text('user_notes')->nullable();
             $table->text('admin_notes')->nullable();
+            $table->json('translation')->nullable();
             $table->timestamps();
         });
     }

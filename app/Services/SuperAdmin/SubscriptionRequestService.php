@@ -16,10 +16,13 @@ use App\Models\User;
 use App\Models\User as UserModel;
 use App\Repositories\interfaces\Admin\PowerGeneratorRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\PlanPriceRepositoryInterface;
+use App\Repositories\interfaces\SuperAdmin\SubscriptionPaymentRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\SubscriptionRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\SubscriptionRequestRepositoryInterface;
 use App\Repositories\interfaces\UserRepositoryInterface;
 use App\Types\GeneratorRequests;
+use App\Types\PaymentStatus;
+use App\Types\PaymentType;
 use App\Types\UserTypes;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -36,6 +39,7 @@ class SubscriptionRequestService
         protected PowerGeneratorRepositoryInterface $powerGeneratorRepository,
         protected SubscriptionRepositoryInterface $subscriptionRepository,
         protected UserRepositoryInterface $userRepository,
+        protected SubscriptionPaymentRepositoryInterface $subscriptionPaymentRepository,
     )
     {
     }
@@ -54,8 +58,14 @@ class SubscriptionRequestService
             throw new ErrorException(__('planPrice.notFound'),ApiCode::NOT_FOUND);
         }
         $requestDTO->period=$planPrice->period;
-        $subscriptionRequests=$this->subscriptionRequestRepository->create($requestDTO->toArray());
-        return $this->success(null,__('subscriptionRequest.create'));
+        $subscriptionRequest=$this->subscriptionRequestRepository->create($requestDTO->toArray());
+        $payment=$this->subscriptionPaymentRepository->create([
+            'user_id'=>$requestDTO->user_id,
+            'status'=>PaymentStatus::Pending,
+            'amount'=>$planPrice->price,
+            'subscriptionRequest_id'=>$subscriptionRequest->id,
+        ]);
+        return $this->success(['request_id'=>$subscriptionRequest->id],__('subscriptionRequest.create'));
     }
 
     public function getAll(Request $request)
@@ -88,12 +98,26 @@ class SubscriptionRequestService
             $subscriptionDTO->price = $planPrice->price;
             $subscriptionDTO->generator_id = $generator->id;
             $subscription = $this->subscriptionRepository->create($subscriptionDTO->toArray());
+            $payment=$this->subscriptionPaymentRepository->findWhere(['subscriptionRequest_id'=>$requestId]);
+            if (! $payment)
+            {
+                throw new ErrorException(__('payment.notFound'),ApiCode::NOT_FOUND);
+            }
+            if ($payment->type == PaymentType::Cash)
+            {
+                $this->subscriptionPaymentRepository->update($payment,[
+                    'date'=>Carbon::now(),'status'=>PaymentStatus::Paid
+                ]);
+            }
             DB::commit();
-            return $this->success(null, __('subscriptionRequest.approve'));
+            return ['success'=>true];
+
         }
         catch (\Throwable $exception) {
             DB::rollBack();
-            throw new ErrorException(__('messages.error.serverError'), ApiCode::INTERNAL_SERVER_ERROR);
+            throw new ErrorException($exception->getMessage(), ApiCode::INTERNAL_SERVER_ERROR);
+
+//            throw new ErrorException(__('messages.error.serverError'), ApiCode::INTERNAL_SERVER_ERROR);
         }
     }
 

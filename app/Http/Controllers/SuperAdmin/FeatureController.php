@@ -30,6 +30,10 @@ class FeatureController extends Controller
     public function store(CreateFeatureRequest $request)
     {
         $featureDTO=FeatureDTO::fromRequest($request);
+        if (str_contains($featureDTO->description, '{}'))
+        {
+            $featureDTO->hasValue=true;
+        }
         return $this->featureService->create($featureDTO);
     }
 

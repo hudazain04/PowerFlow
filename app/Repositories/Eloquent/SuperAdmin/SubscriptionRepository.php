@@ -7,6 +7,7 @@ use App\Repositories\interfaces\SuperAdmin\SubscriptionRepositoryInterface;
 use App\Types\SubscriptionExpirationTypes;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use function Symfony\Component\String\s;
 
 
 class SubscriptionRepository implements SubscriptionRepositoryInterface
@@ -59,6 +60,12 @@ class SubscriptionRepository implements SubscriptionRepositoryInterface
        $subscription->update($data);
        $subscription->save();
        return  $subscription;
+    }
+
+    public function getRelations(SubscriptionModel $subscription, array $relations): SubscriptionModel
+    {
+        $subscription->load($relations);
+        return $subscription;
     }
 
 }

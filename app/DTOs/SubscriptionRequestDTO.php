@@ -12,8 +12,8 @@ class SubscriptionRequestDTO extends SimpleDTO
     public ?int $id;
     public ?int $period;
     public ?string $type;
-    public string $name;
-    public string $location;
+    public ?string $name;
+    public ?string $location;
     public ?int $user_id;
     public ?int $planPrice_id;
     public ?Carbon $created_at;

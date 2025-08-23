@@ -6,6 +6,7 @@ use App\ApiHelper\ApiCode;
 use App\ApiHelper\ApiResponse;
 use App\DTOs\SubscriptionRequestDTO;
 use App\Exceptions\ErrorException;
+use App\Http\Resources\SubscriptionResource;
 use App\Models\User as UserModel;
 use App\Repositories\interfaces\SuperAdmin\PlanPriceRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\SubscriptionRepositoryInterface;
@@ -93,12 +94,21 @@ class SubscriptionService
         {
             throw new ErrorException(__('planPrice.notFound'),ApiCode::NOT_FOUND);
         }
-        $user=$this->userRepository->getRelations(['powerGenerator']);
+        $user=$this->userRepository->getRelations($user,['powerGenerator']);
+//        dd($user->powerGenerator);
         $subscriptionRequestDTO->name=$user->powerGenerator->name;
         $subscriptionRequestDTO->location=$user->powerGenerator->location;
         $subscriptionRequestDTO->period=$planPrice->period;
         $subscriptionRequest=$this->subscriptionRequestRepository->create($subscriptionRequestDTO->toArray());
         return $this->success(null,__('subscriptionRequest.create'));
+
+    }
+
+    public function getLastSubscription(int $generator_id)
+    {
+     $subscription=$this->subscriptionRepository->getLastForGenerator($generator_id);
+     $subscription=$this->subscriptionRepository->getRelations($subscription,['planPrice.plan']);
+     return $this->success(SubscriptionResource::make($subscription),__('messages.success'));
 
     }
 

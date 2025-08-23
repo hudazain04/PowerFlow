@@ -28,4 +28,10 @@ class AccountController extends Controller
     {
         return $this->accountService->blocking($user_id);
     }
+
+    public function getAll(Request $request)
+    {
+        return $this->accountService->getAll([$request->query()]);
+
+    }
 }

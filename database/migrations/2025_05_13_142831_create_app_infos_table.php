@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->enum('type',array_values((new ReflectionClass(\App\Types\AppInfoTypes::class))->getConstants()));
             $table->text('content');
+            $table->json('translation')->nullable();
             $table->timestamps();
         });
     }
