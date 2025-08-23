@@ -40,4 +40,7 @@ class Counter extends Model
             ->wherePivotNull('removed_at');
 
     }
+//    public function boxes(){
+//        return $this->hasMany(ElectricalBox::class);
+//    }
 }
