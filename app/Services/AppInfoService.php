@@ -7,6 +7,7 @@ use App\ApiHelper\ApiResponse;
 use App\DTOs\AppInfoDTO;
 use App\Exceptions\ErrorException;
 use App\Http\Requests\AppInfo\CreateAppInfoRequest;
+use App\Http\Resources\AppInfoResource;
 use App\Repositories\interfaces\AppInfoRepositoryInterface;
 use App\Types\AppInfoTypes;
 
@@ -33,7 +34,8 @@ class AppInfoService
         $appInfoDTO->type=AppInfoTypes::AboutApp;
         $appInfo=$this->appInfoRepository->createAppInfo($appInfoDTO->toArray());
         $appInfoDTO=AppInfoDTO::fromModel($appInfo);
-        return $this->success($appInfoDTO,__('AppInfo.AboutAppCreate'),ApiCode::CREATED);
+        return $this->success(AppInfoResource::make($appInfoDTO),__('AppInfo.AboutAppCreate'),ApiCode::CREATED);
+
     }
 
     public function getAboutApp()
@@ -44,7 +46,7 @@ class AppInfoService
             throw new ErrorException(__('AppInfo.AboutAppNotFound'),ApiCode::NOT_FOUND);
         }
         $appInfoDTO=AppInfoDTO::fromModel($appInfo);
-        return $this->success($appInfoDTO,__('messages.success'));
+        return $this->success(AppInfoResource::make($appInfoDTO),__('messages.success'));
     }
 
     public function updateAboutApp(AppInfoDTO $appInfoDTO)
@@ -57,7 +59,7 @@ class AppInfoService
         $appInfoDTO->type=AppInfoTypes::AboutApp;
         $appInfo=$this->appInfoRepository->updateAppInfo($appInfo,$appInfoDTO->toArray());
         $appInfoDTO=AppInfoDTO::fromModel($appInfo);
-        return $this->success($appInfoDTO,__('AppInfo.AboutAppUpdate'));
+        return $this->success(AppInfoResource::make($appInfoDTO),__('AppInfo.AboutAppUpdate'));
     }
 
     public function deleteAboutApp()
@@ -67,7 +69,7 @@ class AppInfoService
         {
             throw new ErrorException(__('AppInfo.AboutAppNotFound'),ApiCode::NOT_FOUND);
         }
-        $this->appInfoRepository->delete($appInfo);
+        $this->appInfoRepository->updateAppInfo($appInfo,['content'=>null]);
         return $this->success(null,__('AppInfo.AboutAppDelete'));
     }
 
@@ -81,7 +83,7 @@ class AppInfoService
         $appInfoDTO->type=AppInfoTypes::TermsAndConditions;
         $appInfo=$this->appInfoRepository->createAppInfo($appInfoDTO->toArray());
         $appInfoDTO=AppInfoDTO::fromModel($appInfo);
-        return $this->success($appInfoDTO,__('AppInfo.TermsAndConditionsCreate'),ApiCode::CREATED);
+        return $this->success(AppInfoResource::make($appInfoDTO),__('AppInfo.TermsAndConditionsCreate'),ApiCode::CREATED);
     }
 
     public function getTermsAndConditions()
@@ -92,7 +94,7 @@ class AppInfoService
             throw new ErrorException(__('AppInfo.TermsAndConditionsNotFound'),ApiCode::NOT_FOUND);
         }
         $appInfoDTO=AppInfoDTO::fromModel($appInfo);
-        return $this->success($appInfoDTO,__('messages.success'));
+        return $this->success(AppInfoResource::make($appInfoDTO),__('messages.success'));
     }
 
     public function updateTermsAndConditions(AppInfoDTO $appInfoDTO)
@@ -105,7 +107,7 @@ class AppInfoService
         $appInfoDTO->type=AppInfoTypes::TermsAndConditions;
         $appInfo=$this->appInfoRepository->updateAppInfo($appInfo,$appInfoDTO->toArray());
         $appInfoDTO=AppInfoDTO::fromModel($appInfo);
-        return $this->success($appInfoDTO,__('AppInfo.TermsAndConditionsUpdate'));
+        return $this->success(AppInfoResource::make($appInfoDTO),__('AppInfo.TermsAndConditionsUpdate'));
     }
 
     public function deleteTermsAndConditions()
@@ -115,7 +117,7 @@ class AppInfoService
         {
             throw new ErrorException(__('AppInfo.TermsAndConditionsNotFound'),ApiCode::NOT_FOUND);
         }
-        $this->appInfoRepository->delete($appInfo);
+        $this->appInfoRepository->updateAppInfo($appInfo,['content'=>null]);
         return $this->success(null,__('AppInfo.TermsAndConditionsDelete'));
     }
 
@@ -129,7 +131,7 @@ class AppInfoService
         $appInfoDTO->type=AppInfoTypes::PrivacyPolicy;
         $appInfo=$this->appInfoRepository->createAppInfo($appInfoDTO->toArray());
         $appInfoDTO=AppInfoDTO::fromModel($appInfo);
-        return $this->success($appInfoDTO,__('AppInfo.PrivacyPolicyCreate'),ApiCode::CREATED);
+        return $this->success(AppInfoResource::make($appInfoDTO),__('AppInfo.PrivacyPolicyCreate'),ApiCode::CREATED);
     }
 
     public function getPrivacyPolicy()
@@ -140,7 +142,7 @@ class AppInfoService
             throw new ErrorException(__('AppInfo.PrivacyPolicyNotFound'),ApiCode::NOT_FOUND);
         }
         $appInfoDTO=AppInfoDTO::fromModel($appInfo);
-        return $this->success($appInfoDTO,__('messages.success'));
+        return $this->success(AppInfoResource::make($appInfoDTO),__('messages.success'));
     }
 
     public function updatePrivacyPolicy(AppInfoDTO $appInfoDTO)
@@ -153,7 +155,7 @@ class AppInfoService
         $appInfoDTO->type=AppInfoTypes::PrivacyPolicy;
         $appInfo=$this->appInfoRepository->updateAppInfo($appInfo,$appInfoDTO->toArray());
         $appInfoDTO=AppInfoDTO::fromModel($appInfo);
-        return $this->success($appInfoDTO,__('AppInfo.PrivacyPolicyUpdate'));
+        return $this->success(AppInfoResource::make($appInfoDTO),__('AppInfo.PrivacyPolicyUpdate'));
     }
 
     public function deletePrivacyPolicy()
@@ -163,7 +165,7 @@ class AppInfoService
         {
             throw new ErrorException(__('AppInfo.PrivacyPolicyNotFound'),ApiCode::NOT_FOUND);
         }
-        $this->appInfoRepository->delete($appInfo);
+        $this->appInfoRepository->updateAppInfo($appInfo,['content'=>null]);
         return $this->success(null,__('AppInfo.PrivacyPolicyDelete'));
     }
 }

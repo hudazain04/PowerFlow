@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Http\Controllers\User\complaintcontroller;
+use App\Models\AppInfo;
 use App\Models\Area;
 use App\Models\Area_Box;
 use App\Models\Complaint;
@@ -34,10 +35,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+
         User::factory(10)->create();
         $this->call([
             RoleSeeder::class,
-            FaqSeeder::class
+            FaqSeeder::class,
+            AppInfoSeeder::class,
         ]);
 
         $user = User::factory()->create([
