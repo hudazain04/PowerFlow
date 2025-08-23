@@ -14,7 +14,8 @@ class ElectricalBox extends Model
 
     protected $fillable = [
         'location',
-        'maps',
+        'latitude',
+        'longitude',
         'number',
         'capacity',
         'generator_id'

@@ -10,12 +10,8 @@ class ElectricalBoxRepository implements ElectricalBoxRepositoryInterface
     public function createBox(array $data)
     {
 
-        return ElectricalBoxModel::create([
-            'location' => $data['location'],
-            'maps' => $data['maps'],
-            'number' => $data['number'],
-            'capacity' => $data['capacity']
-        ]);
+        return ElectricalBoxModel::create($data);
+
     }
 
     public function getAvailableBoxes(int $areaId)
@@ -23,7 +19,7 @@ class ElectricalBoxRepository implements ElectricalBoxRepositoryInterface
         // Get the authenticated generator's ID
         $generatorId = auth()->user()->generator_id; // Adjust based on your auth structure
 
-        return ElectricalBox::where('generator_id', $generatorId)
+        return ElectricalBoxModel::where('generator_id', $generatorId)
             // First get the count of active counters for each box
             ->leftJoin('counter__boxes', function($join) {
                 $join->on('electrical_boxes.id', '=', 'counter__boxes.box_id')
@@ -83,13 +79,13 @@ class ElectricalBoxRepository implements ElectricalBoxRepositoryInterface
 
     public function get(int $generator_id)
     {
-        return ElectricalBox::where('generator_id',$generator_id)->get();
+        return ElectricalBoxModel::where('generator_id',$generator_id)->get();
     }
 
     public function updateBox($id, array $data)
     {
         return DB::transaction(function () use ($id, $data) {
-            $box = ElectricalBox::findOrFail($id);
+            $box = ElectricalBoxModel::findOrFail($id);
 
             $box->update([
                 'location' => $data['location'],
@@ -122,17 +118,17 @@ class ElectricalBoxRepository implements ElectricalBoxRepositoryInterface
 
     public function findById($id)
     {
-        return ElectricalBox::findOrFail($id);
+        return ElectricalBoxModel::findOrFail($id);
     }
 
     public function delete($id)
     {
-        return ElectricalBox::where('id', $id)->delete();
+        return ElectricalBoxModel::where('id', $id)->delete();
     }
 
     public function bulkDelete(array $ids)
     {
-        return ElectricalBox::whereIn('id', $ids)->delete();
+        return ElectricalBoxModel::whereIn('id', $ids)->delete();
     }
 
     public function update(int $id, array $data)

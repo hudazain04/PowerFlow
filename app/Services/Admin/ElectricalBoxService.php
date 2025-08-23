@@ -2,8 +2,10 @@
 
 namespace App\Services\Admin;
 
+use App\ApiHelper\ApiCode;
 use App\DTOs\AssignCounterToBoxDTO;
 use App\DTOs\ElectricalBoxDTO;
+use App\Exceptions\ErrorException;
 use App\Exceptions\GeneralException;
 use App\Models\ElectricalBox;
 use App\Repositories\Eloquent\Admin\ElectricalBoxRepository;
@@ -22,9 +24,8 @@ class ElectricalBoxService
     {
 
         if (ElectricalBox::where('number', $data['number'])->exists()) {
-            throw new \Exception('Box number already exists');
+            throw new ErrorException(__('box.boxExist'),ApiCode::BAD_REQUEST);
         }
-
         return $this->boxRepo->createBox($data);
     }
     public function getBoxes(int $generator_id){

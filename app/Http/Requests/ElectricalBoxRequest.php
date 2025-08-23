@@ -23,7 +23,6 @@ class ElectricalBoxRequest extends FormRequest
     public function rules(): array
     {
         $boxId = $this->route('id');
-        $generatorId = auth()->user()->id;
         return [
             'number' => [
                 'required',
@@ -31,7 +30,9 @@ class ElectricalBoxRequest extends FormRequest
             ],
             'capacity' => 'required|integer|min:1',
             'location'=>'required|string|max:500',
-            'maps'=>'required|string',
+            'maps'=>'array',
+            'maps.x'=>'numeric',
+            'maps.y'=>'numeric',
             'area_id'=>'nullable|exists:areas,id'
         ];
     }
