@@ -280,9 +280,6 @@ Route::middleware('lang')->group(function () {
                 Route::get('getComplaints', [complaintcontroller::class, 'getComplaints'])->middleware('role:admin,superAdmin, employee');
             });
 
-            Route::prefix('spending')->group(function () {
-                Route::post('createSpending', []);
-            });
 
 
             Route::prefix('account')->group(function () {
