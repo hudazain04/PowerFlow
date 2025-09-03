@@ -17,7 +17,7 @@ class EmployeeService
         return $emp;
     }
     public function update(int $id,array $data){
-        $employee=$this->repository->update($id,$data);
+        $employee=$this->repository->update($id,[$data,'generator_id'=>auth()->user()->id]);
         return $employee;
     }
     public function delete(int $id){

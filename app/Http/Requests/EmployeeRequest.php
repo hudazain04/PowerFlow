@@ -26,4 +26,5 @@ class EmployeeRequest extends FormRequest
             'phone_number'=>'required|max:10',
         ];
     }
+
 }

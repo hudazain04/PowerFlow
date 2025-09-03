@@ -22,7 +22,7 @@ interface PlanRepositoryInterface
 
     public function delete(PlanModel $plan) : bool;
 
-    public function getFeatures(PlanModel $plan): Collection;
+    public function getFeatures(PlanModel $plan, array $where=[]): Collection;
 
     public function getPlanPrices(PlanModel $plan): Collection;
 }

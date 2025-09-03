@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\ApiHelper\HasFeatureLimit;
 use App\ApiHelper\Translatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Area extends Model
 {
      use HasFactory;
-     use Translatable;
+     use Translatable,HasFeatureLimit;
     protected $fillable = [
         'name',
         'neighborhood_id',
@@ -19,6 +20,9 @@ class Area extends Model
     public $translatable=[
         'name',
     ];
+    public string $featureKey = 'neighborhoods_count';
+
+
 
     public function electricalbox()
     {

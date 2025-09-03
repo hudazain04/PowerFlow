@@ -41,4 +41,10 @@ class PowerGeneratorRepository implements PowerGeneratorRepositoryInterface
         $generators=PowerGeneratorModel::filter($filters)->with(['user','subscriptions'])->paginate(10);
         return $generators;
     }
+
+    public function getRelationCount(PowerGeneratorModel $powerGenerator, string $relation): int
+    {
+        $powerGenerator=$powerGenerator->loadCount($relation);
+        return $powerGenerator->getAttribute("{$relation}_count");
+    }
 }

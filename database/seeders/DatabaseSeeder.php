@@ -138,7 +138,9 @@ class DatabaseSeeder extends Seeder
 
         // Create Counters for users
         foreach ($users as $user) {
-            $counter = Counter::factory()->for($user)->create();
+            $counter = Counter::factory()->for($user)->create([
+                'generator_id' => $generators->random()->id,
+            ]);
             $box = $boxes->random();
             Counter_Box::factory()->create([
                 'counter_id' => $counter->id,

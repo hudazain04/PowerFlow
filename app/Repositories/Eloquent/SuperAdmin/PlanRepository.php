@@ -58,17 +58,11 @@ class PlanRepository implements PlanRepositoryInterface
         return $plan->delete();
     }
 
-    public function getFeatures(PlanModel $plan): Collection
+    public function getFeatures(PlanModel $plan, array $where=[]): Collection
     {
 
-            $features=$plan->features;
+            $features=$plan->features->where($where);
              return $features;
-
-//        ->map(function ($feature){
-//        $featureDTO= FeatureDTO::fromModel($feature);
-//        $featureDTO->value=$feature->pivot->value;
-//        return $featureDTO;
-//    })
 
     }
 

@@ -38,6 +38,10 @@ class PowerGenerator extends Model
     {
         return $this->hasMany(Area::class);
     }
+    public function counters()
+    {
+        return $this->hasMany(Counter::class);
+    }
     public function electricalBoxes(){
         return $this->hasMany(ElectricalBox::class);
     }
@@ -46,6 +50,7 @@ class PowerGenerator extends Model
     {
         return $this->belongsTo(User::class);
     }
+
     public function plan()
     {
         return $this->belongsTo(Plan::class);

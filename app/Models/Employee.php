@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\ApiHelper\HasFeatureLimit;
 use App\ApiHelper\Translatable;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Employee extends Authenticate
 {
 
-    use HasFactory;
+    use HasFactory,HasFeatureLimit;
 
     protected $fillable = [
         'user_name',
@@ -21,7 +22,9 @@ class Employee extends Authenticate
         'generator_id',
         'phone_number',
     ];
-    public function powergenerator()
+    public string $featureKey = 'employees_count';
+
+    public function powerGenerator()
     {
         return $this->belongsTo(PowerGenerator::class);
     }

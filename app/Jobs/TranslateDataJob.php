@@ -43,7 +43,7 @@ class TranslateDataJob implements ShouldQueue
         $response = Http::post('http://localhost:8080/translate', $payload);
 
         if ($response->successful()) {
-            $translations = $response->json();
+            $translations = $response->body();
             $this->model->update([
                 'translations' => $translations,
             ]);

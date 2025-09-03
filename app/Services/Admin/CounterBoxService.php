@@ -55,7 +55,6 @@ class CounterBoxService
                 'number' => $data['number'],
                 'QRCode' => $qrCode['content'],
                 'user_id' => $data['user_id'],
-//                'generator_id' => $generator->id,
                 'current_spending' => 0,
                 'box_id' => $data['box_id'] ?? null
             ]);
@@ -71,13 +70,13 @@ class CounterBoxService
         return DB::transaction(function () use ($id, $data) {
 
             $counter = $this->repository->find($id);
+            $generator = auth()->user()->powerGenerator;
 
+            if (!$generator) {
+                throw new \Exception('Authenticated user is not associated with a power generator');
+            }
             if (isset($data['number']) && $data['number'] !== $counter->number) {
-                $generator = auth()->user()->powerGenerator;
 
-                if (!$generator) {
-                    throw new \Exception('Authenticated user is not associated with a power generator');
-                }
 
                 $qrCodeData = [
                     'counter_number' => $data['number'],
@@ -89,7 +88,7 @@ class CounterBoxService
                 $data['QRCode'] = $qrCode['content'];
             }
 
-            $updatedCounter = $this->repository->update($id, $data);
+            $updatedCounter = $this->repository->update($id,$data);
 
             return [
                 'counter' => $updatedCounter,
