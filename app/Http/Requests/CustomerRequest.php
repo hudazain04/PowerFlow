@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Types\SpendingTypes;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use ReflectionClass;
 
 class CustomerRequest extends FormRequest
 {
@@ -23,9 +26,13 @@ class CustomerRequest extends FormRequest
     {
         return [
             'generator_id' => 'required|exists:power_generators,id',
-//            'user_notes' => 'nullable|string|max:500',
+            'user_notes' => 'required|string|max:500',
+            'box_id'=>'required|int|exists:electrical_boxes,id',
+            'spendingType'=>['required', Rule::in(array_values((new ReflectionClass(\App\Types\SpendingTypes::class))->getConstants()))],
 //            'address' => 'required|string|max:255',
 //            'estimated_usage' => 'nullable|numeric|min:0'
         ];
     }
+
+
 }

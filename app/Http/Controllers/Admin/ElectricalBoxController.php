@@ -9,10 +9,12 @@ use App\DTOs\ElectricalBoxDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DeleteERequest;
 use App\Http\Requests\ElectricalBoxRequest;
+use App\Http\Resources\ElectricalBoxResource;
 use App\Models\Area;
 use App\Models\ElectricalBox;
 use App\Services\Admin\ElectricalBoxService;
 use Illuminate\Http\Request;
+use function Symfony\Component\String\b;
 
 class ElectricalBoxController extends Controller
 {
@@ -21,10 +23,10 @@ class ElectricalBoxController extends Controller
 
     public function store(ElectricalBoxRequest $request)
     {
-
-        $box = $this->service->createBox($request->validated());
-
-        return ApiResponses::success($box,'success',ApiCode::OK);
+        $dto=ElectricalBoxDTO::fromRequest($request);
+        $dto->generator_id=$request->user()->powerGenerator->id;
+        $box = $this->service->createBox($dto->toArray());
+        return ApiResponses::success(ElectricalBoxResource::make($box),'success',ApiCode::OK);
     }
     public function getGeneratorAreas()
     {
@@ -35,11 +37,11 @@ class ElectricalBoxController extends Controller
     }
     public function getBoxes(int $generator_id){
         $Boxes=$this->service->getBoxes($generator_id);
-        return ApiResponses::success($Boxes,'total boxes',ApiCode::OK);
+        return ApiResponses::success(['boxes_count'=>$Boxes],'total boxes',ApiCode::OK);
     }
     public function get(int $generator_id){
         $Boxes=$this->service->get($generator_id);
-        return ApiResponses::success($Boxes,'total boxes',ApiCode::OK);
+        return ApiResponses::success(ElectricalBoxResource::collection($Boxes),'total boxes',ApiCode::OK);
     }
     public function update(int $id,ElectricalBoxRequest $request){
         $box = $this->service->updateBox($id, $request->validated());

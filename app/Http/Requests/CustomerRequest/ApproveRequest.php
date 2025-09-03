@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\CustomerRequest;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use ReflectionClass;
 
-class ElectricalBoxRequest extends FormRequest
+class ApproveRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,18 +23,9 @@ class ElectricalBoxRequest extends FormRequest
      */
     public function rules(): array
     {
-        $boxId = $this->route('id');
         return [
-            'number' => [
-                'required',
-                Rule::unique('electrical_boxes')->ignore($boxId)
-            ],
-            'capacity' => 'required|integer|min:1',
-            'location'=>'required|string|max:500',
-            'maps'=>'array',
-            'maps.x'=>'numeric',
-            'maps.y'=>'numeric',
-            'area_id'=>'nullable|exists:areas,id'
+            'admin_notes' => 'nullable|string|max:500',
+            'spendingType'=>['required', Rule::in(array_values((new ReflectionClass(\App\Types\SpendingTypes::class))->getConstants()))],
         ];
     }
 }
