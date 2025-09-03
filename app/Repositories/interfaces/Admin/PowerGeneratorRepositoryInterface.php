@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Repositories\interfaces\Admin;
+use App\Models\PowerGenerator as PowerGeneratorModel;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
@@ -16,4 +17,5 @@ interface PowerGeneratorRepositoryInterface
 
     public function getAll(array $filters) : LengthAwarePaginator;
 
+    public function getRelationCount(PowerGeneratorModel $powerGenerator, string $relation) : int;
 }

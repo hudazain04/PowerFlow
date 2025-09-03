@@ -2,10 +2,11 @@
 
 namespace App\Repositories\interfaces\SuperAdmin;
 
+use App\Models\Feature;
 use App\Models\Plan;
+use App\Models\Plan as PlanModel;
 use Illuminate\Support\Collection;
 use App\DTOs\PlanDTO;
-use App\Models\Plan as PlanModel;
 
 
 interface PlanRepositoryInterface
@@ -23,6 +24,8 @@ interface PlanRepositoryInterface
     public function delete(PlanModel $plan) : bool;
 
     public function getFeatures(PlanModel $plan): Collection;
+
+    public function getFeaturesByKey(PlanModel $plan, array $where=[]): Feature;
 
     public function getPlanPrices(PlanModel $plan): Collection;
 }

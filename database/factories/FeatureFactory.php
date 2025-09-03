@@ -22,9 +22,7 @@ class FeatureFactory extends Factory
                 'counters_count',
                 'neighborhoods_count',
                 'boxes_count',
-                'areas_count',
-                'employee_count',
-                'areas_count'
+                'employees_count',
             ]),
             'description' => $this->faker->sentence,
 

@@ -28,4 +28,5 @@ class EmployeeRequest extends FormRequest
             'permissions.*' => 'string|exists:permissions,name'
         ];
     }
+
 }

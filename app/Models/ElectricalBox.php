@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\ApiHelper\HasFeatureLimit;
 use App\ApiHelper\Translatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class ElectricalBox extends Model
 {
        use  HasFactory;
-       use Translatable;
+       use Translatable,HasFeatureLimit;
 
     protected $fillable = [
         'location',
@@ -20,8 +21,10 @@ class ElectricalBox extends Model
         'capacity',
         'generator_id'
     ];
+    public string $featureKey = 'boxes_count';
+
     public function powerGenerator(){
-        return $this->BelongsTo(PowerGenerator::class);
+        return $this->BelongsTo(PowerGenerator::class,'generator_id');
     }
 
     public $translatable=[

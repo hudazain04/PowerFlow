@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\ApiHelper\HasFeatureLimit;
 use App\ApiHelper\Translatable;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
@@ -15,8 +16,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class Employee extends Authenticate
 {
-
-    use HasFactory, HasPermissions,HasRoles;
+    use HasFactory, HasPermissions,HasRoles,HasFeatureLimit;
 
     protected $guard_name = 'employee';
 
@@ -26,9 +26,11 @@ class Employee extends Authenticate
         'generator_id',
         'phone_number',
     ];
-    public function powergenerator()
+    public string $featureKey = 'employees_count';
+
+    public function powerGenerator()
     {
-        return $this->belongsTo(PowerGenerator::class);
+        return $this->belongsTo(PowerGenerator::class,'generator_id');
     }
     public function user()
     {

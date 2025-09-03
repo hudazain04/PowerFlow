@@ -13,6 +13,7 @@ class EmployeeRepository implements EmployeeRepositoryInterface
 
     public function create(array $data)
     {
+//        dd($data);
         $user= Employee::create([
             'user_name' => $data['user_name'],
             'phone_number' => $data['phone_number'],
