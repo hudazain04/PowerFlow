@@ -16,11 +16,21 @@ class AreaService
 
     public function createArea(AreaDTO $dto)
     {
+        $generator=auth()->user()->powerGenerator->id;
         return $this->repository->createForGenerator(
-            $dto->generator_id,
-            $dto->neighborhood_id,
-            ['name' => $dto->name]
+            [     'name' => $dto->name,
+                'generator_id'=>$generator,
+                'neighborhood_id'=>$dto->neighborhood_id,
+                'box_id' => $dto->box_id
+            ]
         );
+    }
+    public function updateArea(array $data,int $id){
+
+         $area=$this->repository->updateArea($data,$id);
+
+         return $area;
+
     }
 
 

@@ -50,49 +50,49 @@ Route::middleware('lang')->group(function () {
 
     Route::prefix('/password')->group(function () {
         Route::post('/request', [PasswordController::class, 'request']);
+        Route::post('/resend', [PasswordController::class, 'resend'])->middleware('throttle:3,1');
+        Route::post('/reset', [PasswordController::class, 'reset']);
+    });
+    Route::get('/verify', [PasswordController::class, 'verify'])->name('verification.pass');
 
+    // routes/api.php
+    Route::prefix('generator')->middleware(['auth:api', 'role:admin'])->group(function () {
+        // Areas
+        Route::post('areas', [AreaController::class, 'store'])->middleware('permission:CREATE_AREAS');
+        Route::get('getAreas', [AreaController::class, 'index'])->middleware('permission:VIEW_AREAS');
+        Route::put('update/{id}',[AreaController::class,'update']);
+        // Box assignment to areas
+        Route::post('/areas/{area_id}/boxes', [AreaBoxController::class, 'assignBox'])->middleware('permission:ASSIGN_BOXES_TO_AREAS');
+        Route::delete('/areas/{area}/boxes/{box}', [AreaBoxController::class, 'removeBoxFromArea'])->middleware('permission:REMOVE_BOXES_FROM_AREAS');
+        Route::get('/areas/{area_id}/boxes', [AreaBoxController::class, 'getAreaBoxes'])->middleware('permission:VIEW_AREA_BOXES');
 
-        Route::prefix('generator')->middleware('role:admin')->group(function () {
-            // Areas//////
-            Route::post('areas', [AreaController::class, 'store']);
-            Route::get('getareas', [AreaController::class, 'index']);
+        // Box management
+        Route::post('/boxes', [ElectricalBoxController::class, 'store'])->middleware('permission:CREATE_BOXES');
+        Route::get('/boxes/{id}', [ElectricalBoxController::class, 'get'])->middleware('permission:VIEW_BOXES');
+        Route::delete('/boxes', [ElectricalBoxController::class, 'destroy'])->middleware('permission:DELETE_BOXES');
+        Route::put('/box/update/{id}', [ElectricalBoxController::class, 'update'])->middleware('permission:UPDATE_BOXES');
 
+        // Counter management
+        Route::post('/counters', [CounterBoxController::class, 'create'])->middleware('permission:CREATE_COUNTERS');
+        Route::put('/counter/update/{id}', [CounterBoxController::class, 'update'])->middleware('permission:UPDATE_COUNTERS');
+        Route::delete('counters/{id?}', [CounterBoxController::class, 'destroy'])->middleware('permission:DELETE_COUNTERS');
+        Route::get('/counters', [CounterController::class, 'get'])->middleware('permission:view counters');
 
-            // Box assignment to areas////
-            Route::post('/areas/{area_id}/boxes', [AreaBoxController::class, 'assignBox']);
-            Route::delete('/areas/{area}/boxes/{box}', [AreaBoxController::class, 'removeBoxFromArea']);
-            Route::get('/areas/{area_id}/boxes/available', [AreaBoxController::class, 'getAvailableBoxes']);
-            Route::get('/areas/{area_id}/boxes', [AreaBoxController::class, 'getAreaBoxes']);
+        // Counter-box assignment
+        Route::get('/boxes/{box_id}/counters', [CounterBoxController::class, 'getBoxCounters'])->middleware('permission:VIEW_BOX_COUNTERS');
+        Route::get('/counters/{counter_id}/current-box', [CounterBoxController::class, 'getCurrentCounter'])->middleware('permission:VIEW_COUNTER_CURRENT_BOX');
+        Route::delete('/counters/remove-box', [CounterBoxController::class, 'removeCounter'])->middleware('permission:REMOVE_COUNTER_FROM_BOX');
 
-// Box management////////
+        // Employee management
+        Route::post('/createEmp', [EmployeeController::class, 'create'])->middleware('permission:CREATE_EMPLOYEES');
+        Route::put('/updateEmp/{id}', [EmployeeController::class, 'update'])->middleware('permission:UPDATE_EMPLOYEES');
+        Route::delete('deleteEmp/{id?}', [EmployeeController::class, 'delete'])->middleware('permission:DELETE_EMPLOYEES');
+        Route::get('/getEmps/{generator_id}', [EmployeeController::class, 'getEmployees'])->middleware('permission:VIEW_EMPLOYEES');
+        Route::get('/getEmp/{id}', [EmployeeController::class, 'getEmployee'])->middleware('permission:VIEW_EMPLOYEES_DETAILS');
 
-            Route::post('/boxes', [ElectricalBoxController::class, 'store']);
-            Route::get('/boxes/{id}', [ElectricalBoxController::class, 'get']);
-            Route::delete('/boxes', [ElectricalBoxController::class, 'destroy']);
-            Route::put('/box/update/{id}', [ElectricalBoxController::class, 'update']);
+        Route::get('/permissions', [EmployeeController::class, 'getPermission']);
+    });
 
-
-// counter with boxes assignment///////
-            Route::post('/counters', [CounterBoxController::class, 'create']);
-            Route::put('/counter/update/{id}', [CounterBoxController::class, 'update']);
-            Route::delete('counters/{id?}', [CounterBoxController::class, 'destroy']);
-
-//        Route::post('/counters/assign-box', [CounterBoxController::class, 'assignCounter']);
-            Route::get('/boxes/{box_id}/counters', [CounterBoxController::class, 'getBoxCounters']);
-            Route::get('/counters/{counter_id}/current-box', [CounterBoxController::class, 'getCurrentCounter']);
-            Route::delete('/counters/remove-box', [CounterBoxController::class, 'removeCounter']);
-            // employee creation/////////
-            Route::post('/createEmp', [EmployeeController::class, 'create']);
-            Route::put('/updateEmp/{id}', [EmployeeController::class, 'update']);
-            Route::delete('/deleteEmp/{id}', [EmployeeController::class, 'delete']);
-            Route::get('/getEmps/{generator_id}', [EmployeeController::class, 'getEmployees']);
-            Route::get('/getEmp/{id}', [EmployeeController::class, 'getEmployee']);
-
-            Route::post('/resend', [PasswordController::class, 'resend'])->middleware('throttle:3,1');
-            Route::post('/reset', [PasswordController::class, 'reset']);
-
-        });
-        Route::get('/verify', [PasswordController::class, 'verify'])->name('verification.pass');
 
         Route::middleware('auth:api')->group(function () {
             Route::prefix('faq')->group(function () {
@@ -123,35 +123,35 @@ Route::middleware('lang')->group(function () {
                 Route::get('all', [NeighborhoodController::class, 'index']);
                 Route::get('show/{id}', [NeighborhoodController::class, 'show']);
             });
-
-            Route::prefix('generator')->middleware('role:admin')->group(function () {
-                // Areas//////
-                Route::post('areas', [AreaController::class, 'store']);
-                Route::get('getareas', [AreaController::class, 'index']);
-
-
-                // Box assignment to areas////
-                Route::post('/areas/{area_id}/boxes', [AreaBoxController::class, 'assignBox']);
-                Route::delete('/areas/{area}/boxes/{box}', [AreaBoxController::class, 'removeBoxFromArea']);
-                Route::get('/areas/{area_id}/boxes/available', [AreaBoxController::class, 'getAvailableBoxes']);
-                Route::get('/areas/{area_id}/boxes', [AreaBoxController::class, 'getAreaBoxes']);
-
-                // Box management////////
-
-                Route::post('/boxes', [ElectricalBoxController::class, 'store']);
-
-                // counter with boxes assignment///////
-                Route::post('/counters/assign-box', [CounterBoxController::class, 'assignCounter']);
-                Route::get('/boxes/{box_id}/counters', [CounterBoxController::class, 'getBoxCounters']);
-                Route::get('/counters/{counter_id}/current-box', [CounterBoxController::class, 'getCurrentCounter']);
-                Route::delete('/counters/remove-box', [CounterBoxController::class, 'removeCounter']);
-                // employee creation/////////
-                Route::post('/createEmp', [EmployeeController::class, 'create']);
-                Route::patch('/updateEmp/{id}', [EmployeeController::class, 'update']);
-                Route::delete('/deleteEmp/{id}', [EmployeeController::class, 'delete']);
-                Route::get('/getEmps/{generator_id}', [EmployeeController::class, 'getEmployees']);
-                Route::get('/getEmp/{id}', [EmployeeController::class, 'getEmployee']);
-            });
+//
+//            Route::prefix('generator')->middleware('role:admin')->group(function () {
+//                // Areas//////
+//                Route::post('areas', [AreaController::class, 'store']);
+//                Route::get('getareas', [AreaController::class, 'index']);
+//
+//
+//                // Box assignment to areas////
+//                Route::post('/areas/{area_id}/boxes', [AreaBoxController::class, 'assignBox']);
+//                Route::delete('/areas/{area}/boxes/{box}', [AreaBoxController::class, 'removeBoxFromArea']);
+//                Route::get('/areas/{area_id}/boxes/available', [AreaBoxController::class, 'getAvailableBoxes']);
+//                Route::get('/areas/{area_id}/boxes', [AreaBoxController::class, 'getAreaBoxes']);
+//
+//                // Box management////////
+//
+//                Route::post('/boxes', [ElectricalBoxController::class, 'store']);
+//
+//                // counter with boxes assignment///////
+//                Route::post('/counters/assign-box', [CounterBoxController::class, 'assignCounter']);
+//                Route::get('/boxes/{box_id}/counters', [CounterBoxController::class, 'getBoxCounters']);
+//                Route::get('/counters/{counter_id}/current-box', [CounterBoxController::class, 'getCurrentCounter']);
+//                Route::delete('/counters/remove-box', [CounterBoxController::class, 'removeCounter']);
+//                // employee creation/////////
+//                Route::post('/createEmp', [EmployeeController::class, 'create']);
+//                Route::patch('/updateEmp/{id}', [EmployeeController::class, 'update']);
+//                Route::delete('/deleteEmp/{id}', [EmployeeController::class, 'delete']);
+//                Route::get('/getEmps/{generator_id}', [EmployeeController::class, 'getEmployees']);
+//                Route::get('/getEmp/{id}', [EmployeeController::class, 'getEmployee']);
+//            });
 
 
             Route::middleware('role:superAdmin')->group(function () {
@@ -308,6 +308,6 @@ Route::middleware('lang')->group(function () {
         Route::get('stripe/success', [paymentController::class, 'stripeSuccess'])->name('stripe.success');
         Route::get('stripe/cancel', [paymentController::class, 'stripeCancel'])->name('stripe.cancel');
     });
-});
+
 
 

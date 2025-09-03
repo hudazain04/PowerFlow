@@ -22,8 +22,10 @@ class EmployeeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_name'=>'required|string',
+            'user_name'=>'required|string|unique:employees,user_name',
             'phone_number'=>'required|max:10',
+            'permissions' => 'array',
+            'permissions.*' => 'string|exists:permissions,name'
         ];
     }
 }

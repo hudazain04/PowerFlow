@@ -7,9 +7,10 @@ use Spatie\LaravelData\Data;
 class AreaDTO extends Data
 {
 public function __construct(
-    public  int $generator_id,
+//    public  int $generator_id,
     public int $neighborhood_id,
     public  string $name,
+        public array $box_id
 ){
 
 }
