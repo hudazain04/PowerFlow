@@ -55,6 +55,9 @@ class PowerGenerator extends Model
     {
         return $this->belongsTo(Plan::class);
     }
+    public function counters(){
+        return $this->hasMany(Counter::class);
+    }
 
     public function scopePlanGenerators($query,array $filters)
     {

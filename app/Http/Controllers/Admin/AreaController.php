@@ -26,6 +26,10 @@ class AreaController extends Controller
 
         return ApiResponses::success($area,'success',ApiCode::OK);
     }
+    public function update(AreaRequest $request,int $id){
+        $area=$this->service->updateArea($request->validated(),$id);
+        return ApiResponses::success($area,'updates successfully',ApiCode::OK);
+    }
 
 
     public function index()

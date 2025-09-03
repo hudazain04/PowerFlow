@@ -25,4 +25,7 @@ class CounterService
         return $this->repository->getTotalConsumption($generator_id);
 
    }
+   public function get(){
+        return $this->repository->get();
+   }
 }

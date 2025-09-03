@@ -22,9 +22,10 @@ class AreaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'generator_id'=>'required|integer',
+//            'generator_id'=>'required|integer',
             'neighborhood_id'=>'required|integer',
             'name' => 'required|string|max:255',
+            'box_id'=>'nullable|exists:electrical_boxes,id|array'
         ];
     }
 }

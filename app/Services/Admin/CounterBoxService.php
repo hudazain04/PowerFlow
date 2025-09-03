@@ -36,7 +36,7 @@ class CounterBoxService
     public function createCounter(array $data)
     {
         return DB::transaction(function () use ($data) {
-            $generator = auth()->user()->powerGenerator;
+            $generator = auth()->user()->powerGenerator->id;
 
             if (!$generator) {
                 throw new \Exception('Authenticated user is not associated with a power generator');
@@ -44,7 +44,7 @@ class CounterBoxService
 
             $qrCodeData = [
                 'counter_number' => $data['number'],
-                'generator_id' => $generator->id,
+                'generator_id' => $generator,
                 'created_at' => now()->toISOString()
             ];
 
@@ -55,6 +55,7 @@ class CounterBoxService
                 'number' => $data['number'],
                 'QRCode' => $qrCode['content'],
                 'user_id' => $data['user_id'],
+                'generator_id' => $generator,
                 'current_spending' => 0,
                 'box_id' => $data['box_id'] ?? null
             ]);
@@ -76,11 +77,12 @@ class CounterBoxService
                 throw new \Exception('Authenticated user is not associated with a power generator');
             }
             if (isset($data['number']) && $data['number'] !== $counter->number) {
+                $generator = auth()->user()->powerGenerator->id;
 
 
                 $qrCodeData = [
                     'counter_number' => $data['number'],
-                    'generator_id' => $generator->id,
+                    'generator_id' => $generator,
                     'created_at' => now()->toISOString()
                 ];
 

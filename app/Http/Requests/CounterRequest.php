@@ -21,11 +21,12 @@ class CounterRequest extends FormRequest
      */
     public function rules(): array
     {
+
         return [
             'number' => 'required',
             'user_id' => 'required',
-            'box_id' => 'nullable|exists:electrical_boxes,id'
-
+            'box_id' => 'nullable|exists:electrical_boxes,id',
+//            'generator_id'=>$generator
         ];
     }
 }

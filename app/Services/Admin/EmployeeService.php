@@ -13,6 +13,7 @@ class EmployeeService
     public function __construct(private EmployeeRepositoryInterface $repository){}
 
     public function create(array $data){
+
         $emp=$this->repository->create($data);
         return $emp;
     }
@@ -21,9 +22,13 @@ class EmployeeService
         return $employee;
     }
     public function delete(int $id){
-        $emp=$this->repository->findEmployee($id);
-        $employee=$this->repository->delete($emp);
+
+        $employee=$this->repository->delete($id);
         return $employee;
+    }
+    public function deleteMultiple(array $ids){
+        $empolyees=$this->repository->deleteMultiple($ids);
+        return $empolyees;
     }
     public function getEmployees(int $id){
         $emp=$this->repository->getEmployees($id);

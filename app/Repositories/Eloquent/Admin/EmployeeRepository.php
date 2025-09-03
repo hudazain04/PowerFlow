@@ -13,16 +13,29 @@ class EmployeeRepository implements EmployeeRepositoryInterface
 
     public function create(array $data)
     {
-        return Employee::create([
+        $user= Employee::create([
             'user_name' => $data['user_name'],
             'phone_number' => $data['phone_number'],
             'generator_id' => auth()->user()->powerGenerator->id,
-            'secret_key' =>$this->model->generateSecretKey()]);
+            'secret_key' =>$this->model->generateSecretKey(),
+//            'permissions'=> $data['permissions'],
+        ],
+
+        );
+        if (array_key_exists('permissions',$data)) {
+            $user->syncPermissions(...$data['permissions']);
+        }
+
+
+        return $user;
     }
 
     public function update(int $id, array $data)
     {
        $emp=$this->findEmployee($id);
+        if (array_key_exists('permissions',$data)) {
+            $emp->syncPermissions(...$data['permissions']);
+        }
 
        return $emp->update($data);
     }
@@ -35,7 +48,7 @@ class EmployeeRepository implements EmployeeRepositoryInterface
     public function delete(int $id)
     {
         $emp=$this->findEmployee($id);
-        return Employee::delete($emp);
+        return $emp->delete();
 
     }
     public function getEmployees(int $id)
@@ -47,5 +60,15 @@ class EmployeeRepository implements EmployeeRepositoryInterface
     public function getEmp(int $generator_id)
     {
         return Employee::where('generator_id',$generator_id)->count();
+    }
+
+    public function deleteMultiple(array $ids)
+    {
+     $employees=Employee::whereIn('id',$ids)->get();
+     foreach ($employees as $employee){
+         $employee->delete();
+     }
+     return true;
+
     }
 }
