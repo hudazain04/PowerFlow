@@ -61,7 +61,7 @@ class CounterBoxRepository implements CounterBoxRepositoryInterface
             'number' => $data['number'],
             'QRCode' => $data['QRCode'],
             'user_id' => $data['user_id'],
-//            'generator_id' => $data['generator_id'],
+            'generator_id' => $data['generator_id'],
             'current_spending' => $data['current_spending']
         ]);
 
@@ -93,6 +93,8 @@ class CounterBoxRepository implements CounterBoxRepositoryInterface
 
 
             if (array_key_exists('box_id', $data)) {
+                DB::table('counter__boxes')
+                    ->where('counter_id', $id)->delete();
                 $this->assignCounterToBox($counter->id, $data['box_id']);
             }
 

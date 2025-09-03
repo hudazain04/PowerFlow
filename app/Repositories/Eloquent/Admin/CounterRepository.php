@@ -3,6 +3,7 @@
 namespace App\Repositories\Eloquent\Admin;
 use App\Models\Counter;
 use App\Models\ElectricalBox;
+use App\Models\PowerGenerator;
 use App\Repositories\interfaces\Admin\CounterRepositoryInterface;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
@@ -21,6 +22,11 @@ class CounterRepository implements CounterRepositoryInterface
     public function find(int $id): ?Counter
     {
         return $this->model->find($id);
+    }
+    public function get(){
+        $generator=auth()->user()->powerGenerator->id;
+        $counters=Counter::where('generator_id',$generator)->get();
+        return $counters;
     }
 
     public function update(int $id, array $data): bool
@@ -65,9 +71,11 @@ class CounterRepository implements CounterRepositoryInterface
     }
 
 
+
     public function getWhere(array $wheres): Counter
     {
        $counters=$this->model->where($wheres)->get();
        return  $counters;
     }
+
 }

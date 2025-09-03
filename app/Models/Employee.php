@@ -7,13 +7,18 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticate;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Permission\Traits\HasPermissions;
+use Spatie\Permission\Traits\HasRoles;
+
 //use Laravel\Sanctum\HasApiTokens;
 
 
 class Employee extends Authenticate
 {
 
-    use HasFactory;
+    use HasFactory, HasPermissions,HasRoles;
+
+    protected $guard_name = 'employee';
 
     protected $fillable = [
         'user_name',

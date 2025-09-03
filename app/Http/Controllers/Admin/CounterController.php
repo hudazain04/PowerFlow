@@ -21,5 +21,9 @@ class CounterController extends Controller
         return ApiResponses::success($counters,'counter for generator',ApiCode::OK);
 
     }
+    public function get(Request $request){
+        $counters=$this->service->get();
+        return ApiResponses::success($counters,'counters for generator',ApiCode::OK);
+    }
 
 }

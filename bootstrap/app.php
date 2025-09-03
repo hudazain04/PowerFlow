@@ -22,7 +22,12 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => \App\Http\Middleware\RoleMiddleware::class,
             'block'=>\App\Http\Middleware\BlockMiddleware::class,
             'lang'=>\App\Http\Middleware\LanguageMiddleware::class,
+
+            'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+
+
             "userContext" => \App\Http\Middleware\UserContextMiddleware::class,
+
         ]);
 
     })

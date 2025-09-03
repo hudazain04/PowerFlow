@@ -3,6 +3,7 @@
 namespace App\Repositories\Eloquent\Admin;
 
 use App\Models\Area;
+use App\Models\ElectricalBox;
 use App\Models\Neighborhood;
 use App\Models\PowerGenerator;
 use App\Repositories\interfaces\Admin\AreaRepositoryInterface;
@@ -16,16 +17,60 @@ class AreaRepository implements AreaRepositoryInterface
         $this->model=$model;
     }
 
-    public function createForGenerator(int $generator_id,int $neighborhood_id, array $data)
+    public function createForGenerator(array $data)
     {
-        $generator = PowerGenerator::findOrFail($generator_id);
-        $neighborhood = Neighborhood::findOrFail($neighborhood_id);
 
-        return $this->model->create([
+         $area=$this->model->create([
             'name' => $data['name'],
-            'neighborhood_id'=>$neighborhood->id,
-            'generator_id'=>$generator->id,
+            'neighborhood_id'=>$data['neighborhood_id'],
+            'generator_id'=>$data['generator_id'],
         ]);
+
+         if (array_key_exists('box_id',$data)){
+             $box_ids = is_array($data['box_id']) ? $data['box_id'] : [$data['box_id']];
+             foreach ($box_ids as $box_id) {
+                 $this->assignBoxToArea($area->id, $box_id);
+             }
+         }
+         return $area;
+
+    }
+
+    public function updateArea(array $data, int $id)
+    {
+        $area=Area::findOrFail($id);
+        $generator=auth()->user()->powerGenerator->id;
+        $area->update([
+            'name' => $data['name'],
+            'neighborhood_id'=>$data['neighborhood_id'],
+            'generator_id'=>$generator,
+        ]);
+
+        if (array_key_exists('box_id',$data)){
+            $box_ids = is_array($data['box_id']) ? $data['box_id'] : [$data['box_id']];
+            DB::table('area__boxes')
+                ->where('area_id', $id)->delete();
+            foreach ($box_ids as $box_id) {
+
+                $this->assignBoxToArea($area->id, $box_id);
+            }
+        }
+        return $area;
+
+    }
+    public function assignBoxToArea(int $area_id, int $box_id)
+    {
+        $boxExists = ElectricalBox::where('id', $box_id)->exists();
+
+        if (!$boxExists) {
+            throw new \Exception("Electrical box with ID {$box_id} does not exist");
+        }
+
+
+        return DB::table('area__boxes')->updateOrInsert(
+            ['area_id' => $area_id, 'box_id' => $box_id],
+            ['removed_at' => null, 'assigned_at' => now()]
+        );
     }
 
 
@@ -49,4 +94,6 @@ class AreaRepository implements AreaRepositoryInterface
     {
         return Area::where('generator_id',$generator_id)->count();
     }
+
+
 }
