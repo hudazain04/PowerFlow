@@ -17,7 +17,6 @@ class RoleMiddleware
     public function handle(Request $request, Closure $next, ...$roles)
     {
         try {
-
             $user = JWTAuth::parseToken()->authenticate();
             if (!$user) {
                 return response()->json(['error' => 'Unauthorized'], 401);

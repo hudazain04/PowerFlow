@@ -7,6 +7,7 @@ use App\DTOs\FeatureDTO;
 use App\DTOs\PlanDTO;
 use App\DTOs\PlanPriceDTO;
 use App\Exceptions\ErrorException;
+use App\Models\Feature;
 use App\Models\Plan;
 use App\Repositories\interfaces\SuperAdmin\PlanRepositoryInterface;
 use Illuminate\Support\Collection;
@@ -58,10 +59,9 @@ class PlanRepository implements PlanRepositoryInterface
         return $plan->delete();
     }
 
-    public function getFeatures(PlanModel $plan, array $where=[]): Collection
+    public function getFeatures(PlanModel $plan): Collection
     {
-
-            $features=$plan->features->where($where);
+            $features=$plan->features;
              return $features;
 
     }
@@ -71,5 +71,18 @@ class PlanRepository implements PlanRepositoryInterface
             $planPrices=$plan->prices;
             return $planPrices;
 
+    }
+
+    public function getFeaturesByKey(PlanModel $plan, array $where = []): Feature
+    {
+        $features = $plan->features()
+            ->when($where, function ($query) use ($where) {
+                foreach ($where as $key => $value) {
+                    $query->where($key, $value);
+                }
+            })
+            ->first();
+
+        return $features;
     }
 }

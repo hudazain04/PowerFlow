@@ -2,6 +2,7 @@
 
 namespace App\ApiHelper;
 
+use App\Exceptions\ErrorException;
 use App\Services\FeatureGate;
 
 trait HasFeatureLimit
@@ -11,12 +12,10 @@ trait HasFeatureLimit
         static::creating(function ($model) {
             $generator_id = $model->powerGenerator->id ?? null;
             $featureKey = $model->featureKey ?? null;
-
             if ($generator_id && $featureKey) {
-                $gate = new FeatureGate();
-
+                $gate = app(FeatureGate::class);
                 if (!$gate->check($generator_id, $featureKey)) {
-                    throw new \Exception(__('messages.feature.limitReached'));
+                   throw new ErrorException(__('messages.feature.limitReached'),ApiCode::FORBIDDEN);
                 }
             }
         });

@@ -29,30 +29,27 @@ class FeatureGate
 
         $plan = $this->subscriptionRepository->getRelations($subscription,['planPrice.plan'])->planPrice->plan;
 
-        $feature = $this->planRepository->getFeatures($plan,['key'=>$featureKey]);
-
+        $feature = $this->planRepository->getFeaturesByKey($plan,['key'=>$featureKey]);
         if (!$feature) {
             return false;
         }
-
         if ($feature->pivot->value == -1) {
             return true;
         }
 
         $currentUsage = $this->getCurrentUsage($generator_id, $featureKey);
-
+//        dd($currentUsage);
         return ($currentUsage + $increment) <= $feature->pivot->value;
     }
 
     protected function getCurrentUsage(int $generator_id, string $featureKey): int
     {
         $generator=$this->powerGeneratorRepository->find($generator_id);
-
         return match ($featureKey) {
-            'users_count' => $this->counterRepository->getUserCount($generator_id),
+            'users_count' => $this->counterRepository->getUserCountForGenerator($generator_id),
             'counters_count' =>$this->powerGeneratorRepository->getRelationCount($generator,'counters'),
             'neighborhoods_count'=>$this->powerGeneratorRepository->getRelationCount($generator,'areas'),
-            'boxes_count'=>$this->powerGeneratorRepository->getRelationCount($generator,'electricalBoxes'),
+            'boxes_count'=>$this->powerGeneratorRepository->getRelationCount($generator,'boxes'),
             'employees_count'=>$this->powerGeneratorRepository->getRelationCount($generator,'employees'),
 
 

@@ -59,6 +59,11 @@ class CounterRepository implements CounterRepositoryInterface
             ->distinct('counters.user_id')
             ->count('counters.user_id');
     }
+    public function getUserCountForGenerator($generator_id)
+    {
+        return Counter::where(['generator_id'=>$generator_id])
+            ->distinct('user_id')->count('user_id');
+    }
     public function getTotalConsumption(int $generator_id)
     {
         return DB::table('spendings')

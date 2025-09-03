@@ -46,12 +46,10 @@ class Counter extends Model
     }
     public function powerGenerator()
     {
-        return $this->belongsTo(PowerGenerator::class);
+        return $this->belongsTo(PowerGenerator::class,'generator_id');
     }
 //    public function boxes(){
 //        return $this->hasMany(ElectricalBox::class);
 //    }
-   public function powerGenerator(){
-        return $this->belongsTo(PowerGenerator::class);
-   }
+
 }

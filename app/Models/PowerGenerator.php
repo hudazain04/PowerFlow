@@ -28,7 +28,7 @@ class PowerGenerator extends Model
     }
     public function employees()
     {
-        return $this->hasMany(Employee::class);
+        return $this->hasMany(Employee::class,'generator_id');
     }
     public function phones()
     {
@@ -36,14 +36,14 @@ class PowerGenerator extends Model
     }
     public function areas()
     {
-        return $this->hasMany(Area::class);
+        return $this->hasMany(Area::class,'generator_id');
     }
     public function counters()
     {
-        return $this->hasMany(Counter::class);
+        return $this->hasMany(Counter::class,'generator_id');
     }
-    public function electricalBoxes(){
-        return $this->hasMany(ElectricalBox::class);
+    public function boxes(){
+        return $this->hasMany(ElectricalBox::class,'generator_id');
     }
 
     public function user()
@@ -55,9 +55,7 @@ class PowerGenerator extends Model
     {
         return $this->belongsTo(Plan::class);
     }
-    public function counters(){
-        return $this->hasMany(Counter::class);
-    }
+
 
     public function scopePlanGenerators($query,array $filters)
     {

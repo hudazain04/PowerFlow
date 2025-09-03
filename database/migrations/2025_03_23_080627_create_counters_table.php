@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('counters', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('generator_id')->nullable()->constrained('power_generators')->nullOnDelete();
             $table->integer('number');
             $table->string('QRCode');
             $table->integer('current_spending');

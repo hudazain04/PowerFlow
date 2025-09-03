@@ -35,6 +35,6 @@ class Area extends Model
     }
 
     public function powerGenerator(){
-        return $this->belongsTo(PowerGenerator::class);
+        return $this->belongsTo(PowerGenerator::class,'generator_id');
     }
 }

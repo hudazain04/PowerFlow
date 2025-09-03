@@ -30,7 +30,7 @@ class Employee extends Authenticate
 
     public function powerGenerator()
     {
-        return $this->belongsTo(PowerGenerator::class);
+        return $this->belongsTo(PowerGenerator::class,'generator_id');
     }
     public function user()
     {
