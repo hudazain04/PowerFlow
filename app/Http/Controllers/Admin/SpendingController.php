@@ -2,65 +2,52 @@
 
 namespace App\Http\Controllers\Admin;
 
+
+use App\ApiHelper\ApiResponse;
+use App\DTOs\SpendingDTO;
 use App\Http\Controllers\Controller;
-use App\Models\Spending;
+use App\Http\Requests\Spending\CreateSpendingRequest;
+use App\Http\Requests\Spending\UpdateSpendingRequest;
+use App\Http\Resources\SpendingResource;
+use App\Repositories\interfaces\User\SpendingRepositoryInterface;
+use App\Services\User\SpendingService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class SpendingController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    use ApiResponse;
+    public function __construct(
+        protected SpendingService $spendingService,
+    )
     {
-        //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function create(CreateSpendingRequest $request)
     {
-        //
+        $spendingDTO=SpendingDTO::fromRequest($request);
+        $spendingDTO->date=Carbon::now();
+        $this->spendingService->create($spendingDTO);
+        return $this->success(null,__('spending.create'));
+    }
+    public function update(int $id,UpdateSpendingRequest $request)
+    {
+        $spendingDTO=SpendingDTO::fromRequest($request);
+        $this->spendingService->update($id,$spendingDTO);
+        return $this->success(null,__('spending.update'));
+
+    }
+    public function getAll(int $counter_id)
+    {
+        $spendings=$this->spendingService->getAll($counter_id);
+        return $this->successWithPagination(SpendingResource::collection($spendings));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function delete(int $id)
     {
-        //
+         $this->spendingService->delete($id);
+         return $this->success(null,__('spending.delete'));
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Spending $spending)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Spending $spending)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Spending $spending)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Spending $spending)
-    {
-        //
-    }
 }
+

@@ -13,11 +13,14 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->dateTime('date');
+            $table->dateTime('date')->nullable();
             $table->integer('amount');
             $table->integer('current_spending');
-            $table->integer('next_spending');
+            $table->integer('next_spending')->nullable();
             $table->foreignId('counter_id')->constrained('counters')->cascadeOnDelete();
+            $table->string('session_id')->nullable();
+            $table->enum('status',array_values((new \ReflectionClass(\App\Types\PaymentStatus::class))->getConstants()));
+            $table->enum('type',array_values((new \ReflectionClass(\App\Types\PaymentType::class))->getConstants()))->nullable();
             $table->timestamps();
         });
     }

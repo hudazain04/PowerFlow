@@ -2,9 +2,13 @@
 
 namespace App\Providers;
 
+use App\Repositories\Eloquent\Admin\PaymentRepository;
+use App\Repositories\Eloquent\Admin\SpendingRepository;
 use App\Repositories\Eloquent\AuthRepository;
 use App\Repositories\Eloquent\SuperAdmin\SubscriptionPaymentRepository;
 use App\Repositories\Eloquent\User\ComplaintRepository;
+use App\Repositories\interfaces\Admin\PaymentRepositoryInterface;
+use App\Repositories\interfaces\Admin\SpendingRepositoryInterface;
 use App\Repositories\interfaces\AuthRepositoryInterface;
 
 //use App\Events\UserApproved;
@@ -65,6 +69,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(VisitorRepositoryInterface::class,VisitorRepository::class);
         $this->app->bind(ComplaintRepositoryInterface::class,ComplaintRepository::class);
         $this->app->bind(SubscriptionPaymentRepositoryInterface::class,SubscriptionPaymentRepository::class);
+        $this->app->bind(SpendingRepositoryInterface::class,SpendingRepository::class);
+        $this->app->bind(PaymentRepositoryInterface::class,PaymentRepository::class);
 
 
 

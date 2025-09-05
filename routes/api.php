@@ -8,8 +8,10 @@ use App\Http\Controllers\Admin\CounterBoxController;
 use App\Http\Controllers\Admin\ElectricalBoxController;
 use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\PowerGeneratorController;
+use App\Http\Controllers\Admin\SpendingController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\paymentController;
+use App\Http\Controllers\SpendingPaymentController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\SuperAdmin\AppInfoController;
 use App\Http\Controllers\SuperAdmin\FaqController;
@@ -35,74 +37,63 @@ Route::middleware('lang')->group(function () {
         Route::post('login', [AuthController::class, 'login']);
         Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:api');
     });
-    Route::get('/verify/{id}/{hash}', [VerificationController::class, 'verify'])
-        ->name('verification.verify');
+    Route::get('/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify');
     Route::prefix('email')->group(function () {
-
-        Route::post('/send-verification', [VerificationController::class, 'send'])
-            ->name('verification.send');
-
+        Route::post('/send-verification', [VerificationController::class, 'send'])->name('verification.send');
         Route::post('/resend', [VerificationController::class, 'resend'])
             ->middleware('throttle:3,1')
             ->name('verification.resend');
     });
-
-
     Route::prefix('/password')->group(function () {
         Route::post('/request', [PasswordController::class, 'request']);
-
         Route::post('/resend', [PasswordController::class, 'resend'])->middleware('throttle:3,1');
         Route::post('/reset', [PasswordController::class, 'reset']);
-
-
-
         Route::prefix('generator')->middleware('role:admin')->group(function () {
-
             Route::post('/resend', [PasswordController::class, 'resend'])->middleware('throttle:3,1');
             Route::post('/reset', [PasswordController::class, 'reset']);
-
         });
         Route::get('/verify', [PasswordController::class, 'verify'])->name('verification.pass');
-
     });
 
 
-    // routes/api.php
-    Route::prefix('generator')->middleware(['auth:api', 'role:admin'])->group(function () {
-        // Areas
-        Route::post('areas', [AreaController::class, 'store'])->middleware('permission:CREATE_AREAS');
-        Route::get('getAreas', [AreaController::class, 'index'])->middleware('permission:VIEW_AREAS');
-        Route::put('update/{id}',[AreaController::class,'update']);
-        // Box assignment to areas
-        Route::post('/areas/{area_id}/boxes', [AreaBoxController::class, 'assignBox'])->middleware('permission:ASSIGN_BOXES_TO_AREAS');
-        Route::delete('/areas/{area}/boxes/{box}', [AreaBoxController::class, 'removeBoxFromArea'])->middleware('permission:REMOVE_BOXES_FROM_AREAS');
-        Route::get('/areas/{area_id}/boxes', [AreaBoxController::class, 'getAreaBoxes'])->middleware('permission:VIEW_AREA_BOXES');
+    Route::prefix('generator')->middleware(['auth:api'])->group(function () {
+        Route::middleware(['role:admin'])->group(function () {
+            // Areas
+            Route::post('areas', [AreaController::class, 'store'])->middleware('permission:CREATE_AREAS');
+            Route::get('getAreas', [AreaController::class, 'index'])->middleware('permission:VIEW_AREAS');
+            Route::put('update/{id}', [AreaController::class, 'update']);
+            // Box assignment to areas
+            Route::post('/areas/{area_id}/boxes', [AreaBoxController::class, 'assignBox'])->middleware('permission:ASSIGN_BOXES_TO_AREAS');
+            Route::delete('/areas/{area}/boxes/{box}', [AreaBoxController::class, 'removeBoxFromArea'])->middleware('permission:REMOVE_BOXES_FROM_AREAS');
+            Route::get('/areas/{area_id}/boxes', [AreaBoxController::class, 'getAreaBoxes'])->middleware('permission:VIEW_AREA_BOXES');
 
-        // Box management
-        Route::post('/boxes', [ElectricalBoxController::class, 'store'])->middleware('permission:CREATE_BOXES');
-        Route::get('/boxes/{id}', [ElectricalBoxController::class, 'get'])->middleware('permission:VIEW_BOXES');
-        Route::delete('/boxes', [ElectricalBoxController::class, 'destroy'])->middleware('permission:DELETE_BOXES');
-        Route::put('/box/update/{id}', [ElectricalBoxController::class, 'update'])->middleware('permission:UPDATE_BOXES');
+            // Box management
+            Route::post('/boxes', [ElectricalBoxController::class, 'store'])->middleware('permission:CREATE_BOXES');
+            Route::get('/boxes/{id}', [ElectricalBoxController::class, 'get'])->middleware('permission:VIEW_BOXES');
+            Route::delete('/boxes', [ElectricalBoxController::class, 'destroy'])->middleware('permission:DELETE_BOXES');
+            Route::put('/box/update/{id}', [ElectricalBoxController::class, 'update'])->middleware('permission:UPDATE_BOXES');
 
-        // Counter management
-        Route::post('/counters', [CounterBoxController::class, 'create'])->middleware('permission:CREATE_COUNTERS');
-        Route::put('/counter/update/{id}', [CounterBoxController::class, 'update'])->middleware('permission:UPDATE_COUNTERS');
-        Route::delete('counters/{id?}', [CounterBoxController::class, 'destroy'])->middleware('permission:DELETE_COUNTERS');
-        Route::get('/counters', [CounterController::class, 'get'])->middleware('permission:view counters');
+            // Counter management
+            Route::post('/counters', [CounterBoxController::class, 'create'])->middleware('permission:CREATE_COUNTERS');
+            Route::put('/counter/update/{id}', [CounterBoxController::class, 'update'])->middleware('permission:UPDATE_COUNTERS');
+            Route::delete('counters/{id?}', [CounterBoxController::class, 'destroy'])->middleware('permission:DELETE_COUNTERS');
+            Route::get('/counters', [CounterController::class, 'get'])->middleware('permission:view counters');
 
-        // Counter-box assignment
-        Route::get('/boxes/{box_id}/counters', [CounterBoxController::class, 'getBoxCounters'])->middleware('permission:VIEW_BOX_COUNTERS');
-        Route::get('/counters/{counter_id}/current-box', [CounterBoxController::class, 'getCurrentCounter'])->middleware('permission:VIEW_COUNTER_CURRENT_BOX');
-        Route::delete('/counters/remove-box', [CounterBoxController::class, 'removeCounter'])->middleware('permission:REMOVE_COUNTER_FROM_BOX');
+            // Counter-box assignment
+            Route::get('/boxes/{box_id}/counters', [CounterBoxController::class, 'getBoxCounters'])->middleware('permission:VIEW_BOX_COUNTERS');
+            Route::get('/counters/{counter_id}/current-box', [CounterBoxController::class, 'getCurrentCounter'])->middleware('permission:VIEW_COUNTER_CURRENT_BOX');
+            Route::delete('/counters/remove-box', [CounterBoxController::class, 'removeCounter'])->middleware('permission:REMOVE_COUNTER_FROM_BOX');
 
-        // Employee management
-        Route::post('/createEmp', [EmployeeController::class, 'create'])->middleware('permission:CREATE_EMPLOYEES');
-        Route::put('/updateEmp/{id}', [EmployeeController::class, 'update'])->middleware('permission:UPDATE_EMPLOYEES');
-        Route::delete('deleteEmp/{id?}', [EmployeeController::class, 'delete'])->middleware('permission:DELETE_EMPLOYEES');
-        Route::get('/getEmps/{generator_id}', [EmployeeController::class, 'getEmployees'])->middleware('permission:VIEW_EMPLOYEES');
-        Route::get('/getEmp/{id}', [EmployeeController::class, 'getEmployee'])->middleware('permission:VIEW_EMPLOYEES_DETAILS');
+            // Employee management
+            Route::post('/createEmp', [EmployeeController::class, 'create'])->middleware('permission:CREATE_EMPLOYEES');
+            Route::put('/updateEmp/{id}', [EmployeeController::class, 'update'])->middleware('permission:UPDATE_EMPLOYEES');
+            Route::delete('deleteEmp/{id?}', [EmployeeController::class, 'delete'])->middleware('permission:DELETE_EMPLOYEES');
+            Route::get('/getEmps/{generator_id}', [EmployeeController::class, 'getEmployees'])->middleware('permission:VIEW_EMPLOYEES');
+            Route::get('/getEmp/{id}', [EmployeeController::class, 'getEmployee'])->middleware('permission:VIEW_EMPLOYEES_DETAILS');
 
-        Route::get('/permissions', [EmployeeController::class, 'getPermission']);
+            Route::get('/permissions', [EmployeeController::class, 'getPermission']);
+
+        });
     });
 
 
@@ -458,8 +449,9 @@ Route::middleware('lang')->group(function () {
 
                     });
 
-                    Route::prefix('user')->middleware(['auth:api', 'role:user'])->group(function () {
-
+                    Route::prefix('spendingPay')->middleware(['auth:api'])->group(function () {
+                        Route::post('paySpending/{counter_id}',[SpendingPaymentController::class,'createStripeCheckout']);
+                        Route::get('payCash/{counter_id}', [SpendingPaymentController::class, 'handleCashPayment']);
 
                     });
 
@@ -479,7 +471,11 @@ Route::middleware('lang')->group(function () {
                     });
 
                     Route::prefix('spending')->group(function () {
-                        Route::post('createSpending', []);
+                        Route::post('create', [SpendingController::class,'create']);
+                        Route::patch('update/{id}', [SpendingController::class,'update']);
+                        Route::delete('delete/{id}', [SpendingController::class,'delete']);
+                        Route::get('getAll/{counter_id}', [SpendingController::class,'getAll']);
+
                     });
 
 
@@ -506,10 +502,10 @@ Route::middleware('lang')->group(function () {
                 Route::get('payCash/{request_id}', [paymentController::class, 'handleCashPayment']);
                 Route::get('stripe/success', [paymentController::class, 'stripeSuccess'])->name('stripe.success');
                 Route::get('stripe/cancel', [paymentController::class, 'stripeCancel'])->name('stripe.cancel');
+                Route::get('stripe/success', [SpendingPaymentController::class, 'stripeSuccess'])->name('spendingStripe.success');
+                Route::get('stripe/cancel', [SpendingPaymentController::class, 'stripeCancel'])->name('spendingStripe.cancel');
 
-
-
-    });
+});
 
 
 

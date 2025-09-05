@@ -2,18 +2,11 @@
 
 namespace App\Models;
 
-use App\ApiHelper\Translatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class AppInfo extends Model
+class GeneratorSetting extends Model
 {
-    use Translatable;
     use HasFactory;
-
     protected $guarded=['id'];
-
-    public $translatable=[
-      'content',
-    ];
 }

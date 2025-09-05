@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Jobs;
-
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Http;
@@ -39,13 +38,11 @@ class TranslateDataJob implements ShouldQueue
             'data' => $this->model->only($translatable),
             'to' => [$this->language],
         ];
-
         $response = Http::post('http://localhost:8080/translate', $payload);
-
         if ($response->successful()) {
             $translations = $response->body();
             $this->model->update([
-                'translations' => $translations,
+                'translation' => $translations,
             ]);
         }
     }

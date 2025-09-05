@@ -56,6 +56,10 @@ class PowerGenerator extends Model
         return $this->belongsTo(Plan::class);
     }
 
+    public function settings()
+    {
+        return $this->hasOne(GeneratorSetting::class,'generator_id');
+    }
 
     public function scopePlanGenerators($query,array $filters)
     {

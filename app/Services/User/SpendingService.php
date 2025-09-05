@@ -2,13 +2,53 @@
 
 namespace App\Services\User;
 
+use App\ApiHelper\ApiCode;
+use App\DTOs\SpendingDTO;
+use App\Exceptions\ErrorException;
+use App\Repositories\interfaces\Admin\SpendingRepositoryInterface;
+
 class SpendingService
 {
     /**
      * Create a new class instance.
      */
-    public function __construct()
+    public function __construct(
+        protected SpendingRepositoryInterface $spendingRepository,
+    )
     {
         //
+    }
+
+    public function create(SpendingDTO $spendingDTO)
+    {
+        $spending=$this->spendingRepository->create($spendingDTO->toArray());
+        return $spending;
+    }
+
+    public function update(int $id ,SpendingDTO $spendingDTO)
+    {
+        $spending=$this->spendingRepository->find($id);
+        if (!$spending)
+        {
+            throw new ErrorException(__('spending.notFound'),ApiCode::NOT_FOUND);
+        }
+        $spending=$this->spendingRepository->update($spending,$spendingDTO->toArray());
+        return $spending;
+    }
+
+    public function getAll(int $counter_id)
+    {
+        $spendings=$this->spendingRepository->getAll($counter_id);
+        return $spendings;
+    }
+
+    public function delete(int $id)
+    {
+        $spending=$this->spendingRepository->find($id);
+        if (!$spending)
+        {
+            throw new ErrorException(__('spending.notFound'),ApiCode::NOT_FOUND);
+        }
+        return $this->spendingRepository->delete($spending);
     }
 }

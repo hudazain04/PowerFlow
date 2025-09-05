@@ -1,7 +1,34 @@
 <?php
 
 namespace App\Repositories\Eloquent\Admin;
-class PaymentRepository
+use App\Models\Payment as PaymentModel;
+use App\Repositories\interfaces\Admin\PaymentRepositoryInterface;
+
+class PaymentRepository implements PaymentRepositoryInterface
 {
+
+    public function create(array $data): PaymentModel
+    {
+        $payment=PaymentModel::create($data);
+        return $payment;
+    }
+
+    public function findWhereLatest(array $wheres): ?PaymentModel
+    {
+       $payment=PaymentModel::where($wheres)->latest()->first();
+       return $payment;
+    }
+    public function findWhere(array $wheres): ?PaymentModel
+    {
+        $payment=PaymentModel::where($wheres)->first();
+        return $payment;
+    }
+
+    public function update(PaymentModel $payment, array $data): PaymentModel
+    {
+        $payment->update($data);
+        $payment->save();
+        return  $payment;
+    }
 
 }

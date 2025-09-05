@@ -47,6 +47,8 @@ class CustomerRequestService
               'user_id'=>$request->user_id,
               'number'=>1,
               'QRCode'=>'ff',
+              'generator_id'=>$request->generator_id,
+              'spendingType'=>$requestDTO->spendingType,
               'current_spending'=> 0,
 
           ]);

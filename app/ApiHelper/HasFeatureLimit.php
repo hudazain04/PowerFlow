@@ -15,7 +15,7 @@ trait HasFeatureLimit
             if ($generator_id && $featureKey) {
                 $gate = app(FeatureGate::class);
                 if (!$gate->check($generator_id, $featureKey)) {
-                   throw new ErrorException(__('messages.feature.limitReached'),ApiCode::FORBIDDEN);
+//                    throw new ErrorException(__('feature.limitReached'),ApiCode::FORBIDDEN);
                 }
             }
         });

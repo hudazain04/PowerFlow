@@ -4,7 +4,6 @@ namespace App\Repositories\Eloquent;
 
 use App\Models\AppInfo as AppInfoModel;
 use App\Repositories\interfaces\AppInfoRepositoryInterface;
-use App\Types\AppInfoTypes;
 
 class AppInfoRepository implements AppInfoRepositoryInterface
 {
