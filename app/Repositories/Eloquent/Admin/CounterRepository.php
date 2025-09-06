@@ -83,4 +83,10 @@ class CounterRepository implements CounterRepositoryInterface
        return  $counters;
     }
 
+    public function getRelations(Counter $counter, array $relations): Counter
+    {
+        $counter=$counter->load($relations);
+        return $counter;
+    }
+
 }

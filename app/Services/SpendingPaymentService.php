@@ -1,0 +1,151 @@
+<?php
+
+namespace App\Services;
+
+use App\ApiHelper\ApiCode;
+use App\ApiHelper\ApiResponse;
+use App\DTOs\SpendingPayDTO;
+use App\Exceptions\ErrorException;
+use App\Http\Requests\Payment\SpendingPayRequest;
+use App\Payment\Methods\CashPayment;
+use App\Payment\Methods\StripePayment;
+use App\Payment\Visitors\PaymentProcessor;
+use App\Repositories\interfaces\Admin\CounterRepositoryInterface;
+use App\Repositories\interfaces\Admin\PaymentRepositoryInterface;
+use App\Repositories\interfaces\Admin\SpendingRepositoryInterface;
+use App\Repositories\interfaces\SpendingPaymentRepositoryInterface;
+use App\Types\PaymentStatus;
+use App\Types\PaymentType;
+use App\Types\SpendingTypes;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class SpendingPaymentService
+{
+    use ApiResponse;
+    /**
+     * Create a new class instance.
+     */
+    public function __construct(
+        protected SpendingRepositoryInterface $spendingRepository,
+        protected PaymentRepositoryInterface $paymentRepository,
+        protected CounterRepositoryInterface $counterRepository,
+    )
+    {
+        //
+    }
+
+
+    public function createStripeCheckout(SpendingPayDTO $dto,int $counter_id)
+    {
+        $counter=$this->counterRepository->find($counter_id);
+        if (!$counter)
+        {
+            throw  new ErrorException(__('counter.notFound'),ApiCode::NOT_FOUND);
+        }
+        $currentSpending=$this->spendingRepository->getLastForCounter($counter_id);
+        if ($counter->spendingType === SpendingTypes::Before)
+        {
+            $generatorSettings=$this->counterRepository->getRelations($counter,['powerGenerator.settings'])->powerGenerator->settings;
+            $amount=$dto->kilos*$generatorSettings->kiloPrice;
+        }
+        elseif ($counter->spendingType === SpendingTypes::After)
+        {
+            $generatorSettings=$this->counterRepository->getRelations($counter,['powerGenerator.settings'])->powerGenerator->settings;
+            $lastPayment=$this->paymentRepository->findWhereLatest(['counter_id'=>$counter_id]);
+            $amount=(($currentSpending->consume)-($lastPayment->current_spending))*$generatorSettings->kiloPrice;
+        }
+        $processor = new PaymentProcessor();
+        $stripePayment = new StripePayment(null, $amount*100,"Spending Renew", route('spendingStripe.success'),route('spendingStripe.cancel'));
+        $result = $stripePayment->accept($processor);
+        $payment=$this->paymentRepository->create([
+            'amount'=>$amount,
+            'current_spending'=>$currentSpending->consume,
+            'next_spending'=>$dto->kilos ? $currentSpending->consume+$dto->kilos : null,
+            'counter_id'=>$counter_id,
+            'status'=>PaymentStatus::Pending,
+            'type'=>PaymentType::Stripe,
+            'session_id'=>$result['session_id'],
+        ]);
+        return $this->success($result,__('spendingPayment.create'),ApiCode::CREATED);
+    }
+
+    public function stripeSuccess(Request $request)
+    {
+        try{
+            $processor = new PaymentProcessor();
+            $stripePayment = new StripePayment($request->get('session_id'));
+            $result = $stripePayment->accept($processor);
+            DB::beginTransaction();
+
+            $payment = $this->paymentRepository->findWhere(['session_id' => $result['session_id']]);
+            if (!$payment) {
+                throw new ErrorException(__('spendingPayment.notFound'), ApiCode::NOT_FOUND);
+            }
+            $payment = $this->paymentRepository->update($payment, [
+                'date' => Carbon::now(), 'status' => PaymentStatus::Paid
+            ]);
+            DB::commit();
+            return $this->success($result, __('spendingPayment.success'));
+        }
+        catch(\Throwable  $exception)
+        {
+            DB::rollBack();
+//            throw new ErrorException($exception->getMessage(), ApiCode::INTERNAL_SERVER_ERROR);
+
+            throw new ErrorException(__('messages.error.serverError'), ApiCode::INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function stripeCancel(Request $request)
+    {
+        $processor = new PaymentProcessor();
+        $payment = new StripePayment($request->get('session_id'));
+        $result = $payment->accept($processor);
+        $payment=$this->paymentRepository->findWhere(['session_id'=>$result['session_id']]);
+        if (! $payment)
+        {
+            throw new ErrorException(__('spendingPayment.notFound'),ApiCode::NOT_FOUND);
+        }
+        $this->paymentRepository->update($payment,[
+            'status'=>PaymentStatus::Cancelled
+        ]);
+        return $this->success($result, __('spendingPayment.cancel'));
+    }
+
+    public function handleCashPayment(SpendingPayDTO $dto,$counter_id)
+    {
+        $counter=$this->counterRepository->find($counter_id);
+        if (!$counter)
+        {
+            throw  new ErrorException(__('counter.notFound'),ApiCode::NOT_FOUND);
+        }
+        $currentSpending=$this->spendingRepository->getLastForCounter($counter_id);
+        if ($counter->spendingType === SpendingTypes::Before)
+        {
+            $generatorSettings=$this->counterRepository->getRelations($counter,['powerGenerator.settings'])->powerGenerator->settings;
+            $amount=$dto->kilos*$generatorSettings->kiloPrice;
+        }
+        elseif ($counter->spendingType === SpendingTypes::After)
+        {
+            $generatorSettings=$this->counterRepository->getRelations($counter,['powerGenerator.settings'])->powerGenerator->settings;
+            $lastPayment=$this->paymentRepository->findWhereLatest(['counter_id'=>$counter_id]);
+            $amount=(($currentSpending->consume)-($lastPayment->current_spending))*$generatorSettings->kiloPrice;
+        }
+        $processor = new PaymentProcessor();
+        $payment = new CashPayment();
+        $result = $payment->accept($processor);
+        $payment=$this->paymentRepository->create([
+            'date'=>Carbon::now(),
+            'amount'=>$amount,
+            'current_spending'=>$currentSpending->consume,
+            'next_spending'=>$dto->kilos ? $currentSpending->consume+$dto->kilos : null,
+            'counter_id'=>$counter_id,
+            'status'=>PaymentStatus::Paid,
+            'type'=>PaymentType::Cash,
+            'session_id'=>$result['session_id'],
+        ]);
+        return $this->success($result,__('spendingPayment.cash'));
+    }
+}

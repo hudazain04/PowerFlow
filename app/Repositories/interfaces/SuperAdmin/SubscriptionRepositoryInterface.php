@@ -16,7 +16,7 @@ interface SubscriptionRepositoryInterface
 
     public function create(array $data) : SubscriptionModel;
 
-    public function getLastForGenerator(int $generator_id) : SubscriptionModel;
+    public function getLastForGenerator(int $generator_id) : ?SubscriptionModel;
 
     public function update(SubscriptionModel $subscription, array $data) : SubscriptionModel;
 

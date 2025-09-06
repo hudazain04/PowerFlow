@@ -8,8 +8,10 @@ use App\Http\Controllers\Admin\CounterBoxController;
 use App\Http\Controllers\Admin\ElectricalBoxController;
 use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\PowerGeneratorController;
+use App\Http\Controllers\Admin\SpendingController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\paymentController;
+use App\Http\Controllers\SpendingPaymentController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\SuperAdmin\AppInfoController;
 use App\Http\Controllers\SuperAdmin\FaqController;
@@ -27,36 +29,9 @@ use \App\Http\Controllers\Admin\CounterController;
 use App\Http\Controllers\User\VerificationController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('lang')->group(function () {
 
 
-//    Route::prefix('auth')->group(function () {
-//        Route::post('register', [AuthController::class, 'register']);
-//        Route::post('login', [AuthController::class, 'login']);
-//        Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:api');
-//    });
-//    Route::get('/verify/{id}/{hash}', [VerificationController::class, 'verify'])
-//        ->name('verification.verify');
-//    Route::prefix('email')->group(function () {
-//
-//        Route::post('/send-verification', [VerificationController::class, 'send'])
-//            ->name('verification.send');
-//
-//        Route::post('/resend', [VerificationController::class, 'resend'])
-//            ->middleware('throttle:3,1')
-//            ->name('verification.resend');
-//    });
-//
-//
-//    Route::prefix('/password')->group(function () {
-//        Route::post('/request', [PasswordController::class, 'request']);
-//
-//        Route::post('/resend', [PasswordController::class, 'resend'])->middleware('throttle:3,1');
-//        Route::post('/reset', [PasswordController::class, 'reset']);
-//        Route::get('/verify', [PasswordController::class, 'verify'])->name('verification.pass');
-//
-//    });
-//
+
     Route::middleware('lang')->group(function () {
         // Authentication routes
         Route::prefix('auth')->group(function () {
@@ -110,6 +85,8 @@ Route::middleware('lang')->group(function () {
         });
 
         Route::get('visitLandingPage', [SuperAdminStatisticsController::class, 'visitLandingPage']);
+
+
     });
 
     // Protected routes
@@ -125,6 +102,7 @@ Route::middleware('lang')->group(function () {
                 ->middleware('permission:UPDATE_AREAS');
             Route::delete('delete/{id}', [AreaController::class, 'destroy'])
                 ->middleware('permission:DELETE_AREAS');
+
 
             // Box assignment to areas
             Route::post('/areas/{area_id}/boxes', [AreaBoxController::class, 'assignBox'])
@@ -176,6 +154,7 @@ Route::middleware('lang')->group(function () {
 
             Route::get('/permissions', [EmployeeController::class, 'getPermission']);
         });
+
 
         // FAQ routes
         Route::prefix('faq')->group(function () {
@@ -373,7 +352,36 @@ Route::middleware('lang')->group(function () {
             ->middleware('permission:PROCESS_CASH_PAYMENT');
         Route::get('stripe/success', [PaymentController::class, 'stripeSuccess'])->name('stripe.success');
         Route::get('stripe/cancel', [PaymentController::class, 'stripeCancel'])->name('stripe.cancel');
-    });});
+    });
+
+
+//    Route::prefix('auth')->group(function () {
+//        Route::post('register', [AuthController::class, 'register']);
+//        Route::post('login', [AuthController::class, 'login']);
+//        Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:api');
+//    });
+//    Route::get('/verify/{id}/{hash}', [VerificationController::class, 'verify'])
+//        ->name('verification.verify');
+//    Route::prefix('email')->group(function () {
+//
+//        Route::post('/send-verification', [VerificationController::class, 'send'])
+//            ->name('verification.send');
+//
+//        Route::post('/resend', [VerificationController::class, 'resend'])
+//            ->middleware('throttle:3,1')
+//            ->name('verification.resend');
+//    });
+//
+//
+//    Route::prefix('/password')->group(function () {
+//        Route::post('/request', [PasswordController::class, 'request']);
+//
+//        Route::post('/resend', [PasswordController::class, 'resend'])->middleware('throttle:3,1');
+//        Route::post('/reset', [PasswordController::class, 'reset']);
+//        Route::get('/verify', [PasswordController::class, 'verify'])->name('verification.pass');
+//
+//    });
+//
 //    // routes/api.php
 //        Route::prefix('generator')->middleware(['auth:api', 'role:admin'])->group(function () {
 //        // Areas
@@ -594,9 +602,6 @@ Route::middleware('lang')->group(function () {
 //Route::get('payCash/{request_id}', [paymentController::class, 'handleCashPayment']);
 //Route::get('stripe/success', [paymentController::class, 'stripeSuccess'])->name('stripe.success');
 //Route::get('stripe/cancel', [paymentController::class, 'stripeCancel'])->name('stripe.cancel');
-
-
-
 
 
 

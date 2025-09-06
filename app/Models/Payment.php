@@ -9,13 +9,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Payment extends Model
 {
         use HasFactory;
-        
-    protected $fillable = [
-        'amount',
-        'date',
-        'current_spending',
-        'counter_id'
-    ];
+
+    protected $guarded=['id'];
 
 
     public function counter()

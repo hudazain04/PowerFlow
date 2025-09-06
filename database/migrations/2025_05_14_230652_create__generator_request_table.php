@@ -19,7 +19,8 @@ return new class extends Migration
             $table->string('generator_name');
             $table->string('generator_location');
             $table->string('phone');
-            $table->string('status')->default(GeneratorRequests::PENDING);
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->enum('status',array_values((new ReflectionClass(GeneratorRequests::class))->getConstants()))->default(GeneratorRequests::PENDING);
             $table->json('translation')->nullable();
             $table->timestamps();
         });

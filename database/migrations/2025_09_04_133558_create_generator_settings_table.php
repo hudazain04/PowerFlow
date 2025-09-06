@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('employees', function (Blueprint $table) {
+        Schema::create('generator_settings', function (Blueprint $table) {
             $table->id();
-            $table->string('user_name');
-            $table->string('secret_key');
-            $table->string('phone_number');
             $table->foreignId('generator_id')->constrained('power_generators')->cascadeOnDelete();
+            $table->enum('spendingType',array_values((new ReflectionClass(\App\Types\SpendingTypes::class))->getConstants()));
+            $table->integer('kiloPrice');
+            $table->integer('afterPaymentFrequency');
+            $table->enum('day',array_values((new ReflectionClass(\App\Types\DaysOfWeek::class))->getConstants()));
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('employees');
+        Schema::dropIfExists('generator_settings');
     }
 };

@@ -4,11 +4,14 @@ namespace App\Models;
 
 use App\ApiHelper\HasFeatureLimit;
 use App\ApiHelper\Translatable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class CustomerRequest extends Model
 {
     use Translatable,HasFeatureLimit;
+    use HasFactory;
+
     protected $guarded=['id'];
     public $translatable=[
         'status',
