@@ -26,6 +26,7 @@ class CounterService
 
    }
    public function get(){
+
         return $this->repository->get();
    }
 }
