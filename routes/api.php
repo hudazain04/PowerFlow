@@ -378,7 +378,25 @@ use App\Http\Controllers\User\UserAppController;
             ->middleware('permission:PROCESS_CASH_PAYMENT');
         Route::get('stripe/success', [PaymentController::class, 'stripeSuccess'])->name('stripe.success');
         Route::get('stripe/cancel', [PaymentController::class, 'stripeCancel'])->name('stripe.cancel');
+
+        Route::prefix('spendingPay')->middleware(['auth:api'])->group(function () {
+            Route::post('paySpending/{counter_id}',[SpendingPaymentController::class,'createStripeCheckout']);
+            Route::get('payCash/{counter_id}', [SpendingPaymentController::class, 'handleCashPayment']);
+            Route::get('stripe/success', [SpendingPaymentController::class, 'stripeSuccess'])->name('spendingStripe.success');
+            Route::get('stripe/cancel', [SpendingPaymentController::class, 'stripeCancel'])->name('spendingStripe.cancel');
+
+
+        });
+
+        Route::prefix('spending')->group(function () {
+            Route::post('create', [SpendingController::class,'create']);
+            Route::patch('update/{id}', [SpendingController::class,'update']);
+            Route::delete('delete/{id}', [SpendingController::class,'delete']);
+            Route::get('getAll/{counter_id}', [SpendingController::class,'getAll']);
+
+        });
     });
+
 
 
 //    Route::prefix('auth')->group(function () {
