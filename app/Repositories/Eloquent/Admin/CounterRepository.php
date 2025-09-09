@@ -7,6 +7,8 @@ use App\Models\PowerGenerator;
 use App\Repositories\interfaces\Admin\CounterRepositoryInterface;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
+use Mockery\Exception;
+use Mockery\Expectation;
 
 class CounterRepository implements CounterRepositoryInterface
 {
@@ -26,6 +28,9 @@ class CounterRepository implements CounterRepositoryInterface
     public function get(){
         $generator=auth()->user()->powerGenerator->id;
         $counters=Counter::where('generator_id',$generator)->get();
+        if(! $counters){
+            throw new Exception('no counters for this id');
+        }
         return $counters;
     }
 
