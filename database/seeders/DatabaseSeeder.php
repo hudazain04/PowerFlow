@@ -49,7 +49,7 @@ class DatabaseSeeder extends Seeder
         $user = User::factory()->create([
             'first_name' => 'Super admin',
             'email' => 'huda1812zain@gmail.com',
-            "password" => "123123123",
+            'password' => '123123123',
         ]);
         $user->assignRole('superAdmin');
 
@@ -57,7 +57,7 @@ class DatabaseSeeder extends Seeder
         $admin = User::factory()->create([
             'first_name' => 'Power generator',
             'email' => 'jawadtakialdeen@gmail.com',
-            "password" => "123123123",
+            'password' => '123123123',
         ]);
         $admin->assignRole('admin');
 
@@ -68,44 +68,63 @@ class DatabaseSeeder extends Seeder
         $generatorUsers = User::factory()->count(5)->create();
 
         $generators = collect();
+        $generatorAdmin = PowerGenerator::factory()->for($admin)->create(); // ✅ admin’s generator
+        $generators->push($generatorAdmin);
+
         foreach ($generatorUsers as $user) {
             $generator = PowerGenerator::factory()->for($user)->create();
             $generators->push($generator);
 
             Phone::factory()->count(2)->create(['generator_id' => $generator->id]);
 
-            // ✅ Add GeneratorRequest
             GeneratorRequest::factory()->create([
-                'user_id'=>$users->random()->id,
+                'user_id' => $users->random()->id,
             ]);
 
             GeneratorSetting::factory()->create([
                 'generator_id' => $generator->id,
             ]);
         }
+
         // Neighborhoods + Areas
-        $areas=collect();
+        $areas = collect();
         $neighborhoods = Neighborhood::factory()->count(10)->create();
+
+        // First neighborhood → force admin generator
+        $firstNeighborhood = $neighborhoods->shift();
+        $adminAreas = Area::factory()->count(2)->create([
+            'neighborhood_id' => $firstNeighborhood->id,
+            'generator_id' => $generatorAdmin->id,
+        ]);
+        $areas = $areas->merge($adminAreas);
+
+        // Remaining neighborhoods random generators
         foreach ($neighborhoods as $neighborhood) {
-            $created=Area::factory()->count(2)->create([
+            $created = Area::factory()->count(2)->create([
                 'neighborhood_id' => $neighborhood->id,
                 'generator_id' => $generators->random()->id,
             ]);
             $areas = $areas->merge($created);
         }
+
+        // Employees
+        // Batch for admin generator
+        $adminEmployees = Employee::factory()->count(3)->create([
+            'generator_id' => $generatorAdmin->id,
+            'area_id' => $adminAreas->random()->id,
+        ]);
+
+        // Employees for other generators
         foreach ($generators as $generator) {
-            $employees=Employee::factory()->count(3)->create([
+            Employee::factory()->count(3)->create([
                 'generator_id' => $generator->id,
-                'area_id'=>$areas->random()->id,
-                ]);
-
+                'area_id' => $areas->random()->id,
+            ]);
         }
-
 
         // Plans
         $plans = Plan::factory()->count(3)->create();
 
-        // Features + plan features
         $features = Feature::factory()->count(6)->create();
         foreach ($plans as $plan) {
             $planFeatures = $features->random(rand(2, 4));
@@ -118,18 +137,27 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-        // Plan prices
         foreach ($plans as $plan) {
             PlanPrice::factory()->count(2)->for($plan)->create();
         }
         $planPrices = PlanPrice::all();
 
-
-
         // ElectricalBoxes
-        $boxes = ElectricalBox::factory()->count(20)->state([
-            'generator_id' => $generators->random()->id,
+        $adminBoxes = ElectricalBox::factory()->count(5)->state([
+            'generator_id' => $generatorAdmin->id,
         ])->create();
+
+        $boxes = ElectricalBox::factory()->count(15)->state([
+            'generator_id' => $generators->random()->id,
+        ])->create()->merge($adminBoxes);
+
+        // Link admin boxes to admin areas
+        foreach ($adminAreas as $area) {
+            Area_Box::factory()->create([
+                'area_id' => $area->id,
+                'box_id' => $adminBoxes->random()->id,
+            ]);
+        }
 
         foreach (Area::all() as $area) {
             foreach ($boxes->random(rand(1, 3)) as $box) {
@@ -140,8 +168,29 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-        // Counters + Spendings + Payments + Complaints + CustomerRequests
-        $counters=collect();
+        // Counters
+        $counters = collect();
+
+        // Admin counter
+        $adminCounter = Counter::factory()->for($users->random())->create([
+            'generator_id' => $generatorAdmin->id,
+        ]);
+        $counters->push($adminCounter);
+
+        Counter_Box::factory()->create([
+            'counter_id' => $adminCounter->id,
+            'box_id' => $adminBoxes->random()->id,
+        ]);
+
+        Spending::factory()->count(3)->for($adminCounter)->create();
+        Payment::factory()->count(2)->for($adminCounter)->create();
+
+        Complaint::factory()->for($adminCounter)->create([
+            'type' => ComplaintTypes::Cut,
+            'user_id' => $users->random()->id,
+        ]);
+
+        // Random counters
         foreach ($users as $user) {
             $counter = Counter::factory()->for($user)->create([
                 'generator_id' => $generators->random()->id,
@@ -162,7 +211,6 @@ class DatabaseSeeder extends Seeder
                 'user_id' => $users->random()->id,
             ]);
 
-            // ✅ Add CustomerRequest
             CustomerRequest::factory()->create([
                 'user_id' => $user->id,
                 'box_id' => $box->id,
@@ -182,7 +230,7 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // Subscriptions + Payments
+        // Subscriptions
         foreach ($generators as $generator) {
             $subscription = Subscription::factory()->create([
                 'generator_id' => $generator->id,
@@ -196,24 +244,19 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // ✅ AppInfo entries
         AppInfo::factory()->count(3)->create();
-
-        // ✅ Faq entries
         Faq::factory()->count(5)->create();
 
         $parentAction = Action::factory()->create([
-            'employee_id' => $employees->random()->id,
+            'employee_id' => $adminEmployees->random()->id,
             'counter_id'  => $counters->random()->id,
             'parent_id' => null,
         ]);
 
-        // Create 2 child actions linked to parent
         Action::factory()->count(2)->create([
-            'employee_id' =>  $employees->random()->id,
+            'employee_id' => $adminEmployees->random()->id,
             'counter_id'  => $counters->random()->id,
             'parent_id' => $parentAction->id,
         ]);
-
     }
 }
