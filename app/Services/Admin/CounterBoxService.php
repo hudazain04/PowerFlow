@@ -53,7 +53,7 @@ class CounterBoxService
 
             $counter = $this->repository->create([
                 'number' => $data['number'],
-                'QRCode' => $qrCode['content'],
+                'QRCode' =>  asset($qrCode['url']),
                 'user_id' => $data['user_id'],
                 'generator_id' => $generator,
                 'current_spending' => 0,
