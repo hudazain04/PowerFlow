@@ -39,5 +39,8 @@ return [
         'secret' => env('STRIPE_SECRET'),
         'public' => env('STRIPE_KEY'),
     ],
+    'fcm' => [
+        'server_key' => env('FIREBASE_SERVER_KEY'),
+    ],
 
 ];

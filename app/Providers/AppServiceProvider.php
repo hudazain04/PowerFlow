@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Events\EmployeeLocationUpdate;
+use App\Listeners\StoreEmployeeLocation;
 use App\Repositories\Eloquent\Admin\PaymentRepository;
 use App\Repositories\Eloquent\Admin\SpendingRepository;
 use App\Repositories\Eloquent\AuthRepository;
@@ -46,6 +48,7 @@ use App\Repositories\interfaces\UserRepositoryInterface;
 use Dedoc\Scramble\Scramble;
 use Dedoc\Scramble\Support\Generator\OpenApi;
 use Dedoc\Scramble\Support\Generator\SecurityScheme;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
 
@@ -88,6 +91,11 @@ class AppServiceProvider extends ServiceProvider
                     SecurityScheme::http('bearer')
                 );
             });
+
+        Event::listen(
+            EmployeeLocationUpdate::class,
+            StoreEmployeeLocation::class,
+        );
     }
 //    protected $listen = [
 //        UserRegistered::class => [

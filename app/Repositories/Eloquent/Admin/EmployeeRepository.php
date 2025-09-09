@@ -43,7 +43,7 @@ class EmployeeRepository implements EmployeeRepositoryInterface
 
     public function findEmployee(int $id)
     {
-        return Employee::findOrFail($id);
+        return Employee::find($id);
     }
 
     public function delete(int $id)

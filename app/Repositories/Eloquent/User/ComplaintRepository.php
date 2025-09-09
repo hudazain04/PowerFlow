@@ -47,4 +47,10 @@ class ComplaintRepository implements ComplaintRepositoryInterface
         $complaints=ComplaintModel::filter($filters)->get();
         return $complaints;
     }
+
+    public function getRelations(ComplaintModel $complaint,array $relations = []): ComplaintModel
+    {
+       $complaint->load($relations);
+       return  $complaint;
+    }
 }
