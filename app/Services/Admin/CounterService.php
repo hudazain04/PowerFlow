@@ -7,6 +7,7 @@ use App\Exceptions\GeneralException;
 use App\Models\Area;
 use App\Models\Counter;
 use App\Repositories\interfaces\Admin\CounterRepositoryInterface;
+use Illuminate\Http\Request;
 
 class CounterService
 {
@@ -25,8 +26,8 @@ class CounterService
         return $this->repository->getTotalConsumption($generator_id);
 
    }
-   public function get(){
+   public function get(Request $request){
 
-        return $this->repository->get();
+        return $this->repository->get([ 'status' => $request->query('status')]);
    }
 }

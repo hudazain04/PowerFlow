@@ -14,7 +14,7 @@ interface CounterRepositoryInterface
 
     public function delete(int $id) : bool;
 
-    public function getCounters(int $generator_id);
+    public function getCounters(int $generator_id,?array $filters=[]);
 
     public function getUserCount(int $generator_id);
 
