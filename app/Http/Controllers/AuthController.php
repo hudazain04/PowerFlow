@@ -84,7 +84,7 @@ class AuthController extends Controller
 
             $id=null;
             if($user->hasRole('admin')){
-              $id=$user->id;
+              $id=$user->powerGenerator->id;
             }
             $User=UserResource::make($user);
             $result=["user"=>$User,"token"=>$token,"power_generator"=>$id];
