@@ -227,6 +227,13 @@ use App\Http\Controllers\User\UserAppController;
             Route::delete('delete/{id}', [NeighborhoodController::class, 'delete'])
                 ->middleware('permission:DELETE_NEIGHBORHOOD');
         });
+        Route::middleware('role:superAdmin')->group(function () {
+            Route::get('/generators/{generator}/statistics', [SuperAdminStatisticsController::class
+                            , 'getGeneratorStatistics']);
+            Route::get('/generators/{id}/info', [SuperAdminStatisticsController::class, 'getGenInfo']);
+            Route::delete('/generators/{id}/', [GeneratorRequestController::class, 'delete']);
+        });
+
 
         // Feature routes
         Route::prefix('feature')->group(function () {
