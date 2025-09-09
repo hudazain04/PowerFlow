@@ -41,6 +41,8 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             FaqSeeder::class,
             AppInfoSeeder::class,
+            PermissionSeeder::class,
+
         ]);
 
         // Super admin

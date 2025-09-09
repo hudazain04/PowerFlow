@@ -10,11 +10,12 @@ use Illuminate\Foundation\Auth\User as Authenticate;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Traits\HasRoles;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
 //use Laravel\Sanctum\HasApiTokens;
 
 
-class Employee extends Authenticate
+class Employee extends Authenticate implements JWTSubject
 {
     use HasFactory, HasPermissions,HasRoles,HasFeatureLimit;
 
@@ -27,6 +28,18 @@ class Employee extends Authenticate
         'phone_number',
     ];
     public string $featureKey = 'employees_count';
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+    public function getAuthPassword()
+    {
+        return $this->secret_key;
+    }
 
     public function powerGenerator()
     {

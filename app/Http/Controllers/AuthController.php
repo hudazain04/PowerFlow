@@ -79,9 +79,15 @@ class AuthController extends Controller
                 throw new ErrorException(__('messages.error.notVerified'),ApiCode::UNAUTHORIZED,['verified'=>false,'user'=>$user]);
 //                throw VerificationException::emailNotVerfied();
             }
+
             $user=$this->authservice->update($user->id,['fcmToken'=>$request->fcmToken]);
+
+            $id=null;
+            if($user->hasRole('admin')){
+              $id=$user->id;
+            }
             $User=UserResource::make($user);
-            $result=["user"=>$User,"token"=>$token];
+            $result=["user"=>$User,"token"=>$token,"power_generator"=>$id];
             return ApiResponses::success($result, __('messages.login_success'), ApiCode::OK);
 
         }

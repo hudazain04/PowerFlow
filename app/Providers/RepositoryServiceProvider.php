@@ -25,6 +25,7 @@ use App\Repositories\Eloquent\SuperAdmin\VisitorRepository;
 use App\Repositories\Eloquent\User\ComplaintRepository;
 use App\Repositories\Eloquent\User\CustomerRequestRepository;
 use App\Repositories\Eloquent\User\PasswordResetRepository;
+use App\Repositories\Eloquent\User\UserAppRepository;
 use App\Repositories\Eloquent\User\VerificationRepository;
 use App\Repositories\interfaces\Admin\AreaRepositoryInterface;
 use App\Repositories\interfaces\Admin\CounterBoxRepositoryInterface;
@@ -47,6 +48,7 @@ use App\Repositories\interfaces\SuperAdmin\VisitorRepositoryInterface;
 use App\Repositories\interfaces\User\ComplaintRepositoryInterface;
 use App\Repositories\interfaces\User\CustomerRequestRepositoryInterface;
 use App\Repositories\interfaces\User\PasswordResetRepositoryInterface;
+use App\Repositories\interfaces\User\UserAppRepositoryInterface;
 use App\Repositories\interfaces\User\VerificationRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\Interfaces\UserRepositoryInterface;
@@ -70,7 +72,8 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(ElectricalBoxRepositoryInterface::class,ElectricalBoxRepository::class);
         $this->app->bind(CounterBoxRepositoryInterface::class,CounterBoxRepository::class);
         $this->app->bind(EmployeeRepositoryInterface::class,EmployeeRepository::class);
-
+       $this->app->bind(\App\Repositories\interfaces\Employee\EmployeeRepositoryInterface::class,\App\Repositories\Eloquent\Employee\EmployeeRepository::class);
+        $this->app->bind(UserAppRepositoryInterface::class,UserAppRepository::class);
     }
 
     public function boot()
