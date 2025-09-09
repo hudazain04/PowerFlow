@@ -17,4 +17,7 @@ class Payment extends Model
     {
         return $this->belongsTo(Counter::class);
     }
+    public function payments(){
+        return $this->belongsTo(Counter::class);
+    }
 }

@@ -6,6 +6,7 @@ use App\ApiHelper\ApiCode;
 use App\ApiHelper\ApiResponses;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EmployeeRequest;
+use App\Http\Requests\UpdateEmployeeRequest;
 use App\Models\Employee;
 use App\Services\Admin\EmployeeService;
 use Illuminate\Http\Request;
@@ -18,7 +19,7 @@ class EmployeeController extends Controller
         $emp=$this->service->create(array_merge($request->validated(),['generator_id'=>$request->user()->id]));
         return ApiResponses::success($emp,'success',ApiCode::OK);
     }
-    public function update(EmployeeRequest $request,int $id)
+    public function update(UpdateEmployeeRequest $request,int $id)
     {
         $employee = $this->service->update($id, $request->validated());
         return ApiResponses::success($employee, 'Employee updated successfully', ApiCode::OK);

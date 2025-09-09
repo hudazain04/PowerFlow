@@ -17,6 +17,9 @@ class GeneralException extends Exception
     public static function counters(){
         return new self('there is no generator with this id or he do not have areas',400 );
     }
+    public static function CounterPdf(){
+        return new self('counter not found',400 );
+    }
 
     public function render($request)
     {
