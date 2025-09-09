@@ -16,7 +16,9 @@ return new class extends Migration
             $table->string('user_name');
             $table->string('secret_key');
             $table->string('phone_number');
+            $table->string('fcmToken');
             $table->foreignId('generator_id')->constrained('power_generators')->cascadeOnDelete();
+            $table->foreignId('area_id')->nullable()->constrained('areas')->nullOnDelete();
             $table->timestamps();
         });
     }

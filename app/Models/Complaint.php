@@ -13,15 +13,7 @@ class Complaint extends Model
 
     use HasFactory;
     use Translatable;
-    protected $fillable = [
-        'description',
-        'status',
-        'counter_id',
-        'user_id',
-        'type',
-
-    ];
-
+    protected $guarded=['id'];
     public $translatable=[
         'description',
         'status',

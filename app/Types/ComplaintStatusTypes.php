@@ -12,6 +12,7 @@ class ComplaintStatusTypes
         //
     }
     public const Pending = "Pending";
+    public const Assigned="Assigned";
     public const Accepted = "Accepted";
     public const InProgress = "InProgress";
     public const OnHold = "OnHold";

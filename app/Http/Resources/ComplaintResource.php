@@ -25,8 +25,10 @@ class ComplaintResource extends JsonResource
         {
             $data=array_merge($data,[
                 'status'=>$this->status,
-                'counter_id'=>$this->counter_id,
+                'counter'=>CounterResource::make($this->counter),
                 'employee_id'=>$this->employee_id,
+                'latitude'=>$this->counter->electricalBoxes->first()->latitude,
+                'longitude'=>$this->counter->electricalBoxes->first()->longitude,
             ]);
         }
         return $data;

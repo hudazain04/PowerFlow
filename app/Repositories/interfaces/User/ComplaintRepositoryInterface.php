@@ -15,4 +15,6 @@ interface ComplaintRepositoryInterface
     public function delete(ComplaintModel $complaint) :  bool;
 
     public function getAll(?array $filters=[]) : Collection;
+
+    public function getRelations(ComplaintModel $complaint,array $relations=[]) : ComplaintModel;
 }

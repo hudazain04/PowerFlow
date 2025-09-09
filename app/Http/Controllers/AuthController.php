@@ -79,6 +79,9 @@ class AuthController extends Controller
                 throw new ErrorException(__('messages.error.notVerified'),ApiCode::UNAUTHORIZED,['verified'=>false,'user'=>$user]);
 //                throw VerificationException::emailNotVerfied();
             }
+
+            $user=$this->authservice->update($user->id,['fcmToken'=>$request->fcmToken]);
+
             $id=null;
             if($user->hasRole('admin')){
               $id=$user->id;

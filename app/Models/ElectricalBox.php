@@ -45,8 +45,8 @@ class ElectricalBox extends Model
     }
     public function areas()
     {
-        return $this->hasMany(Area::class,'electrical_boxes')
-            ->whereNull('electrical_boxes.removed_at');
+        return $this->belongsToMany(Area::class,'area__boxes','box_id','area_id')
+            ->whereNull('area__boxes.removed_at');
 
     }
 //    public function counter(){

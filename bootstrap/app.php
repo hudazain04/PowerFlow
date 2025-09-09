@@ -15,12 +15,13 @@ return Application::configure(basePath: dirname(__DIR__))
         channels: __DIR__.'/../routes/channels.php',
         health: '/up',
     )
+
     ->withMiddleware(function (Middleware $middleware) {
 
         $middleware->api();
         $middleware->alias([
             'role' => \App\Http\Middleware\RoleMiddleware::class,
-            'block'=>\App\Http\Middleware\BlockMiddleware::class,
+            'block'=>\App\Http\Middleware\BlockedMiddleware::class,
             'lang'=>\App\Http\Middleware\LanguageMiddleware::class,
 
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
@@ -51,7 +52,6 @@ return Application::configure(basePath: dirname(__DIR__))
 //        });
 
     })
-
     ->create();
 
 //        $middleware->alias([
