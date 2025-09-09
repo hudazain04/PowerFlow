@@ -109,7 +109,7 @@ class PermissionSeeder extends Seeder
                 'DELETE_FAQ',
             ],
 
-            'Generator Requests' => [
+            'Generator_Requests' => [
                 'CREATE_GENERATOR_REQUEST',
                 'VIEW_GENERATOR_REQUESTS',
                 'APPROVE_GENERATOR_REQUEST',
@@ -117,7 +117,7 @@ class PermissionSeeder extends Seeder
                 'DELETE_GENERATOR',
             ],
 
-            'Customer Requests' => [
+            'Customer_Requests' => [
                 'CREATE_CUSTOMER_REQUEST',
                 'VIEW_CUSTOMER_REQUESTS',
                 'APPROVE_CUSTOMER_REQUEST',
@@ -148,7 +148,7 @@ class PermissionSeeder extends Seeder
                 'UPDATE_PLAN_FEATURE',
             ],
 
-            'Plan Prices' => [
+            'Plan_Prices' => [
                 'CREATE_PLAN_PRICE',
                 'VIEW_PLAN_PRICES',
                 'UPDATE_PLAN_PRICE',
@@ -162,14 +162,14 @@ class PermissionSeeder extends Seeder
                 'CANCEL_SUBSCRIPTION',
             ],
 
-            'Subscription Requests' => [
+            'Subscription_Requests' => [
                 'CREATE_SUBSCRIPTION_REQUEST',
                 'VIEW_SUBSCRIPTION_REQUESTS',
                 'APPROVE_SUBSCRIPTION_REQUEST',
                 'REJECT_SUBSCRIPTION_REQUEST',
             ],
 
-            'App Info' => [
+            'App_Info' => [
                 'MANAGE_ABOUT_APP',
                 'MANAGE_TERMS_CONDITIONS',
                 'MANAGE_PRIVACY_POLICY',

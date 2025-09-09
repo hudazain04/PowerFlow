@@ -256,7 +256,7 @@ return
             "Complaint_Added_Successfully" => "تم إرسال الشكوى بنجاح",
         ],
 
-        "EmployeeController" => [
+        "EmployeeAuthController" => [
             "Employee_Added_Successfully" => "تم إضافة موظف جديد بنجاح",
             "Employee_Updated_Successfully" => "تم تعديل بيانات الموظف بنجاح",
             "Code_Updated_Successfully" => "تم تعديل الكود بنجاح",

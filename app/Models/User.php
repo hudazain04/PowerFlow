@@ -8,7 +8,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Spatie\Permission\Traits\HasRoles;
+ use Predis\Command\Traits\Count;
+ use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 
@@ -95,6 +96,11 @@ class User extends Authenticatable implements JWTSubject,MustVerifyEmail
     public function customerRequests(){
         return $this->hasMany(CustomerRequest::class);
     }
+    public function counters(){
+        return $this->hasMany(Counter::class);
+    }
+
+
     public function getJWTIdentifier()
     {
         return $this->getKey();

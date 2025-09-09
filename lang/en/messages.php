@@ -179,7 +179,7 @@ Congratulations! You have been successfully enrolled in the course :course_name 
         "Complaint_Added_Successfully" => "Complaint Added Successfully",
     ],
 
-    "EmployeeController" => [
+    "EmployeeAuthController" => [
         "Employee_Added_Successfully" => "Employee Added Successfully",
         "Employee_Updated_Successfully" => "Employee Updated Successfully",
         "Code_Updated_Successfully" => "Code Updated Successfully",

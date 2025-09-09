@@ -28,7 +28,8 @@ use App\Http\Controllers\User\PasswordController;
 use \App\Http\Controllers\Admin\CounterController;
 use App\Http\Controllers\User\VerificationController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Employee\EmployeeAuthController;
+use App\Http\Controllers\User\UserAppController;
 
 
 
@@ -38,6 +39,24 @@ use Illuminate\Support\Facades\Route;
             Route::post('register', [AuthController::class, 'register']);
             Route::post('login', [AuthController::class, 'login']);
             Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:api');
+        });
+        Route::prefix('employee')->group(function () {
+            Route::post('login', [EmployeeAuthController::class, 'login']);
+            Route::middleware('auth:employee')->group(function () {
+                Route::post('logout', [EmployeeAuthController::class, 'logout']);
+                Route::get('permissions/{id}',[EmployeeAuthController::class,'getPermissions']);
+            });
+        });
+        Route::prefix('user')->group(function (){
+            Route::put('name/{id}',[UserAppController::class,'name']);
+            Route::put('password/{id}',[UserAppController::class,'resetPassword']);
+            Route::get('counters/{id}',[UserAppController::class,'getCounters']);
+            Route::get('counter/{id}',[UserAppController::class,'getCounter']);
+            Route::get('payments/{counter_id}',[UserAppController::class,'getPayments']);
+            Route::get('/pdf/{counter_id}', [UserAppController::class, 'downloadPaymentsPdf']);
+            Route::get('spending_consumption/{counter_id}',[UserAppController::class,'spendingConsumption']);
+            Route::get('generators/nearby', [UserAppController::class, 'findNearbyGenerators']);
+
         });
 
         // Email verification routes
@@ -411,13 +430,13 @@ use Illuminate\Support\Facades\Route;
 //        Route::delete('/counters/remove-box', [CounterBoxController::class, 'removeCounter'])->middleware('permission:REMOVE_COUNTER_FROM_BOX');
 //
 //        // Employee management
-//        Route::post('/createEmp', [EmployeeController::class, 'create'])->middleware('permission:CREATE_EMPLOYEES');
-//        Route::put('/updateEmp/{id}', [EmployeeController::class, 'update'])->middleware('permission:UPDATE_EMPLOYEES');
-//        Route::delete('deleteEmp/{id?}', [EmployeeController::class, 'delete'])->middleware('permission:DELETE_EMPLOYEES');
-//        Route::get('/getEmps/{generator_id}', [EmployeeController::class, 'getEmployees'])->middleware('permission:VIEW_EMPLOYEES');
-//        Route::get('/getEmp/{id}', [EmployeeController::class, 'getEmployee'])->middleware('permission:VIEW_EMPLOYEES_DETAILS');
+//        Route::post('/createEmp', [EmployeeAuthController::class, 'create'])->middleware('permission:CREATE_EMPLOYEES');
+//        Route::put('/updateEmp/{id}', [EmployeeAuthController::class, 'update'])->middleware('permission:UPDATE_EMPLOYEES');
+//        Route::delete('deleteEmp/{id?}', [EmployeeAuthController::class, 'delete'])->middleware('permission:DELETE_EMPLOYEES');
+//        Route::get('/getEmps/{generator_id}', [EmployeeAuthController::class, 'getEmployees'])->middleware('permission:VIEW_EMPLOYEES');
+//        Route::get('/getEmp/{id}', [EmployeeAuthController::class, 'getEmployee'])->middleware('permission:VIEW_EMPLOYEES_DETAILS');
 //
-//        Route::get('/permissions', [EmployeeController::class, 'getPermission']);
+//        Route::get('/permissions', [EmployeeAuthController::class, 'getPermission']);
 //    });
 //
 //

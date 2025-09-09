@@ -29,7 +29,7 @@ class Counter extends Model
     {
         return $this->hasMany(Spending::class);
     }
-    public function paymentes()
+    public function payments()
     {
         return $this->hasMany(Payment::class);
     }
