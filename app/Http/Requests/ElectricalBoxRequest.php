@@ -25,14 +25,15 @@ class ElectricalBoxRequest extends FormRequest
         $boxId = $this->route('id');
         return [
             'number' => [
-                'required|integer',
+                'required',
+                'string',
                 Rule::unique('electrical_boxes')->ignore($boxId)
             ],
             'capacity' => 'required|integer|min:1',
             'location'=>'required|string|max:500',
             'maps'=>'array',
-            'maps.x'=>'numeric|integer',
-            'maps.y'=>'numeric|integer',
+            'maps.x'=>'numeric|required',
+            'maps.y'=>'numeric|required',
             'area_id'=>'nullable|exists:areas,id'
         ];
     }
