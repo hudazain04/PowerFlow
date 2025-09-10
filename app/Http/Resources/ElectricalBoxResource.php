@@ -24,7 +24,14 @@ class ElectricalBoxResource extends JsonResource
                 'x'=>$this->latitude,
                 'y'=>$this->longitude,
             ],
-//            'counters_count'=>$this->counters
+            'areas' => $this->whenLoaded('areas', function () {
+                return $this->areas->map(function ($area) {
+                    return [
+                        'id' => $area->id,
+                        'name' => $area->name,
+                    ];
+                });
+            }),
         ];
     }
 }

@@ -78,4 +78,10 @@ class ElectricalBoxController extends Controller
         return ApiResponses::success(null,'success',ApiCode::OK);
     }
 
+    public function show($id)
+    {
+        $box = $this->service->getBoxWithArea($id);
+        return ApiResponses::success(ElectricalBoxResource::make($box), __('box.show'), ApiCode::OK);
+    }
+
 }

@@ -4,6 +4,7 @@ namespace App\Repositories\Eloquent\Admin;
 use App\Models\ElectricalBox as ElectricalBoxModel;
 use App\Repositories\interfaces\Admin\ElectricalBoxRepositoryInterface;
 use Illuminate\Support\Facades\DB;
+use Mockery\Exception;
 
 class ElectricalBoxRepository implements ElectricalBoxRepositoryInterface
 {
@@ -154,5 +155,16 @@ class ElectricalBoxRepository implements ElectricalBoxRepositoryInterface
     public function update(int $id, array $data)
     {
         // TODO: Implement update() method.
+    }
+
+    public function getBoxWithArea($id)
+    {
+        $box = ElectricalBoxModel::with('areas')->find($id);
+
+        if (!$box) {
+            throw new Exception(__('box.notFound'));
+        }
+
+        return $box;
     }
 }

@@ -107,4 +107,9 @@ class ElectricalBoxService
          DB::table('area__boxes')->where('box_id', $boxId)->delete();
          DB::table('counter__boxes')->where('box_id', $boxId)->delete();
     }
+
+    public function getBoxWithArea($id)
+    {
+        return $this->boxRepo->getBoxWithArea($id);
+    }
 }

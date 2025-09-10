@@ -151,6 +151,7 @@ use App\Http\Controllers\User\UserAppController;
             Route::put('/box/update/{id}', [ElectricalBoxController::class, 'update'])
                 ->middleware('permission:UPDATE_BOXES');
 
+            Route::get('showBoxes/{id}', [ElectricalBoxController::class, 'show']);
             // Counter management
             Route::post('/counters', [CounterBoxController::class, 'create'])
                 ->middleware('permission:CREATE_COUNTERS');
