@@ -131,6 +131,8 @@ use App\Http\Controllers\User\UserAppController;
             // Box assignment to areas
             Route::post('/areas/{area_id}/boxes', [AreaBoxController::class, 'assignBox'])
                 ->middleware('permission:ASSIGN_BOXES_TO_AREAS');
+            Route::get('/areas/{area_id}/boxes/available', [AreaBoxController::class, 'getAvailableBoxes'])
+                ->middleware('permission:VIEW_AREA_BOXES');
             Route::delete('/areas/{area}/boxes/{box}', [AreaBoxController::class, 'removeBoxFromArea'])
                 ->middleware('permission:REMOVE_BOXES_FROM_AREAS');
             Route::get('/areas/{area_id}/boxes', [AreaBoxController::class, 'getAreaBoxes'])
@@ -141,7 +143,7 @@ use App\Http\Controllers\User\UserAppController;
                 ->middleware('permission:CREATE_BOXES');
             Route::get('/boxes/{id}', [ElectricalBoxController::class, 'get'])
                 ->middleware('permission:VIEW_BOXES');
-            Route::delete('/boxes/{id}', [ElectricalBoxController::class, 'destroy'])
+            Route::delete('/boxes', [ElectricalBoxController::class, 'destroy'])
                 ->middleware('permission:DELETE_BOXES');
             Route::put('/box/update/{id}', [ElectricalBoxController::class, 'update'])
                 ->middleware('permission:UPDATE_BOXES');
