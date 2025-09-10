@@ -25,7 +25,7 @@ class AreaRequest extends FormRequest
 //            'generator_id'=>'required|integer',
             'neighborhood_id'=>'required|integer',
             'name' => 'required|string|max:255',
-            'box_id'=>'nullable|exists:electrical_boxes,id|array'
+            'box_id'=>'nullable|array|exists:electrical_boxes,id|array'
         ];
     }
 }

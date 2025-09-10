@@ -110,7 +110,7 @@ class ElectricalBoxRepository implements ElectricalBoxRepositoryInterface
             $box->update([
                 'location' => $data['location'],
                 'maps' => $data['maps'],
-                'number' => $data['number'],
+//                'number' => $data['number'],
                 'capacity' => $data['capacity'],
 
             ]);

@@ -56,22 +56,32 @@ class CounterBoxRepository implements CounterBoxRepositoryInterface
     }
     public function create(array $data)
     {
-        return DB::transaction(function ()use($data){
-     $counter=Counter::create([
-            'number' => $data['number'],
-            'QRCode' => $data['QRCode'],
-            'user_id' => $data['user_id'],
-            'generator_id' => $data['generator_id'],
-            'current_spending' => $data['current_spending']
-        ]);
+//        return DB::transaction(function () use ($data) {
+//            $counter = Counter::create([
+//                'QRCode' => $data['QRCode'],
+//                'user_id' => $data['user_id'],
+//                'generator_id' => $data['generator_id'],
+//                'current_spending' => $data['current_spending'],
+//                'box_id' => $data['box_id'] ?? null
+//            ]);
+//
+//            if (array_key_exists('box_id', $data) && !is_null($data['box_id'])) {
+//                $this->assignCounterToBox($counter->id, $data['box_id']);
+//            }
+//
+//            return $counter;
+//        });
+        return DB::transaction(function () use ($data) {
+            $counter = Counter::create([
+                'number' => $data['number'],
+                'QRCode' => $data['QRCode'],
+                'user_id' => $data['user_id'],
+                'generator_id' => $data['generator_id'],
+                'current_spending' => $data['current_spending']
+            ]);
 
-
-            if (array_key_exists('box_id', $data) && !is_null($data['box_id'])) {
-                $this->assignCounterToBox($counter->id, $data['box_id']);
-            }
-
-
-        return $counter;
+            // Note: We removed the box assignment here since it's now handled in the service
+            return $counter;
         });
     }
     public function update($id, array $data)
