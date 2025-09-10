@@ -122,7 +122,7 @@ use App\Http\Controllers\User\UserAppController;
                 ->middleware('permission:CREATE_AREAS');
             Route::get('getAreas', [AreaController::class, 'index'])
                 ->middleware('permission:VIEW_AREAS');
-            Route::put('update/{id}', [AreaController::class, 'update'])
+            Route::put('area/update/{id}', [AreaController::class, 'update'])
                 ->middleware('permission:UPDATE_AREAS');
             Route::delete('delete/{id}', [AreaController::class, 'destroy'])
                 ->middleware('permission:DELETE_AREAS');
@@ -131,6 +131,8 @@ use App\Http\Controllers\User\UserAppController;
             // Box assignment to areas
             Route::post('/areas/{area_id}/boxes', [AreaBoxController::class, 'assignBox'])
                 ->middleware('permission:ASSIGN_BOXES_TO_AREAS');
+            Route::get('/areas/{area_id}/boxes/available', [AreaBoxController::class, 'getAvailableBoxes'])
+                ->middleware('permission:VIEW_AREA_BOXES');
             Route::delete('/areas/{area}/boxes/{box}', [AreaBoxController::class, 'removeBoxFromArea'])
                 ->middleware('permission:REMOVE_BOXES_FROM_AREAS');
             Route::get('/areas/{area_id}/boxes', [AreaBoxController::class, 'getAreaBoxes'])

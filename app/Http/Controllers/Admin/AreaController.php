@@ -7,6 +7,7 @@ use App\ApiHelper\ApiResponses;
 use App\DTOs\AreaDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AreaRequest;
+use App\Http\Resources\AreaResource;
 use App\Models\PowerGenerator;
 use App\Services\Admin\AreaService;
 use App\Services\Admin\CounterService;
@@ -24,7 +25,7 @@ class AreaController extends Controller
 
         $area = $this->service->createArea($dto);
 
-        return ApiResponses::success($area,'success',ApiCode::OK);
+        return ApiResponses::success(AreaResource::make($area),__('area.create'),ApiCode::OK);
     }
     public function update(AreaRequest $request,int $id){
         $area=$this->service->updateArea($request->validated(),$id);
@@ -36,7 +37,7 @@ class AreaController extends Controller
     {
         $generatorId = auth()->user()->powerGenerator->id;
         $areas = $this->service->getGeneratorAreas($generatorId);
-        return  ApiResponses::success($areas,'success',ApiCode::OK);
+        return  ApiResponses::success(AreaResource::collection($areas),__('messages.success'),ApiCode::OK);
     }
     public function getAreas(int $generator_id){
         $areas=$this->service->getAreas($generator_id);

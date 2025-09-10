@@ -2,6 +2,8 @@
 
 namespace App\Services\Admin;
 
+use App\ApiHelper\ApiCode;
+use App\Exceptions\ErrorException;
 use App\Repositories\Eloquent\Admin\AreaBoxRepository;
 use App\Repositories\Eloquent\Admin\ElectricalBoxRepository;
 use Illuminate\Support\Facades\DB;
@@ -22,7 +24,7 @@ class AreaBoxService
             ->exists();
 
         if ($existing) {
-            throw new \Exception('Box is already assigned to another area');
+            throw new ErrorException(__('box.boxISAssigned'),ApiCode::BAD_REQUEST);
         }
 
         return $this->areaBoxRepo->assignBoxToArea($area_id, $box_id);
@@ -37,7 +39,7 @@ class AreaBoxService
             ->exists();
 
         if (!$assigned) {
-            throw new \Exception('Box is not currently assigned to this area');
+            throw new ErrorException(__('box.boxIsNotAssignedToThis'),ApiCode::BAD_REQUEST);
         }
 
         return $this->areaBoxRepo->removeBoxFromArea($area_id, $box_id);

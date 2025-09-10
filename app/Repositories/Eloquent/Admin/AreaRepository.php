@@ -96,4 +96,9 @@ class AreaRepository implements AreaRepositoryInterface
     }
 
 
+    public function getRelations(Area $area, array $relations = []): Area
+    {
+        $area=$area->load($relations);
+        return $area;
+    }
 }
