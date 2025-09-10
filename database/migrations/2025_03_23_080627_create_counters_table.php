@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('counters', function (Blueprint $table) {
             $table->id();
-            $table->integer('number');
+            $table->string('number');
             $table->string('QRCode');
             $table->integer('current_spending');
             $table->enum('spendingType',array_values((new ReflectionClass(\App\Types\SpendingTypes::class))->getConstants()));

@@ -41,9 +41,9 @@ class ElectricalBoxService
     public function updateBox($id, array $data)
     {
         // Check if number already exists (excluding current box)
-        if (ElectricalBox::where('number', $data['number'])->where('id', '!=', $id)->exists()) {
-            throw new ErrorException(__('box.boxExist'),ApiCode::BAD_REQUEST);
-        }
+//        if (ElectricalBox::where('number', $data['number'])->where('id', '!=', $id)->exists()) {
+//            throw new ErrorException(__('box.boxExist'),ApiCode::BAD_REQUEST);
+//        }
 
         return $this->boxRepo->updateBox($id, $data);
     }

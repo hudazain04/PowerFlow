@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('electrical_boxes', function (Blueprint $table) {
             $table->id();
-            $table->integer('number');
+            $table->string('number');
             $table->string('location');
             $table->float('latitude');
             $table->float('longitude');

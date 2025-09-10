@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\ApiHelper\GenerateCounterNumber;
 use App\ApiHelper\HasFeatureLimit;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,7 +17,8 @@ class Counter extends Model
         'QRCode',
         'current_spending',
         'user_id',
-        'generator_id'
+        'generator_id',
+        'status'
     ];
 
     public string $featureKey = 'counters_count';
