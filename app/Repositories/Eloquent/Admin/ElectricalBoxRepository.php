@@ -84,7 +84,9 @@ class ElectricalBoxRepository implements ElectricalBoxRepositoryInterface
 
     public function get(int $generator_id)
     {
-        return ElectricalBoxModel::where('generator_id',$generator_id)->get();
+        $box=ElectricalBoxModel::where('generator_id',$generator_id)->get();
+        $box_count=$box->count();
+        return  ['boxes'=>$box,'total_count'=>$box_count];
     }
 
     public function updateBox($id, array $data)

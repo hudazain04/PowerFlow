@@ -25,12 +25,26 @@ class CounterRepository implements CounterRepositoryInterface
     {
         return $this->model->find($id);
     }
-    public function get(){
-        $generator=auth()->user()->powerGenerator->id;
-        $counters=Counter::where('generator_id',$generator)->get();
-        if(! $counters){
-            throw new Exception('no counters for this id');
+    public function get($statuses = null){
+        $generator = auth()->user()->powerGenerator->id;
+
+        $query = Counter::where('generator_id', $generator);
+
+        if ($statuses) {
+            $statusArray = is_array($statuses) ? $statuses : explode(',', $statuses);
+            $validStatuses = array_intersect($statusArray, self::$CounterTypes);
+
+            if (!empty($validStatuses)) {
+                $query->whereIn('status', $validStatuses);
+            }
         }
+
+        $counters = $query->get();
+
+        if ($counters->isEmpty()) {
+            throw new Exception('No counters found' . ($statuses ? " with the specified status(es)" : ''));
+        }
+
         return $counters;
     }
 
