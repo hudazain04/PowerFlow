@@ -89,6 +89,7 @@ class UserRepository implements UserRepositoryInterface
 
     public function getRelations(User $user, array $relations): User
     {
-        // TODO: Implement getRelations() method.
+        $user=$user->load($relations);
+        return $user;
     }
 }
