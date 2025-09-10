@@ -2,6 +2,8 @@
 
 namespace App\Services\Admin;
 
+use App\ApiHelper\ApiCode;
+use App\Exceptions\ErrorException;
 use App\Repositories\Eloquent\Admin\CounterBoxRepository;
 use App\Repositories\interfaces\Admin\CounterBoxRepositoryInterface;
 use Illuminate\Support\Facades\DB;
@@ -39,7 +41,7 @@ class CounterBoxService
             $generator = auth()->user()->powerGenerator->id;
 
             if (!$generator) {
-                throw new \Exception('Authenticated user is not associated with a power generator');
+                throw new ErrorException(__('powerGenerator.noGeneratorForUser'),ApiCode::BAD_REQUEST);
             }
 
             $qrCodeData = [
@@ -60,10 +62,7 @@ class CounterBoxService
                 'box_id' => $data['box_id'] ?? null
             ]);
 
-            return [
-                'counter' => $counter,
-                'qr_code_url' => $qrCode['url']
-            ];
+            return $counter;
         });
     }
     public function updateCounter($id, array $data)
@@ -87,15 +86,12 @@ class CounterBoxService
                 ];
 
                 $qrCode = $this->generateQRCode($qrCodeData);
-                $data['QRCode'] = $qrCode['content'];
+                $data['QRCode'] = asset($qrCode['url']);
+
             }
 
             $updatedCounter = $this->repository->update($id,$data);
-
-            return [
-                'counter' => $updatedCounter,
-                'qr_code_url' => $qrCode['url'] ?? null
-            ];
+            return $updatedCounter;
         });
     }
     public function deleteCounter($id)

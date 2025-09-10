@@ -72,4 +72,22 @@ class EmployeeRepository implements EmployeeRepositoryInterface
      return true;
 
     }
+    public function getPermissions($id)
+    {
+
+        $employee = Employee::where('id', $id)->first();
+
+        if (!$employee) {
+            throw new \Exception("Employee not found");
+        }
+        $permissions = $employee->getAllPermissions();
+
+        return $permissions;
+
+    }
+
+    public function updateRole(Employee $employee , string $role) : void
+    {
+        $employee->syncRoles([$role]);
+    }
 }

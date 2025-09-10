@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\ApiHelper\ApiCode;
 use App\ApiHelper\ApiResponses;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CounterResource;
 use App\Models\Counter;
 use App\Services\Admin\CounterService;
 use Illuminate\Http\Request;
@@ -23,7 +24,7 @@ class CounterController extends Controller
     }
     public function get(Request $request){
         $counters=$this->service->get($request);
-        return ApiResponses::success($counters,'counters for generator',ApiCode::OK);
+        return ApiResponses::success(CounterResource::collection($counters),__('messages.success'),ApiCode::OK);
     }
 
 }

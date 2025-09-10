@@ -211,6 +211,9 @@ class PermissionSeeder extends Seeder
                 'VIEW_POWER_GENERATORS',
             ],
             'Spendings'=>[
+                'CREATE_SPENDING',
+                'UPDATE_SPENDING',
+                'DELETE_SPENDING',
               'GET_SPENDINGS',
             ],
         ];

@@ -29,7 +29,7 @@ class AreaController extends Controller
     }
     public function update(AreaRequest $request,int $id){
         $area=$this->service->updateArea($request->validated(),$id);
-        return ApiResponses::success($area,'updates successfully',ApiCode::OK);
+        return ApiResponses::success(AreaResource::make($area),__('area.update'),ApiCode::OK);
     }
 
 

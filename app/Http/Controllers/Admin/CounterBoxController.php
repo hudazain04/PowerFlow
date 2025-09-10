@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CounterBoxRequest;
 use App\Http\Requests\CounterRequest;
 use App\Http\Requests\counterUpdateRequest;
+use App\Http\Resources\CounterResource;
 use App\Repositories\Eloquent\Admin\CounterBoxRepository;
 use App\Services\Admin\CounterBoxService;
 use Illuminate\Http\Request;
@@ -24,18 +25,19 @@ class CounterBoxController extends Controller
     }
     public function create(CounterRequest $request){
         $result = $this->service->createCounter($request->validated());
-        return ApiResponses::success($result, 'Counter created', ApiCode::OK);
+        return ApiResponses::success(CounterResource::make($result), __('counter.create'), ApiCode::OK);
+
     }
     public function update(counterUpdateRequest $request, $id)
     {
         $result = $this->service->updateCounter($id, $request->validated());
-        return ApiResponses::success($result, 'Counter updated', ApiCode::OK);
+        return ApiResponses::success(CounterResource::make($result), __('counter.update'), ApiCode::OK);
     }
     public function destroy(Request $request, $id = null)
     {
         if ($id) {
             $this->service->deleteCounter($id);
-            return ApiResponses::success(null, 'Counter deleted successfully', ApiCode::OK);
+            return ApiResponses::success(null, __('counter.delete'), ApiCode::OK);
         }
 
         if ($request->has('ids')) {

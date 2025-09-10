@@ -42,7 +42,7 @@ class ElectricalBoxService
     {
         // Check if number already exists (excluding current box)
         if (ElectricalBox::where('number', $data['number'])->where('id', '!=', $id)->exists()) {
-            throw new \Exception('Box number already exists');
+            throw new ErrorException(__('box.boxExist'),ApiCode::BAD_REQUEST);
         }
 
         return $this->boxRepo->updateBox($id, $data);
@@ -53,7 +53,7 @@ class ElectricalBoxService
             $generatorId = auth()->user()->powerGenerator->id;
 
             if (empty($ids)) {
-                throw new \Exception('No boxes specified for deletion');
+                throw new ErrorException(__('box.noBoxForDelete'),ApiCode::BAD_REQUEST);
             }
 
             // Verify all boxes belong to this generator
@@ -63,7 +63,7 @@ class ElectricalBoxService
                 ->pluck('id');
 
             if ($invalidIds->isNotEmpty()) {
-                throw new \Exception('Cannot delete boxes that do not belong to your generator');
+                throw new ErrorException(__('box.canNotDeleteBox'),ApiCode::BAD_REQUEST);
             }
 
             // Remove relations for all boxes
