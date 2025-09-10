@@ -43,10 +43,10 @@ class CounterBoxController extends Controller
         if ($request->has('ids')) {
             $ids = $request->input('ids');
             $this->service->deleteMultipleCounters($ids);
-            return ApiResponses::success(null, 'Counters deleted successfully', ApiCode::OK);
+            return ApiResponses::success(null, __('counter.delete'), ApiCode::OK);
         }
 
-        return ApiResponses::error('No counter IDs provided for deletion', ApiCode::BAD_REQUEST);
+        return ApiResponses::error(__('counter.noCountersToDelete'), ApiCode::BAD_REQUEST);
     }
 
 

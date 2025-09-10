@@ -73,7 +73,7 @@ class CounterBoxService
             $generator = auth()->user()->powerGenerator;
 
             if (!$generator) {
-                throw new \Exception('Authenticated user is not associated with a power generator');
+                throw new ErrorException(__('powerGenerator.noGeneratorForUser'),ApiCode::BAD_REQUEST);
             }
             if (isset($data['number']) && $data['number'] !== $counter->number) {
                 $generator = auth()->user()->powerGenerator->id;
