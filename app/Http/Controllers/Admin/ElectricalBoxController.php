@@ -41,10 +41,10 @@ class ElectricalBoxController extends Controller
     }
     public function get(int $generator_id){
         $Boxes=$this->service->get($generator_id);
-        return ApiResponses::success( [
-            'boxes' => ElectricalBoxResource::collection($Boxes['boxes']),
-            'total_count' => $Boxes['total_count']
-        ],'total boxes',ApiCode::OK);
+        return ApiResponses::success(
+             ElectricalBoxResource::collection($Boxes),'total boxes'
+
+             ,ApiCode::OK);
     }
     public function update(int $id,ElectricalBoxRequest $request){
         $box = $this->service->updateBox($id, $request->validated());

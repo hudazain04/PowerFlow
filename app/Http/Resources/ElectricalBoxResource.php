@@ -23,6 +23,7 @@ class ElectricalBoxResource extends JsonResource
                 'x'=>$this->latitude,
                 'y'=>$this->longitude,
             ],
+//            'counters_count'=>$this->counters
         ];
     }
 }
