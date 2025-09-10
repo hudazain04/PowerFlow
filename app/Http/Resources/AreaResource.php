@@ -17,7 +17,7 @@ class AreaResource extends JsonResource
         return [
           'id'=>$this->id,
           'name'=>$this->name,
-            'neighborhood'=>$this->neighborhood->name,
+            'neighborhoodName'=>$this->neighborhood->name,
         ];
     }
 }

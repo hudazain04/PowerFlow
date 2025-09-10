@@ -7,6 +7,7 @@ use App\ApiHelper\ApiResponses;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
+use App\Http\Resources\EmployeeResource;
 use App\Models\Employee;
 use App\Services\Admin\EmployeeService;
 use Illuminate\Http\Request;
@@ -17,17 +18,17 @@ class EmployeeController extends Controller
     public function __construct(private EmployeeService $service){ }
     public function create(EmployeeRequest $request){
         $emp=$this->service->create(array_merge($request->validated(),['generator_id'=>$request->user()->id]));
-        return ApiResponses::success($emp,'success',ApiCode::OK);
+        return ApiResponses::success(EmployeeResource::make($emp),__('employee.create'),ApiCode::OK);
     }
     public function update(UpdateEmployeeRequest $request,int $id)
     {
         $employee = $this->service->update($id, $request->validated());
-        return ApiResponses::success($employee, 'Employee updated successfully', ApiCode::OK);
+        return ApiResponses::success(null, __('employee.update'), ApiCode::OK);
     }
     public function delete(Request $request,int $id= null){
         if($id){
             $employee=$this->service->delete($id);
-            return ApiResponses::success(null,'success',ApiCode::OK);
+            return ApiResponses::success(null,__('employee.delete'),ApiCode::OK);
         }
         if ($request->has('ids')){
             $ids=$request->input('ids');
@@ -35,20 +36,20 @@ class EmployeeController extends Controller
             return ApiResponses::success(null,'success',ApiCode::OK);
         }
 
-        return ApiResponses::error('No employee IDs provided for deletion', ApiCode::BAD_REQUEST);
+        return ApiResponses::error(__('employee.noEmployeeIds'), ApiCode::BAD_REQUEST);
 
     }
     public function getEmployees(int $id){
         $emp=$this->service->getEmployees($id);
-        return ApiResponses::success($emp,'success',ApiCode::OK);
+        return ApiResponses::success(EmployeeResource::collection($emp),__('messages.success'),ApiCode::OK);
     }
     public function getEmployee(int $id){
         $emp=$this->service->getEmployee($id);
-        return ApiResponses::success($emp,'success',ApiCode::OK);
+        return ApiResponses::success(EmployeeResource::make($emp),__('messages.success'),ApiCode::OK);
     }
     public function getEmp(int $generator_id){
         $emp=$this->service->getEmp($generator_id);
-        return ApiResponses::success($emp,"success",ApiCode::OK);
+        return ApiResponses::success(EmployeeResource::make($emp),__('messages.success'),ApiCode::OK);
     }
     public function assignPermissions(Request $request, $id)
     {

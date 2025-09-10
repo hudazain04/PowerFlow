@@ -73,7 +73,7 @@ class PlanRepository implements PlanRepositoryInterface
 
     }
 
-    public function getFeaturesByKey(PlanModel $plan, array $where = []): Feature
+    public function getFeaturesByKey(PlanModel $plan, array $where = []): ?Feature
     {
         $features = $plan->features()
             ->when($where, function ($query) use ($where) {

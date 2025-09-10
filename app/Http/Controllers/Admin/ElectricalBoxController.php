@@ -26,7 +26,7 @@ class ElectricalBoxController extends Controller
         $dto=ElectricalBoxDTO::fromRequest($request);
         $dto->generator_id=$request->user()->powerGenerator->id;
         $box = $this->service->createBox($dto->toArray());
-        return ApiResponses::success(ElectricalBoxResource::make($box),'success',ApiCode::OK);
+        return ApiResponses::success(ElectricalBoxResource::make($box),__('box.create'),ApiCode::OK);
     }
     public function getGeneratorAreas()
     {
@@ -48,7 +48,7 @@ class ElectricalBoxController extends Controller
     }
     public function update(int $id,ElectricalBoxRequest $request){
         $box = $this->service->updateBox($id, $request->validated());
-        return ApiResponses::success($box, 'Box updated successfully', ApiCode::OK);
+        return ApiResponses::success(ElectricalBoxResource::make($box), __('box.update'), ApiCode::OK);
     }
 //    public function destroy($id)
 //    {
@@ -68,7 +68,7 @@ class ElectricalBoxController extends Controller
 
       $this->service->deleteBoxes($ids);
 
-        return ApiResponses::success(null,'success',ApiCode::OK);
+        return ApiResponses::success(null,__('box.delete'),ApiCode::OK);
     }
 
     public function bulkDestroy(BulkDeleteRequest $request)

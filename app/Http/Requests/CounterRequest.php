@@ -23,7 +23,7 @@ class CounterRequest extends FormRequest
     {
 
         return [
-            'number' => 'required',
+            'number' => 'required|string',
             'user_id' => 'required',
             'box_id' => 'nullable|exists:electrical_boxes,id',
 //            'generator_id'=>$generator

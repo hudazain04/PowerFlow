@@ -9,6 +9,8 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 use Mockery\Exception;
 use Mockery\Expectation;
+use Illuminate\Database\Eloquent\Collection;
+
 
 class CounterRepository implements CounterRepositoryInterface
 {
@@ -28,38 +30,6 @@ class CounterRepository implements CounterRepositoryInterface
 
 
 
-//    public function get($statuses = null)
-//    {
-//        $generator = auth()->user()->powerGenerator->id;
-//
-//        $query = Counter::where('generator_id', $generator);
-//
-//        if ($statuses) {
-//            $statusArray = is_array($statuses) ? $statuses : explode(',', $statuses);
-//            $validStatuses = array_intersect($statusArray, self::$CounterTypes);
-//
-//            if (!empty($validStatuses)) {
-//                $query->whereIn('status', $validStatuses);
-//            }
-//        }
-//    }
-
-    public function get(?array $filters=[]){
-        $generator=auth()->user()->powerGenerator->id;
-        $counters=Counter::where('generator_id',$generator)->filter($filters)->get();
-        if(! $counters){
-            throw new Exception('no counters for this id');
-
-        }
-
-        $counters = $query->get();
-
-        if ($counters->isEmpty()) {
-            throw new Exception('No counters found' . ($statuses ? " with the specified status(es)" : ''));
-        }
-
-        return $counters;
-    }
 
     public function update(int $id, array $data): bool
     {
@@ -123,4 +93,12 @@ class CounterRepository implements CounterRepositoryInterface
         return $counter;
     }
 
+    public function get($generator_id,?array $filters = []): Collection
+    {
+        $counters=Counter::where('generator_id',$generator_id)->filter($filters)->get();
+        if(! $counters){
+            throw new Exception('no counters for this id');
+        }
+        return $counters;
+    }
 }

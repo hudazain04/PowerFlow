@@ -6,6 +6,7 @@ use App\ApiHelper\ApiCode;
 use App\ApiHelper\ApiResponses;
 use App\Models\Employee;
 use App\Repositories\interfaces\Admin\EmployeeRepositoryInterface;
+use App\Types\UserTypes;
 
 class EmployeeService
 
@@ -15,6 +16,7 @@ class EmployeeService
     public function create(array $data){
 
         $emp=$this->repository->create($data);
+        $this->repository->updateRole($emp,UserTypes::EMPLOYEE);
         return $emp;
     }
     public function update(int $id,array $data){
