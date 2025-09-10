@@ -12,4 +12,6 @@ interface AreaRepositoryInterface
     public function getAreas(int $generator_id);
 
     public function getRelations(Area $area, array $relations=[]) :  Area;
+
+    public function find(int $area_id) : Area;
 }

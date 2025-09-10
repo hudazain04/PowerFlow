@@ -120,6 +120,8 @@ use App\Http\Controllers\User\UserAppController;
             // Areas
             Route::post('areas', [AreaController::class, 'store'])
                 ->middleware('permission:CREATE_AREAS');
+            Route::get('getArea/{id}',[AreaController::class,'getArea'])
+                ->middleware('permission:VIEW_AREA');
             Route::get('getAreas', [AreaController::class, 'index'])
                 ->middleware('permission:VIEW_AREAS');
             Route::put('update/{id}', [AreaController::class, 'update'])
@@ -137,6 +139,7 @@ use App\Http\Controllers\User\UserAppController;
                 ->middleware('permission:REMOVE_BOXES_FROM_AREAS');
             Route::get('/areas/{area_id}/boxes', [AreaBoxController::class, 'getAreaBoxes'])
                 ->middleware('permission:VIEW_AREA_BOXES');
+
 
             // Box management
             Route::post('/boxes', [ElectricalBoxController::class, 'store'])

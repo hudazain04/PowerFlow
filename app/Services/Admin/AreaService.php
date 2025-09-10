@@ -2,8 +2,10 @@
 
 namespace App\Services\Admin;
 
+use App\ApiHelper\ApiCode;
 use App\DTOs\AreaDTO;
 use App\DTOs\AssignBoxToAreaDTO;
+use App\Exceptions\ErrorException;
 use App\Exceptions\GeneralException;
 use App\Models\Area;
 use App\Repositories\interfaces\Admin\AreaRepositoryInterface;
@@ -35,6 +37,16 @@ class AreaService
 
          return $area;
 
+    }
+
+    public function getArea(int $area_id)
+    {
+        $area=$this->repository->find($area_id);
+        if (!$area)
+        {
+            throw  new ErrorException(__('area.notFound'),ApiCode::NOT_FOUND);
+        }
+        return $area;
     }
     public function deleteAreas(array $ids)
     {

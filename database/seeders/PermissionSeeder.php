@@ -72,6 +72,7 @@ class PermissionSeeder extends Seeder
                 'VIEW_AREAS',
                 'UPDATE_AREAS',
                 'DELETE_AREAS',
+                'VIEW_AREA',
             ],
 
             'Boxes' => [
@@ -234,7 +235,7 @@ class PermissionSeeder extends Seeder
             $userRole = Role::firstOrCreate(['name' => 'user', 'guard_name' => $guard]);
             $superAdminRole->givePermissionTo(Permission::where('guard_name', $guard)->get());
             $adminPermissions = [
-                'CREATE_AREAS', 'VIEW_AREAS', 'UPDATE_AREAS', 'DELETE_AREAS',
+                'CREATE_AREAS', 'VIEW_AREAS','VIEW_AREA' ,'UPDATE_AREAS', 'DELETE_AREAS',
                 'CREATE_BOXES', 'VIEW_BOXES', 'UPDATE_BOXES', 'DELETE_BOXES',
                 'ASSIGN_BOXES_TO_AREAS', 'REMOVE_BOXES_FROM_AREAS', 'VIEW_AREA_BOXES',
                 'CREATE_COUNTERS', 'VIEW_COUNTERS', 'UPDATE_COUNTERS', 'DELETE_COUNTERS',

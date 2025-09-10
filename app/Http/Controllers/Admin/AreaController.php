@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\ApiHelper\ApiCode;
+use App\ApiHelper\ApiResponse;
 use App\ApiHelper\ApiResponses;
 use App\DTOs\AreaDTO;
 use App\Http\Controllers\Controller;
@@ -16,6 +17,7 @@ use App\Services\Admin\ElectricalBoxService;
 
 class AreaController extends Controller
 {
+    use ApiResponse;
     public function __construct(private AreaService $service
     ,private ElectricalBoxService $boxService,
     private CounterService $counterService) {}
@@ -31,6 +33,13 @@ class AreaController extends Controller
     public function update(AreaRequest $request,int $id){
         $area=$this->service->updateArea($request->validated(),$id);
         return ApiResponses::success(AreaResource::make($area),__('area.update'),ApiCode::OK);
+    }
+
+    public function getArea(int $area_id)
+    {
+        $area=$this->service->getArea($area_id);
+//        dd($area->electricalbox);
+        return $this->success(AreaResource::make($area),__('messages.success'));
     }
 
 

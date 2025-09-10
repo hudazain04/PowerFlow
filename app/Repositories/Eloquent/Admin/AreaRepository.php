@@ -107,4 +107,10 @@ class AreaRepository implements AreaRepositoryInterface
         $area=$area->load($relations);
         return $area;
     }
+
+    public function find(int $area_id): Area
+    {
+        $area=Area::find($area_id);
+        return $area;
+    }
 }

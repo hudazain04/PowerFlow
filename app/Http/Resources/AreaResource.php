@@ -18,6 +18,7 @@ class AreaResource extends JsonResource
           'id'=>$this->id,
           'name'=>$this->name,
             'neighborhoodName'=>$this->neighborhood->name,
+            'boxes'=>ElectricalBoxResource::collection($this->electricalbox),
         ];
     }
 }

@@ -22,7 +22,6 @@ trait GenerateBoxNumber
         $lastBox = ElectricalBox::where('generator_id', $this->generator_id)
             ->orderBy('id', 'desc')
             ->first();
-
         if ($lastBox && is_numeric(substr($lastBox->number, -3))) {
             $sequentialNumber = (int) substr($lastBox->number, -3) + 1;
         } else {

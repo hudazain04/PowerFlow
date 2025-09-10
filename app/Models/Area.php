@@ -26,7 +26,7 @@ class Area extends Model
 
     public function electricalbox()
     {
-        return $this->hasMany(ElectricalBox::class);
+        return $this->belongsToMany(ElectricalBox::class,'area__boxes','area_id','box_id');
     }
 
     public function neighborhood()
