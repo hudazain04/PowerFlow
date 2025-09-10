@@ -28,6 +28,6 @@ class CounterService
    }
    public function get(Request $request){
 
-        return $this->repository->get([ 'status' => $request->query('status')]);
+       return $this->repository->get([ 'status' => $request->query('status')]);
    }
 }
