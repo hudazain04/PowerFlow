@@ -96,9 +96,6 @@ class CounterRepository implements CounterRepositoryInterface
     public function get($generator_id,?array $filters = []): Collection
     {
         $counters=Counter::where('generator_id',$generator_id)->filter($filters)->get();
-        if(! $counters){
-            throw new Exception('no counters for this id');
-        }
         return $counters;
     }
 }
