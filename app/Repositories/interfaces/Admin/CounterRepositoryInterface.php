@@ -4,7 +4,7 @@ namespace App\Repositories\interfaces\Admin;
 
 use App\Models\Counter;
 use Illuminate\Database\Query\Builder;
-
+use Illuminate\Database\Eloquent\Collection;
 interface CounterRepositoryInterface
 {
     public function create(array $data): Counter;
@@ -25,5 +25,7 @@ interface CounterRepositoryInterface
     public function getWhere(array $wheres) : Counter;
 
     public function getRelations(Counter $counter,array $relations) : Counter;
+
+    public function get($generator_id,?array $filters=[]) : Collection;
 
 }

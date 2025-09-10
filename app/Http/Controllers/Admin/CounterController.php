@@ -19,7 +19,7 @@ class CounterController extends Controller
     public function index(int $generator_id)
     {
         $counters=$this->service->getCounters($generator_id);
-        return ApiResponses::success($counters,'counter for generator',ApiCode::OK);
+        return ApiResponses::success(CounterResource::collection($counters),'counter for generator',ApiCode::OK);
 
     }
     public function get(Request $request){

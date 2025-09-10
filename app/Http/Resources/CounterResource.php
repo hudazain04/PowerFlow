@@ -18,6 +18,7 @@ class CounterResource extends JsonResource
           'id'=>$this->id,
             'number'=>$this->number,
             'QRCode'=>$this->QRCode,
+            'status'=>$this->status,
             'current_spending'=>$this->current_spending,
         ];
     }

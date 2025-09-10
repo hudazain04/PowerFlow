@@ -27,7 +27,7 @@ class CounterService
 
    }
    public function get(Request $request){
-
-       return $this->repository->get([ 'status' => $request->query('status')]);
+       $generator=auth()->user()->powerGenerator->id;
+       return $this->repository->get($generator,[ 'status' => $request->query('status')]);
    }
 }
