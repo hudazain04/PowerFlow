@@ -97,11 +97,7 @@ use App\Http\Controllers\User\UserAppController;
             Route::get('findById/{id}', [PlanPriceController::class, 'findById']);
         });
 
-        Route::prefix('powerGenerator')->group(function () {
-            Route::get('getForPlan/{id}', [PowerGeneratorController::class, 'getForPlan']);
-            Route::get('getAll', [PowerGeneratorController::class, 'getAll']);
-            Route::get('getLastSubscription/{id}', [SubscriptionController::class, 'getLastSubscription']);
-        });
+
 
         Route::get('visitLandingPage', [SuperAdminStatisticsController::class, 'visitLandingPage']);
 
@@ -110,6 +106,15 @@ use App\Http\Controllers\User\UserAppController;
 
     // Protected routes
     Route::middleware(['auth:api', 'lang'])->group(function () {
+
+        Route::prefix('powerGenerator')->group(function () {
+            Route::get('getForPlan/{id}', [PowerGeneratorController::class, 'getForPlan'])
+                ->middleware('permission:VIEW_POWER_GENERATORS');
+            Route::get('getAll', [PowerGeneratorController::class, 'getAll'])
+                ->middleware('permission:VIEW_POWER_GENERATORS');
+            Route::get('getLastSubscription/{id}', [SubscriptionController::class, 'getLastSubscription'])
+                ->middleware('permission:VIEW_SUBSCRIPTIONS');
+        });
         // Generator management routes
         Route::prefix('generator')->group(function () {
             // Areas
@@ -380,8 +385,10 @@ use App\Http\Controllers\User\UserAppController;
         Route::get('stripe/cancel', [PaymentController::class, 'stripeCancel'])->name('stripe.cancel');
 
         Route::prefix('spendingPay')->middleware(['auth:api'])->group(function () {
-            Route::post('paySpending/{counter_id}',[SpendingPaymentController::class,'createStripeCheckout']);
-            Route::get('payCash/{counter_id}', [SpendingPaymentController::class, 'handleCashPayment']);
+            Route::post('paySpending/{counter_id}',[SpendingPaymentController::class,'createStripeCheckout'])
+                ->middleware('permission:PROCESS_STRIPE_SPENDING_PAYMENT');
+            Route::get('payCash/{counter_id}', [SpendingPaymentController::class, 'handleCashPayment'])
+                ->middleware('permission:PROCESS_CACHE_SPENDING_PAYMENT');
             Route::get('stripe/success', [SpendingPaymentController::class, 'stripeSuccess'])->name('spendingStripe.success');
             Route::get('stripe/cancel', [SpendingPaymentController::class, 'stripeCancel'])->name('spendingStripe.cancel');
 
@@ -389,10 +396,14 @@ use App\Http\Controllers\User\UserAppController;
         });
 
         Route::prefix('spending')->group(function () {
-            Route::post('create', [SpendingController::class,'create']);
-            Route::patch('update/{id}', [SpendingController::class,'update']);
-            Route::delete('delete/{id}', [SpendingController::class,'delete']);
-            Route::get('getAll/{counter_id}', [SpendingController::class,'getAll']);
+            Route::post('create', [SpendingController::class,'create'])
+                ->middleware('permission:CREATE_SPENDING');
+            Route::patch('update/{id}', [SpendingController::class,'update'])
+                ->middleware('permission:UPDATE_SPENDING');
+            Route::delete('delete/{id}', [SpendingController::class,'delete'])
+                ->middleware('permission:DELETE_SPENDING');
+            Route::get('getAll/{counter_id}', [SpendingController::class,'getAll'])
+                ->middleware('permission:GET_SPENDINGS');
 
         });
     });
