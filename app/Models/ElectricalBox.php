@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\ApiHelper\GenerateBoxNumber;
 use App\ApiHelper\HasFeatureLimit;
 use App\ApiHelper\Translatable;
 use Illuminate\Database\Eloquent\Model;
@@ -12,12 +13,12 @@ class ElectricalBox extends Model
 {
        use  HasFactory;
        use Translatable,HasFeatureLimit;
-
+    use GenerateBoxNumber;
     protected $fillable = [
         'location',
         'latitude',
         'longitude',
-        'number',
+
         'capacity',
         'generator_id'
     ];
