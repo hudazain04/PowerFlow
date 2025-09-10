@@ -7,6 +7,7 @@ use App\DTOs\AssignBoxToAreaDTO;
 use App\Exceptions\GeneralException;
 use App\Models\Area;
 use App\Repositories\interfaces\Admin\AreaRepositoryInterface;
+use Illuminate\Support\Facades\DB;
 
 class AreaService
 {
@@ -29,9 +30,43 @@ class AreaService
     }
     public function updateArea(array $data,int $id){
 
+
          $area=$this->repository->updateArea($data,$id);
 
          return $area;
+
+    }
+    public function deleteAreas(array $ids)
+    {
+        return DB::transaction(function () use ($ids) {
+            $generatorId = auth()->user()->powerGenerator->id;
+
+            if (empty($ids)) {
+                throw new \Exception('No areas specified for deletion');
+            }
+
+
+            $invalidIds = DB::table('areas')
+                ->whereIn('id', $ids)
+                ->where('generator_id', '!=', $generatorId)
+                ->pluck('id');
+
+            if ($invalidIds->isNotEmpty()) {
+                throw new \Exception('Cannot delete areas that do not belong to your generator');
+            }
+
+
+            foreach ($ids as $id) {
+                $this->removeAreaRelations($id);
+            }
+
+            // Delete all areas
+            return $this->repository->bulkDelete($ids);
+        });
+    }
+    private function removeAreaRelations($areaId)
+    {
+        DB::table('area__boxes')->where('area_id', $areaId)->delete();
 
     }
 

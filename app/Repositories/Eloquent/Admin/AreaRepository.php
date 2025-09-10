@@ -58,6 +58,12 @@ class AreaRepository implements AreaRepositoryInterface
         return $area;
 
     }
+
+    public function bulkDelete(array $ids)
+    {
+        return $this->model->whereIn('id', $ids)->delete();
+    }
+
     public function assignBoxToArea(int $area_id, int $box_id)
     {
         $boxExists = ElectricalBox::where('id', $box_id)->exists();

@@ -28,23 +28,38 @@ class CounterRepository implements CounterRepositoryInterface
 
 
 
-    public function get($statuses = null)
-    {
-        $generator = auth()->user()->powerGenerator->id;
+//    public function get($statuses = null)
+//    {
+//        $generator = auth()->user()->powerGenerator->id;
+//
+//        $query = Counter::where('generator_id', $generator);
+//
+//        if ($statuses) {
+//            $statusArray = is_array($statuses) ? $statuses : explode(',', $statuses);
+//            $validStatuses = array_intersect($statusArray, self::$CounterTypes);
+//
+//            if (!empty($validStatuses)) {
+//                $query->whereIn('status', $validStatuses);
+//            }
+//        }
+//    }
 
-        $query = Counter::where('generator_id', $generator);
+    public function get(?array $filters=[]){
+        $generator=auth()->user()->powerGenerator->id;
+        $counters=Counter::where('generator_id',$generator)->filter($filters)->get();
+        if(! $counters){
+            throw new Exception('no counters for this id');
 
-        if ($statuses) {
-            $statusArray = is_array($statuses) ? $statuses : explode(',', $statuses);
-            $validStatuses = array_intersect($statusArray, self::$CounterTypes);
-
-            if (!empty($validStatuses)) {
-                $query->whereIn('status', $validStatuses);
-            }
         }
+
+        $counters = $query->get();
+
+        if ($counters->isEmpty()) {
+            throw new Exception('No counters found' . ($statuses ? " with the specified status(es)" : ''));
+        }
+
+        return $counters;
     }
-
-
 
     public function update(int $id, array $data): bool
     {
@@ -58,7 +73,7 @@ class CounterRepository implements CounterRepositoryInterface
 
     public function getCounters(int  $generator_id,?array $filters=[])
     {
-        $counters=Counter::where('generator_id',$generator_id)->filter($filters)->count();
+        $counters=Counter::where('generator_id',$generator_id)->filter($filters)->get();
         return $counters;
 //        return DB::table('counters')
 //            ->join('counter__boxes', 'counters.id', '=', 'counter__boxes.counter_id')

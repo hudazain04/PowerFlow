@@ -124,7 +124,7 @@ use App\Http\Controllers\User\UserAppController;
                 ->middleware('permission:VIEW_AREAS');
             Route::put('update/{id}', [AreaController::class, 'update'])
                 ->middleware('permission:UPDATE_AREAS');
-            Route::delete('delete/{id}', [AreaController::class, 'destroy'])
+            Route::delete('delete', [AreaController::class, 'delete'])
                 ->middleware('permission:DELETE_AREAS');
 
 
@@ -171,7 +171,7 @@ use App\Http\Controllers\User\UserAppController;
                 ->middleware('permission:CREATE_EMPLOYEES');
             Route::put('/updateEmp/{id}', [EmployeeController::class, 'update'])
                 ->middleware('permission:UPDATE_EMPLOYEES');
-            Route::delete('deleteEmp/{id}', [EmployeeController::class, 'delete'])
+            Route::delete('deleteEmp', [EmployeeController::class, 'delete'])
                 ->middleware('permission:DELETE_EMPLOYEES');
             Route::get('/getEmps/{generator_id}', [EmployeeController::class, 'getEmployees'])
                 ->middleware('permission:VIEW_EMPLOYEES');

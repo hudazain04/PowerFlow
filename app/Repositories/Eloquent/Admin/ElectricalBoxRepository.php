@@ -50,7 +50,14 @@ class ElectricalBoxRepository implements ElectricalBoxRepositoryInterface
             ->withCount(['counters' => function($q) {
                 $q->whereNull('counter__boxes.removed_at');
             }])
-            ->havingRaw('counters_count < capacity')
+            ->where(function($query) {
+                $query->whereRaw('capacity > (
+                SELECT COUNT(*)
+                FROM counter__boxes
+                WHERE counter__boxes.box_id = electrical_boxes.id
+                AND counter__boxes.removed_at IS NULL
+            )');
+            })
             ->get();
     }
     public function createBox(array $data)

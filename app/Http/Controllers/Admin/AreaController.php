@@ -6,6 +6,7 @@ use App\ApiHelper\ApiCode;
 use App\ApiHelper\ApiResponses;
 use App\DTOs\AreaDTO;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AreaDeleteRequest;
 use App\Http\Requests\AreaRequest;
 use App\Http\Resources\AreaResource;
 use App\Models\PowerGenerator;
@@ -38,6 +39,19 @@ class AreaController extends Controller
         $generatorId = auth()->user()->powerGenerator->id;
         $areas = $this->service->getGeneratorAreas($generatorId);
         return  ApiResponses::success(AreaResource::collection($areas),__('messages.success'),ApiCode::OK);
+    }
+
+    public function delete(AreaDeleteRequest $request){
+        $ids = $request->input('ids', []);
+//        $id = $request->input('id');
+
+//        if ($id) {
+//            $ids = [$id];
+//        }
+
+        $this->service->deleteAreas($ids);
+
+        return ApiResponses::success(null, __('area delete success'), ApiCode::OK);
     }
     public function getAreas(int $generator_id){
         $areas=$this->service->getAreas($generator_id);
