@@ -18,6 +18,7 @@ class ElectricalBoxResource extends JsonResource
           'number'=>$this->number,
           'location'=>$this->location,
           'capacity'=>$this->capacity,
+            'counters_count' => $this->counters_count,
             'maps'=>[
                 'x'=>$this->latitude,
                 'y'=>$this->longitude,
