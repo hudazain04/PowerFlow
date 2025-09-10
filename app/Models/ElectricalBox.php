@@ -18,7 +18,7 @@ class ElectricalBox extends Model
         'location',
         'latitude',
         'longitude',
-
+          'number',
         'capacity',
         'generator_id'
     ];

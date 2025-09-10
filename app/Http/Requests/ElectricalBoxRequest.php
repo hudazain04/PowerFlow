@@ -34,7 +34,7 @@ class ElectricalBoxRequest extends FormRequest
             'maps'=>'array',
             'maps.x'=>'numeric|required',
             'maps.y'=>'numeric|required',
-            'area_id'=>'nullable|exists:areas,id'
+            'area_id'=>'nullable|integer|exists:areas,id'
         ];
     }
 }

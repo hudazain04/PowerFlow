@@ -14,6 +14,7 @@ class ElectricalBoxDTO extends SimpleDTO
     public  ?int $capacity;
     public ?float $latitude;
     public ?float $longitude;
+    public ?int $area_id;
 
     protected function defaults(): array
     {
@@ -24,6 +25,7 @@ class ElectricalBoxDTO extends SimpleDTO
     {
         return [
             'generator_id'=>new IntegerCast(),
+            'area_id'=>new IntegerCast(),
             'capacity'    => new IntegerCast(),
             'latitude'    => new FloatCast(),
             'longitude'   => new FloatCast(),

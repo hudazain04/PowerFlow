@@ -64,7 +64,20 @@ class ElectricalBoxRepository implements ElectricalBoxRepositoryInterface
     public function createBox(array $data)
     {
 
-        return ElectricalBoxModel::create($data);
+//        return ElectricalBoxModel::create($data);
+        return DB::transaction(function () use ( $data) {
+            $box = ElectricalBoxModel::create($data);
+
+
+            if (array_key_exists('area_id', $data)) {
+                if (!is_null($data['area_id'])) {
+                    $this->assignBoxToArea($data['area_id'], $box->id);
+                }
+            }
+
+            return $box;
+        });
+
 
     }
 
