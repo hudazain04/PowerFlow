@@ -23,9 +23,9 @@ class ElectricalBoxService
     public function createBox(array $data)
     {
 
-        if (ElectricalBox::where('number', $data['number'])->exists()) {
-            throw new ErrorException(__('box.boxExist'),ApiCode::BAD_REQUEST);
-        }
+//        if (ElectricalBox::where('number', $data['number'])->exists()) {
+//            throw new ErrorException(__('box.boxExist'),ApiCode::BAD_REQUEST);
+//        }
         return $this->boxRepo->createBox($data);
     }
     public function getBoxes(int $generator_id){

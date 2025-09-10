@@ -9,7 +9,7 @@ use WendellAdriel\ValidatedDTO\SimpleDTO;
 class ElectricalBoxDTO extends SimpleDTO
 {
     public  ?int $generator_id;
-    public  ?string $number;
+//    public  ?string $number;
     public  ?string $location;
     public  ?int $capacity;
     public ?float $latitude;
