@@ -25,7 +25,11 @@ class CounterRepository implements CounterRepositoryInterface
     {
         return $this->model->find($id);
     }
-    public function get($statuses = null){
+
+
+
+    public function get($statuses = null)
+    {
         $generator = auth()->user()->powerGenerator->id;
 
         $query = Counter::where('generator_id', $generator);
@@ -38,15 +42,9 @@ class CounterRepository implements CounterRepositoryInterface
                 $query->whereIn('status', $validStatuses);
             }
         }
-
-        $counters = $query->get();
-
-        if ($counters->isEmpty()) {
-            throw new Exception('No counters found' . ($statuses ? " with the specified status(es)" : ''));
-        }
-
-        return $counters;
     }
+
+
 
     public function update(int $id, array $data): bool
     {
@@ -58,14 +56,16 @@ class CounterRepository implements CounterRepositoryInterface
         return $this->model->delete($id);
     }
 
-    public function getCounters(int  $generator_id)
+    public function getCounters(int  $generator_id,?array $filters=[])
     {
-        return DB::table('counters')
-            ->join('counter__boxes', 'counters.id', '=', 'counter__boxes.counter_id')
-            ->join('area__boxes', 'counter__boxes.box_id', '=', 'area__boxes.box_id')
-            ->join('areas', 'area__boxes.area_id', '=', 'areas.id')
-            ->where('areas.generator_id', $generator_id)
-            ->count();
+        $counters=Counter::where('generator_id',$generator_id)->filter($filters)->count();
+        return $counters;
+//        return DB::table('counters')
+//            ->join('counter__boxes', 'counters.id', '=', 'counter__boxes.counter_id')
+//            ->join('area__boxes', 'counter__boxes.box_id', '=', 'area__boxes.box_id')
+//            ->join('areas', 'area__boxes.area_id', '=', 'areas.id')
+//            ->where('areas.generator_id', $generator_id)
+//            ->count();
     }
 
     public function getUserCount($generator_id)

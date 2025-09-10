@@ -49,6 +49,14 @@ class Counter extends Model
     {
         return $this->belongsTo(PowerGenerator::class,'generator_id');
     }
+    public function scopeFilter($query,array $filters)
+    {
+//        dd($filters['type']);
+        $query->when($filters['status'] ?? false , function ($query) use ($filters){
+            $query->where('status',$filters['status']);
+        });
+        return $query;
+    }
 //    public function boxes(){
 //        return $this->hasMany(ElectricalBox::class);
 //    }

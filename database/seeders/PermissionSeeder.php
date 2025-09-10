@@ -202,11 +202,16 @@ class PermissionSeeder extends Seeder
             'Payments' => [
                 'PROCESS_STRIPE_PAYMENT',
                 'PROCESS_CASH_PAYMENT',
+                'PROCESS_STRIPE_SPENDING_PAYMENT',
+                'PROCESS_CACHE_SPENDING_PAYMENT'
             ],
 
             'Miscellaneous' => [
                 'VIEW_LANDING_PAGE_STATS',
                 'VIEW_POWER_GENERATORS',
+            ],
+            'Spendings'=>[
+              'GET_SPENDINGS',
             ],
         ];
         foreach ($guards as $guard) {
@@ -239,7 +244,9 @@ class PermissionSeeder extends Seeder
                 'VIEW_ABOUT_APP', 'VIEW_TERMS_CONDITIONS', 'VIEW_PRIVACY_POLICY',
                 'VIEW_STATISTICS', 'CREATE_COMPLAINT', 'CREATE_CUSTOMER_COMPLAINT',
                 'VIEW_COMPLAINTS', 'VIEW_PROFILE', 'UPDATE_PROFILE', 'PROCESS_STRIPE_PAYMENT',
-                'PROCESS_CASH_PAYMENT', 'VIEW_LANDING_PAGE_STATS', 'VIEW_POWER_GENERATORS',
+                'PROCESS_CASH_PAYMENT','PROCESS_STRIPE_SPENDING_PAYMENT', 'PROCESS_CACHE_SPENDING_PAYMENT',
+                'VIEW_LANDING_PAGE_STATS', 'VIEW_POWER_GENERATORS','CREATE_SPENDING',
+                'UPDATE_SPENDING','DELETE_SPENDING','GET_SPENDINGS',
             ];
 
             $adminRole->givePermissionTo($adminPermissions);
@@ -250,8 +257,8 @@ class PermissionSeeder extends Seeder
                 'VIEW_PLANS', 'VIEW_PLAN_PRICES', 'VIEW_SUBSCRIPTIONS', 'CREATE_SUBSCRIPTION_REQUEST',
                 'VIEW_ABOUT_APP', 'VIEW_TERMS_CONDITIONS', 'VIEW_PRIVACY_POLICY',
                 'CREATE_COMPLAINT', 'CREATE_CUSTOMER_COMPLAINT', 'VIEW_COMPLAINTS',
-                'VIEW_PROFILE', 'UPDATE_PROFILE', 'PROCESS_STRIPE_PAYMENT',
-                'PROCESS_CASH_PAYMENT', 'VIEW_POWER_GENERATORS',
+                'VIEW_PROFILE', 'UPDATE_PROFILE', 'VIEW_POWER_GENERATORS','CREATE_SPENDING',
+                'UPDATE_SPENDING','DELETE_SPENDING','GET_SPENDINGS',
             ];
             $employeeRole->givePermissionTo($employeePermissions);
             $userPermissions = [
@@ -259,7 +266,8 @@ class PermissionSeeder extends Seeder
                 'CREATE_SUBSCRIPTION_REQUEST', 'VIEW_ABOUT_APP',
                 'VIEW_TERMS_CONDITIONS', 'VIEW_PRIVACY_POLICY', 'CREATE_CUSTOMER_COMPLAINT',
                 'VIEW_PROFILE', 'UPDATE_PROFILE', 'PROCESS_STRIPE_PAYMENT',
-                'PROCESS_CASH_PAYMENT', 'VIEW_PLANS', 'VIEW_PLAN_PRICES',
+                'PROCESS_CASH_PAYMENT','PROCESS_STRIPE_SPENDING_PAYMENT' ,'PROCESS_CACHE_SPENDING_PAYMENT',
+                'VIEW_PLANS', 'VIEW_PLAN_PRICES','GET_SPENDINGS',
             ];
 
             $userRole->givePermissionTo($userPermissions);

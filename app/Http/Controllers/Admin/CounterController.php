@@ -22,7 +22,7 @@ class CounterController extends Controller
 
     }
     public function get(Request $request){
-        $counters=$this->service->get();
+        $counters=$this->service->get($request);
         return ApiResponses::success($counters,'counters for generator',ApiCode::OK);
     }
 
