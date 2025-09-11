@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Counter extends Model
 {
      use HasFactory,HasFeatureLimit;
-
+    use GenerateCounterNumber;
 
     protected $fillable = [
         'number',

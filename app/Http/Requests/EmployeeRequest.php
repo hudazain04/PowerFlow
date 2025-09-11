@@ -26,6 +26,7 @@ class EmployeeRequest extends FormRequest
 
             'user_name'=>'required|string|unique:employees,user_name',
             'phone_number'=>'required|max:10',
+            'area_id'=>'nullable|exists:areas,id',
             'permissions' => 'array',
             'permissions.*' => 'string|exists:permissions,name'
         ];

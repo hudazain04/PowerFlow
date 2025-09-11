@@ -24,6 +24,7 @@ class UpdateEmployeeRequest extends FormRequest
         return [
             'user_name'=>'required|string',
             'phone_number'=>'required|max:10',
+            'area_id'=>'nullable|exists:areas,id',
             'permissions' => 'array',
             'permissions.*' => 'string|exists:permissions,name'
         ];

@@ -4,6 +4,7 @@ namespace App\Repositories\Eloquent\Admin;
 use App\Models\Counter;
 use App\Models\ElectricalBox;
 use App\Models\PowerGenerator;
+use App\Models\User;
 use App\Repositories\interfaces\Admin\CounterRepositoryInterface;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
@@ -97,5 +98,17 @@ class CounterRepository implements CounterRepositoryInterface
     {
         $counters=Counter::where('generator_id',$generator_id)->filter($filters)->get();
         return $counters;
+    }
+
+    public function getUserWithCounters(int $userId, int $generatorId)
+    {
+        return User::with(['counters' => function($query) use ($generatorId) {
+            $query->where('generator_id', $generatorId)
+                ->with(['electricalBoxes' => function($q) {
+                    $q->wherePivotNull('removed_at');
+                }]);
+        }])
+            ->where('id', $userId)
+            ->firstOrFail();
     }
 }

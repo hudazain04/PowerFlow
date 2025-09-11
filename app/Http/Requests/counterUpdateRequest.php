@@ -22,7 +22,7 @@ class counterUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'number' => 'sometimes|required',
+//            'number' => 'sometimes|required',
             'user_id' => 'sometimes|required',
             'box_id' => 'nullable|exists:electrical_boxes,id'
         ];

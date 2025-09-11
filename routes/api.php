@@ -162,6 +162,8 @@ use App\Http\Controllers\User\UserAppController;
             Route::get('/counters', [CounterController::class, 'get'])
                 ->middleware('permission:VIEW_COUNTERS');
 
+            Route::get('users/{user}', [CounterController::class, 'getUserCounters']);
+
             // Counter-box assignment
             Route::get('/boxes/{box_id}/counters', [CounterBoxController::class, 'getBoxCounters'])
                 ->middleware('permission:VIEW_BOX_COUNTERS');

@@ -27,5 +27,6 @@ interface CounterRepositoryInterface
     public function getRelations(Counter $counter,array $relations) : Counter;
 
     public function get($generator_id,?array $filters=[]) : Collection;
+    public function getUserWithCounters(int $userId, int $generatorId);
 
 }

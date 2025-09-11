@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class EmployeeResource extends JsonResource
+class UserWithCountersResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,13 +15,10 @@ class EmployeeResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-          'id'=>$this->id,
-          'user_name'=>$this->user_name,
-            'phone_number'=>$this->phone_number,
-            'secret_key'=>$this->secret_key,
-            'permissions' =>
-                $this->getPermissionNames()
-
+            'id' => $this->id,
+            'phone_number' => $this->phone_number,
+            'email' => $this->email,
+            'counters' => CounterResource::collection($this->counters),
         ];
     }
 }

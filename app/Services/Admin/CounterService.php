@@ -30,4 +30,8 @@ class CounterService
        $generator=auth()->user()->powerGenerator->id;
        return $this->repository->get($generator,[ 'status' => $request->query('status')]);
    }
+    public function getUserCountersInGenerator(int $userId, int $generatorId)
+    {
+        return $this->repository->getUserWithCounters($userId, $generatorId);
+    }
 }
