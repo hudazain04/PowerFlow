@@ -52,7 +52,7 @@ class Employee extends Authenticate implements JWTSubject
     }
     public function generateSecretKey(): string
     {
-        $key = bin2hex(random_bytes(2));
+        $key = bin2hex(random_bytes(4));
         $this->update([
             'secret_key' => $key,
         ]);
