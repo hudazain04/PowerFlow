@@ -249,13 +249,13 @@ class DatabaseSeeder extends Seeder
 
         $parentAction = Action::factory()->create([
             'employee_id' => $adminEmployees->random()->id,
-            'counter_id'  => $counters->random()->id,
+            'counter_id' => $counters->random()->id,
             'parent_id' => null,
         ]);
 
         Action::factory()->count(2)->create([
             'employee_id' => $adminEmployees->random()->id,
-            'counter_id'  => $counters->random()->id,
+            'counter_id' => $counters->random()->id,
             'parent_id' => $parentAction->id,
         ]);
     }
