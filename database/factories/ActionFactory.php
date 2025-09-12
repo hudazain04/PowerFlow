@@ -18,7 +18,7 @@ class ActionFactory extends Factory
      */
     public function definition(): array
     {
-        $actionTypes = array_values((new \ReflectionClass(ActionTypes::class))->getConstants());
+        $actionTypes = ActionTypes::all();
         $statusTypes = array_values((new \ReflectionClass(ComplaintStatusTypes::class))->getConstants());
 
         return [

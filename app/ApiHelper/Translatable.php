@@ -19,6 +19,6 @@ trait Translatable
 
     protected function dispatchTranslationJob()
     {
-            TranslateDataJob::dispatch($this, 'en');
+//            TranslateDataJob::dispatch($this, 'en');
     }
 }

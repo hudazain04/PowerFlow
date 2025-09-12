@@ -6,11 +6,13 @@ use App\Events\EmployeeLocationUpdate;
 use App\Listeners\StoreEmployeeLocation;
 use App\Models\Spending;
 use App\Observers\SpendingObserver;
+use App\Repositories\Eloquent\Admin\ActionRepository;
 use App\Repositories\Eloquent\Admin\PaymentRepository;
 use App\Repositories\Eloquent\Admin\SpendingRepository;
 use App\Repositories\Eloquent\AuthRepository;
 use App\Repositories\Eloquent\SuperAdmin\SubscriptionPaymentRepository;
 use App\Repositories\Eloquent\User\ComplaintRepository;
+use App\Repositories\interfaces\Admin\ActionRepositoryInterface;
 use App\Repositories\interfaces\Admin\PaymentRepositoryInterface;
 use App\Repositories\interfaces\Admin\SpendingRepositoryInterface;
 use App\Repositories\interfaces\AuthRepositoryInterface;
@@ -47,6 +49,8 @@ use App\Repositories\interfaces\SuperAdmin\VisitorRepositoryInterface;
 
 use App\Repositories\interfaces\User\ComplaintRepositoryInterface;
 use App\Repositories\interfaces\UserRepositoryInterface;
+use App\Repository\Eloquent\Admin\GeneratorSettingRepository;
+use App\Repository\interfaces\Admin\GeneratorSettingRepositoryInterface;
 use Dedoc\Scramble\Scramble;
 use Dedoc\Scramble\Support\Generator\OpenApi;
 use Dedoc\Scramble\Support\Generator\SecurityScheme;
@@ -76,6 +80,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(SubscriptionPaymentRepositoryInterface::class,SubscriptionPaymentRepository::class);
         $this->app->bind(SpendingRepositoryInterface::class,SpendingRepository::class);
         $this->app->bind(PaymentRepositoryInterface::class,PaymentRepository::class);
+        $this->app->bind(ActionRepositoryInterface::class,ActionRepository::class);
+        $this->app->bind(GeneratorSettingRepositoryInterface::class,GeneratorSettingRepository::class);
 
 
 

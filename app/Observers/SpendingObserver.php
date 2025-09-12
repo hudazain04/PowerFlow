@@ -13,7 +13,7 @@ class SpendingObserver
         $counter=$spending->counter;
         if ($counter->spendingType === SpendingTypes::Before)
         {
-            app(SpendingMonitorService::class)->checkConsumption($counter);
+            app(SpendingMonitorService::class)->checkSpending($counter);
         }
     }
 }

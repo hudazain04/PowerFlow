@@ -7,7 +7,6 @@ use App\Models\Action;
 use App\Models\Counter;
 use App\Models\Spending;
 use App\Models\Payment;
-use App\Events\AdminNotifyEvent;
 use App\Models\User;
 use App\Repositories\interfaces\Admin\ActionRepositoryInterface;
 use App\Repositories\interfaces\Admin\CounterRepositoryInterface;
@@ -29,8 +28,13 @@ class SpendingMonitorService
     {
         $latestPayment=$this->counterRepository->latestPayment($counter);
 
-        $latestSpending = $counter->spendings()->sum('amount');
+        $latestSpending = $this->counterRepository->latestSpending($counter);
 
+        if (!$latestSpending || empty($latestSpending->next_spending) || $latestSpending->next_spending == 0) {
+            return;
+        }
+
+        $percentage = ($latestSpending->consume / $latestSpending->next_spending) * 100;
         $percentage = ($latestSpending->consume / $latestSpending->next_spending) * 100;
 
         if ($percentage >= 90) {

@@ -110,10 +110,10 @@ class CounterRepository implements CounterRepositoryInterface
 
     public function latestSpending(Counter $counter): ?Spending
     {
-        $latestSpending=$counter->spendings->latest()->first();
+        $latestSpending=$counter->spendings()->latest()->first();
         return $latestSpending;
     }
-    
+
     public function getUserWithCounters(int $userId, int $generatorId)
     {
         return User::with(['counters' => function($query) use ($generatorId) {

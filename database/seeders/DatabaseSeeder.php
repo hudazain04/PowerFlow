@@ -29,6 +29,7 @@ use App\Models\SubscriptionPayment;
 use App\Models\SubscriptionRequest;
 use App\Models\User;
 use App\Types\ComplaintTypes;
+use App\Types\UserTypes;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -63,6 +64,10 @@ class DatabaseSeeder extends Seeder
 
         // Customers
         $users = User::factory()->count(10)->create();
+        foreach ($users as $user)
+        {
+            $user->assignRole(UserTypes::USER);
+        }
 
         // Generator users
         $generatorUsers = User::factory()->count(5)->create();

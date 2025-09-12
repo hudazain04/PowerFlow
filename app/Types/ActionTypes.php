@@ -28,4 +28,13 @@ class ActionTypes
     {
         return self::PRIORITIES[$type] ?? 0;
     }
+    public static function all(): array
+    {
+        return [
+            self::Cut,
+            self::Connect,
+            self::OverConsume,
+            self::Payment,
+        ];
+    }
 }

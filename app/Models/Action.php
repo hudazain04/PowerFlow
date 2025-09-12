@@ -18,6 +18,9 @@ class Action extends Model
     protected static function booted()
     {
         static::creating(function ($action) {
+            if (is_array($action->type)) {
+                \Log::error('Action type is array: ', $action->type);
+            }
             $selfPriority = ActionTypes::getPriority($action->type);
 
             if ($action->parent_id) {
