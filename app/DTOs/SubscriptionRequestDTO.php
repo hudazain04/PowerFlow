@@ -16,6 +16,11 @@ class SubscriptionRequestDTO extends SimpleDTO
     public ?string $location;
     public ?int $user_id;
     public ?int $planPrice_id;
+    public ?int $kiloPrice;
+    public ?string $spendingType;
+    public ?string $day;
+    public ?int $afterPaymentFrequency;
+
     public ?Carbon $created_at;
 
     protected function defaults(): array

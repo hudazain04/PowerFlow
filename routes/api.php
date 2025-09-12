@@ -391,9 +391,9 @@ use App\Http\Controllers\User\UserAppController;
         Route::get('stripe/cancel', [PaymentController::class, 'stripeCancel'])->name('stripe.cancel');
 
         Route::prefix('spendingPay')->middleware(['auth:api'])->group(function () {
-            Route::post('paySpending/{counter_id}',[SpendingPaymentController::class,'createStripeCheckout'])
+            Route::post('payStripeSpending/{counter_id}',[SpendingPaymentController::class,'createStripeCheckout'])
                 ->middleware('permission:PROCESS_STRIPE_SPENDING_PAYMENT');
-            Route::get('payCash/{counter_id}', [SpendingPaymentController::class, 'handleCashPayment'])
+            Route::get('payCashSpending/{counter_id}', [SpendingPaymentController::class, 'handleCashPayment'])
                 ->middleware('permission:PROCESS_CACHE_SPENDING_PAYMENT');
             Route::get('stripe/success', [SpendingPaymentController::class, 'stripeSuccess'])->name('spendingStripe.success');
             Route::get('stripe/cancel', [SpendingPaymentController::class, 'stripeCancel'])->name('spendingStripe.cancel');

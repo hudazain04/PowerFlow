@@ -6,6 +6,7 @@ use App\Types\SubscriptionTypes;
 use App\Types\UserTypes;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use ReflectionClass;
 
 class CreateSubscriptionRequestRequest extends FormRequest
 {
@@ -29,6 +30,10 @@ class CreateSubscriptionRequestRequest extends FormRequest
             'location'     => 'required|string',
 //            'period'       => 'required|integer',
             'planPrice_id' => 'required|exists:plan_prices,id',
+            'kiloPrice'=>'required|int',
+            'afterPaymentFrequency'=>'nullable|int',
+            'day'=>['required', Rule::in(array_values((new ReflectionClass(\App\Types\DaysOfWeek::class))->getConstants()))],
+            'spendingType'=>['required', Rule::in(array_values((new ReflectionClass(\App\Types\SpendingTypes::class))->getConstants()))],
         ];
         return $rules;
     }

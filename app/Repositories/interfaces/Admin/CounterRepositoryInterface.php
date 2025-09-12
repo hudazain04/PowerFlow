@@ -3,6 +3,8 @@
 namespace App\Repositories\interfaces\Admin;
 
 use App\Models\Counter;
+use App\Models\Payment;
+use App\Models\Spending;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Collection;
 interface CounterRepositoryInterface
@@ -28,4 +30,7 @@ interface CounterRepositoryInterface
 
     public function get($generator_id,?array $filters=[]) : Collection;
 
+    public function latestPayment(Counter $counter) : ?Payment;
+
+    public function latestSpending(Counter $counter) : ?Spending;
 }

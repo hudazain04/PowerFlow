@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Events\EmployeeLocationUpdate;
 use App\Listeners\StoreEmployeeLocation;
+use App\Models\Spending;
+use App\Observers\SpendingObserver;
 use App\Repositories\Eloquent\Admin\PaymentRepository;
 use App\Repositories\Eloquent\Admin\SpendingRepository;
 use App\Repositories\Eloquent\AuthRepository;
@@ -84,6 +86,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Spending::observe(SpendingObserver::class);
         Scramble::configure()
             ->withDocumentTransformers(function (OpenApi $openApi) {
                 // Add HTTP Bearer security scheme

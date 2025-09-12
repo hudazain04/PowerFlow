@@ -36,7 +36,7 @@ class ComplaintAssignEvent implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new Channel("employee.{$this->employee_id}"),
+            new Channel("{$this->employee_id}.complaint"),
         ];
     }
     public function broadcastWith(): array
@@ -52,4 +52,10 @@ class ComplaintAssignEvent implements ShouldBroadcastNow
             ]
         ];
     }
+
+    public function broadcastAs()
+    {
+        return 'cut.complaint';
+    }
+
 }

@@ -4,6 +4,7 @@ namespace App\Services\SuperAdmin;
 
 use App\ApiHelper\ApiCode;
 use App\ApiHelper\ApiResponse;
+use App\DTOs\GeneratorSettingDTO;
 use App\DTOs\PlanDTO;
 use App\DTOs\PlanPriceDTO;
 use App\DTOs\PowerGeneratorDTO;
@@ -97,6 +98,13 @@ class SubscriptionRequestService
             $subscriptionDTO->planPrice_id = $planPrice->id;
             $subscriptionDTO->price = $planPrice->price;
             $subscriptionDTO->generator_id = $generator->id;
+            $settingDTO=new GeneratorSettingDTO();
+            $settingDTO->generator_id=$generator->id;
+            $settingDTO->day=$request->day;
+            $settingDTO->spendingType=$request->spendingType;
+            $settingDTO->afterPaymentFrequency=$request->afterPaymentFrequency;
+            $settingDTO->kiloPrice=$request->kiloPrice;
+
             $subscription = $this->subscriptionRepository->create($subscriptionDTO->toArray());
             $payment=$this->subscriptionPaymentRepository->findWhere(['subscriptionRequest_id'=>$requestId]);
             if (! $payment)

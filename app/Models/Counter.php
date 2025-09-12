@@ -63,4 +63,6 @@ class Counter extends Model
 //        return $this->hasMany(ElectricalBox::class);
 //    }
 
+
+
 }

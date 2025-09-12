@@ -5,15 +5,22 @@ namespace App\Services;
 use App\ApiHelper\ApiCode;
 use App\ApiHelper\ApiResponse;
 use App\DTOs\SpendingPayDTO;
+use App\Events\AdminActionEvent;
+use App\Events\PaymentActionEvent;
 use App\Exceptions\ErrorException;
 use App\Http\Requests\Payment\SpendingPayRequest;
 use App\Payment\Methods\CashPayment;
 use App\Payment\Methods\StripePayment;
 use App\Payment\Visitors\PaymentProcessor;
+use App\Repositories\interfaces\Admin\ActionRepositoryInterface;
 use App\Repositories\interfaces\Admin\CounterRepositoryInterface;
 use App\Repositories\interfaces\Admin\PaymentRepositoryInterface;
 use App\Repositories\interfaces\Admin\SpendingRepositoryInterface;
 use App\Repositories\interfaces\SpendingPaymentRepositoryInterface;
+use App\Services\Admin\ActionService;
+use App\Types\ActionTypes;
+use App\Types\ComplaintStatusTypes;
+use App\Types\CounterStatus;
 use App\Types\PaymentStatus;
 use App\Types\PaymentType;
 use App\Types\SpendingTypes;
@@ -31,6 +38,7 @@ class SpendingPaymentService
         protected SpendingRepositoryInterface $spendingRepository,
         protected PaymentRepositoryInterface $paymentRepository,
         protected CounterRepositoryInterface $counterRepository,
+        protected ActionService $actionService,
     )
     {
         //
@@ -68,6 +76,7 @@ class SpendingPaymentService
             'type'=>PaymentType::Stripe,
             'session_id'=>$result['session_id'],
         ]);
+
         return $this->success($result,__('spendingPayment.create'),ApiCode::CREATED);
     }
 
@@ -86,6 +95,9 @@ class SpendingPaymentService
             $payment = $this->paymentRepository->update($payment, [
                 'date' => Carbon::now(), 'status' => PaymentStatus::Paid
             ]);
+
+            $this->checkCutCounter($payment->counter_id,$payment);
+
             DB::commit();
             return $this->success($result, __('spendingPayment.success'));
         }
@@ -96,6 +108,26 @@ class SpendingPaymentService
 
             throw new ErrorException(__('messages.error.serverError'), ApiCode::INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public function checkCutCounter($spendingPayment,$counter_id)
+    {
+        $counter=$this->counterRepository->find($counter_id);
+        if ($counter->status === CounterStatus::DisConnected)
+        {
+            $action=$this->actionService->create([
+                'type'=>ActionTypes::Payment,
+                'status'=>ComplaintStatusTypes::Assigned,
+                'counter_id'=>$counter_id,
+                'generator_id'=>$counter->generator_id,
+                'relatedData'=>['payment'=>$spendingPayment],
+            ]);
+
+            event(new AdminActionEvent($counter->generator_id,$action));
+
+        }
+        return;
+
     }
 
     public function stripeCancel(Request $request)
@@ -146,6 +178,7 @@ class SpendingPaymentService
             'type'=>PaymentType::Cash,
             'session_id'=>$result['session_id'],
         ]);
+        $this->checkCutCounter($payment,$counter_id);
         return $this->success($result,__('spendingPayment.cash'));
     }
 }

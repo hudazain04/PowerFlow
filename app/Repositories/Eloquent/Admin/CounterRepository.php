@@ -3,7 +3,9 @@
 namespace App\Repositories\Eloquent\Admin;
 use App\Models\Counter;
 use App\Models\ElectricalBox;
+use App\Models\Payment;
 use App\Models\PowerGenerator;
+use App\Models\Spending;
 use App\Repositories\interfaces\Admin\CounterRepositoryInterface;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
@@ -97,5 +99,17 @@ class CounterRepository implements CounterRepositoryInterface
     {
         $counters=Counter::where('generator_id',$generator_id)->filter($filters)->get();
         return $counters;
+    }
+
+    public function latestPayment(Counter $counter): ?Payment
+    {
+        $latestPayment = $counter->payments()->latest()->first();
+        return $latestPayment;
+    }
+
+    public function latestSpending(Counter $counter): ?Spending
+    {
+        $latestSpending=$counter->spendings->latest()->first();
+        return $latestSpending;
     }
 }

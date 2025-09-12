@@ -21,6 +21,10 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('planPrice_id')->nullable()->constrained('plan_prices')->nullOnDelete();
             $table->enum('status',array_values((new ReflectionClass(\App\Types\GeneratorRequests::class))->getConstants()));
+            $table->enum('spendingType',array_values((new ReflectionClass(\App\Types\SpendingTypes::class))->getConstants()));
+            $table->integer('kiloPrice');
+            $table->integer('afterPaymentFrequency');
+            $table->enum('day',array_values((new ReflectionClass(\App\Types\DaysOfWeek::class))->getConstants()));
             $table->json('translation')->nullable();
             $table->timestamps();
         });
