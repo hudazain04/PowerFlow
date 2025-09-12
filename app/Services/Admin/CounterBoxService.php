@@ -98,7 +98,13 @@ class CounterBoxService
             }
 
             // Find or create user based on phone number and email
-            $user = $this->findOrCreateUser($data['phone_number'], $data['email']);
+            $user = $this->findOrCreateUser(
+                $data['phone_number'],
+                $data['email'],
+                $data['first_name'] ?? null,
+                $data['last_name'] ?? null
+            );
+
 
             $boxId = $data['box_id'] ?? null;
 
@@ -136,35 +142,38 @@ class CounterBoxService
         });
 
     }
-    private function findOrCreateUser(string $phoneNumber, string $email): User
+    private function findOrCreateUser(string $phoneNumber, string $email, ?string $firstName = null, ?string $lastName = null): User
     {
-
         $normalizedPhone = preg_replace('/[^0-9]/', '', $phoneNumber);
-
         $user = User::where('phone_number', $normalizedPhone)->first();
 
         if ($user) {
+            // User exists, return the existing user
             return $user;
         }
 
-
+        // Check if email is already taken by another user
         $existingUserWithEmail = User::where('email', $email)->first();
         if ($existingUserWithEmail) {
             throw new ErrorException('Email already taken by another user', ApiCode::BAD_REQUEST);
         }
 
+        // For new users, first and last name are required
+        if (empty($firstName) || empty($lastName)) {
+            throw new ErrorException('First name and last name are required for new users', ApiCode::BAD_REQUEST);
+        }
 
         $temporaryPassword = Str::random(10);
 
+        // Create user with provided details
         $user = User::create([
             'phone_number' => $normalizedPhone,
             'email' => $email,
             'password' => Hash::make($temporaryPassword),
             'should_reset_password' => true,
-            'first_name'=>'null',
-            'last_name'=>'null'
+            'first_name' => $firstName,
+            'last_name' => $lastName
         ]);
-
 
         $this->sendPasswordResetEmail($user);
 

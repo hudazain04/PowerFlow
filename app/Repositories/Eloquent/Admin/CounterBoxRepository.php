@@ -63,7 +63,8 @@ class CounterBoxRepository implements CounterBoxRepositoryInterface
                 'QRCode' => $data['QRCode'],
                 'user_id' => $data['user_id'],
                 'generator_id' => $data['generator_id'],
-                'current_spending' => $data['current_spending']
+                'current_spending' => $data['current_spending'],
+
             ]);
 
             return $counter;

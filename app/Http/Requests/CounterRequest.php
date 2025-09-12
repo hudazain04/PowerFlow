@@ -28,6 +28,8 @@ class CounterRequest extends FormRequest
             'box_id' => 'nullable|exists:electrical_boxes,id',
             'phone_number' => 'required|string',
             'email' => 'required|email',
+            'first_name' => 'required_if:is_new_user,true|string|nullable',
+            'last_name' => 'required_if:is_new_user,true|string|nullable',
 
         ];
     }
