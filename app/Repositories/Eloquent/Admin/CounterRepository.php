@@ -6,6 +6,7 @@ use App\Models\ElectricalBox;
 use App\Models\Payment;
 use App\Models\PowerGenerator;
 use App\Models\Spending;
+use App\Models\User;
 use App\Repositories\interfaces\Admin\CounterRepositoryInterface;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
@@ -111,5 +112,17 @@ class CounterRepository implements CounterRepositoryInterface
     {
         $latestSpending=$counter->spendings->latest()->first();
         return $latestSpending;
+    }
+    
+    public function getUserWithCounters(int $userId, int $generatorId)
+    {
+        return User::with(['counters' => function($query) use ($generatorId) {
+            $query->where('generator_id', $generatorId)
+                ->with(['electricalBoxes' => function($q) {
+                    $q->wherePivotNull('removed_at');
+                }]);
+        }])
+            ->where('id', $userId)
+            ->firstOrFail();
     }
 }

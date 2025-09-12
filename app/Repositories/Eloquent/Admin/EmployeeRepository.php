@@ -19,7 +19,8 @@ class EmployeeRepository implements EmployeeRepositoryInterface
             'phone_number' => $data['phone_number'],
             'generator_id' => auth()->user()->powerGenerator->id,
             'secret_key' =>$this->model->generateSecretKey(),
-//            'permissions'=> $data['permissions'],
+            'permissions'=> $data['permissions'],
+            'area_id'=>$data['area_id']
         ],
 
         );
@@ -37,8 +38,15 @@ class EmployeeRepository implements EmployeeRepositoryInterface
         if (array_key_exists('permissions',$data)) {
             $emp->syncPermissions(...$data['permissions']);
         }
+        if (array_key_exists('area_id',$data)) {
+            $emp->area_id=$data['area_id'];
+            $emp->save();
+            unset($data['area_id']);
 
-       return $emp->update($data);
+        }
+        $emp->update($data);
+
+       return $emp;
     }
 
     public function findEmployee(int $id)

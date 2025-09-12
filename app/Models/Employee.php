@@ -26,6 +26,7 @@ class Employee extends Authenticate implements JWTSubject
         'secret_key',
         'generator_id',
         'phone_number',
+        'area_id'
     ];
     public string $featureKey = 'employees_count';
     public function getJWTIdentifier()

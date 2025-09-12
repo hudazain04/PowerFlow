@@ -24,9 +24,11 @@ class CounterRequest extends FormRequest
 
         return [
 
-            'user_id' => 'required',
+//            'user_id' => 'required',
             'box_id' => 'nullable|exists:electrical_boxes,id',
-//            'generator_id'=>$generator
+            'phone_number' => 'required|string',
+            'email' => 'required|email',
+
         ];
     }
 }

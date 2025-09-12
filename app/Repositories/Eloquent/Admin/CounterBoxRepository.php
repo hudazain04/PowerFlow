@@ -56,21 +56,7 @@ class CounterBoxRepository implements CounterBoxRepositoryInterface
     }
     public function create(array $data)
     {
-//        return DB::transaction(function () use ($data) {
-//            $counter = Counter::create([
-//                'QRCode' => $data['QRCode'],
-//                'user_id' => $data['user_id'],
-//                'generator_id' => $data['generator_id'],
-//                'current_spending' => $data['current_spending'],
-//                'box_id' => $data['box_id'] ?? null
-//            ]);
-//
-//            if (array_key_exists('box_id', $data) && !is_null($data['box_id'])) {
-//                $this->assignCounterToBox($counter->id, $data['box_id']);
-//            }
-//
-//            return $counter;
-//        });
+
         return DB::transaction(function () use ($data) {
             $counter = Counter::create([
                 'number' => $data['number'],
@@ -80,7 +66,6 @@ class CounterBoxRepository implements CounterBoxRepositoryInterface
                 'current_spending' => $data['current_spending']
             ]);
 
-            // Note: We removed the box assignment here since it's now handled in the service
             return $counter;
         });
     }
@@ -101,11 +86,16 @@ class CounterBoxRepository implements CounterBoxRepositoryInterface
 
             $counter->update($updateData);
 
-
             if (array_key_exists('box_id', $data)) {
+                // Remove existing box assignments
                 DB::table('counter__boxes')
-                    ->where('counter_id', $id)->delete();
-                $this->assignCounterToBox($counter->id, $data['box_id']);
+                    ->where('counter_id', $id)
+                    ->update(['removed_at' => now()]);
+
+                // If a new box_id is provided, assign the counter to the box
+                if (!is_null($data['box_id'])) {
+                    $this->assignCounterToBox($counter->id, $data['box_id']);
+                }
             }
 
             return $counter;

@@ -31,9 +31,13 @@ class User extends Authenticatable implements JWTSubject,MustVerifyEmail
         'last_name',
         'email',
         'password',
+        'should_reset_password',
         'phone_number',
         'blocked',
         'translations',
+    ];
+    protected $casts = [
+        'should_reset_password' => 'boolean',
     ];
 
 

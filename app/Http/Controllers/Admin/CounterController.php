@@ -6,7 +6,9 @@ use App\ApiHelper\ApiCode;
 use App\ApiHelper\ApiResponses;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CounterResource;
+use App\Http\Resources\UserWithCountersResource;
 use App\Models\Counter;
+use App\Models\User;
 use App\Services\Admin\CounterService;
 use Illuminate\Http\Request;
 
@@ -25,6 +27,18 @@ class CounterController extends Controller
     public function get(Request $request){
         $counters=$this->service->get($request);
         return ApiResponses::success(CounterResource::collection($counters),__('messages.success'),ApiCode::OK);
+    }
+    // UserController.php
+    // UserController.php
+    public function getUserCounters(User $user)
+    {
+        $generatorId = auth()->user()->powerGenerator->id;
+        $result = $this->service->getUserCountersInGenerator($user->id, $generatorId);
+        return ApiResponses::success(
+            UserWithCountersResource::make($result),
+            __('user.counters_retrieved'),
+            ApiCode::OK
+        );
     }
 
 }
