@@ -28,7 +28,7 @@ class EmployeeController extends Controller
     public function update(UpdateEmployeeRequest $request, int $id)
     {
         $employee = $this->service->update($id, $request->validated());
-        return ApiResponses::success($employee, __('employee.update'), ApiCode::OK);
+        return ApiResponses::success(EmployeeResource::make($employee), __('employee.update'), ApiCode::OK);
     }
     public function delete(Request $request, int $id = null)
     {
