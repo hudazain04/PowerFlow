@@ -34,8 +34,8 @@ class CounterService
     {
         return $this->repository->getUserWithCounters($userId, $generatorId);
     }
-    public function getGeneratorClients(int $generatorId, string $search = '',string $searchField = 'all')
+    public function getGeneratorClients(int $generatorId, string $search = '', string $searchField = 'all')
     {
-        return $this->repository->getUsersByGeneratorWithSearch($generatorId, $search,  $searchField = 'all');
+        return $this->repository->getUsersByGeneratorWithSearch($generatorId, $search, $searchField);
     }
 }

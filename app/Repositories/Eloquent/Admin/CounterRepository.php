@@ -128,35 +128,35 @@ class CounterRepository implements CounterRepositoryInterface
 
     public function getUsersByGeneratorWithSearch(int $generatorId, string $search = '', string $searchField = 'all')
     {
-        $query = User::with('counters', function($query) use ($generatorId) {
-            $query->where('generator_id', $generatorId);
-        })
+        $query = User::with(['counters' => function($query) use ($generatorId) {
+            $query->where('generator_id', $generatorId)->firstOrFail();
+        }])
             ->withCount(['counters' => function($query) use ($generatorId) {
                 $query->where('generator_id', $generatorId);
             }]);
 
-        // Apply search based on the specified field
-        if (!empty($searchTerm)) {
+
+        if (!empty($search)) {
             switch ($searchField) {
                 case 'first_name':
-                    $query->where('first_name', 'like', "%{$searchTerm}%");
+                    $query->where('first_name', 'like', "%{$search}%");
                     break;
                 case 'last_name':
-                    $query->where('last_name', 'like', "%{$searchTerm}%");
+                    $query->where('last_name', 'like', "%{$search}%");
                     break;
                 case 'phone_number':
-                    $query->where('phone_number', 'like', "%{$searchTerm}%");
+                    $query->where('phone_number', 'like', "%{$search}%");
                     break;
                 case 'email':
-                    $query->where('email', 'like', "%{$searchTerm}%");
+                    $query->where('email', 'like', "%{$search}%");
                     break;
                 case 'all':
                 default:
-                    $query->where(function($q) use ($searchTerm) {
-                        $q->where('first_name', 'like', "%{$searchTerm}%")
-                            ->orWhere('last_name', 'like', "%{$searchTerm}%")
-                            ->orWhere('phone_number', 'like', "%{$searchTerm}%")
-                            ->orWhere('email', 'like', "%{$searchTerm}%");
+                    $query->where(function($q) use ($search) {
+                        $q->where('first_name', 'like', "%{$search}%")
+                            ->orWhere('last_name', 'like', "%{$search}%")
+                            ->orWhere('phone_number', 'like', "%{$search}%")
+                            ->orWhere('email', 'like', "%{$search}%");
                     });
                     break;
             }

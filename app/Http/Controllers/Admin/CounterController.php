@@ -12,9 +12,11 @@ use App\Models\Counter;
 use App\Models\User;
 use App\Services\Admin\CounterService;
 use Illuminate\Http\Request;
+use Stripe\ApiResponse;
 
 class CounterController extends Controller
 {
+    use \App\ApiHelper\ApiResponse;
     public function __construct(private CounterService $service){
 
     }
@@ -48,10 +50,9 @@ class CounterController extends Controller
         $search = $request->input('search', '');
         $searchField = $request->input('field', 'all');
 
+        $result = $this->service->getGeneratorClients($generatorId, $search, $searchField);
 
-        $result = $this->service->getGeneratorClients($generatorId, $search,$searchField);
-
-        return ApiResponses::success(clientsResource::collection($result), __('user.clients_retrieved'), ApiCode::OK
+        return ApiResponses::success($this->successWithPagination(clientsResource::collection($result)), __('user.clients_retrieved'), ApiCode::OK
         );
     }
 

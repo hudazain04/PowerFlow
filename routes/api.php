@@ -158,7 +158,7 @@ use App\Http\Controllers\User\UserAppController;
                 ->middleware('permission:CREATE_COUNTERS');
             Route::put('/counter/update/{id}', [CounterBoxController::class, 'update'])
                 ->middleware('permission:UPDATE_COUNTERS');
-            Route::delete('counters/{id}', [CounterBoxController::class, 'destroy'])
+            Route::delete('counters/delete', [CounterBoxController::class, 'destroy'])
                 ->middleware('permission:DELETE_COUNTERS');
             Route::get('/counters', [CounterController::class, 'get'])
                 ->middleware('permission:VIEW_COUNTERS');
