@@ -11,6 +11,8 @@ interface PowerGeneratorRepositoryInterface
 
     public function create(array $data);
 
+    public function update(PowerGeneratorModel $powerGenerator,array $data) : PowerGeneratorModel;
+
     public function find(int $id);
 
     public function getForPlan($plan_id , array $filters) : Collection;

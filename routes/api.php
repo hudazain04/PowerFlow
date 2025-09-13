@@ -240,12 +240,15 @@ use App\Http\Controllers\User\UserAppController;
             Route::delete('delete/{id}', [NeighborhoodController::class, 'delete'])
                 ->middleware('permission:DELETE_AREA');
         });
+
         Route::get('/generators/{id}/info', [SuperAdminStatisticsController::class, 'getGenInfo'])
             ->middleware('permission:VIEW_INFO');
+        Route::patch('generators/{id}/info/update',[PowerGeneratorController::class,'updateInfo'])
+            ->middleware('permission:UPDATE_GENERATOR_INFO');
         Route::middleware('role:superAdmin')->group(function () {
             Route::get('/generators/{generator}/statistics', [SuperAdminStatisticsController::class
                             , 'getGeneratorStatistics']);
-
+//            Route::get('/generators/{id}/info', [SuperAdminStatisticsController::class, 'getGenInfo']);
             Route::delete('/generators/{id}/', [GeneratorRequestController::class, 'delete']);
         });
 
