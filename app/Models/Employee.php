@@ -8,6 +8,7 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticate;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -27,6 +28,10 @@ class Employee extends Authenticate implements JWTSubject
         'generator_id',
         'phone_number',
         'area_id'
+    ];
+    protected $casts = [
+        'secret_key',
+
     ];
     public string $featureKey = 'employees_count';
     public function getJWTIdentifier()
@@ -52,10 +57,13 @@ class Employee extends Authenticate implements JWTSubject
     }
     public function generateSecretKey(): string
     {
-        $key = bin2hex(random_bytes(4));
+        $Key = bin2hex(random_bytes(4));
+        $hashedKey = Hash::make($Key);
+
         $this->update([
-            'secret_key' => $key,
+            'secret_key' => $hashedKey,
         ]);
-        return $key;
+
+        return $hashedKey;
     }
 }

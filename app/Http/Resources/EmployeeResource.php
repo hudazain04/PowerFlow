@@ -18,7 +18,8 @@ class EmployeeResource extends JsonResource
           'id'=>$this->id,
           'user_name'=>$this->user_name,
             'phone_number'=>$this->phone_number,
-            'secret_key'=>$this->secret_key,
+            'area_id'=>$this->area_id,
+//            'secret_key'=>$this->secret_key,
             'permissions' =>
                 $this->getPermissionNames()
 
