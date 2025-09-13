@@ -22,7 +22,8 @@ class UpdateEmployeeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_name'=>'required|string',
+            'first_name'=>'required|string',
+            'last_name'=>'required|string',
             'phone_number'=>'required|max:10',
             'area_id'=>'nullable|exists:areas,id',
             'permissions' => 'array',
