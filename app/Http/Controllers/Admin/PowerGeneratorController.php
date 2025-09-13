@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\ApiHelper\ApiResponse;
+use App\DTOs\GeneratorSettingDTO;
 use App\DTOs\PowerGeneratorDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PowerGenerator\UpdateInfoRequest;
@@ -33,7 +34,9 @@ class PowerGeneratorController extends Controller
     public function updateInfo($generator_id,UpdateInfoRequest $request)
     {
         $generatorDTO=PowerGeneratorDTO::fromRequest($request);
-        $generator=$this->powerGeneratorService->updateInfo($generator_id,$generatorDTO);
+        $generatorSettingDTO=GeneratorSettingDTO::fromRequest($request);
+        $generatorSettingDTO->generator_id=$generator_id;
+        $generator=$this->powerGeneratorService->updateInfo($generator_id,$generatorDTO,$generatorSettingDTO);
         return $this->success(PowerGeneratorResource::make($generator),__('powerGenerator.update'));
     }
 }

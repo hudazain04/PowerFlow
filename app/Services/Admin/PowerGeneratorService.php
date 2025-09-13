@@ -4,6 +4,7 @@ namespace App\Services\Admin;
 
 use App\ApiHelper\ApiCode;
 use App\ApiHelper\ApiResponse;
+use App\DTOs\GeneratorSettingDTO;
 use App\DTOs\PowerGeneratorDTO;
 use App\DTOs\SubscribedGeneratorDTO;
 use App\DTOs\SubscriptionDTO;
@@ -55,7 +56,7 @@ class PowerGeneratorService
         return $this->successWithPagination(PowerGeneratorResource::collection($generators),__('messages.success'));
     }
 
-    public function updateInfo($generator_id ,  PowerGeneratorDTO $generatorDTO)
+    public function updateInfo($generator_id ,  PowerGeneratorDTO $generatorDTO,GeneratorSettingDTO $generatorSettingDTO)
     {
         $generator=$this->powerGeneratorRepository->find($generator_id);
         if (! $generator)
@@ -68,7 +69,7 @@ class PowerGeneratorService
         {
             throw new ErrorException(__('powerGenerator.noSetting'),ApiCode::NOT_FOUND);
         }
-        $generatorSetting=$this->generatorSettingRepository->update($generatorSetting,$generatorDTO->toArray());
+        $generatorSetting=$this->generatorSettingRepository->update($generatorSetting,$generatorSettingDTO->toArray());
         return $generator;
     }
 

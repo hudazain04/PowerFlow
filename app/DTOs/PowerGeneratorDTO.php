@@ -15,10 +15,6 @@ class PowerGeneratorDTO extends SimpleDTO
     public ?string $phone;
     public ?Carbon $expired_at;
     public ?int $user_id;
-    public ?int $kiloPrice;
-    public ?string $spendingType;
-    public ?string $day;
-    public ?int $afterPaymentFrequency;
     protected function defaults(): array
     {
         return [];
