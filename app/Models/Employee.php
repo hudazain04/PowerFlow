@@ -29,6 +29,10 @@ class Employee extends Authenticate implements JWTSubject
         'phone_number',
         'area_id'
     ];
+    protected $casts = [
+        'secret_key',
+
+    ];
     public string $featureKey = 'employees_count';
     public function getJWTIdentifier()
     {
@@ -60,6 +64,6 @@ class Employee extends Authenticate implements JWTSubject
             'secret_key' => $hashedKey,
         ]);
 
-        return $Key;
+        return $hashedKey;
     }
 }
