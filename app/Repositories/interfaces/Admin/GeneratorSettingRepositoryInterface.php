@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repository\interfaces\Admin;
+namespace App\Repositories\interfaces\Admin;
 
 interface GeneratorSettingRepositoryInterface
 {

@@ -36,7 +36,7 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        User::factory(10)->create();
+//        User::factory(10)->create();
 
         $this->call([
             RoleSeeder::class,
@@ -63,7 +63,7 @@ class DatabaseSeeder extends Seeder
         $admin->assignRole('admin');
 
         // Customers
-        $users = User::factory()->count(10)->create();
+        $users = User::factory()->count(32)->create();
         foreach ($users as $user)
         {
             $user->assignRole(UserTypes::USER);

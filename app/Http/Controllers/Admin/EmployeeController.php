@@ -10,8 +10,10 @@ use App\Http\Requests\UpdateEmployeeRequest;
 use App\Http\Resources\EmployeeResource;
 use App\Models\Employee;
 use App\Services\Admin\EmployeeService;
+use App\Types\UserTypes;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class EmployeeController extends Controller
 {
@@ -74,10 +76,18 @@ class EmployeeController extends Controller
     }
     public function getPermission()
     {
-        $permissions = Permission::where('guard_name', 'api')
-            ->get()
-            ->groupBy('group');
+        $roleAdmin=Role::findByName(UserTypes::ADMIN);
+        $adminPermissions=$roleAdmin->permissions->groupBy('group')->map(fn ($permissions) => $permissions->pluck('name'));;
+        $roleEmployee=Role::findByName(UserTypes::EMPLOYEE);
+        $employeePermissions=$roleEmployee->permissions->pluck('name');
+//        $permissions = Permission::where('guard_name', 'api')
+//            ->get()
+//            ->groupBy('group');
+        $permissions=[
+            'adminPermissions'=>$adminPermissions,
+            'employeePermissions'=>$employeePermissions,
+        ];
 
-        return ApiResponses::success($permissions, 'Permissions retrieved', ApiCode::OK);
+        return ApiResponses::success($permissions, __('messages.success'), ApiCode::OK);
     }
 }
