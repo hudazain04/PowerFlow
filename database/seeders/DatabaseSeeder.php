@@ -63,7 +63,7 @@ class DatabaseSeeder extends Seeder
         $admin->assignRole('admin');
 
         // Customers
-        $users = User::factory()->count(15)->create();
+        $users = User::factory()->count(32)->create();
         foreach ($users as $user)
         {
             $user->assignRole(UserTypes::USER);
