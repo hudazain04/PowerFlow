@@ -3,10 +3,14 @@
 namespace App\Services\Admin;
 
 use App\ApiHelper\ApiCode;
+use App\DTOs\ActionDTO;
 use App\Exceptions\ErrorException;
 use App\Repositories\interfaces\Admin\ActionRepositoryInterface;
+use App\Repositories\interfaces\Admin\CounterRepositoryInterface;
 use App\Types\ActionTypes;
 use App\Types\ComplaintStatusTypes;
+use App\Types\CounterStatus;
+use function Symfony\Component\Translation\t;
 
 class ActionService
 {
@@ -16,6 +20,7 @@ class ActionService
     public function __construct(
         protected ActionRepositoryInterface $actionRepository,
         protected EmployeeAssignmentService $employeeAssignmentService,
+        protected CounterRepositoryInterface $counterRepository,
     )
     {
         //
@@ -25,6 +30,32 @@ class ActionService
     {
         $action=$this->actionRepository->create($data);
         return $action;
+    }
+
+    public function update($action_id , ActionDTO $actionDTO)
+    {
+        $action=$this->actionRepository->find($action_id);
+        if (!$action)
+        {
+            throw new ErrorException(__('action.notFound'),ApiCode::NOT_FOUND);
+        }
+        $action=$this->actionRepository->update($action,$actionDTO->toArray());
+        $counter=$this->counterRepository->find($action->counter_id);
+        if (! $counter)
+        {
+            throw new ErrorException(__('counter.notFound'),ApiCode::NOT_FOUND);
+        }
+        if ($action->type===ActionTypes::Cut && $action->status===ComplaintStatusTypes::Resolved)
+        {
+            $counter=$this->counterRepository->update($counter->id,['status'=>CounterStatus::DisConnected]);
+        }
+        elseif ($action->type===ActionTypes::Connect  && $action->status===ComplaintStatusTypes::Resolved)
+        {
+            $counter=$this->counterRepository->update($counter->id,['status'=>CounterStatus::Connect]);
+        }
+
+        return $action;
+
     }
 
     public function approve($action_id)
@@ -69,5 +100,21 @@ class ActionService
            'status'=>ComplaintStatusTypes::Rejected,
         ]);
         return;
+    }
+
+    public function find($action_id)
+    {
+        $action=$this->actionRepository->find($action_id);
+        if (!$action)
+        {
+            throw new ErrorException(__('action.notFound'),ApiCode::NOT_FOUND);
+        }
+        return $action;
+    }
+
+    public function getAll($generator_id)
+    {
+        $actions=$this->actionRepository->getAll($generator_id);
+        return $actions;
     }
 }

@@ -4,6 +4,7 @@ namespace App\Repositories\Eloquent\Admin;
 
 use App\Models\Action as ActionModel;
 use App\Repositories\interfaces\Admin\ActionRepositoryInterface;
+use Illuminate\Support\Collection;
 
 class ActionRepository implements ActionRepositoryInterface
 {
@@ -33,4 +34,10 @@ class ActionRepository implements ActionRepositoryInterface
        $action->save();
        return  $action;
     }
+
+    public function getAll($generator_id): Collection
+    {
+        $actions=ActionModel::where('generator_id',$generator_id)->paginate(10);
+        return  $actions;
+   }
 }

@@ -26,8 +26,15 @@ class ActionController extends Controller
     {
         $actionDTO=ActionDTO::fromRequest($request);
         $action=$this->actionService->create($actionDTO->toArray());
-        return $this->success(ActionResource::make($action),__('action.ceate',['type' => $action->type]));
+        return $this->success(ActionResource::make($action),__('action.create',['type' => $action->type]));
 
+    }
+
+    public function update($action_id,UpdateActionRequest $request)
+    {
+        $actionDTO=ActionDTO::fromRequest($request);
+        $action=$this->actionService->update($action_id,$actionDTO);
+        return $this->success(ActionResource::make($action),__('action.update'));
     }
 
     public function  approve($action_id)
@@ -41,5 +48,17 @@ class ActionController extends Controller
     {
         $this->actionService->reject($action_id);
         return $this->success(null,__('action.reject'));
+    }
+
+    public function getAction($action_id)
+    {
+        $action=$this->actionService->find($action_id);
+        return $this->success(ActionResource::make($action),__('messages.success'));
+    }
+
+    public function getAll($generator_id)
+    {
+        $actions=$this->actionService->getAll($generator_id);
+        return $this->successWithPagination(ActionResource::collection($actions),__('messages.success'));
     }
 }

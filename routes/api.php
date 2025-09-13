@@ -2,6 +2,7 @@
 
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\Admin\ActionController;
 use App\Http\Controllers\Admin\AreaBoxController;
 use App\Http\Controllers\Admin\AreaController;
 use App\Http\Controllers\Admin\CounterBoxController;
@@ -357,6 +358,7 @@ use App\Http\Controllers\User\UserAppController;
                 ->middleware('permission:MANAGE_PRIVACY_POLICY');
         });
 
+
         // Subscription routes
         Route::prefix('Subscription')->group(function () {
             Route::post('renew', [SubscriptionController::class, 'renew'])
@@ -419,6 +421,22 @@ use App\Http\Controllers\User\UserAppController;
                 ->middleware('permission:DELETE_SPENDING');
             Route::get('getAll/{counter_id}', [SpendingController::class,'getAll'])
                 ->middleware('permission:GET_SPENDINGS');
+
+        });
+
+        Route::prefix('action')->group(function (){
+            Route::post('create', [ActionController::class,'create'])
+                ->middleware('permission:CREATE_ACTION');
+            Route::patch('update/{id}', [ActionController::class,'update'])
+                ->middleware('permission:UPDATE_ACTION');
+            Route::post('approve/{id}', [ActionController::class,'approve'])
+                ->middleware('permission:APPROVE_ACTION');
+            Route::post('reject/{id}', [ActionController::class,'reject'])
+                ->middleware('permission:REJECT_ACTION');
+            Route::get('getAll/{generator_id}', [ActionController::class,'getAll'])
+                ->middleware('permission:VIEW_ACTIONS');
+            Route::get('getAction/{id}',[ActionController::class,'getAction'])
+                ->middleware('permission:VIEW_ACTION');
 
         });
     });
