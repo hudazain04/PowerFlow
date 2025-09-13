@@ -251,6 +251,7 @@ class PermissionSeeder extends Seeder
                 'PROCESS_CASH_PAYMENT','PROCESS_STRIPE_SPENDING_PAYMENT', 'PROCESS_CACHE_SPENDING_PAYMENT',
                 'VIEW_LANDING_PAGE_STATS', 'VIEW_POWER_GENERATORS','CREATE_SPENDING',
                 'UPDATE_SPENDING','DELETE_SPENDING','GET_SPENDINGS',
+                'UPDATE_GENERATOR_INFO'
             ];
 
             $adminRole->givePermissionTo($adminPermissions);

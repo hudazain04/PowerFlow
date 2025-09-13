@@ -2,12 +2,15 @@
 
 namespace App\Services\Admin;
 
+use App\ApiHelper\ApiCode;
 use App\ApiHelper\ApiResponse;
 use App\DTOs\PowerGeneratorDTO;
 use App\DTOs\SubscribedGeneratorDTO;
 use App\DTOs\SubscriptionDTO;
+use App\Exceptions\ErrorException;
 use App\Http\Resources\PowerGeneratorResource;
 use App\Http\Resources\SubscribedGeneratorResource;
+use App\Repositories\interfaces\Admin\GeneratorSettingRepositoryInterface;
 use App\Repositories\interfaces\Admin\PowerGeneratorRepositoryInterface;
 
 class PowerGeneratorService
@@ -18,6 +21,7 @@ class PowerGeneratorService
      */
     public function __construct(
         protected PowerGeneratorRepositoryInterface $powerGeneratorRepository,
+        protected GeneratorSettingRepositoryInterface $generatorSettingRepository,
     )
     {
         //
@@ -50,4 +54,22 @@ class PowerGeneratorService
 //        dd($generatorsDTOs);
         return $this->successWithPagination(PowerGeneratorResource::collection($generators),__('messages.success'));
     }
+
+    public function updateInfo($generator_id ,  PowerGeneratorDTO $generatorDTO)
+    {
+        $generator=$this->powerGeneratorRepository->find($generator_id);
+        if (! $generator)
+        {
+            throw  new ErrorException(__('powerGenerator.notFound'),ApiCode::NOT_FOUND);
+        }
+        $generator=$this->powerGeneratorRepository->update($generator,$generatorDTO->toArray());
+        $generatorSetting=$generator->settings;
+        if (! $generatorSetting)
+        {
+            throw new ErrorException(__('powerGenerator.noSetting'),ApiCode::NOT_FOUND);
+        }
+        $generatorSetting=$this->generatorSettingRepository->update($generatorSetting,$generatorDTO->toArray());
+        return $generator;
+    }
+
 }
