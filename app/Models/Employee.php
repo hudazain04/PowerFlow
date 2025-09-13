@@ -23,7 +23,8 @@ class Employee extends Authenticate implements JWTSubject
     protected $guard_name = 'employee';
 
     protected $fillable = [
-        'user_name',
+        'first_name',
+        'last_name',
         'secret_key',
         'generator_id',
         'phone_number',

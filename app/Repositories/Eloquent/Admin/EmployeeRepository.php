@@ -15,7 +15,8 @@ class EmployeeRepository implements EmployeeRepositoryInterface
     {
 //        dd($data);
         $user= Employee::create([
-            'user_name' => $data['user_name'],
+            'first_name' => $data['first_name'],
+            'last_name'=>$data['last_name'],
             'phone_number' => $data['phone_number'],
             'generator_id' => auth()->user()->powerGenerator->id,
             'secret_key' =>$this->model->generateSecretKey(),

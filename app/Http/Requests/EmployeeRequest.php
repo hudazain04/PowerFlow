@@ -24,8 +24,10 @@ class EmployeeRequest extends FormRequest
 
         return [
 
-            'user_name'=>'required|string|unique:employees,user_name',
-            'phone_number'=>'required|max:10',
+//            'user_name'=>'required|string|unique:employees,user_name',
+            'first_name'=>'required|string',
+            'last_name'=>'required|string',
+            'phone_number'=>'required|max:10|unique:employees,phone_number',
             'area_id'=>'nullable|exists:areas,id',
             'permissions' => 'array',
             'permissions.*' => 'string|exists:permissions,name'

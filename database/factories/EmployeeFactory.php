@@ -19,7 +19,8 @@ class EmployeeFactory extends Factory
     {
         return [
             'phone_number' => $this->faker->numerify('07########'),
-            'user_name' => $this->faker->name,
+            'first_name' => $this->faker->name,
+            'last_name' => $this->faker->name,
 //            'last_name' => $this->faker->lastName,
             'secret_key' => Str::random(10),
 //            'password' => bcrypt('employee123'),

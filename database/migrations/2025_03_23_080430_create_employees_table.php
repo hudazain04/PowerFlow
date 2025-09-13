@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
-            $table->string('user_name');
+            $table->string('first_name');
+            $table->string('last_name');
             $table->string('secret_key');
             $table->string('phone_number');
             $table->string('fcmToken')->nullable();

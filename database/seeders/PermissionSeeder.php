@@ -116,6 +116,8 @@ class PermissionSeeder extends Seeder
                 'APPROVE_GENERATOR_REQUEST',
                 'REJECT_GENERATOR_REQUEST',
                 'DELETE_GENERATOR',
+                'VIEW_INFO',
+                'UPDATE_GENERATOR_INFO'
             ],
 
             'Customer_Requests' => [
@@ -250,8 +252,7 @@ class PermissionSeeder extends Seeder
                 'VIEW_COMPLAINTS', 'VIEW_PROFILE', 'UPDATE_PROFILE', 'PROCESS_STRIPE_PAYMENT',
                 'PROCESS_CASH_PAYMENT','PROCESS_STRIPE_SPENDING_PAYMENT', 'PROCESS_CACHE_SPENDING_PAYMENT',
                 'VIEW_LANDING_PAGE_STATS', 'VIEW_POWER_GENERATORS','CREATE_SPENDING',
-                'UPDATE_SPENDING','DELETE_SPENDING','GET_SPENDINGS',
-                'UPDATE_GENERATOR_INFO'
+                'UPDATE_SPENDING','DELETE_SPENDING','GET_SPENDINGS','VIEW_INFO','UPDATE_GENERATOR_INFO'
             ];
 
             $adminRole->givePermissionTo($adminPermissions);
