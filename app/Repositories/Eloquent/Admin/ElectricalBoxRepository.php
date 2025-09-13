@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Repositories\Eloquent\Admin;
+use App\Models\ElectricalBox;
 use App\Models\ElectricalBox as ElectricalBoxModel;
 use App\Repositories\interfaces\Admin\ElectricalBoxRepositoryInterface;
 use Illuminate\Support\Facades\DB;
@@ -173,10 +174,12 @@ class ElectricalBoxRepository implements ElectricalBoxRepositoryInterface
     public function getBoxWithArea($id)
     {
         $box = ElectricalBoxModel::with('areas')->find($id);
-
+//        $counters_count = $box->counters()->count();
+        $box->counters_count = ElectricalBox::with('counters')->count();
         if (!$box) {
             throw new Exception(__('box.notFound'));
         }
+
 
         return $box;
     }

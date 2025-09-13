@@ -124,7 +124,7 @@ use App\Http\Controllers\User\UserAppController;
                 ->middleware('permission:VIEW_NEIGHBORHOOD');
             Route::get('getAreas', [AreaController::class, 'index'])
                 ->middleware('permission:VIEW_NEIGHBORHOODS');
-            Route::put('update/{id}', [AreaController::class, 'update'])
+            Route::put('updateArea/{id}', [AreaController::class, 'update'])
                 ->middleware('permission:UPDATE_NEIGHBORHOODS');
             Route::delete('delete', [AreaController::class, 'delete'])
                 ->middleware('permission:DELETE_NEIGHBORHOODS');
