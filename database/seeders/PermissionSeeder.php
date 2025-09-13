@@ -67,12 +67,12 @@ class PermissionSeeder extends Seeder
                 'RESET_PASSWORD',
             ],
 
-            'Areas' => [
-                'CREATE_AREAS',
-                'VIEW_AREAS',
-                'UPDATE_AREAS',
-                'DELETE_AREAS',
-                'VIEW_AREA',
+            'Neighborhoods' => [
+                'CREATE_NEIGHBORHOODS',
+                'VIEW_NEIGHBORHOODS',
+                'UPDATE_NEIGHBORHOODS',
+                'DELETE_NEIGHBORHOODS',
+                'VIEW_NEIGHBORHOOD',
             ],
 
             'Boxes' => [
@@ -80,9 +80,9 @@ class PermissionSeeder extends Seeder
                 'VIEW_BOXES',
                 'UPDATE_BOXES',
                 'DELETE_BOXES',
-                'ASSIGN_BOXES_TO_AREAS',
-                'REMOVE_BOXES_FROM_AREAS',
-                'VIEW_AREA_BOXES',
+                'ASSIGN_BOXES_TO_NEIGHBORHOODS',
+                'REMOVE_BOXES_FROM_NEIGHBORHOODS',
+                'VIEW_NEIGHBORHOOD_BOXES',
             ],
 
             'Counters' => [
@@ -125,11 +125,11 @@ class PermissionSeeder extends Seeder
                 'REJECT_CUSTOMER_REQUEST',
             ],
 
-            'Neighborhoods' => [
-                'CREATE_NEIGHBORHOOD',
-                'VIEW_NEIGHBORHOODS',
-                'UPDATE_NEIGHBORHOOD',
-                'DELETE_NEIGHBORHOOD',
+            'AREAS' => [
+                'CREATE_AREA',
+                'VIEW_AREAS',
+                'UPDATE_AREA',
+                'DELETE_AREA',
             ],
 
             'Features' => [
@@ -235,14 +235,14 @@ class PermissionSeeder extends Seeder
             $userRole = Role::firstOrCreate(['name' => 'user', 'guard_name' => $guard]);
             $superAdminRole->givePermissionTo(Permission::where('guard_name', $guard)->get());
             $adminPermissions = [
-                'CREATE_AREAS', 'VIEW_AREAS','VIEW_AREA' ,'UPDATE_AREAS', 'DELETE_AREAS',
+                'CREATE_NEIGHBORHOODS', 'VIEW_NEIGHBORHOODS','VIEW_NEIGHBORHOOD' ,'UPDATE_NEIGHBORHOODS', 'DELETE_NEIGHBORHOODS',
                 'CREATE_BOXES', 'VIEW_BOXES', 'UPDATE_BOXES', 'DELETE_BOXES',
-                'ASSIGN_BOXES_TO_AREAS', 'REMOVE_BOXES_FROM_AREAS', 'VIEW_AREA_BOXES',
+                'ASSIGN_BOXES_TO_NEIGHBORHOODS', 'REMOVE_BOXES_FROM_NEIGHBORHOODS', 'VIEW_NEIGHBORHOOD_BOXES',
                 'CREATE_COUNTERS', 'VIEW_COUNTERS', 'UPDATE_COUNTERS', 'DELETE_COUNTERS',
                 'VIEW_BOX_COUNTERS', 'VIEW_COUNTER_CURRENT_BOX', 'REMOVE_COUNTER_FROM_BOX',
                 'CREATE_EMPLOYEES', 'VIEW_EMPLOYEES', 'UPDATE_EMPLOYEES', 'DELETE_EMPLOYEES',
                 'VIEW_EMPLOYEE_DETAILS', 'VIEW_FAQ', 'CREATE_GENERATOR_REQUEST',
-                'VIEW_CUSTOMER_REQUESTS', 'VIEW_NEIGHBORHOODS', 'VIEW_FEATURES',
+                'VIEW_CUSTOMER_REQUESTS', 'VIEW_AREAS', 'VIEW_FEATURES',
                 'VIEW_PLANS', 'VIEW_PLAN_PRICES', 'CREATE_SUBSCRIPTION', 'VIEW_SUBSCRIPTIONS',
                 'RENEW_SUBSCRIPTION', 'CANCEL_SUBSCRIPTION', 'CREATE_SUBSCRIPTION_REQUEST',
                 'VIEW_ABOUT_APP', 'VIEW_TERMS_CONDITIONS', 'VIEW_PRIVACY_POLICY',

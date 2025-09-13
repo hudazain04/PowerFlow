@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repository\Eloquent\Admin;
+namespace App\Repositories\Eloquent\Admin;
 
 class GeneratorSettingRepository
 {

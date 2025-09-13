@@ -119,26 +119,26 @@ use App\Http\Controllers\User\UserAppController;
         Route::prefix('generator')->group(function () {
             // Areas
             Route::post('areas', [AreaController::class, 'store'])
-                ->middleware('permission:CREATE_AREAS');
+                ->middleware('permission:CREATE_NEIGHBORHOODS');
             Route::get('getArea/{id}',[AreaController::class,'getArea'])
-                ->middleware('permission:VIEW_AREA');
+                ->middleware('permission:VIEW_NEIGHBORHOOD');
             Route::get('getAreas', [AreaController::class, 'index'])
-                ->middleware('permission:VIEW_AREAS');
+                ->middleware('permission:VIEW_NEIGHBORHOODS');
             Route::put('update/{id}', [AreaController::class, 'update'])
-                ->middleware('permission:UPDATE_AREAS');
+                ->middleware('permission:UPDATE_NEIGHBORHOODS');
             Route::delete('delete', [AreaController::class, 'delete'])
-                ->middleware('permission:DELETE_AREAS');
+                ->middleware('permission:DELETE_NEIGHBORHOODS');
 
 
             // Box assignment to areas
             Route::post('/areas/{area_id}/boxes', [AreaBoxController::class, 'assignBox'])
-                ->middleware('permission:ASSIGN_BOXES_TO_AREAS');
+                ->middleware('permission:ASSIGN_BOXES_TO_NEIGHBORHOODS');
             Route::get('/areas/{area_id}/boxes/available', [AreaBoxController::class, 'getAvailableBoxes'])
-                ->middleware('permission:VIEW_AREA_BOXES');
+                ->middleware('permission:VIEW_NEIGHBORHOOD_BOXES');
             Route::delete('/areas/{area}/boxes/{box}', [AreaBoxController::class, 'removeBoxFromArea'])
-                ->middleware('permission:REMOVE_BOXES_FROM_AREAS');
+                ->middleware('permission:REMOVE_BOXES_FROM_NEIGHBORHOOD');
             Route::get('/areas/{area_id}/boxes', [AreaBoxController::class, 'getAreaBoxes'])
-                ->middleware('permission:VIEW_AREA_BOXES');
+                ->middleware('permission:VIEW_NEIGHBORHOOD_BOXES');
 
 
             // Box management
@@ -230,15 +230,15 @@ use App\Http\Controllers\User\UserAppController;
         // Neighborhood routes
         Route::prefix('neighborhood')->group(function () {
             Route::post('store', [NeighborhoodController::class, 'store'])
-                ->middleware('permission:CREATE_NEIGHBORHOOD');
+                ->middleware('permission:CREATE_AREA');
             Route::get('all', [NeighborhoodController::class, 'index'])
-                ->middleware('permission:VIEW_NEIGHBORHOODS');
+                ->middleware('permission:VIEW_AREAS');
             Route::get('show/{id}', [NeighborhoodController::class, 'show'])
-                ->middleware('permission:VIEW_NEIGHBORHOODS');
+                ->middleware('permission:VIEW_AREAS');
             Route::put('update/{id}', [NeighborhoodController::class, 'update'])
-                ->middleware('permission:UPDATE_NEIGHBORHOOD');
+                ->middleware('permission:UPDATE_AREA');
             Route::delete('delete/{id}', [NeighborhoodController::class, 'delete'])
-                ->middleware('permission:DELETE_NEIGHBORHOOD');
+                ->middleware('permission:DELETE_AREA');
         });
         Route::middleware('role:superAdmin')->group(function () {
             Route::get('/generators/{generator}/statistics', [SuperAdminStatisticsController::class
