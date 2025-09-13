@@ -22,7 +22,8 @@ class CounterBoxService
     public function __construct(
         private CounterBoxRepositoryInterface $repository,
         private PasswordResetService $passwordResetService,
-    ) {}
+    ) {
+    }
 
     public function assignCounter(int $counterId, int $boxId)
     {
@@ -46,7 +47,7 @@ class CounterBoxService
     public function createCounter(array $data)
     {
 
-//        return DB::transaction(function () use ($data) {
+        //        return DB::transaction(function () use ($data) {
 //            $generator = auth()->user()->powerGenerator->id;
 //
 //            if (!$generator) {
@@ -198,7 +199,7 @@ class CounterBoxService
         }
     }
 
-//    public function updateCounter($id, array $data)
+    //    public function updateCounter($id, array $data)
 //    {
 //        return DB::transaction(function () use ($id, $data) {
 //
@@ -312,7 +313,7 @@ class CounterBoxService
         // Get the next sequential counter number for this generator+box combination
         $lastCounter = Counter::where('generator_id', $generatorId)
             ->whereNot('id', $counter->id) // Exclude current counter
-            ->whereHas('electricalBoxes', function($query) use ($boxId) {
+            ->whereHas('electricalBoxes', function ($query) use ($boxId) {
                 $query->where('box_id', $boxId);
             })
             ->orderBy('id', 'desc')
@@ -389,8 +390,7 @@ class CounterBoxService
         $qrCode = QrCode::size(300)
             ->format('svg')
             ->color(110, 220, 148)
-            ->backgroundColor(0,0,0,0)
-            ->margin(10)
+            ->backgroundColor(0, 0, 0, 0)
             ->generate($qrContent);
 
 
