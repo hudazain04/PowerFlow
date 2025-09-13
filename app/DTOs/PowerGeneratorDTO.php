@@ -24,6 +24,8 @@ class PowerGeneratorDTO extends SimpleDTO
     {
         return [
             'user_id'=>new IntegerCast(),
+            'afterPaymentFrequency'=>new IntegerCast(),
+            'kiloPrice'=>new IntegerCast(),
         ];
     }
 }

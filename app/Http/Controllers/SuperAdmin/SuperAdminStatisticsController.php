@@ -9,6 +9,7 @@ use App\ApiHelper\ApiResponses;
 use App\ApiHelper\ApiResponse;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PowerGeneratorResource;
 use App\Models\PowerGenerator;
 use App\Services\Admin\AreaService;
 use App\Services\Admin\CounterService;
@@ -123,6 +124,6 @@ class SuperAdminStatisticsController extends Controller
     }
     public function getGenInfo($generator_id){
         $data=$this->generatorRequestService->getGenInfo($generator_id);
-        return ApiResponses::success($data,__('messages.success'),ApiCode::OK);
+        return ApiResponses::success(PowerGeneratorResource::make($data),__('messages.success'),ApiCode::OK);
     }
 }

@@ -24,9 +24,11 @@ class SubscriptionRequestResource extends JsonResource
             'period'=>$this->period,
             'type'=>$this->type,
             'status'=>$this->status,
+            'kiloPrice'=>$this->kiloPrice,
+            'spendingType'=>$this->spendingType,
+            'day'=>$this->day,
+            'afterPaymentFrequency'=>$this->afterPaymentFrequency,
             'time'=>$this->created_at->format('Y-m-d  h:iA'),
-
-
         ];
     }
 }

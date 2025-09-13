@@ -47,4 +47,11 @@ class PowerGeneratorRepository implements PowerGeneratorRepositoryInterface
         $powerGenerator=$powerGenerator->loadCount($relation);
         return $powerGenerator->getAttribute("{$relation}_count");
     }
+
+    public function update(PowerGeneratorModel $powerGenerator, array $data): PowerGeneratorModel
+    {
+        $powerGenerator->update($data);
+        $powerGenerator->save();
+        return $powerGenerator;
+    }
 }

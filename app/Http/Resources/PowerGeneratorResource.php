@@ -20,6 +20,10 @@ class PowerGeneratorResource extends JsonResource
             'email'=>$this->email,
             'phone'=>$this->phone,
             'location'=>$this->location,
+            'kiloPrice'=>$this->settings->kiloPrice,
+            'spendingType'=>$this->settings->spendingType,
+            'day'=>$this->settings->day,
+            'afterPaymentFrequency'=>$this->settings->afterPaymentFrequency,
             'expired_at'=>$this->expired_at->format('Y-m-d'),
         ];
     }
