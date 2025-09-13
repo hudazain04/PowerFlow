@@ -24,13 +24,17 @@ class ElectricalBoxResource extends JsonResource
                 'x'=>$this->latitude,
                 'y'=>$this->longitude,
             ],
-            'areas' => $this->whenLoaded('areas', function () {
-                return $this->areas->map(function ($area) {
-                    return [
-                        'id' => $area->id,
-                        'name' => $area->name,
-                    ];
-                });
+//            'area' => $this->whenLoaded('areas', function () {
+                'area' => $this->whenLoaded('areas', function () {
+                    // Get the first area and format it as an object
+                    if ($area = $this->areas->first()) {
+                        return [
+                            'id' => $area->id,
+                            'name' => $area->name,
+                        ];
+                    }
+
+
             }),
         ];
     }
