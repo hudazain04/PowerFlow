@@ -33,6 +33,7 @@ use App\Repositories\interfaces\Admin\CounterRepositoryInterface;
 use App\Repositories\interfaces\Admin\ElectricalBoxRepositoryInterface;
 use App\Repositories\interfaces\Admin\EmployeeRepositoryInterface;
 use App\Repositories\interfaces\Admin\PowerGeneratorRepositoryInterface;
+use App\Repositories\interfaces\Admin\StatisticsRepositoryInterface;
 use App\Repositories\interfaces\AppInfoRepositoryInterface;
 use App\Repositories\interfaces\FaqRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\FeatureRepositoryInterface;
@@ -74,6 +75,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(EmployeeRepositoryInterface::class,EmployeeRepository::class);
        $this->app->bind(\App\Repositories\interfaces\Employee\EmployeeRepositoryInterface::class,\App\Repositories\Eloquent\Employee\EmployeeRepository::class);
         $this->app->bind(UserAppRepositoryInterface::class,UserAppRepository::class);
+        $this->app->bind(StatisticsRepositoryInterface::class,StatisticsRepository::class);
     }
 
     public function boot()

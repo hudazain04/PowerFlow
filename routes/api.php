@@ -31,6 +31,7 @@ use App\Http\Controllers\User\VerificationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Employee\EmployeeAuthController;
 use App\Http\Controllers\User\UserAppController;
+use App\Http\Controllers\Admin\StatisticsController;
 
 
 
@@ -188,6 +189,25 @@ use App\Http\Controllers\User\UserAppController;
                 ->middleware('permission:VIEW_EMPLOYEE_DETAILS');
 
             Route::get('/permissions', [EmployeeController::class, 'getPermission']);
+            Route::get('/statistics/overview', [\App\Http\Controllers\Admin\StatisticsController::class, 'getOverviewStatistics']);
+//                ->middleware('permission:VIEW_STATISTICS');
+            Route::get('/statistics/counter-details/{counterId}', [StatisticsController::class, 'getCounterDetails']);
+//                ->middleware('permission:VIEW_STATISTICS');
+
+            Route::get('/statistics/box-details/{boxId}', [StatisticsController::class, 'getBoxDetails']);
+//                ->middleware('permission:VIEW_STATISTICS');
+
+            Route::get('/statistics/area-details/{areaId}', [StatisticsController::class, 'getAreaDetails']);
+//                ->middleware('permission:VIEW_STATISTICS');
+
+            Route::get('/statistics/totals', [StatisticsController::class, 'getTotalCounts']);
+//                ->middleware('permission:VIEW_STATISTICS');
+
+            Route::get('/statistics/recent-activities', [StatisticsController::class, 'getRecentActivities']);
+//                ->middleware('permission:VIEW_STATISTICS');
+
+            Route::get('/generators/{generator}/statistics', [SuperAdminStatisticsController::class
+                , 'getGeneratorStatistics']);
         });
 
 
