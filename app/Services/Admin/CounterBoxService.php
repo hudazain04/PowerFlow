@@ -388,6 +388,9 @@ class CounterBoxService
 
         $qrCode = QrCode::size(300)
             ->format('svg')
+            ->color(110, 220, 148)
+            ->backgroundColor(0,0,0,0)
+            ->margin(10)
             ->generate($qrContent);
 
 

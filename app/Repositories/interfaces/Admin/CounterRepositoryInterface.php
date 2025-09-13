@@ -34,4 +34,5 @@ interface CounterRepositoryInterface
     public function latestPayment(Counter $counter) : ?Payment;
 
     public function latestSpending(Counter $counter) : ?Spending;
+    public function getUsersByGeneratorWithSearch(int $generatorId, string $search = '', string $searchField = 'all');
 }

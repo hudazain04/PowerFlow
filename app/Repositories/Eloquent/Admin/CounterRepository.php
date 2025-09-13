@@ -125,4 +125,43 @@ class CounterRepository implements CounterRepositoryInterface
             ->where('id', $userId)
             ->firstOrFail();
     }
+
+    public function getUsersByGeneratorWithSearch(int $generatorId, string $search = '', string $searchField = 'all')
+    {
+        $query = User::with('counters', function($query) use ($generatorId) {
+            $query->where('generator_id', $generatorId);
+        })
+            ->withCount(['counters' => function($query) use ($generatorId) {
+                $query->where('generator_id', $generatorId);
+            }]);
+
+        // Apply search based on the specified field
+        if (!empty($searchTerm)) {
+            switch ($searchField) {
+                case 'first_name':
+                    $query->where('first_name', 'like', "%{$searchTerm}%");
+                    break;
+                case 'last_name':
+                    $query->where('last_name', 'like', "%{$searchTerm}%");
+                    break;
+                case 'phone_number':
+                    $query->where('phone_number', 'like', "%{$searchTerm}%");
+                    break;
+                case 'email':
+                    $query->where('email', 'like', "%{$searchTerm}%");
+                    break;
+                case 'all':
+                default:
+                    $query->where(function($q) use ($searchTerm) {
+                        $q->where('first_name', 'like', "%{$searchTerm}%")
+                            ->orWhere('last_name', 'like', "%{$searchTerm}%")
+                            ->orWhere('phone_number', 'like', "%{$searchTerm}%")
+                            ->orWhere('email', 'like', "%{$searchTerm}%");
+                    });
+                    break;
+            }
+        }
+
+        return $query->orderBy('created_at', 'desc')->paginate(10);
+    }
 }

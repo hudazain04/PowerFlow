@@ -124,7 +124,7 @@ use App\Http\Controllers\User\UserAppController;
                 ->middleware('permission:VIEW_NEIGHBORHOOD');
             Route::get('getAreas', [AreaController::class, 'index'])
                 ->middleware('permission:VIEW_NEIGHBORHOODS');
-            Route::put('updateArea/{id}', [AreaController::class, 'update'])
+            Route::put('area/update/{id}', [AreaController::class, 'update'])
                 ->middleware('permission:UPDATE_NEIGHBORHOODS');
             Route::delete('delete', [AreaController::class, 'delete'])
                 ->middleware('permission:DELETE_NEIGHBORHOODS');
@@ -163,6 +163,8 @@ use App\Http\Controllers\User\UserAppController;
                 ->middleware('permission:VIEW_COUNTERS');
 
             Route::get('users/{user}', [CounterController::class, 'getUserCounters']);
+            // routes/api.php
+            Route::get('/clients', [CounterController::class, 'getGeneratorClients']);
 
             // Counter-box assignment
             Route::get('/boxes/{box_id}/counters', [CounterBoxController::class, 'getBoxCounters'])

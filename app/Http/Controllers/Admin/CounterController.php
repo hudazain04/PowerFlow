@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\ApiHelper\ApiCode;
 use App\ApiHelper\ApiResponses;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\clientsResource;
 use App\Http\Resources\CounterResource;
 use App\Http\Resources\UserWithCountersResource;
 use App\Models\Counter;
@@ -38,6 +39,19 @@ class CounterController extends Controller
             UserWithCountersResource::make($result),
             __('user.counters_retrieved'),
             ApiCode::OK
+        );
+    }
+
+    public function getGeneratorClients(Request $request)
+    {
+        $generatorId = auth()->user()->powerGenerator->id;
+        $search = $request->input('search', '');
+        $searchField = $request->input('field', 'all');
+
+
+        $result = $this->service->getGeneratorClients($generatorId, $search,$searchField);
+
+        return ApiResponses::success(clientsResource::collection($result), __('user.clients_retrieved'), ApiCode::OK
         );
     }
 
