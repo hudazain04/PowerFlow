@@ -219,6 +219,15 @@ class PermissionSeeder extends Seeder
                 'DELETE_SPENDING',
               'GET_SPENDINGS',
             ],
+            'Actions'=>[
+                'CREATE_ACTION',
+                'UPDATE_ACTION',
+                'APPROVE_ACTION',
+                'REJECT_ACTION',
+                'VIEW_ACTION',
+                'VIEW_ACTIONS'
+
+            ],
         ];
         foreach ($guards as $guard) {
             // Create all permissions
@@ -252,7 +261,8 @@ class PermissionSeeder extends Seeder
                 'VIEW_COMPLAINTS', 'VIEW_PROFILE', 'UPDATE_PROFILE', 'PROCESS_STRIPE_PAYMENT',
                 'PROCESS_CASH_PAYMENT','PROCESS_STRIPE_SPENDING_PAYMENT', 'PROCESS_CACHE_SPENDING_PAYMENT',
                 'VIEW_LANDING_PAGE_STATS', 'VIEW_POWER_GENERATORS','CREATE_SPENDING',
-                'UPDATE_SPENDING','DELETE_SPENDING','GET_SPENDINGS','VIEW_INFO','UPDATE_GENERATOR_INFO'
+                'UPDATE_SPENDING','DELETE_SPENDING','GET_SPENDINGS','VIEW_INFO','UPDATE_GENERATOR_INFO',
+                'CREATE_ACTION','UPDATE_ACTION','APPROVE_ACTION','REJECT_ACTION','VIEW_ACTION','VIEW_ACTIONS',
             ];
 
             $adminRole->givePermissionTo($adminPermissions);
