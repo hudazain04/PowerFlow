@@ -79,7 +79,7 @@ class EmployeeController extends Controller
         $roleAdmin=Role::findByName(UserTypes::ADMIN);
         $adminPermissions=$roleAdmin->permissions->groupBy('group')->map(fn ($permissions) => $permissions->pluck('name'));;
         $roleEmployee=Role::findByName(UserTypes::EMPLOYEE);
-        $employeePermissions=$roleEmployee->permissions->map(fn ($permissions) => $permissions->pluck('name'));;
+        $employeePermissions=$roleEmployee->permissions->pluck('name');
 //        $permissions = Permission::where('guard_name', 'api')
 //            ->get()
 //            ->groupBy('group');
