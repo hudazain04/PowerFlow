@@ -128,9 +128,9 @@ class CounterRepository implements CounterRepositoryInterface
 
     public function getUsersByGeneratorWithSearch(int $generatorId, string $search = '', string $searchField = 'all')
     {
-        $query = User::with(['counters' => function($query) use ($generatorId) {
-            $query->where('generator_id', $generatorId)->firstOrFail();
-        }])
+        $query = User::whereHas('counters', function($query) use ($generatorId) {
+            $query->where('generator_id', $generatorId);
+        })
             ->withCount(['counters' => function($query) use ($generatorId) {
                 $query->where('generator_id', $generatorId);
             }]);
