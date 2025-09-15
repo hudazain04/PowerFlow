@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('number');
             $table->string('QRCode');
             $table->integer('current_spending');
+            $table->string('physical_device_id')->nullable();
             $table->enum('spendingType',array_values((new ReflectionClass(\App\Types\SpendingTypes::class))->getConstants()));
             $table->foreignId('generator_id')->nullable()->constrained('power_generators')->nullOnDelete();
             $table->string('status')->default(\App\Types\CounterStatus::InCheck);
