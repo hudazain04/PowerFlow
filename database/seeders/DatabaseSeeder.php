@@ -36,7 +36,7 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-//        User::factory(10)->create();
+        //        User::factory(10)->create();
 
         $this->call([
             RoleSeeder::class,
@@ -64,8 +64,7 @@ class DatabaseSeeder extends Seeder
 
         // Customers
         $users = User::factory()->count(32)->create();
-        foreach ($users as $user)
-        {
+        foreach ($users as $user) {
             $user->assignRole(UserTypes::USER);
         }
 
@@ -177,9 +176,19 @@ class DatabaseSeeder extends Seeder
         $counters = collect();
 
         // Admin counter
-        $adminCounter = Counter::factory()->for($users->random())->create([
-            'generator_id' => $generatorAdmin->id,
-        ]);
+        // $adminCounter = Counter::factory()->for($users->random())->create([
+        //     'generator_id' => $generatorAdmin->id,
+        //     "physical_device_id" => 
+
+        // ]);
+
+        foreach ($users as $index => $user) {
+            $adminCounter = Counter::factory()->for($user)->create([
+                'generator_id' => $generatorAdmin->id,
+                'physical_device_id' => $index + 1,
+            ]);
+        }
+
         $counters->push($adminCounter);
 
         Counter_Box::factory()->create([
