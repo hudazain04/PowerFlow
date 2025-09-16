@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\ApiHelper\ApiCode;
 use App\ApiHelper\ApiResponses;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CounterResource;
+use App\Http\Resources\SpendingPaymentRersource;
+use App\Http\Resources\SpendingResource;
 use App\Models\Area;
 use App\Models\Counter;
 use App\Models\ElectricalBox;
@@ -84,11 +87,11 @@ class StatisticsController extends Controller
         return ApiResponses::success(
             [
 
-                'counter' => $counter,
-                'total_consumption' => $counter->spendings_sum_consume,
-                'total_payments' => $counter->payments_sum_amount,
-                'recent_spending' => $recentSpending,
-                'recent_payments' => $recentPayments,
+                'counter' => CounterResource::make($counter),
+                'total_consumption' => $counter->spendings_sum_consume ?? 0,
+                'total_payments' => $counter->payments_sum_amount ?? 0,
+                'recent_spending' => SpendingResource::collection($recentSpending),
+                'recent_payments' => SpendingPaymentRersource::collection($recentPayments),
             ],
             'Counter details retrieved successfully',
             ApiCode::OK

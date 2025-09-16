@@ -14,6 +14,15 @@ class SpendingPaymentRersource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return[
+          'id'=>$this->id,
+            'date'=>$this->date->format('Y-m-d H:s a'),
+            'amount'=>$this->amount,
+            'current_spending'=>$this->current_spending,
+            'next_spending'=>$this->next_spending,
+            'counter_id'=>$this->counter_id,
+            'status'=>$this->status,
+            'type'=>$this->type,
+        ];
     }
 }
