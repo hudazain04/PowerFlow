@@ -9,4 +9,7 @@ interface GeneratorSettingRepositoryInterface
     public function create(array  $data) : GeneratorSetting;
 
     public function update(GeneratorSetting $generatorSetting ,  array $data) : GeneratorSetting;
+
+    public function get($generator_id) : GeneratorSetting;
 }
+

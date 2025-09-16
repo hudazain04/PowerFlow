@@ -27,4 +27,10 @@ class GeneratorSettingRepository implements GeneratorSettingRepositoryInterface
        $generatorSetting->save();
        return $generatorSetting;
     }
+
+    public function get($generator_id): GeneratorSetting
+    {
+        $setting=GeneratorSetting::where('generator_id',$generator_id)->first();
+        return $setting;
+    }
 }

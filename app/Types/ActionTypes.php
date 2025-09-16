@@ -12,10 +12,10 @@ class ActionTypes
         //
     }
 
-    public const Cut="Cut";
-    public const Connect="Connect";
-    public const OverConsume="OverConsume";
-    public const Payment="Payment";
+    public const Cut="cut";
+    public const Connect="connect";
+    public const OverConsume="overConsume";
+    public const Payment="payment";
 
     public const PRIORITIES = [
         self::Cut         => 2,
