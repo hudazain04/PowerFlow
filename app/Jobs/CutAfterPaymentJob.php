@@ -36,7 +36,7 @@ class CutAfterPaymentJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $counters=$this->counterRepository->get($this->generator->id,[],['spendingType'=>SpendingTypes::After]);
+        $counters=$this->counterRepository->get(generator_id : $this->generator->id, wheres : ['spendingType'=>SpendingTypes::After]);
         foreach ($counters as $counter)
         {
             $setting=$this->generatorSettingRepository->get($this->generator->id);
