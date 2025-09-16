@@ -26,25 +26,25 @@ class StatisticsController extends Controller
         $totalBoxes = ElectricalBox::where('generator_id', $generatorId)->count();
         $totalCounters = Counter::where('generator_id', $generatorId)->count();
         $totalEmployees = Employee::where('generator_id', $generatorId)->count();
-        $totalClients = User::whereHas('counters', function($query) use ($generatorId) {
+        $totalClients = User::whereHas('counters', function ($query) use ($generatorId) {
             $query->where('generator_id', $generatorId);
         })->count();
 
         // Active counters (with recent activity)
         $activeCounters = Counter::where('generator_id', $generatorId)
-            ->whereHas('spendings', function($query) {
+            ->whereHas('spendings', function ($query) {
                 $query->where('date', '>=', Carbon::now()->subDays(30));
             })
             ->count();
 
         // Recent payments
-        $recentPayments = Payment::whereHas('counter', function($query) use ($generatorId) {
+        $recentPayments = Payment::whereHas('counter', function ($query) use ($generatorId) {
             $query->where('generator_id', $generatorId);
         })
             ->where('created_at', '>=', Carbon::now()->subDays(30))
             ->sum('amount');
 
-        return   ApiResponses::success([
+        return ApiResponses::success([
             [
                 'total_areas' => $totalAreas,
                 'total_boxes' => $totalBoxes,
@@ -53,7 +53,9 @@ class StatisticsController extends Controller
                 'total_clients' => $totalClients,
                 'active_counters' => $activeCounters,
                 'recent_payments' => $recentPayments,
-            ],'statistics',ApiCode::OK
+            ],
+            'statistics',
+            ApiCode::OK
 
 
         ]);
@@ -79,15 +81,18 @@ class StatisticsController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return ApiResponses::success([
+        return ApiResponses::success(
             [
+
                 'counter' => $counter,
                 'total_consumption' => $counter->spendings_sum_consume,
                 'total_payments' => $counter->payments_sum_amount,
                 'recent_spending' => $recentSpending,
                 'recent_payments' => $recentPayments,
-            ], 'Counter details retrieved successfully', ApiCode::OK
-        ]);
+            ],
+            'Counter details retrieved successfully',
+            ApiCode::OK
+        );
     }
     public function getBoxDetails(Request $request, $boxId)
     {
@@ -101,12 +106,14 @@ class StatisticsController extends Controller
             : 0;
 
         return ApiResponses::success([
-             [
+            [
                 'box' => $box,
                 'counters_count' => $box->counters_count,
                 'capacity' => $box->capacity,
                 'available_slots' => $box->capacity - $box->counters_count,
-            ], 'Box details retrieved successfully', ApiCode::OK
+            ],
+            'Box details retrieved successfully',
+            ApiCode::OK
         ]);
     }
     public function getAreaDetails(Request $request, $areaId)
@@ -115,18 +122,20 @@ class StatisticsController extends Controller
             ->findOrFail($areaId);
 
         // Get boxes in this area
-        $boxes = ElectricalBox::whereHas('areas', function($query) use ($areaId) {
+        $boxes = ElectricalBox::whereHas('areas', function ($query) use ($areaId) {
             $query->where('area_id', $areaId);
         })
             ->withCount('counters')
             ->get();
 
         return ApiResponses::success([
-           [
+            [
                 'area' => $area,
                 'boxes_count' => $area->electricalbox_count,
                 'boxes' => $boxes,
-            ], 'Area details retrieved successfully', ApiCode::OK
+            ],
+            'Area details retrieved successfully',
+            ApiCode::OK
         ]);
     }
     public function getTotalCounts(Request $request)
@@ -137,13 +146,15 @@ class StatisticsController extends Controller
             'areas' => Area::where('generator_id', $generatorId)->count(),
             'boxes' => ElectricalBox::where('generator_id', $generatorId)->count(),
             'counters' => Counter::where('generator_id', $generatorId)->count(),
-            'clients' => User::whereHas('counters', function($query) use ($generatorId) {
+            'clients' => User::whereHas('counters', function ($query) use ($generatorId) {
                 $query->where('generator_id', $generatorId);
             })->count(),
         ];
 
         return ApiResponses::success([
-             $totals, 'Total counts retrieved successfully', ApiCode::OK
+            $totals,
+            'Total counts retrieved successfully',
+            ApiCode::OK
         ]);
     }
 
@@ -154,7 +165,7 @@ class StatisticsController extends Controller
         $generatorId = auth()->user()->powerGenerator->id;
 
         // Recent payments (last 10)
-        $recentPayments = Payment::whereHas('counter', function($query) use ($generatorId) {
+        $recentPayments = Payment::whereHas('counter', function ($query) use ($generatorId) {
             $query->where('generator_id', $generatorId);
         })
             ->with('counter.user')
@@ -163,7 +174,7 @@ class StatisticsController extends Controller
             ->get();
 
         // Recent spending (last 10)
-        $recentSpending = Spending::whereHas('counter', function($query) use ($generatorId) {
+        $recentSpending = Spending::whereHas('counter', function ($query) use ($generatorId) {
             $query->where('generator_id', $generatorId);
         })
             ->with('counter.user')
@@ -175,7 +186,9 @@ class StatisticsController extends Controller
             [
                 'recent_payments' => $recentPayments,
                 'recent_spending' => $recentSpending,
-            ], 'Recent activities retrieved successfully', ApiCode::OK
+            ],
+            'Recent activities retrieved successfully',
+            ApiCode::OK
         ]);
     }
 
