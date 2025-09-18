@@ -37,15 +37,14 @@ class CutAfterPaymentJob implements ShouldQueue
     public function handle(): void
     {
         $counters=$this->counterRepository->get(generator_id : $this->generator->id, wheres : ['spendingType'=>SpendingTypes::After]);
+        $setting=$this->generatorSettingRepository->get($this->generator->id);
+        $nextDueDate =$setting->nextDueDate;
+        $dayBeforeDue = $nextDueDate->copy()->subDay();
         foreach ($counters as $counter)
         {
-            $setting=$this->generatorSettingRepository->get($this->generator->id);
             $latestPayment=$this->counterRepository->latestPayment($counter);
             $latestSpending=$this->counterRepository->latestSpending($counter);
             $latestPaymentDate=$latestPayment->date;
-            $nextDueDate =$setting->nextDueDate;
-            $dayBeforeDue = $nextDueDate->copy()->subDay();
-
             if (!($latestPaymentDate->isSameDay($nextDueDate) || $latestPaymentDate->isSameDay($dayBeforeDue))) {
                 $action=$this->actionService->create([
                     'type'=>ActionTypes::Cut,
@@ -61,5 +60,11 @@ class CutAfterPaymentJob implements ShouldQueue
             }
 
         }
+        $newNextDueDate = $nextDueDate->copy()
+        ->addWeeks($setting->afterPaymentFrequency)
+        ->next($setting->day);
+        $this->generatorSettingRepository->update($setting, [
+            'nextDueDate' => $newNextDueDate
+        ]);
     }
 }

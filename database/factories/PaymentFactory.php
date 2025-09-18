@@ -2,6 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Types\ComplaintStatusTypes;
+use App\Types\PaymentStatus;
+use App\Types\PaymentType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -23,6 +26,9 @@ class PaymentFactory extends Factory
             'date' => $this->faker->dateTimeThisYear,
             'current_spending' => $current,
             'next_spending' => $next,
+            'status' => $this->faker->randomElement(array_values((new \ReflectionClass(PaymentStatus::class))->getConstants())),
+            'type' => $this->faker->randomElement(array_values((new \ReflectionClass(PaymentType::class))->getConstants())),
+
         ];
     }
 }
