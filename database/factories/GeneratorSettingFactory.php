@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Types\DaysOfWeek;
 use App\Types\SpendingTypes;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,6 +19,11 @@ class GeneratorSettingFactory extends Factory
      */
     public function definition(): array
     {
+        $afterPaymentFrequency = $this->faker->numberBetween(1, 4);
+        $day = $this->faker->randomElement(
+            array_values((new \ReflectionClass(DaysOfWeek::class))->getConstants())
+        );
+
         return [
             'spendingType' => $this->faker->randomElement(
                 array_values((new \ReflectionClass(SpendingTypes::class))->getConstants())
@@ -25,11 +31,13 @@ class GeneratorSettingFactory extends Factory
 
             'kiloPrice' => $this->faker->numberBetween(100, 1000),
 
-            'afterPaymentFrequency' => $this->faker->numberBetween(1, 4),
+            'afterPaymentFrequency' => $afterPaymentFrequency,
 
-            'day' => $this->faker->randomElement(
-                array_values((new \ReflectionClass(DaysOfWeek::class))->getConstants())
-            ),
+            'day' => $day,
+
+            'nextDueDate' => Carbon::now()
+                ->addWeeks($afterPaymentFrequency)
+                ->next($day),
         ];
     }
 }

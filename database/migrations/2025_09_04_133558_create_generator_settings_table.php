@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('kiloPrice');
             $table->integer('afterPaymentFrequency');
             $table->enum('day',array_values((new ReflectionClass(\App\Types\DaysOfWeek::class))->getConstants()));
+            $table->date('nextDueDate')->nullable();
             $table->timestamps();
         });
     }

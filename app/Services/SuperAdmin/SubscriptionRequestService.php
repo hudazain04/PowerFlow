@@ -13,8 +13,10 @@ use App\DTOs\SubscriptionRequestDTO;
 use App\DTOs\UserDTO;
 use App\Exceptions\ErrorException;
 use App\Http\Resources\SubscriptionRequestResource;
+use App\Jobs\AfterPaymentReminderJob;
 use App\Models\User;
 use App\Models\User as UserModel;
+use App\Repositories\interfaces\Admin\GeneratorSettingRepositoryInterface;
 use App\Repositories\interfaces\Admin\PowerGeneratorRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\PlanPriceRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\SubscriptionPaymentRepositoryInterface;
@@ -41,6 +43,7 @@ class SubscriptionRequestService
         protected SubscriptionRepositoryInterface $subscriptionRepository,
         protected UserRepositoryInterface $userRepository,
         protected SubscriptionPaymentRepositoryInterface $subscriptionPaymentRepository,
+        protected GeneratorSettingRepositoryInterface $generatorSettingRepository,
     )
     {
     }
@@ -66,7 +69,7 @@ class SubscriptionRequestService
             'amount'=>$planPrice->price,
             'subscriptionRequest_id'=>$subscriptionRequest->id,
         ]);
-        return $this->success(['request_id'=>$subscriptionRequest->id],__('subscriptionRequest.create'));
+        return $this->success(SubscriptionRequestResource::make($subscriptionRequest),__('subscriptionRequest.create'));
     }
 
     public function getAll(Request $request)
@@ -89,6 +92,16 @@ class SubscriptionRequestService
             $powerGeneratorDTO->location = $request->location;
             $powerGeneratorDTO->user_id = $request->user_id;
             $generator = $this->powerGeneratorRepository->create($powerGeneratorDTO->toArray());
+            $settingDTO=new GeneratorSettingDTO();
+            $settingDTO->generator_id=$generator->id;
+            $settingDTO->day=$request->day;
+            $settingDTO->spendingType=$request->spendingType;
+            $settingDTO->afterPaymentFrequency=$request->afterPaymentFrequency;
+            $settingDTO->kiloPrice=$request->kiloPrice;
+            $settingDTO->nextDueDate=Carbon::now()
+                ->addWeeks($request->afterPaymentFrequency)
+                ->next($request->day);
+            $this->generatorSettingRepository->create($settingDTO->toArray());
             $user=$this->userRepository->findById($request->user_id);
             $this->userRepository->updateRole($user,UserTypes::ADMIN);
             $planPrice = $this->subscriptionRequestRepository->getRelations($request, ['planprice'])->planPrice;
@@ -98,14 +111,8 @@ class SubscriptionRequestService
             $subscriptionDTO->planPrice_id = $planPrice->id;
             $subscriptionDTO->price = $planPrice->price;
             $subscriptionDTO->generator_id = $generator->id;
-            $settingDTO=new GeneratorSettingDTO();
-            $settingDTO->generator_id=$generator->id;
-            $settingDTO->day=$request->day;
-            $settingDTO->spendingType=$request->spendingType;
-            $settingDTO->afterPaymentFrequency=$request->afterPaymentFrequency;
-            $settingDTO->kiloPrice=$request->kiloPrice;
+            $this->subscriptionRepository->create($subscriptionDTO->toArray());
 
-            $subscription = $this->subscriptionRepository->create($subscriptionDTO->toArray());
             $payment=$this->subscriptionPaymentRepository->findWhere(['subscriptionRequest_id'=>$requestId]);
             if (! $payment)
             {
@@ -117,6 +124,9 @@ class SubscriptionRequestService
                     'date'=>Carbon::now(),'status'=>PaymentStatus::Paid
                 ]);
             }
+            $reminderDate = $settingDTO->nextDueDate->copy()->subDay()->startOfDay();
+            AfterPaymentReminderJob::dispatchAfterResponse($generator)
+                ->delay($reminderDate);
             DB::commit();
             return ['success'=>true];
 

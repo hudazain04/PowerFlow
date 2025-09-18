@@ -2,6 +2,8 @@
 
 namespace App\DTOs;
 
+use Carbon\Carbon;
+use WendellAdriel\ValidatedDTO\Casting\CarbonCast;
 use WendellAdriel\ValidatedDTO\Casting\IntegerCast;
 use WendellAdriel\ValidatedDTO\SimpleDTO;
 
@@ -13,6 +15,8 @@ class GeneratorSettingDTO extends SimpleDTO
     public ?string $spendingType;
     public ?string $day;
     public ?int $afterPaymentFrequency;
+    public ?Carbon $nextDueDate;
+
 
     protected function defaults(): array
     {
@@ -25,6 +29,7 @@ class GeneratorSettingDTO extends SimpleDTO
             'generator_id'=>new IntegerCast(),
             'kiloPrice'=>new IntegerCast(),
             'afterPaymentFrequency'=>new IntegerCast(),
+            'nextDueDate'=>new CarbonCast(),
 
         ];
     }

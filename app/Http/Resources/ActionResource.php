@@ -28,6 +28,10 @@ class ActionResource extends JsonResource
         {
             array_merge($data,['payment'=>$this->relatedData['payment']]);
         }
+        if ($this->type ===ActionTypes::Cut)
+        {
+            array_merge($data,['latestSpending'=>$this->relatedData['latestSpending'],'latestPayment'=>relatedData['latestPayment']]);
+        }
         return $data;
     }
 }

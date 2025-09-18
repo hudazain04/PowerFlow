@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('counters', function (Blueprint $table) {
             $table->id();
             $table->string('number');
+            $table->string('physical_device_id')->unique()->nullable();
             $table->string('QRCode');
             $table->integer('current_spending');
             $table->string('physical_device_id')->nullable();

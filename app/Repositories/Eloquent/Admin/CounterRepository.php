@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Collection;
 class CounterRepository implements CounterRepositoryInterface
 {
    protected $model;
+
     public function __construct(Counter $counter){
         $this->model=$counter;
     }
@@ -30,8 +31,6 @@ class CounterRepository implements CounterRepositoryInterface
     {
         return $this->model->find($id);
     }
-
-
 
 
     public function update(int $id, array $data): bool
@@ -96,9 +95,9 @@ class CounterRepository implements CounterRepositoryInterface
         return $counter;
     }
 
-    public function get($generator_id,?array $filters = []): Collection
+    public function get($generator_id,?array $filters = [],?array $wheres=[]): Collection
     {
-        $counters=Counter::where('generator_id',$generator_id)->filter($filters)->get();
+        $counters=Counter::where('generator_id',$generator_id)->filter($filters)->where($wheres)->get();
         return $counters;
     }
 
