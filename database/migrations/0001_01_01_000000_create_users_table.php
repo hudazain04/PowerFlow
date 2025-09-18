@@ -23,6 +23,8 @@ return new class extends Migration
           $table->string('phone_number')->nullable();
            $table->boolean('blocked')->default(false);
           $table->string('fcmToken')->nullable();
+          $table->boolean('should_reset_password')->default(false);
+
           $table->timestamps();
       });
 

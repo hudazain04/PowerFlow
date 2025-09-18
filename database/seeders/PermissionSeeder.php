@@ -228,6 +228,9 @@ class PermissionSeeder extends Seeder
                 'VIEW_ACTIONS'
 
             ],
+            'Notifications'=>[
+              'SEND_NOTIFICATION'
+            ],
         ];
         foreach ($guards as $guard) {
             // Create all permissions
@@ -263,6 +266,7 @@ class PermissionSeeder extends Seeder
                 'VIEW_LANDING_PAGE_STATS', 'VIEW_POWER_GENERATORS','CREATE_SPENDING',
                 'UPDATE_SPENDING','DELETE_SPENDING','GET_SPENDINGS','VIEW_INFO','UPDATE_GENERATOR_INFO',
                 'CREATE_ACTION','UPDATE_ACTION','APPROVE_ACTION','REJECT_ACTION','VIEW_ACTION','VIEW_ACTIONS',
+                'SEND_NOTIFICATION',
             ];
 
             $adminRole->givePermissionTo($adminPermissions);

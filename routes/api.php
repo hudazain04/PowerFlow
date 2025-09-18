@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\PowerGeneratorController;
 use App\Http\Controllers\Admin\SpendingController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\paymentController;
 use App\Http\Controllers\SpendingPaymentController;
 use App\Http\Controllers\SubscriptionController;
@@ -460,6 +461,11 @@ use App\Http\Controllers\Admin\StatisticsController;
             Route::get('getAction/{id}',[ActionController::class,'getAction'])
                 ->middleware('permission:VIEW_ACTION');
 
+        });
+
+        Route::prefix('notification')->group(function (){
+           Route::post('sendNotification',[NotificationController::class,'notify'])
+               ->middleware('permission:SEND_NOTIFICATION');
         });
     });
 
