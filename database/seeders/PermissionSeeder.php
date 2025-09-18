@@ -229,7 +229,9 @@ class PermissionSeeder extends Seeder
 
             ],
             'Notifications'=>[
-              'SEND_NOTIFICATION'
+              'SEND_NOTIFICATION',
+                'VIEW_NOTIFICATIONS',
+                'VIEW_NOTIFICATION',
             ],
         ];
         foreach ($guards as $guard) {
@@ -266,7 +268,7 @@ class PermissionSeeder extends Seeder
                 'VIEW_LANDING_PAGE_STATS', 'VIEW_POWER_GENERATORS','CREATE_SPENDING',
                 'UPDATE_SPENDING','DELETE_SPENDING','GET_SPENDINGS','VIEW_INFO','UPDATE_GENERATOR_INFO',
                 'CREATE_ACTION','UPDATE_ACTION','APPROVE_ACTION','REJECT_ACTION','VIEW_ACTION','VIEW_ACTIONS',
-                'SEND_NOTIFICATION',
+                'SEND_NOTIFICATION','VIEW_NOTIFICATIONS','VIEW_NOTIFICATION',
             ];
 
             $adminRole->givePermissionTo($adminPermissions);
@@ -278,7 +280,7 @@ class PermissionSeeder extends Seeder
                 'VIEW_ABOUT_APP', 'VIEW_TERMS_CONDITIONS', 'VIEW_PRIVACY_POLICY',
                 'CREATE_COMPLAINT', 'CREATE_CUSTOMER_COMPLAINT', 'VIEW_COMPLAINTS',
                 'VIEW_PROFILE', 'UPDATE_PROFILE', 'VIEW_POWER_GENERATORS','CREATE_SPENDING',
-                'UPDATE_SPENDING','DELETE_SPENDING','GET_SPENDINGS',
+                'UPDATE_SPENDING','DELETE_SPENDING','GET_SPENDINGS','VIEW_NOTIFICATIONS','VIEW_NOTIFICATION'
             ];
             $employeeRole->givePermissionTo($employeePermissions);
             $userPermissions = [
@@ -287,7 +289,8 @@ class PermissionSeeder extends Seeder
                 'VIEW_TERMS_CONDITIONS', 'VIEW_PRIVACY_POLICY', 'CREATE_CUSTOMER_COMPLAINT',
                 'VIEW_PROFILE', 'UPDATE_PROFILE', 'PROCESS_STRIPE_PAYMENT',
                 'PROCESS_CASH_PAYMENT','PROCESS_STRIPE_SPENDING_PAYMENT' ,'PROCESS_CACHE_SPENDING_PAYMENT',
-                'VIEW_PLANS', 'VIEW_PLAN_PRICES','GET_SPENDINGS',
+                'VIEW_PLANS', 'VIEW_PLAN_PRICES','GET_SPENDINGS','VIEW_NOTIFICATIONS','VIEW_NOTIFICATION',
+
             ];
 
             $userRole->givePermissionTo($userPermissions);

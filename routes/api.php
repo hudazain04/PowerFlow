@@ -466,6 +466,10 @@ use App\Http\Controllers\Admin\StatisticsController;
         Route::prefix('notification')->group(function (){
            Route::post('sendNotification',[NotificationController::class,'notify'])
                ->middleware('permission:SEND_NOTIFICATION');
+           Route::get('getNotifications',[NotificationController::class,'getAll'])
+               ->middleware('permission:VIEW_NOTIFICATIONS');
+           Route::get('show/{id}',[NotificationController::class,'show'])
+               ->middleware('permission:VIEW_NOTIFICATION');
         });
     });
 
