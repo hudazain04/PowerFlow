@@ -23,11 +23,12 @@ class UserAppController extends Controller
 {
     public function __construct(private UserAppService $service){}
 
-    public function resetPassword(int $id,Request $request){
-        $validate=$request->validate(['Current_Password'=>'required|string',
-            'New_Password'=>'required|string']);
-        $password=$this->service->resetPassword($id,...$validate);
-            return ApiResponses::success($password,'New Password Set Successfully',ApiCode::OK);
+    public function resetPassword(Request $request){
+        $validate=$request->validate(['currentPassword'=>'required|string',
+            'newPassword'=>'required|string']);
+        $user_id=$request->user()->id;
+        $password=$this->service->resetPassword($user_id,...$validate);
+            return ApiResponses::success($password,__('auth.newPassword'),ApiCode::OK);
     }
     public function name(int $id,Request $request){
         $validate=$request->validate([

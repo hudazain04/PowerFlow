@@ -19,4 +19,5 @@ return [
     'blocked'=>'This account is  blocked',
     'updateProfile'=>'Profile updated successfully',
     'userNotFound'=>'user not Found',
+    'newPassword'=>'New Password Set Successfully',
 ];

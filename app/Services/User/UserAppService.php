@@ -19,15 +19,15 @@ class UserAppService
     private UserAppRepositoryInterface $appRepository
 
     ){}
-   public function resetPassword(int $id,string $Current_Password,string $New_Password){
+   public function resetPassword(int $id,string $currentPassword,string $newPassword){
         $user=User::find($id);
         if (!$user){
           throw AuthException::usernotExists();
         }
-        if (!Hash::check($Current_Password,$user->password)){
+        if (!Hash::check($currentPassword,$user->password)){
            throw AuthException::invalidCredentials();
         }
-        return $this->appRepository->resetPassword($id,$New_Password);
+        return $this->appRepository->resetPassword($id,$newPassword);
    }
     public function name(int $id,array $name)
     {
