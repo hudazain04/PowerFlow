@@ -15,9 +15,11 @@ use App\Services\Admin\AreaService;
 use App\Services\Admin\CounterService;
 use App\Services\Admin\ElectricalBoxService;
 use App\Services\Admin\EmployeeService;
+use App\Services\Payment\PaymentService;
 use App\Services\SuperAdmin\GeneratorRequestService;
 use App\Services\SuperAdmin\PlanService;
 use App\Services\SuperAdmin\StatisticsService;
+use App\Services\SuperAdmin\SubscriptionService;
 use Illuminate\Http\Request;
 
 class SuperAdminStatisticsController extends Controller
@@ -31,6 +33,8 @@ class SuperAdminStatisticsController extends Controller
         private EmployeeService $employeeService,
         private PlanService $planService,
         private GeneratorRequestService $generatorRequestService,
+        protected PaymentService $paymentService,
+
     )
     {
     }
@@ -124,6 +128,12 @@ class SuperAdminStatisticsController extends Controller
     }
     public function getGenInfo($generator_id){
         $data=$this->generatorRequestService->getGenInfo($generator_id);
-        return ApiResponses::success(PowerGeneratorResource::make($data),__('messages.success'),ApiCode::OK);
+        return ApiResponses::success($data,__('messages.success'),ApiCode::OK);
+    }
+
+    public function totalIncome($generator_id)
+    {
+        $data=$this->paymentService->getTotalForGenerator($generator_id);
+        return $this->success(['totalIncomeByGenerator'=>$data],__('messages.success'));
     }
 }

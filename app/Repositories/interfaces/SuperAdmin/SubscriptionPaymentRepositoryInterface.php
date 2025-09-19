@@ -11,4 +11,6 @@ interface SubscriptionPaymentRepositoryInterface
     public function update(SubscriptionPaymentModel $subscriptionPayment,array $data)  : SubscriptionPaymentModel;
 
     public function findWhere(array $wheres) : SubscriptionPaymentModel;
+
+    public function getTotalForGenerator($user_id) : int;
 }

@@ -8,6 +8,7 @@ use App\Exceptions\ErrorException;
 use App\Payment\Methods\CashPayment;
 use App\Payment\Methods\StripePayment;
 use App\Payment\Visitors\PaymentProcessor;
+use App\Repositories\interfaces\Admin\PowerGeneratorRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\SubscriptionPaymentRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\SubscriptionRepositoryInterface;
 use App\Services\SuperAdmin\SubscriptionRequestService;
@@ -27,6 +28,7 @@ class PaymentService
     public function __construct(
         protected SubscriptionPaymentRepositoryInterface $subscriptionPaymentRepository,
         protected SubscriptionRequestService  $subscriptionRequestService,
+        protected PowerGeneratorRepositoryInterface $powerGeneratorRepository,
     )
     {
         //
@@ -101,5 +103,17 @@ class PaymentService
         }
         $this->subscriptionPaymentRepository->update($payment,['type'=>PaymentType::Cash,'status'=>PaymentStatus::Pending]);
         return $this->success($result,__('payment.cash'));
+    }
+
+    public function getTotalForGenerator($generator_id)
+    {
+        $generator=$this->powerGeneratorRepository->find($generator_id);
+        if (! $generator)
+        {
+            throw new ErrorException(__('powerGenerator.notFound'),ApiCode::NOT_FOUND);
+        }
+        $user_id=$generator->user->id;
+        $payments=$this->subscriptionPaymentRepository->getTotalForGenerator($user_id);
+        return $payments;
     }
 }

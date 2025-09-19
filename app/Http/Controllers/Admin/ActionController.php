@@ -6,6 +6,7 @@ use App\ApiHelper\ApiResponse;
 use App\DTOs\ActionDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Action\CreateActionRequest;
+use App\Http\Requests\Action\UpdateActionRequest;
 use App\Http\Resources\ActionResource;
 use App\Services\Admin\ActionService;
 use App\Services\Admin\EmployeeService;

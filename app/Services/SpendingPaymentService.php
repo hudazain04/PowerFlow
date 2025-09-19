@@ -61,6 +61,16 @@ class SpendingPaymentService
         elseif ($counter->spendingType === SpendingTypes::After)
         {
             $generatorSettings=$this->counterRepository->getRelations($counter,['powerGenerator.settings'])->powerGenerator->settings;
+            $nextDueDate=$generatorSettings->nextDueDate;
+            $today = Carbon::today();
+            $yesterday = $nextDueDate->copy()->subDay();
+            if (!($today->equalTo($nextDueDate) || $today->equalTo($yesterday)) ) {
+                throw new ErrorException(__('payOnDueDate'),ApiCode::BAD_REQUEST);
+            }
+            if ($counter->status===CounterStatus::DisConnected)
+            {
+                throw new ErrorException(__('payWithCache'),ApiCode::BAD_REQUEST);
+            }
             $lastPayment=$this->paymentRepository->findWhereLatest(['counter_id'=>$counter_id]);
             $amount=(($currentSpending->consume)-($lastPayment->current_spending))*$generatorSettings->kiloPrice;
         }
@@ -169,7 +179,7 @@ class SpendingPaymentService
         $payment = new CashPayment();
         $result = $payment->accept($processor);
         $payment=$this->paymentRepository->create([
-            'date'=>Carbon::now(),
+            'date'=>$dto->date ?? Carbon::now(),
             'amount'=>$amount,
             'current_spending'=>$currentSpending->consume,
             'next_spending'=>$dto->kilos ? $currentSpending->consume+$dto->kilos : null,

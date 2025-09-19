@@ -10,6 +10,7 @@
         "ext-pdo": "*",
         "barryvdh/laravel-dompdf": "^3.1",
         "dedoc/scramble": "^0.12.30",
+        "kreait/laravel-firebase": "^5.8",
         "laravel/framework": "^11.0",
         "laravel/reverb": "^1.0",
         "laravel/sanctum": "^4.0",
@@ -21,6 +22,7 @@
         "spatie/laravel-permission": "^6.17",
         "stripe/stripe-php": "^17.5",
         "tymon/jwt-auth": "^2.2",
+        "vladimir-yuldashev/laravel-queue-rabbitmq": "dev-l11",
         "wendelladriel/laravel-validated-dto": "^4.1"
     },
     "require-dev": {

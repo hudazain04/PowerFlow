@@ -8,6 +8,7 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticate;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Traits\HasRoles;
@@ -18,7 +19,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class Employee extends Authenticate implements JWTSubject
 {
-    use HasFactory, HasPermissions,HasRoles,HasFeatureLimit;
+    use HasFactory, HasPermissions,HasRoles,HasFeatureLimit,Notifiable;
 
     protected $guard_name = 'employee';
 
@@ -66,5 +67,9 @@ class Employee extends Authenticate implements JWTSubject
         ]);
 
         return $hashedKey;
+    }
+    public function routeNotificationForFcm()
+    {
+        return $this->fcm_token;
     }
 }

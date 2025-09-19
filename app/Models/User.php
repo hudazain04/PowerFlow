@@ -136,4 +136,9 @@ class User extends Authenticatable implements JWTSubject,MustVerifyEmail
 
          return $query;
      }
+
+     public function routeNotificationForFcm()
+     {
+         return $this->fcm_token;
+     }
 }

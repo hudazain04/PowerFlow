@@ -22,6 +22,7 @@ class CounterFactory extends Factory
 
             'QRCode' => Str::uuid(),
             'current_spending' => $this->faker->numberBetween(0, 1000),
+            'physical_device_id' => strtoupper(Str::random(12)),
         ];
     }
 }

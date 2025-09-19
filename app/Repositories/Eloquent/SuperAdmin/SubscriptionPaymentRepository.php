@@ -4,6 +4,7 @@ namespace App\Repositories\Eloquent\SuperAdmin;
 
 use App\Models\SubscriptionPayment as SubscriptionPaymentModel;
 use App\Repositories\interfaces\SuperAdmin\SubscriptionPaymentRepositoryInterface;
+use App\Types\PaymentStatus;
 
 class SubscriptionPaymentRepository implements SubscriptionPaymentRepositoryInterface
 {
@@ -32,5 +33,11 @@ class SubscriptionPaymentRepository implements SubscriptionPaymentRepositoryInte
     {
         $payment=SubscriptionPaymentModel::where($wheres)->first();
         return $payment;
+    }
+
+    public function getTotalForGenerator($user_id): int
+    {
+        return SubscriptionPaymentModel::where(['user_id'=> $user_id,'status'=>PaymentStatus::Paid])
+            ->sum('amount');
     }
 }

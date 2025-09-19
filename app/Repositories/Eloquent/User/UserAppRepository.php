@@ -43,9 +43,9 @@ class UserAppRepository implements UserAppRepositoryInterface
         // TODO: Implement consumptionRate() method.
     }
 
-    public function getPayments(int $id)
+    public function getPayments(int $id,?array $filters = [])
     {
-     $payment=Payment::where('counter_id',$id)->get();
+     $payment=Payment::filter($filters)->where('counter_id',$id);
        return $payment;
     }
 

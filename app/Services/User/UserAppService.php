@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Repositories\Eloquent\User\UserAppRepository;
 use App\Repositories\interfaces\Admin\CounterRepositoryInterface;
 use App\Repositories\interfaces\User\UserAppRepositoryInterface;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -50,10 +51,10 @@ class UserAppService
         // TODO: Implement consumptionRate() method.
     }
 
-    public function getPayments(int $id)
+    public function getPayments(int $id,Request $request)
     {
 
-        return $this->appRepository->getPayments($id);
+        return $this->appRepository->getPayments($id,[ 'date' => $request->query('date')]);
     }
     public function getCounter(int $id){
         return $this->appRepository->getCounter($id);
