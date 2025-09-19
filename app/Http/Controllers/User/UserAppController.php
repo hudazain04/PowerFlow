@@ -48,7 +48,7 @@ class UserAppController extends Controller
         $totalAmount = $payment->sum('amount');
         $payment=$payment->paginate(20);
 
-        return $this->successWithPagination(SpendingPaymentRersource::collection($payment),['totalPayments'=>$totalAmount],__('messages.success'),ApiCode::OK);
+        return $this->successWithPagination(SpendingPaymentRersource::collection($payment),__('messages.success'),ApiCode::OK,['totalPayments'=>$totalAmount]);
     }
     public function getCounter(int $id){
        $counter=$this->service->getCounter($id);

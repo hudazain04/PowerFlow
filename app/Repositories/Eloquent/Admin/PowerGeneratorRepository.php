@@ -30,9 +30,9 @@ class PowerGeneratorRepository implements PowerGeneratorRepositoryInterface
 
 
 
-    public function getForPlan($plan_id , array $filters): Collection
+    public function getForPlan($plan_id , array $filters): LengthAwarePaginator
     {
-        $generators=PowerGeneratorModel::planGenerators($filters)->whereRelation('subscriptions.planPrice.plan','id', $plan_id)->with(['user','subscriptions.planPrice.plan'])->get();
+        $generators=PowerGeneratorModel::planGenerators($filters)->whereRelation('subscriptions.planPrice.plan','id', $plan_id)->with(['user','subscriptions.planPrice.plan'])->paginate(10);
         return $generators;
     }
 

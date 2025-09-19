@@ -17,8 +17,12 @@ class SubscribedGeneratorResource extends JsonResource
         return [
             'id'=>$this->id,
             'generatorName'=>$this->name,
-            'phone'=>$this->phone,
-            'expired_at'=>$this->expired_at->format('Y-m-d'),
+            'userName'=>$this->user->fullName(),
+            'userPhone'=>$this->user->phone_number,
+            'location'=>$this->location,
+            'spendingType'=>$this->settings->spendingType,
+            'kiloPrice'=>$this->settings->kiloPrice,
+            'expired_at'=>$this->subscriptions->first()->start_time->addMonths($this->subscriptions->first()->period)->format('Y-m-d'),
         ];
     }
 }

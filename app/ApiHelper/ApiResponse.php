@@ -15,7 +15,7 @@ trait ApiResponse
         ], $code);
     }
 
-    public  function successWithPagination($data = null,?array $extraData=[], $message = 'Success', $code = ApiCode::OK): JsonResponse
+    public  function successWithPagination($data = null, $message = 'Success', $code = ApiCode::OK,?array $extraData=[]): JsonResponse
     {
         return response()->json([
             'message' => $message,

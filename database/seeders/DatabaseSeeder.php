@@ -71,8 +71,12 @@ class DatabaseSeeder extends Seeder
         // Generator users
         $generatorUsers = User::factory()->count(5)->create();
 
+
         $generators = collect();
         $generatorAdmin = PowerGenerator::factory()->for($admin)->create(); // ✅ admin’s generator
+        GeneratorSetting::factory()->create([
+            'generator_id' => $generatorAdmin->id,
+        ]);
         $generators->push($generatorAdmin);
 
         foreach ($generatorUsers as $user) {
@@ -178,7 +182,7 @@ class DatabaseSeeder extends Seeder
         // Admin counter
         // $adminCounter = Counter::factory()->for($users->random())->create([
         //     'generator_id' => $generatorAdmin->id,
-        //     "physical_device_id" => 
+        //     "physical_device_id" =>
 
         // ]);
 
