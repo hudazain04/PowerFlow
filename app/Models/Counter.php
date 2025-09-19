@@ -18,8 +18,10 @@ class Counter extends Model
         'current_spending',
         'user_id',
         'generator_id',
+        'physical_device_id',
         'status'
     ];
+
 
     public string $featureKey = 'counters_count';
 
