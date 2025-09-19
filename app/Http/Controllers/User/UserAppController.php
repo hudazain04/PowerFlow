@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\User;
 
 use App\ApiHelper\ApiCode;
+use App\ApiHelper\ApiResponse;
 use App\ApiHelper\ApiResponses;
 use App\Exceptions\GeneralException;
 use App\Helpers\LocationHelper;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\SpendingPaymentRersource;
 use App\Models\Counter;
 use App\Models\ElectricalBox;
 use App\Models\Payment;
@@ -20,6 +22,7 @@ use Mockery\Exception;
 
 class UserAppController extends Controller
 {
+    use ApiResponse;
     public function __construct(private UserAppService $service){}
 
     public function resetPassword(int $id,Request $request){
@@ -40,9 +43,12 @@ class UserAppController extends Controller
         $counter=$this->service->getCounters($id);
         return ApiResponses::success($counter,'user Counters',ApiCode::OK);
     }
-    public function getPayments(int $id){
-        $payment=$this->service->getPayments($id);
-        return ApiResponses::success($payment,'payment for user',ApiCode::OK);
+    public function getPayments(int $id, Request $request){
+        $payment=$this->service->getPayments($id,$request);
+        $totalAmount = $payment->sum('amount');
+        $payment=$payment->paginate(20);
+
+        return $this->successWithPagination(SpendingPaymentRersource::collection($payment),['totalPayments'=>$totalAmount],__('messages.success'),ApiCode::OK);
     }
     public function getCounter(int $id){
        $counter=$this->service->getCounter($id);

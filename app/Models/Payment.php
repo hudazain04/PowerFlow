@@ -24,4 +24,13 @@ class Payment extends Model
     public function payments(){
         return $this->belongsTo(Counter::class);
     }
+
+    public function scopeFilter($query, array $filters)
+    {
+        $query->when($filters['date'] ?? false, function ($query, $date) {
+            $query->whereDate('date', $date);
+        });
+
+        return $query;
+    }
 }

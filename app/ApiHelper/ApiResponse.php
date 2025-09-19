@@ -15,11 +15,12 @@ trait ApiResponse
         ], $code);
     }
 
-    public  function successWithPagination($data = null, $message = 'Success', $code = ApiCode::OK): JsonResponse
+    public  function successWithPagination($data = null,?array $extraData=[], $message = 'Success', $code = ApiCode::OK): JsonResponse
     {
         return response()->json([
             'message' => $message,
             'data' => $data,
+            'extraData'=>$extraData,
             'meta'    => [
                 'current_page' => $data->resource->currentPage(),
                 'last_page'    => $data->resource->lastPage(),
