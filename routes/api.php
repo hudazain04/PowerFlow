@@ -209,6 +209,7 @@ use App\Http\Controllers\Admin\StatisticsController;
 
             Route::get('/generators/{generator}/statistics', [SuperAdminStatisticsController::class
                 , 'getGeneratorStatistics']);
+            Route::get('/statistics/dashboard', [StatisticsController::class, 'getDashboardOverview']);
 
         });
 

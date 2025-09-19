@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('counters', function (Blueprint $table) {
             $table->id();
-            $table->string('number')->nullable()->change();;
+            $table->string('number')->nullable();
             $table->string('physical_device_id')->unique()->nullable();
-            $table->string('QRCode')->nullable()->change();
+            $table->string('QRCode')->nullable();
             $table->integer('current_spending');
             $table->enum('spendingType',array_values((new ReflectionClass(\App\Types\SpendingTypes::class))->getConstants()));
             $table->foreignId('generator_id')->nullable()->constrained('power_generators')->nullOnDelete();
