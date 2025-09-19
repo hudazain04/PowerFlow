@@ -5,6 +5,7 @@ namespace App\Repositories\Eloquent\User;
 use App\Models\Complaint as ComplaintModel;
 use App\Repositories\interfaces\User\ComplaintRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ComplaintRepository implements ComplaintRepositoryInterface
 {
@@ -41,10 +42,10 @@ class ComplaintRepository implements ComplaintRepositoryInterface
         return $complaint->delete();
     }
 
-    public function getAll(?array $filters=[]): Collection
+    public function getAll(?array $filters=[]): LengthAwarePaginator
     {
 //        dd($filters);
-        $complaints=ComplaintModel::filter($filters)->get();
+        $complaints=ComplaintModel::filter($filters)->paginate(10);
         return $complaints;
     }
 

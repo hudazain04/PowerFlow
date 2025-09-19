@@ -75,12 +75,12 @@ class ComplaintService
 
     public function getComplaints(Request $request)
     {
-        $complaints=$this->complaintRepository->getAll([ 'type' => $request->query('type')]);
+        $complaints=$this->complaintRepository->getAll([ 'type' => $request->query('type'),'search' => $request->query('search'),'status' => $request->query('status')]);
         $complaintsDTOs=$complaints->map(function ($complaint){
            $complaintDTO=ComplaintDTO::fromModel($complaint);
            return $complaintDTO;
         });
-        return $this->success(ComplaintResource::collection($complaintsDTOs),__('messages.success'));
+        return $this->successWithPagination(ComplaintResource::collection($complaints),__('messages.success'));
 
     }
 

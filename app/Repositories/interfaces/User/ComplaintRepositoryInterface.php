@@ -3,6 +3,7 @@
 namespace App\Repositories\interfaces\User;
 use App\Models\Complaint  as ComplaintModel;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 interface ComplaintRepositoryInterface
 {
@@ -14,7 +15,7 @@ interface ComplaintRepositoryInterface
 
     public function delete(ComplaintModel $complaint) :  bool;
 
-    public function getAll(?array $filters=[]) : Collection;
+    public function getAll(?array $filters=[]) : LengthAwarePaginator;
 
     public function getRelations(ComplaintModel $complaint,array $relations=[]) : ComplaintModel;
 }
