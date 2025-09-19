@@ -38,7 +38,7 @@ class PowerGeneratorService
 //            dd(gettype($generator->subscriptions->first()->start_time));
             return $generatorDTO;
         });
-        return $this->success(SubscribedGeneratorResource::collection($generatorsDTOs),__('messages.success'));
+        return $this->successWithPagination(SubscribedGeneratorResource::collection($generators),__('messages.success'));
     }
 
     public function getAll(array $filters)
