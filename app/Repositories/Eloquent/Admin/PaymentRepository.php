@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Repositories\Eloquent\Admin;
+use App\Models\Payment;
 use App\Models\Payment as PaymentModel;
 use App\Repositories\interfaces\Admin\PaymentRepositoryInterface;
 
@@ -31,4 +32,13 @@ class PaymentRepository implements PaymentRepositoryInterface
         return  $payment;
     }
 
+
+    public function getForGenerator($generator_id, ?array $filters = [])
+    {
+
+        $payments = Payment::filter($filters)->whereHas('counter', function ($q) use ($generator_id) {
+            $q->where('generator_id', $generator_id);
+        });
+        return  $payments;
+    }
 }

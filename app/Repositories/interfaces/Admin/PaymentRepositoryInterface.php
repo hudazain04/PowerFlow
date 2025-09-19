@@ -14,4 +14,7 @@ interface PaymentRepositoryInterface
 
     public function update(PaymentModel $payment, array $data) : PaymentModel;
 
+    public function getForGenerator($generator_id,?array $filters=[]) ;
+
+
 }

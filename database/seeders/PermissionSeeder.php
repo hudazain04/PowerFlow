@@ -206,7 +206,8 @@ class PermissionSeeder extends Seeder
                 'PROCESS_STRIPE_PAYMENT',
                 'PROCESS_CASH_PAYMENT',
                 'PROCESS_STRIPE_SPENDING_PAYMENT',
-                'PROCESS_CACHE_SPENDING_PAYMENT'
+                'PROCESS_CACHE_SPENDING_PAYMENT',
+                'VIEW_SPENDING_PAYMENTS'
             ],
 
             'Miscellaneous' => [
@@ -268,7 +269,7 @@ class PermissionSeeder extends Seeder
                 'VIEW_LANDING_PAGE_STATS', 'VIEW_POWER_GENERATORS','CREATE_SPENDING',
                 'UPDATE_SPENDING','DELETE_SPENDING','GET_SPENDINGS','VIEW_INFO','UPDATE_GENERATOR_INFO',
                 'CREATE_ACTION','UPDATE_ACTION','APPROVE_ACTION','REJECT_ACTION','VIEW_ACTION','VIEW_ACTIONS',
-                'SEND_NOTIFICATION','VIEW_NOTIFICATIONS','VIEW_NOTIFICATION',
+                'SEND_NOTIFICATION','VIEW_NOTIFICATIONS','VIEW_NOTIFICATION','VIEW_SPENDING_PAYMENTS'
             ];
 
             $adminRole->givePermissionTo($adminPermissions);

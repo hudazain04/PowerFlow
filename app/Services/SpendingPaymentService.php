@@ -191,4 +191,10 @@ class SpendingPaymentService
         $this->checkCutCounter($payment,$counter_id);
         return $this->success($result,__('spendingPayment.cash'));
     }
+
+    public function getSpendingPayments($generator_id,Request $request)
+    {
+        $payments=$this->paymentRepository->getForGenerator($generator_id,[ 'date' => $request->query('date')]);
+        return $payments;
+    }
 }

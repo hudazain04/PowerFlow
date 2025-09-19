@@ -431,8 +431,8 @@ use App\Http\Controllers\Admin\StatisticsController;
                 ->middleware('permission:PROCESS_CACHE_SPENDING_PAYMENT');
             Route::get('stripe/success', [SpendingPaymentController::class, 'stripeSuccess'])->name('spendingStripe.success');
             Route::get('stripe/cancel', [SpendingPaymentController::class, 'stripeCancel'])->name('spendingStripe.cancel');
-
-
+            Route::get('getSpendingPayments/{generatorId}',[SpendingPaymentController::class,'getSpendingPayments'])
+                ->middleware('permission:VIEW_SPENDING_PAYMENTS');
         });
 
         Route::prefix('spending')->group(function () {

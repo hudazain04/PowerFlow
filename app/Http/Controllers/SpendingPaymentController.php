@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\ApiHelper\ApiCode;
+use App\ApiHelper\ApiResponse;
 use App\DTOs\SpendingPayDTO;
 use App\Http\Requests\Payment\SpendingPayRequest;
+use App\Http\Resources\SpendingPaymentRersource;
 use App\Services\SpendingPaymentService;
 use Illuminate\Http\Request;
 
 class SpendingPaymentController extends Controller
 {
+
+    use ApiResponse;
     public function __construct(
         protected SpendingPaymentService $spendingPaymentService,
     )
@@ -36,5 +41,18 @@ class SpendingPaymentController extends Controller
     {
         $dto=SpendingPayDTO::fromRequest($request);
         return $this->spendingPaymentService->handleCashPayment($dto,$counter_id);
+    }
+
+    public function getSpendingPayments($generator_id,Request $request)
+    {
+        $payments=$this->spendingPaymentService->getSpendingPayments($generator_id,$request);
+        $totalAmount = $payments->sum('amount');
+        $payments = $payments->paginate(20);
+
+        return $this->successWithPagination(SpendingPaymentRersource::collection($payments),
+            __('messages.success'),
+            ApiCode::OK,
+            ['total_amount' => $totalAmount]
+        );
     }
 }
