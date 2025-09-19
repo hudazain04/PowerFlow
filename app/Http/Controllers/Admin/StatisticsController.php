@@ -395,35 +395,35 @@ class StatisticsController extends Controller
                 ];
             });
 
-        // 4. Due counters (both before and after payment types)
+
         $dueCounters = $this->getDueCounters($generatorId);
 
-        return response()->json([
-            'data' => [
-                // Basic counts
+//        return response()->json([
+            $data = [
+
                 'client_count' => $clientCount,
                 'box_count' => $boxCount,
                 'counter_count' => $counterCount,
 
                 // Consumption statistics
-                'total_consumption' => round($totalConsumption, 2),
-                'average_consumption' => round($averageConsumption, 2),
+//                'total_consumption' => round($totalConsumption, 2),
+//                'average_consumption' => round($averageConsumption, 2),
 
-                // Top and least consuming
                 'top_consuming_counters' => $topConsumingCounters,
                 'least_consuming_counters' => $leastConsumingCounters,
 
                 // Due counters
-                'due_counters' => $dueCounters,
-            ],
-            'message' => 'Dashboard overview statistics retrieved successfully',
-            'code' => 200
-        ]);
+                'counters_should_pay' => $dueCounters,
+            ];
+//            'message' => 'Dashboard overview statistics retrieved successfully',
+//            'code' => 200
+//        ]);
+        return ApiResponses::success($data,'statistics retrieved',ApiCode::OK);
     }
 
     private function getDueCounters($generatorId)
     {
-        // Get generator settings
+
         $generatorSetting = GeneratorSetting::where('generator_id', $generatorId)->first();
 
         if (!$generatorSetting) {
@@ -442,7 +442,7 @@ class StatisticsController extends Controller
 
         $result = [];
 
-        // Before payment type counters
+
         if ($generatorSetting->spendingType === SpendingTypes::Before) {
             $counters = Counter::with(['spendings' => function($query) {
                 $query->orderBy('date', 'desc')->limit(1);
@@ -474,15 +474,16 @@ class StatisticsController extends Controller
                 }
             }
 
-            $result['before_payment'] = [
-                '75_percent_count' => $count75,
-                '90_percent_count' => $count90,
-                'cut_off_count' => $countCutoff
-            ];
-            $result['after_payment'] = [
-                'payment_day_count' => 0,
-                'day_before_count' => 0
-            ];
+//            $result['before_payment'] = [
+////                '75_percent_count' => $count75,
+////                '90_percent_count' => $count90,
+//                'counters_count' => $countCutoff +$count75+$count90
+//            ];
+            $result=$countCutoff +$count75+$count90;
+//            $result['after_payment'] = [
+//                'payment_day_count' => 0,
+//                'day_before_count' => 0
+//            ];
         }
         // After payment type counters
         else {
@@ -510,27 +511,17 @@ class StatisticsController extends Controller
 
             $counterCount = Counter::where('generator_id', $generatorId)->count();
 
-            $result['before_payment'] = [
-                '75_percent_count' => 0,
-                '90_percent_count' => 0,
-                'cut_off_count' => 0
-            ];
+//            $result['before_payment'] = [
+//                '75_percent_count' => 0,
+//                '90_percent_count' => 0,
+//                'cut_off_count' => 0
+//            ];
 
-            if ($isPaymentDay) {
+            if ($isPaymentDay || $isDayBeforePayment) {
                 $result['after_payment'] = [
-                    'payment_day_count' => $counterCount,
-                    'day_before_count' => 0
+                    'counters_count' => $counterCount  ,
                 ];
-            } elseif ($isDayBeforePayment) {
-                $result['after_payment'] = [
-                    'payment_day_count' => 0,
-                    'day_before_count' => $counterCount
-                ];
-            } else {
-                $result['after_payment'] = [
-                    'payment_day_count' => 0,
-                    'day_before_count' => 0
-                ];
+
             }
         }
 
