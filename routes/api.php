@@ -208,6 +208,7 @@ use App\Http\Controllers\Admin\StatisticsController;
 
             Route::get('/generators/{generator}/statistics', [SuperAdminStatisticsController::class
                 , 'getGeneratorStatistics']);
+
         });
 
 
