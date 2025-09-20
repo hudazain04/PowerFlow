@@ -21,6 +21,7 @@ class SubscribedGeneratorResource extends JsonResource
             'userPhone'=>$this->user->phone_number,
             'generatorPhones'=>$this->phones->pluck('number'),
             'location'=>$this->location,
+            'blocked'=>$this->user?->blocked,
             'spendingType'=>$this->settings->spendingType,
             'kiloPrice'=>$this->settings->kiloPrice,
             'expired_at'=>$this->subscriptions->first()->start_time->addMonths($this->subscriptions->first()->period)->format('Y-m-d'),
