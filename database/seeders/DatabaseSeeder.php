@@ -83,7 +83,10 @@ class DatabaseSeeder extends Seeder
             $generator = PowerGenerator::factory()->for($user)->create();
             $generators->push($generator);
 
-            Phone::factory()->count(2)->create(['generator_id' => $generator->id]);
+//            Phone::factory()->count(2)->create(['generator_id' => $generator->id]);
+            Phone::factory()->create([
+                'generator_id' => $generatorAdmin->id,
+            ]);
 
             GeneratorRequest::factory()->create([
                 'user_id' => $users->random()->id,

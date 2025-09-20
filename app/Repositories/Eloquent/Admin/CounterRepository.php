@@ -45,7 +45,7 @@ class CounterRepository implements CounterRepositoryInterface
 
     public function getCounters(int  $generator_id,?array $filters=[])
     {
-        $counters=Counter::where('generator_id',$generator_id)->filter($filters)->get();
+        $counters=Counter::where('generator_id',$generator_id)->filter($filters)->count();
         return $counters;
 //        return DB::table('counters')
 //            ->join('counter__boxes', 'counters.id', '=', 'counter__boxes.counter_id')

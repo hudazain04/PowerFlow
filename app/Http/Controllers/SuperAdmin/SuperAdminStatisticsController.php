@@ -107,7 +107,7 @@ class SuperAdminStatisticsController extends Controller
                     'used' => $this->counterService->getCounters($generator_id),
                     'total' =>$features['counters_count'] ?? $generator->plan->box_limit ?? 0
                 ],
-                'total_consumption' => $this->counterService->Consumption($generator_id),
+//                'total_consumption' => $this->counterService->Consumption($generator_id),
 
                     'users' => [
                         'used' => $this->counterService->getUsers($generator_id),
@@ -124,6 +124,11 @@ class SuperAdminStatisticsController extends Controller
 
             ],'success',ApiCode::OK);
 
+
+    }
+    public function totalConsumption(int $generator_id){
+       $totalConsumption = $this->counterService->Consumption($generator_id);
+       return ApiResponses::success($totalConsumption,'total consumption for user',ApiCode::OK);
 
     }
     public function getGenInfo($generator_id){

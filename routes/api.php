@@ -343,6 +343,7 @@ use App\Http\Controllers\Admin\StatisticsController;
                 ->middleware('permission:VIEW_GENERATOR_STATISTICS');
             Route::get('/generators/{id}/info', [SuperAdminStatisticsController::class, 'getGenInfo'])
                 ->middleware('permission:VIEW_GENERATOR_STATISTICS');
+            Route::get('/generators/{id}/consumption', [SuperAdminStatisticsController::class, 'totalConsumption']);
             Route::get('totalIncomeByGenerator/{id}',[SuperAdminStatisticsController::class,'totalIncome'])
             ->middleware('permission:VIEW_GENERATOR_STATISTICS');
         });
