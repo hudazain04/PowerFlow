@@ -126,6 +126,11 @@ class SuperAdminStatisticsController extends Controller
 
 
     }
+    public function totalConsumption(int $generator_id){
+       $totalConsumption = $this->counterService->Consumption($generator_id);
+       return ApiResponses::success($totalConsumption,'total consumption for user',ApiCode::OK);
+
+    }
     public function getGenInfo($generator_id){
         $data=$this->generatorRequestService->getGenInfo($generator_id);
         return ApiResponses::success($data,__('messages.success'),ApiCode::OK);
