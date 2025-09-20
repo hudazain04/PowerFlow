@@ -107,7 +107,7 @@ class SuperAdminStatisticsController extends Controller
                     'used' => $this->counterService->getCounters($generator_id),
                     'total' =>$features['counters_count'] ?? $generator->plan->box_limit ?? 0
                 ],
-                'total_consumption' => $this->counterService->Consumption($generator_id),
+//                'total_consumption' => $this->counterService->Consumption($generator_id),
 
                     'users' => [
                         'used' => $this->counterService->getUsers($generator_id),
