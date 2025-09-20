@@ -62,6 +62,7 @@ class SubscriptionRequestService
             throw new ErrorException(__('planPrice.notFound'),ApiCode::NOT_FOUND);
         }
         $requestDTO->period=$planPrice->period;
+//        dd($requestDTO);
         $subscriptionRequest=$this->subscriptionRequestRepository->create($requestDTO->toArray());
         $payment=$this->subscriptionPaymentRepository->create([
             'user_id'=>$requestDTO->user_id,
@@ -112,7 +113,12 @@ class SubscriptionRequestService
             $subscriptionDTO->price = $planPrice->price;
             $subscriptionDTO->generator_id = $generator->id;
             $this->subscriptionRepository->create($subscriptionDTO->toArray());
-
+            foreach ($request->phones as $phone) {
+                $generator->phones()->create([
+                    'number' => $phone,
+                    'generator_id'=>$generator->id,
+                ]);
+            }
             $payment=$this->subscriptionPaymentRepository->findWhere(['subscriptionRequest_id'=>$requestId]);
             if (! $payment)
             {
@@ -133,9 +139,9 @@ class SubscriptionRequestService
         }
         catch (\Throwable $exception) {
             DB::rollBack();
-//            throw new ErrorException($exception->getMessage(), ApiCode::INTERNAL_SERVER_ERROR);
+            throw new ErrorException($exception->getMessage(), ApiCode::INTERNAL_SERVER_ERROR);
 
-            throw new ErrorException(__('messages.error.serverError'), ApiCode::INTERNAL_SERVER_ERROR);
+//            throw new ErrorException(__('messages.error.serverError'), ApiCode::INTERNAL_SERVER_ERROR);
         }
     }
 

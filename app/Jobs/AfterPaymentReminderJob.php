@@ -19,15 +19,14 @@ class AfterPaymentReminderJob implements ShouldQueue
 
     public PowerGenerator $generator;
 
-    public function __construct(PowerGenerator $generator,
-                                protected CounterRepositoryInterface $counterRepository)
+    public function __construct(PowerGenerator $generator)
     {
         $this->generator = $generator;
     }
 
-    public function handle(): void
+    public function handle(CounterRepositoryInterface $counterRepository): void
     {
-        $counters=$this->counterRepository->get($this->generator->id,[],['spendingType'=>SpendingTypes::After]);
+        $counters=$counterRepository->get($this->generator->id,[],['spendingType'=>SpendingTypes::After]);
         foreach ($counters as $counter)
         {
             $user=$counter->user;

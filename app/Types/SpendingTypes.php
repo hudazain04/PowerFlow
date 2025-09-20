@@ -12,6 +12,6 @@ class SpendingTypes
         //
     }
 
-    public const Before='Before';
-    public const After='After';
+    public const Before='before';
+    public const After='after';
 }

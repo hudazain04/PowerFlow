@@ -28,7 +28,7 @@ class CreateSubscriptionRequestRequest extends FormRequest
         $rules = [
             'name'         => 'required|string',
             'location'     => 'required|string',
-//            'period'       => 'required|integer',
+            'phones'       => 'nullable|array',
             'planPrice_id' => 'required|exists:plan_prices,id',
             'kiloPrice'=>'required|int',
             'afterPaymentFrequency'=>'nullable|int',

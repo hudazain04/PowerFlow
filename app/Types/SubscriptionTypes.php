@@ -11,7 +11,7 @@ class SubscriptionTypes
     {
         //
     }
-    public const Renew = "Renew";
-    public const Cancel = "Cancel";
-    public const NewPlan = "New";
+    public const Renew = "renew";
+    public const Cancel = "cancel";
+    public const NewPlan = "new";
 }

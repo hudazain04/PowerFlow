@@ -20,12 +20,21 @@ class SubscriptionRequest extends Model
         'location',
         'name',
         'status',
+        'phones',
+        'kiloPrice',
+        'afterPaymentFrequency',
+        'spendingType',
+        'day',
     ];
     public $translatable=[
         'name',
         'location',
         'type',
         'status',
+    ];
+
+    protected $casts=[
+        'phones' => 'array',
     ];
 
 

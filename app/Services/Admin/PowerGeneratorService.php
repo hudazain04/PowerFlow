@@ -64,12 +64,14 @@ class PowerGeneratorService
             throw  new ErrorException(__('powerGenerator.notFound'),ApiCode::NOT_FOUND);
         }
         $generator=$this->powerGeneratorRepository->update($generator,$generatorDTO->toArray());
+        $generator->syncPhones($generatorDTO->phones);
         $generatorSetting=$generator->settings;
         if (! $generatorSetting)
         {
             throw new ErrorException(__('powerGenerator.noSetting'),ApiCode::NOT_FOUND);
         }
-        $generatorSetting=$this->generatorSettingRepository->update($generatorSetting,$generatorSettingDTO->toArray());
+//        dd($generatorSettingDTO);
+        $this->generatorSettingRepository->update($generatorSetting,$generatorSettingDTO->toArray());
         return $generator;
     }
 

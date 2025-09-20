@@ -19,6 +19,7 @@ class SubscriptionRequestDTO extends SimpleDTO
     public ?int $kiloPrice;
     public ?string $spendingType;
     public ?string $day;
+    public ?array $phones;
     public ?int $afterPaymentFrequency;
 
     public ?Carbon $created_at;
@@ -36,6 +37,8 @@ class SubscriptionRequestDTO extends SimpleDTO
             'created_at'=>new CarbonCast(),
             'planPrice_id'=>new IntegerCast(),
             'user_id'=>new IntegerCast(),
+            'kiloPrice'=>new IntegerCast(),
+            'afterPaymentFrequency'=>new IntegerCast(),
 
 
         ];

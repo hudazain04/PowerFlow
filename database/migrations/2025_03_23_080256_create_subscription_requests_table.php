@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('subscription_requests', function (Blueprint $table) {
             $table->id();
             $table->integer('period');
+            $table->json('phones')->nullable();
             $table->enum('type',array_values((new \ReflectionClass(SubscriptionTypes::class))->getConstants()));
             $table->string('location');
             $table->string('name');

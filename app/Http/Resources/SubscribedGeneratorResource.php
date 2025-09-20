@@ -19,6 +19,7 @@ class SubscribedGeneratorResource extends JsonResource
             'generatorName'=>$this->name,
             'userName'=>$this->user->fullName(),
             'userPhone'=>$this->user->phone_number,
+            'generatorPhones'=>$this->phones->pluck('number'),
             'location'=>$this->location,
             'spendingType'=>$this->settings->spendingType,
             'kiloPrice'=>$this->settings->kiloPrice,

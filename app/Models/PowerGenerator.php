@@ -122,4 +122,16 @@ class PowerGenerator extends Model
 
         return $query;
     }
+
+    public function syncPhones(array $phones)
+    {
+        $this->phones()->whereNotIn('number', $phones)->delete();
+
+        foreach ($phones as $phone) {
+            $this->phones()->updateOrCreate(
+                ['number' => $phone],
+                ['generator_id' => $this->id]
+            );
+        }
+    }
 }

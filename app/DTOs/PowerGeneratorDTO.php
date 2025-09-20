@@ -13,6 +13,7 @@ class PowerGeneratorDTO extends SimpleDTO
     public ?string $email;
     public string $location;
     public ?string $phone;
+    public ?array $phones;
     public ?Carbon $expired_at;
     public ?int $user_id;
     protected function defaults(): array

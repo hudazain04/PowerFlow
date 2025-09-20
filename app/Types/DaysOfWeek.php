@@ -11,12 +11,12 @@ class DaysOfWeek
     {
         //
     }
-    public const Sunday='Sunday';
-    public const Monday='Monday';
-    public const Tuesday='Tuesday';
-    public const Wednesday='Wednesday';
-    public const Thursday='Thursday';
-    public const Friday='Friday';
-    public const Saturday='Saturday';
+    public const Sunday='sunday';
+    public const Monday='monday';
+    public const Tuesday='tuesday';
+    public const Wednesday='wednesday';
+    public const Thursday='thursday';
+    public const Friday='friday';
+    public const Saturday='saturday';
 
 }

@@ -23,9 +23,6 @@ class CutAfterPaymentJob implements ShouldQueue
     public PowerGenerator $generator;
 
     public function __construct(PowerGenerator $generator,
-    protected CounterRepositoryInterface $counterRepository,
-    protected GeneratorSettingRepositoryInterface $generatorSettingRepository,
-    protected ActionService $actionService,
     )
     {
         $this->generator=$generator;
@@ -34,19 +31,19 @@ class CutAfterPaymentJob implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(): void
+    public function handle( CounterRepositoryInterface $counterRepository,GeneratorSettingRepositoryInterface $generatorSettingRepository, ActionService $actionService): void
     {
-        $counters=$this->counterRepository->get(generator_id : $this->generator->id, wheres : ['spendingType'=>SpendingTypes::After]);
-        $setting=$this->generatorSettingRepository->get($this->generator->id);
+        $counters=$counterRepository->get(generator_id : $this->generator->id, wheres : ['spendingType'=>SpendingTypes::After]);
+        $setting=$generatorSettingRepository->get($this->generator->id);
         $nextDueDate =$setting->nextDueDate;
         $dayBeforeDue = $nextDueDate->copy()->subDay();
         foreach ($counters as $counter)
         {
-            $latestPayment=$this->counterRepository->latestPayment($counter);
-            $latestSpending=$this->counterRepository->latestSpending($counter);
+            $latestPayment=$counterRepository->latestPayment($counter);
+            $latestSpending=$counterRepository->latestSpending($counter);
             $latestPaymentDate=$latestPayment->date;
             if (!($latestPaymentDate->isSameDay($nextDueDate) || $latestPaymentDate->isSameDay($dayBeforeDue))) {
-                $action=$this->actionService->create([
+                $action=$actionService->create([
                     'type'=>ActionTypes::Cut,
                     'status'=>ComplaintStatusTypes::Pending,
                     'generator_id'=>$this->generator->id,
@@ -63,7 +60,7 @@ class CutAfterPaymentJob implements ShouldQueue
         $newNextDueDate = $nextDueDate->copy()
         ->addWeeks($setting->afterPaymentFrequency)
         ->next($setting->day);
-        $this->generatorSettingRepository->update($setting, [
+        $generatorSettingRepository->update($setting, [
             'nextDueDate' => $newNextDueDate
         ]);
     }

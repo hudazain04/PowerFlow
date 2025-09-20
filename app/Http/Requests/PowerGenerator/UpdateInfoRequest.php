@@ -26,6 +26,7 @@ class UpdateInfoRequest extends FormRequest
         return [
                  'name'         => 'required|string',
                 'location'     => 'required|string',
+                'phones'       => 'nullable|array',
                 'kiloPrice'=>'required|int',
                 'afterPaymentFrequency'=>'nullable|int',
                 'day'=>['required', Rule::in(array_values((new ReflectionClass(\App\Types\DaysOfWeek::class))->getConstants()))],
