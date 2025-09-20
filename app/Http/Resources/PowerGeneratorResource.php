@@ -21,11 +21,11 @@ class PowerGeneratorResource extends JsonResource
             'usePhone'=>$this->user?->phone_number,
             'generatorPhones'=>$this->phones?->pluck('number'),
             'location'=>$this->location,
-            'kiloPrice'=>$this->settings->kiloPrice,
-            'spendingType'=>$this->settings->spendingType,
-            'day'=>$this->settings->day,
-            'afterPaymentFrequency'=>$this->settings->afterPaymentFrequency,
-            'expired_at'=>$this->subscriptions->first()->start_time->addMonths($this->subscriptions->first()->period)->format('Y-m-d'),
+            'kiloPrice'=>$this->settings?->kiloPrice,
+            'spendingType'=>$this->settings?->spendingType,
+            'day'=>$this->settings?->day,
+            'afterPaymentFrequency'=>$this->settings?->afterPaymentFrequency,
+            'expired_at'=>$this->subscriptions?->first()->start_time->addMonths($this->subscriptions->first()->period)->format('Y-m-d'),
         ];
     }
 }
