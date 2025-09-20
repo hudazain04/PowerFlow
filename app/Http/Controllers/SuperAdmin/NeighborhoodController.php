@@ -34,5 +34,18 @@ class NeighborhoodController extends Controller
         return ApiResponses::success($neighborhood,'success',ApiCode::OK);
     }
 
+    public function update(NeighborhoodRequest $request, $id)
+    {
+        $dto = new NeighborhoodDTO(...$request->validated());
+        $neighborhood = $this->service->updateNeighborhood($id, $dto);
+        return ApiResponses::success($neighborhood, 'Updated successfully', ApiCode::OK);
+    }
+
+    public function delete($id)
+    {
+        $this->service->deleteNeighborhood($id);
+        return ApiResponses::success(null, 'Deleted successfully', ApiCode::OK);
+    }
+
 
 }
