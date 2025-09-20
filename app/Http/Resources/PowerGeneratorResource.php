@@ -17,15 +17,15 @@ class PowerGeneratorResource extends JsonResource
         return [
             'id'=>$this->id,
             'generatorName'=>$this->name,
-            'email'=>$this->user->email,
-            'usePhone'=>$this->user->phone_number,
-            'generatorPhones'=>$this->phones->pluck('number'),
+            'email'=>$this->user?->email,
+            'usePhone'=>$this->user?->phone_number,
+            'generatorPhones'=>$this->phones?->pluck('number'),
             'location'=>$this->location,
-            'kiloPrice'=>$this->settings->kiloPrice,
-            'spendingType'=>$this->settings->spendingType,
-            'day'=>$this->settings->day,
-            'afterPaymentFrequency'=>$this->settings->afterPaymentFrequency,
-            'expired_at'=>$this->user->expired_at?->format('Y-m-d'),
+            'kiloPrice'=>$this->settings?->kiloPrice,
+            'spendingType'=>$this->settings?->spendingType,
+            'day'=>$this->settings?->day,
+            'afterPaymentFrequency'=>$this->settings?->afterPaymentFrequency,
+            'expired_at'=>$this->subscriptions?->first()->start_time->addMonths($this->subscriptions->first()->period)->format('Y-m-d'),
         ];
     }
 }

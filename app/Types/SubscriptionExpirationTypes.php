@@ -12,6 +12,6 @@ class SubscriptionExpirationTypes
         //
     }
 
-    public const Active='Active';
-    public const Expired='Expired';
+    public const Active='active';
+    public const Expired='expired';
 }

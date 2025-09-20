@@ -44,14 +44,14 @@ class PowerGeneratorService
     public function getAll(array $filters)
     {
         $generators=$this->powerGeneratorRepository->getAll($filters);
-        $generators->getCollection()->transform(function ($generator){
-            $generatorDTO=PowerGeneratorDTO::fromModel($generator);
-            $generatorDTO->phone=$generator->user->phone_number;
-            $generatorDTO->email=$generator->user->email;
-            $generatorDTO->expired_at=$generator->subscriptions->first()->start_time->addMonths($generator->subscriptions->first()->period);
-//            dd(gettype($generator->subscriptions->first()->start_time));
-            return $generatorDTO;
-        });
+//        $generators->getCollection()->transform(function ($generator){
+//            $generatorDTO=PowerGeneratorDTO::fromModel($generator);
+//            $generatorDTO->phone=$generator->user->phone_number;
+//            $generatorDTO->email=$generator->user->email;
+//            $generatorDTO->expired_at=$generator->subscriptions->first()->start_time->addMonths($generator->subscriptions->first()->period);
+////            dd(gettype($generator->subscriptions->first()->start_time));
+//            return $generatorDTO;
+//        });
 //        dd($generatorsDTOs);
         return $this->successWithPagination(PowerGeneratorResource::collection($generators),__('messages.success'));
     }
