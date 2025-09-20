@@ -25,7 +25,7 @@ class PowerGeneratorResource extends JsonResource
             'spendingType'=>$this->settings->spendingType,
             'day'=>$this->settings->day,
             'afterPaymentFrequency'=>$this->settings->afterPaymentFrequency,
-            'expired_at'=>$this->subscriptions->first()->start_time->addMonths($generator->subscriptions->first()->period)->format('Y-m-d'),
+            'expired_at'=>$this->subscriptions->first()->start_time->addMonths($this->subscriptions->first()->period)->format('Y-m-d'),
         ];
     }
 }
