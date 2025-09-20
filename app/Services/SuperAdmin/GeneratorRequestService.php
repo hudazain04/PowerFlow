@@ -99,6 +99,7 @@ class GeneratorRequestService
             'location' => $generator->location,
             'date' => $generator->created_at->format('n/j/Y'),
             'current_plan' => $generator->subscriptions->first()->planPrice->plan->name ?? 'N/A',
+            'current_plan_id'=>$generator->subscriptions->first()->planPrice->plan->id,
             'current_price' => $generator->subscriptions->first()->price?? 'ΘN/a'
         ];
     }
