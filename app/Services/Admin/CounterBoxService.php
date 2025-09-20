@@ -101,7 +101,7 @@ class CounterBoxService
             // Find or create user based on phone number and email
             $user = $this->findOrCreateUser(
                 $data['phone_number'],
-                $data['email'],
+                $data['email'] ?? null,
                 $data['first_name'] ?? null,
                 $data['last_name'] ?? null
             );
@@ -143,7 +143,7 @@ class CounterBoxService
         });
 
     }
-    private function findOrCreateUser(string $phoneNumber, string $email, ?string $firstName = null, ?string $lastName = null): User
+    private function findOrCreateUser(string $phoneNumber, ?string $email = null, ?string $firstName = null, ?string $lastName = null): User
     {
         $normalizedPhone = preg_replace('/[^0-9]/', '', $phoneNumber);
         $user = User::where('phone_number', $normalizedPhone)->first();
@@ -160,8 +160,8 @@ class CounterBoxService
         }
 
         // For new users, first and last name are required
-        if (empty($firstName) || empty($lastName)) {
-            throw new ErrorException('First name and last name are required for new users', ApiCode::BAD_REQUEST);
+        if (empty($firstName) || empty($lastName) || empty($email)) {
+            throw new ErrorException('First name and last name and email are required for new users', ApiCode::BAD_REQUEST);
         }
 
         $temporaryPassword = Str::random(10);

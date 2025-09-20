@@ -27,7 +27,7 @@ class CounterRequest extends FormRequest
 //            'user_id' => 'required',
             'box_id' => 'nullable|exists:electrical_boxes,id',
             'phone_number' => 'required|string',
-            'email' => 'required|email',
+            'email' => 'required_if:is_new_user,true|string|nullable',
             'first_name' => 'required_if:is_new_user,true|string|nullable',
             'last_name' => 'required_if:is_new_user,true|string|nullable',
 
