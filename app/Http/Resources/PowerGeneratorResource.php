@@ -17,8 +17,8 @@ class PowerGeneratorResource extends JsonResource
         return [
             'id'=>$this->id,
             'generatorName'=>$this->name,
-            'email'=>$this->user->email,
-            'usePhone'=>$this->user->phone_number,
+            'email'=>$this->user?->email,
+            'usePhone'=>$this->user?->phone_number,
             'generatorPhones'=>$this->phones->pluck('number'),
             'location'=>$this->location,
             'kiloPrice'=>$this->settings->kiloPrice,

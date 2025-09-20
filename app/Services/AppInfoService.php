@@ -34,7 +34,7 @@ class AppInfoService
         $appInfoDTO->type=AppInfoTypes::AboutApp;
         $appInfo=$this->appInfoRepository->createAppInfo($appInfoDTO->toArray());
         $appInfoDTO=AppInfoDTO::fromModel($appInfo);
-        return $this->success(AppInfoResource::make($appInfoDTO),__('AppInfo.AboutAppCreate'),ApiCode::CREATED);
+        return $this->success(AppInfoResource::make($appInfo),__('AppInfo.AboutAppCreate'),ApiCode::CREATED);
 
     }
 
@@ -93,8 +93,8 @@ class AppInfoService
         {
             throw new ErrorException(__('AppInfo.TermsAndConditionsNotFound'),ApiCode::NOT_FOUND);
         }
-        $appInfoDTO=AppInfoDTO::fromModel($appInfo);
-        return $this->success(AppInfoResource::make($appInfoDTO),__('messages.success'));
+//        $appInfoDTO=AppInfoDTO::fromModel($appInfo);
+        return $this->success(AppInfoResource::make($appInfo),__('messages.success'));
     }
 
     public function updateTermsAndConditions(AppInfoDTO $appInfoDTO)
