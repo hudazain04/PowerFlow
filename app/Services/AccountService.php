@@ -8,6 +8,7 @@ use App\DTOs\UserDTO;
 use App\Http\Requests\User\UpdateProfileRequest;
 use App\Http\Resources\ProfileResource;
 use App\Http\Resources\UserResource;
+use App\Repositories\interfaces\Admin\PowerGeneratorRepositoryInterface;
 use App\Repositories\interfaces\UserRepositoryInterface;
 use App\Types\UserTypes;
 use http\Client\Curl\User;
@@ -22,6 +23,7 @@ class AccountService
      */
     public function __construct(
         protected UserRepositoryInterface $userRepository,
+        protected PowerGeneratorRepositoryInterface $powerGeneratorRepository,
     )
     {
         //
@@ -40,9 +42,10 @@ class AccountService
         return $this->success(ProfileResource::make($profileDTO),__('auth.updateProfile'));
 
     }
-    public function blocking($user_id)
+    public function blocking($generator_id)
     {
-        $user=$this->userRepository->findById($user_id);
+        $generator=$this->powerGeneratorRepository->find($generator_id);
+        $user=$generator->user;
         $user->blocked=! $user->blocked;
         $user->save();
         return $this->success(['blocked'=>$user->blocked],__('messages.success'));
