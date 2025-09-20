@@ -94,9 +94,10 @@ class GeneratorRequestService
 
         return [
             'name' => $generator->name,
-            'phone' => $generator->phones->first()->number,
+            'phone' => $generator->user->phone_number,
             'email' => $generator->user->email,
             'location' => $generator->location,
+            'generatorPhones'=>$generator->phones?->pluck('number'),
             'date' => $generator->created_at->format('n/j/Y'),
             'current_plan' => $generator->subscriptions->first()->planPrice->plan->name ?? 'N/A',
             'current_plan_id'=>$generator->subscriptions->first()->planPrice->plan->id,
