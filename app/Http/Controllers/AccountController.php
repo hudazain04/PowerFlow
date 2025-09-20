@@ -24,9 +24,9 @@ class AccountController extends Controller
         $profileDTO=ProfileDTO::fromRequest($request);
         return $this->accountService->updateProfile($profileDTO);
     }
-    public function blocking($user_id)
+    public function blocking($generator_id)
     {
-        return $this->accountService->blocking($user_id);
+        return $this->accountService->blocking($generator_id);
     }
 
     public function getAll(Request $request)
