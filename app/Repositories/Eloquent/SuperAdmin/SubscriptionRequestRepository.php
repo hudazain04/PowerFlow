@@ -5,6 +5,7 @@ namespace App\Repositories\Eloquent\SuperAdmin;
 use App\Models\SubscriptionRequest as SubscriptionRequestModel;
 use App\Repositories\interfaces\SuperAdmin\SubscriptionRequestRepositoryInterface;
 use App\Types\SubscriptionTypes;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 class SubscriptionRequestRepository implements SubscriptionRequestRepositoryInterface
@@ -52,9 +53,9 @@ class SubscriptionRequestRepository implements SubscriptionRequestRepositoryInte
         return $subscriptionRequest;
     }
 
-    public function getAll(array $filters=[]): Collection
+    public function getAll(array $filters=[]): LengthAwarePaginator
     {
-        $requests=SubscriptionRequestModel::status($filters)->with(['user.powerGenerator','planPrice.plan'])->get();
+        $requests=SubscriptionRequestModel::status($filters)->with(['user.powerGenerator','planPrice.plan'])->paginate(10);
         return $requests;
     }
 

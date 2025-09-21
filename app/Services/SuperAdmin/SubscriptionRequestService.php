@@ -77,7 +77,7 @@ class SubscriptionRequestService
     public function getAll(Request $request)
     {
         $requests=$this->subscriptionRequestRepository->getAll([ 'status' => $request->query('status')]);
-        return $this->success(SubscriptionRequestResource::collection($requests),__('messages.success'));
+        return $this->successWithPagination(SubscriptionRequestResource::collection($requests),__('messages.success'));
     }
 
     public function approve( int $requestId)
