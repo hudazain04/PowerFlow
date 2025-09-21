@@ -114,12 +114,16 @@ class SubscriptionRequestService
             $subscriptionDTO->price = $planPrice->price;
             $subscriptionDTO->generator_id = $generator->id;
             $this->subscriptionRepository->create($subscriptionDTO->toArray());
-            foreach ($request->phones as $phone) {
-                $generator->phones()->create([
-                    'number' => $phone,
-                    'generator_id'=>$generator->id,
-                ]);
+            if ($request->phones)
+            {
+                foreach ($request->phones as $phone) {
+                    $generator->phones()->create([
+                        'number' => $phone,
+                        'generator_id'=>$generator->id,
+                    ]);
+                }
             }
+
             $payment=$this->subscriptionPaymentRepository->findWhere(['subscriptionRequest_id'=>$requestId]);
             if (! $payment)
             {
