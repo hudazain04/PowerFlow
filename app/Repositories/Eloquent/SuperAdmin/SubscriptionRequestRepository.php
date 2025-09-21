@@ -59,7 +59,7 @@ class SubscriptionRequestRepository implements SubscriptionRequestRepositoryInte
         return $requests;
     }
 
-    public function find(int $id): SubscriptionRequestModel
+    public function find(int $id): ?SubscriptionRequestModel
     {
         $request=SubscriptionRequestModel::find($id);
         return $request;

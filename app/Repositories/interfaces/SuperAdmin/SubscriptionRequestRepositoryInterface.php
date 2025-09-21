@@ -23,7 +23,7 @@ interface SubscriptionRequestRepositoryInterface
 
     public function getAll(array $filters=[]) : LengthAwarePaginator;
 
-    public function find(int $id) : SubscriptionRequestModel;
+    public function find(int $id) : ?SubscriptionRequestModel;
 
     public function update(SubscriptionRequestModel $subscriptionRequest, array $data) : SubscriptionRequestModel;
 
