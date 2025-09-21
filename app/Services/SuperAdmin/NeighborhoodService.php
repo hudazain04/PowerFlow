@@ -24,6 +24,15 @@ class NeighborhoodService
     {
         return $this->repository->listAll();
     }
+    public function updateNeighborhood(int $id, NeighborhoodDTO $dto)
+    {
+        return $this->repository->update($id, $dto->toArray());
+    }
+
+    public function deleteNeighborhood(int $id)
+    {
+        return $this->repository->delete($id);
+    }
 
 
 }

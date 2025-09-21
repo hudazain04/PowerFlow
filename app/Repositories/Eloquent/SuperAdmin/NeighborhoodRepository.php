@@ -25,5 +25,23 @@ class NeighborhoodRepository implements NeighborhoodRepositoryInterface
         return Neighborhood::withCount('areas')->get();
     }
 
+    public function update(int $id, array $data)
+    {
+        return DB::transaction(function () use ($id, $data) {
+            $neighborhood = Neighborhood::findOrFail($id);
+            $neighborhood->update($data);
+            return $neighborhood->fresh(); // Returns refreshed model instance
+        });
+    }
+
+    public function delete(int $id)
+    {
+        return DB::transaction(function () use ($id) {
+            $neighborhood = Neighborhood::findOrFail($id);
+            $neighborhood->delete();
+            return true;
+        });
+    }
+
 
 }
