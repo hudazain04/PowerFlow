@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Types\ActionTypes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class Action extends Model
 {
@@ -19,7 +20,7 @@ class Action extends Model
     {
         static::creating(function ($action) {
             if (is_array($action->type)) {
-                \Log::error('Action type is array: ', $action->type);
+                Log::error('Action type is array: ', $action->type);
             }
             $selfPriority = ActionTypes::getPriority($action->type);
 

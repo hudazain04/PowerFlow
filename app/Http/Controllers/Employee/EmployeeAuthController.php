@@ -19,9 +19,9 @@ class EmployeeAuthController extends Controller
 
     public function login(EmployeeLoginRequest $request){
 
-        $credentials = $request->only('user_name', 'secret_key');
+        $credentials = $request->only('phone_number', 'secret_key');
 
-        $employee = Employee::where('user_name', $credentials['user_name'])->first();
+        $employee = Employee::where('phone_number', $credentials['phone_number'])->first();
 
         if (!$employee || $employee->secret_key !== $credentials['secret_key']) {
             return AuthException::invalidCredentials();
@@ -46,5 +46,6 @@ class EmployeeAuthController extends Controller
 
 
     }
+
 
 }
