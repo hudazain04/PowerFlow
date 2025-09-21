@@ -62,6 +62,7 @@ class SubscriptionRequestService
             throw new ErrorException(__('planPrice.notFound'),ApiCode::NOT_FOUND);
         }
         $requestDTO->period=$planPrice->period;
+        $requestDTO->status=GeneratorRequests::PENDING;
 //        dd($requestDTO);
         $subscriptionRequest=$this->subscriptionRequestRepository->create($requestDTO->toArray());
         $payment=$this->subscriptionPaymentRepository->create([
