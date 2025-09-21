@@ -91,7 +91,6 @@ class GeneratorRequestService
 
     public function getGenInfo(int $generator_id){
         $generator = $this->repository->getGenInfo($generator_id);
-
         return [
             'name' => $generator->name,
             'phone' => $generator->user->phone_number,

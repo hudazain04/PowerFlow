@@ -62,6 +62,7 @@ class SubscriptionRequestService
             throw new ErrorException(__('planPrice.notFound'),ApiCode::NOT_FOUND);
         }
         $requestDTO->period=$planPrice->period;
+        $requestDTO->status=GeneratorRequests::PENDING;
 //        dd($requestDTO);
         $subscriptionRequest=$this->subscriptionRequestRepository->create($requestDTO->toArray());
         $payment=$this->subscriptionPaymentRepository->create([
@@ -76,7 +77,7 @@ class SubscriptionRequestService
     public function getAll(Request $request)
     {
         $requests=$this->subscriptionRequestRepository->getAll([ 'status' => $request->query('status')]);
-        return $this->success(SubscriptionRequestResource::collection($requests),__('messages.success'));
+        return $this->successWithPagination(SubscriptionRequestResource::collection($requests),__('messages.success'));
     }
 
     public function approve( int $requestId)
@@ -113,12 +114,16 @@ class SubscriptionRequestService
             $subscriptionDTO->price = $planPrice->price;
             $subscriptionDTO->generator_id = $generator->id;
             $this->subscriptionRepository->create($subscriptionDTO->toArray());
-            foreach ($request->phones as $phone) {
-                $generator->phones()->create([
-                    'number' => $phone,
-                    'generator_id'=>$generator->id,
-                ]);
+            if ($request->phones)
+            {
+                foreach ($request->phones as $phone) {
+                    $generator->phones()->create([
+                        'number' => $phone,
+                        'generator_id'=>$generator->id,
+                    ]);
+                }
             }
+
             $payment=$this->subscriptionPaymentRepository->findWhere(['subscriptionRequest_id'=>$requestId]);
             if (! $payment)
             {

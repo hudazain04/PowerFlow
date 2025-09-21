@@ -16,13 +16,14 @@ class SubscriptionRequestResource extends JsonResource
     {
         return[
             'id'=>$this->id,
-            'generatorName'=>$this->user?->powerGenerator ? $this->user->powerGenerator->name : null,
+            'generatorName'=>$this->name,
             'email'=>$this->user ? $this->user->email : null,
-            'phone'=>$this->user ? $this->user->phone_number : null,
+            'userPhone'=>$this->user ? $this->user->phone_number : null,
+            'generatorPhones'=>$this->phones,
             'plan'=>$this->planPrice?->plan ? $this->planPrice->plan->name : null,
             'price'=>$this->planPrice ? $this->planPrice->price : null,
             'period'=>$this->period,
-            'type'=>$this->type,
+            'subscriptionType'=>$this->type,
             'status'=>$this->status,
             'kiloPrice'=>$this->kiloPrice,
             'spendingType'=>$this->spendingType,

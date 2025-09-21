@@ -29,7 +29,7 @@ class SubscriptionPaymentRepository implements SubscriptionPaymentRepositoryInte
         return $subscriptionPayment;
     }
 
-    public function findWhere(array $wheres): SubscriptionPaymentModel
+    public function findWhere(array $wheres): ?SubscriptionPaymentModel
     {
         $payment=SubscriptionPaymentModel::where($wheres)->first();
         return $payment;

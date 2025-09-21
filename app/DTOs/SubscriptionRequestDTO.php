@@ -15,6 +15,7 @@ class SubscriptionRequestDTO extends SimpleDTO
     public ?string $name;
     public ?string $location;
     public ?int $user_id;
+    public ?string $status;
     public ?int $planPrice_id;
     public ?int $kiloPrice;
     public ?string $spendingType;

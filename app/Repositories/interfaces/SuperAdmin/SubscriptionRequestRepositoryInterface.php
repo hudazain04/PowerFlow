@@ -3,6 +3,7 @@
 namespace App\Repositories\interfaces\SuperAdmin;
 
 use App\Types\SubscriptionTypes;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use App\Models\SubscriptionRequest as SubscriptionRequestModel;
 
@@ -20,9 +21,9 @@ interface SubscriptionRequestRepositoryInterface
 
     public function create(array $data) : SubscriptionRequestModel;
 
-    public function getAll(array $filters=[]) : Collection;
+    public function getAll(array $filters=[]) : LengthAwarePaginator;
 
-    public function find(int $id) : SubscriptionRequestModel;
+    public function find(int $id) : ?SubscriptionRequestModel;
 
     public function update(SubscriptionRequestModel $subscriptionRequest, array $data) : SubscriptionRequestModel;
 
