@@ -75,7 +75,6 @@ class paymentController extends Controller
     {
         $payment=$this->paymentService->createStripeCheckout($subscriptionRequest_id);
         return  $payment;
-
     }
 
     public function stripeSuccess(Request $request)

@@ -2,6 +2,7 @@
 
 namespace App\Repositories\interfaces\SuperAdmin;
 
+use App\Models\User;
 use App\Types\SubscriptionTypes;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
@@ -28,4 +29,6 @@ interface SubscriptionRequestRepositoryInterface
     public function update(SubscriptionRequestModel $subscriptionRequest, array $data) : SubscriptionRequestModel;
 
     public function getRelations(SubscriptionRequestModel $subscriptionRequest , array $realtions) : SubscriptionRequestModel;
+
+    public function getLast(int $user_id): ?SubscriptionRequestModel;
 }

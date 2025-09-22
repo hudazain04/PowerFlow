@@ -9,7 +9,10 @@ use App\Http\Requests\User\UpdateProfileRequest;
 use App\Http\Resources\ProfileResource;
 use App\Http\Resources\UserResource;
 use App\Repositories\interfaces\Admin\PowerGeneratorRepositoryInterface;
+use App\Repositories\interfaces\SuperAdmin\SubscriptionPaymentRepositoryInterface;
+use App\Repositories\interfaces\SuperAdmin\SubscriptionRequestRepositoryInterface;
 use App\Repositories\interfaces\UserRepositoryInterface;
+use App\Types\PaymentStatus;
 use App\Types\UserTypes;
 use http\Client\Curl\User;
 use Illuminate\Support\Facades\Auth;
@@ -24,6 +27,8 @@ class AccountService
     public function __construct(
         protected UserRepositoryInterface $userRepository,
         protected PowerGeneratorRepositoryInterface $powerGeneratorRepository,
+        protected SubscriptionRequestRepositoryInterface $subscriptionRequestRepository,
+        protected SubscriptionPaymentRepositoryInterface  $subscriptionPaymentRepository,
     )
     {
         //
@@ -32,6 +37,24 @@ class AccountService
     {
         $user=Auth::user();
         return $this->success(ProfileResource::make($user),__('messages.success'));
+    }
+
+    public function getLandingProfile()
+    {
+        $user=Auth::user();
+        $lastSubscriptionRequest=$this->subscriptionRequestRepository->getLast($user->getAuthIdentifier());
+        $shouldPay=true;
+        if ($lastSubscriptionRequest->payment->status===PaymentStatus::Paid)
+        {
+            $shouldPay=false;
+        }
+
+        return [
+            'user'=>$user,
+            'lastSubscriptionRequest'=>$lastSubscriptionRequest,
+            'shouldPay'=> $shouldPay,
+        ];
+
     }
 
     public function updateProfile(ProfileDTO $profileDTO)

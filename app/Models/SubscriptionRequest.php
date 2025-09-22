@@ -48,6 +48,10 @@ class SubscriptionRequest extends Model
         return $this->belongsTo(PlanPrice::class , 'planPrice_id');
     }
 
+    public function payment()
+    {
+        return $this->hasOne(SubscriptionPayment::class,'subscriptionRequest_id');
+    }
     public function scopeFilter($query,?string $type=null)
     {
         if($type)

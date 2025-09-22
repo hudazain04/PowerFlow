@@ -3,6 +3,7 @@
 namespace App\Repositories\Eloquent\SuperAdmin;
 
 use App\Models\SubscriptionRequest as SubscriptionRequestModel;
+use App\Models\User;
 use App\Repositories\interfaces\SuperAdmin\SubscriptionRequestRepositoryInterface;
 use App\Types\SubscriptionTypes;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -75,5 +76,11 @@ class SubscriptionRequestRepository implements SubscriptionRequestRepositoryInte
     public function getRelations(SubscriptionRequestModel $subscriptionRequest , array $relations): SubscriptionRequestModel
     {
         return $subscriptionRequest->load($relations);
+    }
+
+    public function getLast(int $user_id): ?SubscriptionRequestModel
+    {
+        $lastRequest=SubscriptionRequestModel::where('user_id',$user_id)->with('payment')->latest()->first();
+        return $lastRequest;
     }
 }
