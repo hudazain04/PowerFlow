@@ -22,6 +22,7 @@ class CounterResource extends JsonResource
             'current_spending'=>$this->current_spending,
             'spendingType'=>$this->spendingType,
             'physical_device_id'=>$this->physical_device_id,
+            'box_id'=> $this->electricalBoxes->first() ? $this->electricalBoxes->first()->id : null,
             'user'=>[
                 'email'=>$this->user->email,
                 'phone_number'=>$this->user->phone_number
