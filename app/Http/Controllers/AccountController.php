@@ -19,6 +19,11 @@ class AccountController extends Controller
         return $this->accountService->getProfile();
     }
 
+    public function getLandingProfile()
+    {
+         $this->accountService->getLandingProfile();
+    }
+
     public function updateProfile(UpdateProfileRequest $request)
     {
         $profileDTO=ProfileDTO::fromRequest($request);

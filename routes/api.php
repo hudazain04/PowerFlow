@@ -411,6 +411,8 @@ use App\Http\Controllers\Admin\StatisticsController;
         Route::prefix('account')->group(function () {
             Route::get('getProfile', [AccountController::class, 'getProfile'])
                 ->middleware('permission:VIEW_PROFILE');
+            Route::get('getLandingProfile',[AccountController::class,'getLandingProfile'])
+                ->middleware('permission:VIEW_PROFILE');
             Route::patch('updateProfile', [AccountController::class, 'updateProfile'])
                 ->middleware('permission:UPDATE_PROFILE');
             Route::post('blocking/{id}', [AccountController::class, 'blocking'])

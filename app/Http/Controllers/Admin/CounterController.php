@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Services\Admin\CounterService;
 use Illuminate\Http\Request;
 use Stripe\ApiResponse;
+use function Spatie\LaravelData\through;
 
 class CounterController extends Controller
 {
@@ -52,8 +53,7 @@ class CounterController extends Controller
 
         $result = $this->service->getGeneratorClients($generatorId, $search, $searchField);
 
-        return ApiResponses::success($this->successWithPagination(clientsResource::collection($result)), __('user.clients_retrieved'), ApiCode::OK
-        );
+        return $this->successWithPagination(clientsResource::collection($result), __('user.clients_retrieved'), ApiCode::OK);
     }
 
 }
