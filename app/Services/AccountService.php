@@ -43,10 +43,10 @@ class AccountService
     {
         $user=Auth::user();
         $lastSubscriptionRequest=$this->subscriptionRequestRepository->getLast($user->getAuthIdentifier());
-        $shouldPay=false;
+        $shouldPay=true;
         if ($lastSubscriptionRequest->payment->status===PaymentStatus::Paid)
         {
-            $shouldPay=true;
+            $shouldPay=false;
         }
 
         return [

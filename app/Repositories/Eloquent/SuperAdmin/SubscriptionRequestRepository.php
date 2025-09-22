@@ -80,7 +80,7 @@ class SubscriptionRequestRepository implements SubscriptionRequestRepositoryInte
 
     public function getLast(int $user_id): ?SubscriptionRequestModel
     {
-        $lastRequest=SubscriptionRequestModel::where('user_id',$user_id)->with('payment')->latest();
+        $lastRequest=SubscriptionRequestModel::where('user_id',$user_id)->with('payment')->latest()->first();
         return $lastRequest;
     }
 }

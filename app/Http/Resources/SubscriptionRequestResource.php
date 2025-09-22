@@ -30,6 +30,8 @@ class SubscriptionRequestResource extends JsonResource
             'day'=>$this->day,
             'afterPaymentFrequency'=>$this->afterPaymentFrequency,
             'time'=>$this->created_at->format('Y-m-d  h:iA'),
+            'paymentType'=>$this->payment->type,
+            'paymentStatus'=>$this->payment->status,
         ];
     }
 }
