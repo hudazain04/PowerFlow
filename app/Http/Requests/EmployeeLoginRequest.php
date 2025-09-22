@@ -22,7 +22,7 @@ class EmployeeLoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_name'=>'required',
+            'phone_number'=>'required',
             'secret_key'=>'required'
         ];
     }
