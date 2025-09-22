@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Types\PaymentStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -30,6 +31,7 @@ class Payment extends Model
         $query->when($filters['date'] ?? false, function ($query, $date) {
             $query->whereDate('date', $date);
         });
+        $query->where('status',PaymentStatus::Paid);
 
         return $query;
     }

@@ -37,9 +37,9 @@ class SpendingController extends Controller
         return $this->success(null,__('spending.update'));
 
     }
-    public function getAll(int $counter_id)
+    public function getAll(int $counter_id , Request $request)
     {
-        $spendings=$this->spendingService->getAll($counter_id);
+        $spendings=$this->spendingService->getAll($counter_id,$request);
         return $this->successWithPagination(SpendingResource::collection($spendings));
     }
 
@@ -48,6 +48,13 @@ class SpendingController extends Controller
          $this->spendingService->delete($id);
          return $this->success(null,__('spending.delete'));
     }
+    public  function getDays($counter_id)
+    {
+        $days=$this->spendingService->getDays($counter_id);
+        return $this->success($days,__('messages.success'));
+    }
+
+
 
 }
 

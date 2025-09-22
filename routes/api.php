@@ -449,6 +449,7 @@ use App\Http\Controllers\Admin\StatisticsController;
                 ->middleware('permission:DELETE_SPENDING');
             Route::get('getAll/{counter_id}', [SpendingController::class,'getAll'])
                 ->middleware('permission:GET_SPENDINGS');
+            Route::get('getDays/{counter_id}',[SpendingController::class,'getDays']);
 
         });
 

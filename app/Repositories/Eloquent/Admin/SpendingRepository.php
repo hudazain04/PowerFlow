@@ -41,7 +41,7 @@ class SpendingRepository implements SpendingRepositoryInterface
         return $spending->delete();
     }
 
-    public function getAll(int $counter_id): LengthAwarePaginator
+    public function getAll(int $counter_id ,?array  $filters=[]): LengthAwarePaginator
     {
         $spendings=SpendingModel::where('counter_id',$counter_id)->paginate(10);
         return $spendings;
@@ -51,5 +51,16 @@ class SpendingRepository implements SpendingRepositoryInterface
     {
         $spending=SpendingModel::where('counter_id',$counter_id)->latest()->first();
         return $spending;
+    }
+
+    public function getDays(int $counter_id)
+    {
+        $days = SpendingModel::where('counter_id',$counter_id)
+            ->select('date')
+            ->distinct()
+            ->get()
+            ->pluck('date')
+            ->map(fn($date) => \Carbon\Carbon::parse($date)->toDateString());
+        return $days;
     }
 }

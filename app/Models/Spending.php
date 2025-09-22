@@ -23,5 +23,14 @@ class Spending extends Model
     {
         return $this->belongsTo(Counter::class);
     }
+
+    public function scopeFilter($query, array $filters)
+    {
+        $query->when($filters['date'] ?? false, function ($query, $date) {
+            $query->whereDate('date', $date);
+        });
+
+        return $query;
+    }
 }
 

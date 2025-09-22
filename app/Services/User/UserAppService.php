@@ -51,9 +51,9 @@ class UserAppService
         // TODO: Implement consumptionRate() method.
     }
 
-    public function getPayments(int $id)
+    public function getPayments(int $id ,Request $request)
     {
-        return $this->appRepository->getPayments($id);
+        return $this->appRepository->getPayments($id,[ 'date' => $request->query('date')]);
     }
     public function getCounter(int $id){
         return $this->appRepository->getCounter($id);
