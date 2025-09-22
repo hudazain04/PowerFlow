@@ -274,7 +274,7 @@ class PermissionSeeder extends Seeder
 
             $adminRole->givePermissionTo($adminPermissions);
             $employeePermissions = [
-                'VIEW_AREAS', 'VIEW_BOXES', 'VIEW_COUNTERS', 'VIEW_BOX_COUNTERS', 'UPDATE_BOXES',
+                'VIEW_AREAS', 'VIEW_BOXES', 'VIEW_COUNTERS', 'VIEW_BOX_COUNTERS', 'UPDATE_BOXES','CREATE_BOXES',
                 'VIEW_COUNTER_CURRENT_BOX', 'VIEW_EMPLOYEES', 'VIEW_FAQ',
                 'CREATE_CUSTOMER_REQUEST', 'VIEW_CUSTOMER_REQUESTS', 'VIEW_NEIGHBORHOODS',
                 'VIEW_PLANS', 'VIEW_PLAN_PRICES', 'VIEW_SUBSCRIPTIONS', 'CREATE_SUBSCRIPTION_REQUEST',
