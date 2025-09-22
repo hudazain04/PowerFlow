@@ -6,6 +6,7 @@ use App\ApiHelper\ApiCode;
 use App\DTOs\SpendingDTO;
 use App\Exceptions\ErrorException;
 use App\Repositories\interfaces\Admin\SpendingRepositoryInterface;
+use Illuminate\Http\Request;
 
 class SpendingService
 {
@@ -36,9 +37,9 @@ class SpendingService
         return $spending;
     }
 
-    public function getAll(int $counter_id)
+    public function getAll(int $counter_id,Request $request)
     {
-        $spendings=$this->spendingRepository->getAll($counter_id);
+        $spendings=$this->spendingRepository->getAll($counter_id,[ 'date' => $request->query('date')]);
         return $spendings;
     }
 
@@ -50,5 +51,11 @@ class SpendingService
             throw new ErrorException(__('spending.notFound'),ApiCode::NOT_FOUND);
         }
         return $this->spendingRepository->delete($spending);
+    }
+
+    public function getDays($counter_id)
+    {
+        $days=$this->spendingRepository->getDays($counter_id);
+        return $days;
     }
 }
