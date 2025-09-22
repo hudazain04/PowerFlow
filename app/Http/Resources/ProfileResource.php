@@ -30,7 +30,7 @@ class ProfileResource extends JsonResource
             $data=array_merge($data,[
                 'generator_id'=>$generator->id,
                 'generatorName'=>$generator->name,
-                'generatorPhones'=>$generator->phones?->pluck('number'),
+                'phones'=>$generator->phones?->pluck('number'),
                 'location'=>$generator->location,
                 'blocked'=>$generator->user?->blocked,
                 'kiloPrice'=>$generator->settings->kiloPrice,
