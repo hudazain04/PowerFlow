@@ -30,6 +30,7 @@ class CounterRequest extends FormRequest
             'email' => 'required_if:is_new_user,true|string|nullable',
             'first_name' => 'required_if:is_new_user,true|string|nullable',
             'last_name' => 'required_if:is_new_user,true|string|nullable',
+            'physical_device_id'=>'required|string'
 
         ];
     }

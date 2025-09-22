@@ -64,6 +64,8 @@ class CounterBoxRepository implements CounterBoxRepositoryInterface
                 'user_id' => $data['user_id'],
                 'generator_id' => $data['generator_id'],
                 'current_spending' => $data['current_spending'],
+                'physical_device_id'=>$data['physical_device_id']
+
 
             ]);
 
@@ -79,6 +81,7 @@ class CounterBoxRepository implements CounterBoxRepositoryInterface
                 'number' => $data['number'] ?? $counter->number,
                 'user_id' => $data['user_id'] ?? $counter->user_id,
                 'current_spending' => $data['current_spending'] ?? $counter->current_spending,
+                'physical_device_id'=>$data['physical_device_id'] ?? $counter->physical_device_id
             ];
 
             if (isset($data['QRCode'])) {

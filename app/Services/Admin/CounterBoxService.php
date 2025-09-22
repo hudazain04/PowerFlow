@@ -131,7 +131,8 @@ class CounterBoxService
                 'QRCode' => $qrCodeUrl,
                 'user_id' => $user->id,
                 'generator_id' => $generator,
-                'current_spending' => 0
+                'current_spending' => 0,
+                'physical_device_id'=>$data['physical_device_id']
             ]);
 
             // If box_id is provided, assign the counter to the box
