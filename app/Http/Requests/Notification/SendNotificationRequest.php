@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Notification;
 
+use App\Types\NotificationTypes;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use ReflectionClass;
@@ -16,6 +17,9 @@ class SendNotificationRequest extends FormRequest
         return true;
     }
 
+
+
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -23,11 +27,13 @@ class SendNotificationRequest extends FormRequest
      */
     public function rules(): array
     {
+
+
         return [
-            'title'=>'required|string',
-            'body'=>'required|text',
-            'ids'=>'nullable|array',
-            'type'=>['required', Rule::in(array_values((new ReflectionClass(\App\Types\NotificationTypes::class))->getConstants()))],
+            'title' => 'required|string',
+            'body' => 'required|string',
+            'ids' => 'nullable|array',
+            'type' => ['required', Rule::in(NotificationTypes::toArray())],
         ];
     }
 }

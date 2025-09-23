@@ -18,8 +18,8 @@ class SubscriptionPaymentRepository implements SubscriptionPaymentRepositoryInte
 
     public function create(array $data): SubscriptionPaymentModel
     {
-       $payment=SubscriptionPaymentModel::create($data);
-       return $payment;
+        $payment = SubscriptionPaymentModel::create($data);
+        return $payment;
     }
 
     public function update(SubscriptionPaymentModel $subscriptionPayment, array $data): SubscriptionPaymentModel
@@ -31,13 +31,13 @@ class SubscriptionPaymentRepository implements SubscriptionPaymentRepositoryInte
 
     public function findWhere(array $wheres): ?SubscriptionPaymentModel
     {
-        $payment=SubscriptionPaymentModel::where($wheres)->first();
+        $payment = SubscriptionPaymentModel::where($wheres)->first();
         return $payment;
     }
 
     public function getTotalForGenerator($user_id): int
     {
-        return SubscriptionPaymentModel::where(['user_id'=> $user_id,'status'=>PaymentStatus::Paid])
+        return SubscriptionPaymentModel::where(['user_id' => $user_id, 'status' => PaymentStatus::Paid])
             ->sum('amount');
     }
 }
