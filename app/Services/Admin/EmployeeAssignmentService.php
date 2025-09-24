@@ -8,12 +8,14 @@ use App\Http\Resources\CounterResource;
 use App\Models\Complaint;
 use App\Models\Employee;
 use App\Models\Action;
+use App\Notifications\SystemNotification;
 use App\Repositories\interfaces\Admin\EmployeeRepositoryInterface;
 use App\Repositories\interfaces\User\ComplaintRepositoryInterface;
 use App\Services\FirebaseService;
 use App\Types\ActionTypes;
 use App\Types\ComplaintStatusTypes;
 use ErrorException;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Redis;
 
 class EmployeeAssignmentService
@@ -65,27 +67,43 @@ class EmployeeAssignmentService
         }
 
         event(new ComplaintAssignEvent($complaint, $employeeId));
-
-        if ($employee->fcmToken) {
-            FirebaseService::sendNotification(
-                $employee->fcmToken,
-                "New Complaint Assigned To You",
-                "Complaint #{$complaint->id}: {$complaint->description}",
-                [
-                    'id'          => $complaint->id,
-                    'status'      => $complaint->status,
-                    'description' => $complaint->description,
-                    'type'        => $complaint->type,
-                    'counter'     => CounterResource::make($complaint->counter),
-                    'created_at'  => $complaint->created_at->format('Y-m-d h:s a'),
-                    'maps'=>[
-                        'x'=>$box->latitude,
-                        'y'=>$box->longitude,
-                    ],
-
-                ]
-            );
-        }
+        $data=[
+            'title'=>"New Complaint Assigned To You",
+            'body'=>"Complaint #{$complaint->id}: {$complaint->description}",
+            'data'=>  [
+                'id'          => $complaint->id,
+                'status'      => $complaint->status,
+                'description' => $complaint->description,
+                'type'        => $complaint->type,
+                'counter'     => CounterResource::make($complaint->counter),
+                'created_at'  => $complaint->created_at->format('Y-m-d h:s a'),
+                'maps'=>[
+                    'x'=>$box->latitude,
+                    'y'=>$box->longitude,
+                ],
+            ],
+        ];
+        Notification::send($employee, new SystemNotification($data));
+//        if ($employee->fcmToken) {
+//            FirebaseService::sendNotification(
+//                $employee->fcmToken,
+//                "New Complaint Assigned To You",
+//                "Complaint #{$complaint->id}: {$complaint->description}",
+//                [
+//                    'id'          => $complaint->id,
+//                    'status'      => $complaint->status,
+//                    'description' => $complaint->description,
+//                    'type'        => $complaint->type,
+//                    'counter'     => CounterResource::make($complaint->counter),
+//                    'created_at'  => $complaint->created_at->format('Y-m-d h:s a'),
+//                    'maps'=>[
+//                        'x'=>$box->latitude,
+//                        'y'=>$box->longitude,
+//                    ],
+//
+//                ]
+//            );
+//        }
 
         return $complaint;
     }
@@ -142,13 +160,23 @@ class EmployeeAssignmentService
                     array_merge($data,['latestSpending'=>$action->relatedData['latestSpending'],
                         'latestPayment'=>$action->relatedData['latestPayment']]);
                 }
-                FirebaseService::sendNotification(
-                    $employee->fcmToken,
-                    "New Action Assigned To You",
-                    "Action #{$action->id}: {$action->type}",
-                   $data
-                );
+
+//                FirebaseService::sendNotification(
+//                    $employee->fcmToken,
+//                    "New Action Assigned To You",
+//                    "Action #{$action->id}: {$action->type}",
+//                   $data
+//                );
+
+                $notifyData=[
+                    'title'=>"New Action Assigned To You",
+                    'body'=>"Action #{$action->id}: {$action->type}",
+                    'data'=>$data
+                ];
+                Notification::send($employee, new SystemNotification($data));
             }
+
+
 
             event(new ActionAssignEvent($action, $employeeId));
         }

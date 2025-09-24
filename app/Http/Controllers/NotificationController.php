@@ -26,11 +26,11 @@ class NotificationController extends Controller
             return $this->success(null,__('notification.invalidType'),ApiCode::BAD_REQUEST);
         }
 
-        $result = $this->notificationService->{$methodName}(
-            $request->title,
-            $request->body,
-            $request->ids?? null
-        );
+        $result = $this->notificationService->{$methodName}([
+            'title'=>$request->title,
+            'body'=>$request->body,
+            'ids'=>$request->ids?? null
+        ]);
 
         return $this->success($result,__('notification.sent'));
     }
