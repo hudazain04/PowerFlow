@@ -34,23 +34,23 @@ class NotificationService
     }
     public function notifyAdmins(array $data)
     {
-        $admins = User::role(UserTypes::ADMIN)->whereNotNull("fcm_token")->pluck('fcm_token');
-        $this->baseSendNotification($data->title, $data->body, $admins);
+        $admins = User::role(UserTypes::ADMIN)->whereNotNull("fcmToken")->pluck('fcmToken')->toArray();
+        $this->baseSendNotification($data["title"], $data["body"], $admins);
 
     }
 
     public function notifyUsers(array $data)
     {
-        $users = User::role(UserTypes::USER)->whereNotNull("fcm_token")->pluck('fcm_token');
+        $users = User::role(UserTypes::USER)->whereNotNull("fcmToken")->pluck('fcmToken')->toArray();
         // Notification::send($users, new SystemNotification($data));
-        $this->baseSendNotification($data->title, $data->body, $users);
+        $this->baseSendNotification($data["title"], $data["body"], $users);
     }
 
     public function notifyEmployees(array $data)
     {
-        $employees = Employee::role(UserTypes::EMPLOYEE)->whereNotNull("fcm_token")->pluck('fcm_token');
+        $employees = Employee::role(UserTypes::EMPLOYEE)->whereNotNull("fcmToken")->pluck('fcmToken');
         Notification::send($employees, new SystemNotification($data));
-        $this->baseSendNotification($data->title, $data->body, $employees);
+        $this->baseSendNotification($data["title"], $data["body"], $employees);
     }
 
     public function notifyAll(array $data)
@@ -62,24 +62,24 @@ class NotificationService
 
     public function notifyCustomUser(array $ids, array $data = [])
     {
-        $users = User::whereIn('id', $ids)->whereNotNull("fcm_token")->pluck('fcm_token');
+        $users = User::whereIn('id', $ids)->whereNotNull("fcmToken")->pluck('fcmToken');
 
-        $this->baseSendNotification($data->title, $data->body, $users);
+        $this->baseSendNotification($data["title"], $data["body"], $users);
     }
 
 
     public function notifyCustomAdmin(array $ids, array $data = [])
     {
-        $users = User::role(UserTypes::ADMIN)->whereIn('id', $ids)->whereNotNull("fcm_token")->pluck('fcm_token');
+        $users = User::role(UserTypes::ADMIN)->whereIn('id', $ids)->whereNotNull("fcmToken")->pluck('fcmToken');
 
-        $this->baseSendNotification($data->title, $data->body, $users);
+        $this->baseSendNotification($data["title"], $data["body"], $users);
     }
 
     public function notifyCustomEmployee(array $ids, array $data = [])
     {
-        $employees = Employee::whereIn('id', $ids)->whereNotNull("fcm_token")->pluck('fcm_token');
+        $employees = Employee::whereIn('id', $ids)->whereNotNull("fcmToken")->pluck('fcmToken');
 
-        $this->baseSendNotification($data->title, $data->body, $employees);
+        $this->baseSendNotification($data["title"], $data["body"], $employees);
 
     }
 

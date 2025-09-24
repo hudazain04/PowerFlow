@@ -14,8 +14,7 @@ class NotificationController extends Controller
     use ApiResponse;
     public function __construct(
         protected NotificationService $notificationService,
-    )
-    {
+    ) {
     }
 
     public function notify(SendNotificationRequest $request)
@@ -23,30 +22,30 @@ class NotificationController extends Controller
         $methodName = "notify" . ucfirst($request->type);
 
         if (!method_exists($this->notificationService, $methodName)) {
-            return $this->success(null,__('notification.invalidType'),ApiCode::BAD_REQUEST);
+            return $this->success(null, __('notification.invalidType'), ApiCode::BAD_REQUEST);
         }
 
         $result = $this->notificationService->{$methodName}([
-            'title'=>$request->title,
-            'body'=>$request->body,
-            'ids'=>$request->ids?? null
+            'title' => $request->title,
+            'body' => $request->body,
+            'ids' => $request->ids ?? null
         ]);
 
-        return $this->success($result,__('notification.sent'));
+        return $this->success($result, __('notification.sent'));
     }
 
     public function getAll(Request $request)
     {
-        $user=$request->user();
-        $notifications=$this->notificationService->getAll($user);
-        return $this->successWithPagination(NotificationResource::collection($notifications),__('messafes.success'));
+        $user = $request->user();
+        $notifications = $this->notificationService->getAll($user);
+        return $this->successWithPagination(NotificationResource::collection($notifications), __('messafes.success'));
     }
 
-    public function show(Request $request ,$id)
+    public function show(Request $request, $id)
     {
-        $user=$request->user();
-        $notification=$this->notificationService->show($user,$id);
-        return $this->success(NotificationResource::make($notification),__('messages.success'));
+        $user = $request->user();
+        $notification = $this->notificationService->show($user, $id);
+        return $this->success(NotificationResource::make($notification), __('messages.success'));
 
     }
 }
