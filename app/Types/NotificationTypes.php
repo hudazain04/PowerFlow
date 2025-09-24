@@ -18,6 +18,7 @@ class NotificationTypes
     public const CustomUser = "CustomUser";
     public const CustomEmployee = "CustomEmployee";
     public const All = "All";
+    public const CustomerAdmin = "CustomAdmin";
 
 
     public static function toArray(): array
@@ -29,6 +30,7 @@ class NotificationTypes
             self::CustomUser,
             self::CustomEmployee,
             self::All,
+            self::CustomerAdmin
         ];
     }
 
