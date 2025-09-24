@@ -35,6 +35,7 @@ class User extends Authenticatable implements JWTSubject,MustVerifyEmail
         'phone_number',
         'blocked',
         'translations',
+        'fcmToken',
     ];
     protected $casts = [
         'should_reset_password' => 'boolean',
