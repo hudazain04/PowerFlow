@@ -12,6 +12,7 @@ class NotificationService
     {
           public function notifyAdmins(array $data)
             {
+
                 $admins = User::role('admin')->get();
                 Notification::send($admins, new SystemNotification($data));
 
