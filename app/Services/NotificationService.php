@@ -35,6 +35,9 @@ class NotificationService
     public function notifyAdmins(array $data)
     {
         $admins = User::role(UserTypes::ADMIN)->whereNotNull("fcmToken")->pluck('fcmToken')->toArray();
+        if (count($admins) === 0) {
+            return;
+        }
         $this->baseSendNotification($data["title"], $data["body"], $admins);
 
     }
@@ -42,14 +45,18 @@ class NotificationService
     public function notifyUsers(array $data)
     {
         $users = User::role(UserTypes::USER)->whereNotNull("fcmToken")->pluck('fcmToken')->toArray();
-        // Notification::send($users, new SystemNotification($data));
+        if (count($users) === 0) {
+            return;
+        }
         $this->baseSendNotification($data["title"], $data["body"], $users);
     }
 
     public function notifyEmployees(array $data)
     {
         $employees = Employee::role(UserTypes::EMPLOYEE)->whereNotNull("fcmToken")->pluck('fcmToken');
-        Notification::send($employees, new SystemNotification($data));
+        if (count($employees) === 0) {
+            return;
+        }
         $this->baseSendNotification($data["title"], $data["body"], $employees);
     }
 
@@ -57,12 +64,15 @@ class NotificationService
     {
         $this->notifyAdmins($data);
         $this->notifyUsers($data);
-        // $this->notifyEmployees($data);
+        $this->notifyEmployees($data);
     }
 
     public function notifyCustomUser(array $ids, array $data = [])
     {
         $users = User::whereIn('id', $ids)->whereNotNull("fcmToken")->pluck('fcmToken');
+        if (count($users) === 0) {
+            return;
+        }
 
         $this->baseSendNotification($data["title"], $data["body"], $users);
     }
@@ -71,6 +81,9 @@ class NotificationService
     public function notifyCustomAdmin(array $ids, array $data = [])
     {
         $users = User::role(UserTypes::ADMIN)->whereIn('id', $ids)->whereNotNull("fcmToken")->pluck('fcmToken');
+        if (count($users) === 0) {
+            return;
+        }
 
         $this->baseSendNotification($data["title"], $data["body"], $users);
     }
@@ -78,7 +91,9 @@ class NotificationService
     public function notifyCustomEmployee(array $ids, array $data = [])
     {
         $employees = Employee::whereIn('id', $ids)->whereNotNull("fcmToken")->pluck('fcmToken');
-
+        if (count($employees) === 0) {
+            return;
+        }
         $this->baseSendNotification($data["title"], $data["body"], $employees);
 
     }
