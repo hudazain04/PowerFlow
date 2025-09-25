@@ -57,7 +57,7 @@ class NotificationService
     {
         $this->notifyAdmins($data);
         $this->notifyUsers($data);
-        $this->notifyEmployees($data);
+        // $this->notifyEmployees($data);
     }
 
     public function notifyCustomUser(array $ids, array $data = [])
