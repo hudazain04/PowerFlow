@@ -474,7 +474,9 @@ use App\Http\Controllers\Admin\StatisticsController;
                ->middleware('permission:SEND_NOTIFICATION');
            Route::get('getNotifications',[NotificationController::class,'getAll'])
                ->middleware('permission:VIEW_NOTIFICATIONS');
-           Route::get('show/{id}',[NotificationController::class,'show'])
+            Route::get('getUnReadNotifications',[NotificationController::class,'getUnRead'])
+                ->middleware('permission:VIEW_NOTIFICATIONS');
+            Route::get('show/{id}',[NotificationController::class,'show'])
                ->middleware('permission:VIEW_NOTIFICATION');
         });
     });

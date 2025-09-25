@@ -36,9 +36,9 @@ class NotificationController extends Controller
 
     public function getAll(Request $request)
     {
-        $user = $request->user();
-        $notifications = $this->notificationService->getAll($user);
-        return $this->successWithPagination(NotificationResource::collection($notifications), __('messafes.success'));
+        $user=$request->user();
+        $notifications=$this->notificationService->getAll($user);
+        return $this->successWithPagination(NotificationResource::collection($notifications),__('messages.success'));
     }
 
     public function show(Request $request, $id)
@@ -47,5 +47,12 @@ class NotificationController extends Controller
         $notification = $this->notificationService->show($user, $id);
         return $this->success(NotificationResource::make($notification), __('messages.success'));
 
+    }
+
+    public function getUnRead(Request $request)
+    {
+        $user=$request->user();
+        $notifications=$this->notificationService->getUnRead($user);
+        return $this->success(NotificationResource::collection($notifications),__('messages.success'));
     }
 }

@@ -121,4 +121,14 @@ class NotificationService
 
         return $notification;
     }
+
+    public function getUnRead($user)
+    {
+        $notifications = $user->notifications()
+            ->whereNull('read_at')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        $user->unreadNotifications->markAsRead();
+        return $notifications;
+    }
 }
