@@ -34,23 +34,25 @@ class NotificationService
     }
     public function notifyAdmins(array $data)
     {
-        $admins = User::role(UserTypes::ADMIN)->whereNotNull("fcm_token")->pluck('fcm_token');
+        $admins = User::role(UserTypes::ADMIN)->whereNotNull("fcmToken")->pluck('fcmToken');
         $this->baseSendNotification($data->title, $data->body, $admins);
 
     }
 
     public function notifyUsers(array $data)
     {
-        $users = User::role(UserTypes::USER)->whereNotNull("fcm_token")->pluck('fcm_token');
+        $users = User::role(UserTypes::USER)->whereNotNull("fcmToken")->pluck('fcmToken');
         // Notification::send($users, new SystemNotification($data));
         $this->baseSendNotification($data->title, $data->body, $users);
     }
 
     public function notifyEmployees(array $data)
     {
-        $employees = Employee::role(UserTypes::EMPLOYEE)->whereNotNull("fcm_token")->pluck('fcm_token');
-        Notification::send($employees, new SystemNotification($data));
-        $this->baseSendNotification($data->title, $data->body, $employees);
+        $employees = Employee::role(UserTypes::EMPLOYEE)->whereNotNull("fcmToken")->pluck('fcmToken');
+//        Notification::send($employees, new SystemNotification($data));
+        if (count($employees) > 0){
+            $this->baseSendNotification($data->title, $data->body, $employees);
+        }
     }
 
     public function notifyAll(array $data)
@@ -105,5 +107,15 @@ class NotificationService
         }
 
         return $notification;
+    }
+
+    public function getUnRead($user)
+    {
+        $notifications = $user->notifications()
+            ->whereNull('read_at')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        $user->unreadNotifications->markAsRead();
+        return $notifications;
     }
 }
