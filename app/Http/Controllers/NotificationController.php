@@ -7,6 +7,7 @@ use App\ApiHelper\ApiResponse;
 use App\Http\Requests\Notification\SendNotificationRequest;
 use App\Http\Resources\NotificationResource;
 use App\Services\NotificationService;
+use App\Types\UserTypes;
 use Illuminate\Http\Request;
 
 class NotificationController extends Controller

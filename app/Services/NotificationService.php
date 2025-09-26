@@ -57,8 +57,10 @@ class NotificationService
 
     public function notifyAdmins(array $data)
     {
+        $authUser = auth()->user();
         $admins = User::role(UserTypes::ADMIN)
             ->whereNotNull("fcmToken")
+            ->where('id', '!=', $authUser->id)
             ->get(['id', 'fcmToken']);
 
         if ($admins->isEmpty()) {
@@ -74,9 +76,22 @@ class NotificationService
 
     public function notifyUsers(array $data)
     {
-        $users = User::role(UserTypes::USER)
-            ->whereNotNull("fcmToken")
-            ->get(['id', 'fcmToken']);
+
+        $authUser = auth()->user();
+        $generator=$authUser->powerGenerator;
+        $query = User::role(UserTypes::USER)
+            ->whereNotNull('fcmToken')
+            ->where('id', '!=', $authUser->id);
+        if ($authUser->hasRole(UserTypes::ADMIN) && $generator) {
+            $query->whereHas('counters', function ($q) use ($generator) {
+                $q->where('generator_id', $generator->id);
+            });
+        }
+
+        $users = $query->get(['id', 'fcmToken']);
+//        $users = User::role(UserTypes::USER)
+//            ->whereNotNull("fcmToken")
+//            ->get(['id', 'fcmToken']);
 
         if ($users->isEmpty()) {
             return;
@@ -91,9 +106,19 @@ class NotificationService
 
     public function notifyEmployees(array $data)
     {
-        $employees = Employee::role(UserTypes::EMPLOYEE)
+        $authUser = auth()->user();
+        $generator=$authUser->powerGenerator;
+        $query = Employee::role(UserTypes::EMPLOYEE)
             ->whereNotNull("fcmToken")
-            ->get(['id', 'fcmToken']);
+            ->where('id', '!=', $authUser->id);
+        if ($authUser->hasRole(UserTypes::ADMIN) && $generator) {
+            $query->where('generator_id',$generator->id);
+        }
+
+        $employees = $query->get(['id', 'fcmToken']);
+//        $employees = Employee::role(UserTypes::EMPLOYEE)
+//            ->whereNotNull("fcmToken")
+//            ->get(['id', 'fcmToken']);
 
         if ($employees->isEmpty()) {
             return;
