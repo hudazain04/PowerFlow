@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services;
 
 use App\ApiHelper\ApiCode;
@@ -6,13 +7,31 @@ use App\Exceptions\ErrorException;
 use App\Models\User;
 use App\Models\Employee;
 use App\Notifications\SystemNotification;
+use App\Repositories\Eloquent\Notification\NotificationRepository;
 use App\Types\UserTypes;
+use Illuminate\Database\Eloquent\Model;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Notification;
 
 class NotificationService
 {
+
+
+    public function __construct(
+        protected NotificationRepository $notificationRepository
+    ) {
+    }
+
+    public function storeNotification(array $data, array $userIds, ?Model $notifier = null)
+    {
+        $notification = $this->notificationRepository->createNotification($data, $notifier);
+
+        $this->notificationRepository->attachUsers($notification, $userIds);
+
+        return $notification;
+    }
+
 
     public function baseSendNotification($title, $body, array $fcmTokens)
     {
@@ -32,32 +51,59 @@ class NotificationService
 
         $messaging->sendMulticast($message, $fcmTokens);
     }
+
+
+
+
     public function notifyAdmins(array $data)
     {
-        $admins = User::role(UserTypes::ADMIN)->whereNotNull("fcmToken")->pluck('fcmToken')->toArray();
+        $admins = User::role(UserTypes::ADMIN)
+            ->whereNotNull("fcmToken")
+            ->get(['id', 'fcmToken']);
+
+        if ($admins->isEmpty()) {
+            return;
+        }
+        $tokens = $admins->pluck('fcmToken')->toArray();
         if (count($admins) === 0) {
             return;
         }
-        $this->baseSendNotification($data["title"], $data["body"], $admins);
-
+        $this->baseSendNotification($data["title"], $data["body"], $tokens);
+        $this->storeNotification($data, $admins->all(), auth()->user());
     }
 
     public function notifyUsers(array $data)
     {
-        $users = User::role(UserTypes::USER)->whereNotNull("fcmToken")->pluck('fcmToken')->toArray();
+        $users = User::role(UserTypes::USER)
+            ->whereNotNull("fcmToken")
+            ->get(['id', 'fcmToken']);
+
+        if ($users->isEmpty()) {
+            return;
+        }
+        $tokens = $users->pluck('fcmToken')->toArray();
         if (count($users) === 0) {
             return;
         }
-        $this->baseSendNotification($data["title"], $data["body"], $users);
+        $this->baseSendNotification($data["title"], $data["body"], $tokens);
+        $this->storeNotification($data, $users->all(), auth()->user());
     }
 
     public function notifyEmployees(array $data)
     {
-        $employees = Employee::role(UserTypes::EMPLOYEE)->whereNotNull("fcmToken")->pluck('fcmToken');
+        $employees = Employee::role(UserTypes::EMPLOYEE)
+            ->whereNotNull("fcmToken")
+            ->get(['id', 'fcmToken']);
+
+        if ($employees->isEmpty()) {
+            return;
+        }
+        $tokens = $employees->pluck('fcmToken')->toArray();
         if (count($employees) === 0) {
             return;
         }
-        $this->baseSendNotification($data["title"], $data["body"], $employees);
+        $this->baseSendNotification($data["title"], $data["body"], $tokens);
+        $this->storeNotification($data, $employees->all(), auth()->user());
     }
 
     public function notifyAll(array $data)
@@ -100,10 +146,12 @@ class NotificationService
 
     public function getAll($user)
     {
-        $notifications = $user->notifications()
-            ->orderBy('created_at', 'desc')
-            ->paginate(20);
-        $user->unreadNotifications->markAsRead();
+        $notifications = $this->notificationRepository->getMyNotifications($user);
+        return $notifications;
+    }
+    public function getSentNotifications($user)
+    {
+        $notifications = $this->notificationRepository->getNotificationsSentByMe($user);
         return $notifications;
     }
 

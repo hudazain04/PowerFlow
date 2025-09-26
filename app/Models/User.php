@@ -2,22 +2,22 @@
 
 namespace App\Models;
 
- use App\ApiHelper\Translatable;
- use App\Types\UserTypes;
- use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\ApiHelper\Translatable;
+use App\Types\UserTypes;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
- use Predis\Command\Traits\Count;
- use Spatie\Permission\Traits\HasRoles;
+use Predis\Command\Traits\Count;
+use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 
-class User extends Authenticatable implements JWTSubject,MustVerifyEmail
+class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
 
-    use HasFactory, Notifiable,HasRoles,\Illuminate\Auth\MustVerifyEmail;
+    use HasFactory, Notifiable, HasRoles, \Illuminate\Auth\MustVerifyEmail;
 
 
 
@@ -47,7 +47,7 @@ class User extends Authenticatable implements JWTSubject,MustVerifyEmail
 
     public function fullName()
     {
-        return $this->first_name . ' '. $this->last_name;
+        return $this->first_name . ' ' . $this->last_name;
     }
 
     public function subcriptionrequest()
@@ -82,7 +82,7 @@ class User extends Authenticatable implements JWTSubject,MustVerifyEmail
         ];
     }
 
-//    public function subcriptionrequest()
+    //    public function subcriptionrequest()
 //    {
 //        return $this->hasMany(SubscriptionRequest::class);
 //    }
@@ -91,17 +91,35 @@ class User extends Authenticatable implements JWTSubject,MustVerifyEmail
 //        return $this->hasMany(PowerGenerator::class);
 //    }
 
+
+    public function sentNotifications()
+    {
+        return $this->morphMany(Notification::class, 'notifier');
+    }
+
+    public function receivedNotifications()
+    {
+        return $this->morphToMany(
+            Notification::class,
+            'notified',
+            'notification_user'
+        )->withPivot('is_read')->withTimestamps();
+    }
+
     public function faqs()
     {
         return $this->belongsToMany(Faq::class);
     }
-    public function generatorRequest(){
+    public function generatorRequest()
+    {
         return $this->BelongsTo(GeneratorRequest::class);
     }
-    public function customerRequests(){
+    public function customerRequests()
+    {
         return $this->hasMany(CustomerRequest::class);
     }
-    public function counters(){
+    public function counters()
+    {
         return $this->hasMany(Counter::class);
     }
 
@@ -118,28 +136,27 @@ class User extends Authenticatable implements JWTSubject,MustVerifyEmail
         ];
     }
 
-     public function scopeFilter($query,array $filters)
-     {
-         $query->when($filters['search'] ?? false ,function ($query) use ($filters){
-             $search=$filters['search'];
-             $query->where(function ($query) use ($search){
-                 foreach ($this->getFillable() as $column)
-                 {
-                     ($query->orWhere($column,'like',"%$search%"));
-                 }
-             });
-         });
-         $query->when($filters['roles'] ?? false, function ($query) use ($filters) {
-             $roles = (array) $filters['roles'];
-             $query->role($roles);
+    public function scopeFilter($query, array $filters)
+    {
+        $query->when($filters['search'] ?? false, function ($query) use ($filters) {
+            $search = $filters['search'];
+            $query->where(function ($query) use ($search) {
+                foreach ($this->getFillable() as $column) {
+                    ($query->orWhere($column, 'like', "%$search%"));
+                }
+            });
+        });
+        $query->when($filters['roles'] ?? false, function ($query) use ($filters) {
+            $roles = (array) $filters['roles'];
+            $query->role($roles);
 
-         });
+        });
 
-         return $query;
-     }
+        return $query;
+    }
 
-     public function routeNotificationForFcm()
-     {
-         return $this->fcm_token;
-     }
+    public function routeNotificationForFcm()
+    {
+        return $this->fcm_token;
+    }
 }
