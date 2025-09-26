@@ -186,7 +186,7 @@ class SpendingPaymentService
             'counter_id'=>$counter_id,
             'status'=>PaymentStatus::Paid,
             'type'=>PaymentType::Cash,
-            'session_id'=>$result['session_id'],
+//            'session_id'=>$result['session_id'],
         ]);
         $this->checkCutCounter($payment,$counter_id);
         return $this->success($result,__('spendingPayment.cash'));
