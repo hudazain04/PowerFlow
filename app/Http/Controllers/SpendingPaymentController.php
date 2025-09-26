@@ -43,8 +43,9 @@ class SpendingPaymentController extends Controller
         return $this->spendingPaymentService->handleCashPayment($dto,$counter_id);
     }
 
-    public function getSpendingPayments($generator_id,Request $request)
+    public function getSpendingPayments(Request $request)
     {
+        $generator_id=$request->user()->powerGenerator->id;
         $payments=$this->spendingPaymentService->getSpendingPayments($generator_id,$request);
         $totalAmount = $payments->sum('amount');
         $payments = $payments->paginate(20);
