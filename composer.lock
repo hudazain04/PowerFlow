@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2cb89a9ae95cbd2374c21ab5a769363d",
+    "content-hash": "ac3d7010a5856eeb1ffd19f86905e16d",
     "packages": [
         {
             "name": "amphp/amp",
@@ -11154,30 +11154,30 @@
         },
         {
             "name": "vladimir-yuldashev/laravel-queue-rabbitmq",
-            "version": "dev-l11",
+            "version": "v14.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vyuldashev/laravel-queue-rabbitmq.git",
-                "reference": "f87aa9d63b39eb9fb14433f29f2a05db5eb35e4c"
+                "reference": "d06427b3efa6ffd19872a059f9301b030158263d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vyuldashev/laravel-queue-rabbitmq/zipball/f87aa9d63b39eb9fb14433f29f2a05db5eb35e4c",
-                "reference": "f87aa9d63b39eb9fb14433f29f2a05db5eb35e4c",
+                "url": "https://api.github.com/repos/vyuldashev/laravel-queue-rabbitmq/zipball/d06427b3efa6ffd19872a059f9301b030158263d",
+                "reference": "d06427b3efa6ffd19872a059f9301b030158263d",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "illuminate/queue": "^10.0|^11.0",
+                "illuminate/queue": "^10.0|^11.0|^12.0",
                 "php": "^8.0",
                 "php-amqplib/php-amqplib": "^v3.6"
             },
             "require-dev": {
-                "laravel/framework": "^9.0|^10.0|^11.0",
+                "laravel/framework": "^9.0|^10.0|^11.0|^12.0",
                 "laravel/horizon": "^5.0",
                 "laravel/pint": "^1.2",
                 "mockery/mockery": "^1.0",
-                "orchestra/testbench": "^7.0|^8.0|^9.0",
+                "orchestra/testbench": "^7.0|^8.0|^9.0|^10.0",
                 "phpunit/phpunit": "^10.0|^11.0"
             },
             "suggest": {
@@ -11212,9 +11212,9 @@
             "description": "RabbitMQ driver for Laravel Queue. Supports Laravel Horizon.",
             "support": {
                 "issues": "https://github.com/vyuldashev/laravel-queue-rabbitmq/issues",
-                "source": "https://github.com/vyuldashev/laravel-queue-rabbitmq/tree/l11"
+                "source": "https://github.com/vyuldashev/laravel-queue-rabbitmq/tree/v14.3.0"
             },
-            "time": "2024-03-14T15:29:16+00:00"
+            "time": "2025-08-22T16:22:52+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -13804,15 +13804,13 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "vladimir-yuldashev/laravel-queue-rabbitmq": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^8.2",
         "ext-pdo": "*"
     },
-    "platform-dev": {},
+    "platform-dev": [],
     "plugin-api-version": "2.6.0"
 }

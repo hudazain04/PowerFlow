@@ -51,7 +51,7 @@ use App\Http\Controllers\Admin\StatisticsController;
             });
         });
         Route::prefix('user')->group(function (){
-            Route::put('name/{id}',[UserAppController::class,'name']);
+            Route::put('name',[UserAppController::class,'name']);
             Route::put('password',[UserAppController::class,'resetPassword']);
             Route::get('counters/{id}',[UserAppController::class,'getCounters']);
             Route::get('counter/{id}',[UserAppController::class,'getCounter']);

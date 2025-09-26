@@ -32,12 +32,13 @@ class UserAppController extends Controller
         $password=$this->service->resetPassword($user_id,...$validate);
             return ApiResponses::success($password,__('auth.newPassword'),ApiCode::OK);
     }
-    public function name(int $id,Request $request){
+    public function name(Request $request){
         $validate=$request->validate([
             'first_name'=>'required|string',
             'last_name'=>'required|string'
         ]);
-        $name =$this->service->name($id,$validate);
+        $user_id=$request->user()->id;
+        $name =$this->service->name($user_id,$validate);
         return ApiResponses::success($name,'New Name',ApiCode::OK);
     }
     public function getCounters(int $id){
