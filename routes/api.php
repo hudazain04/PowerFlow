@@ -484,7 +484,7 @@ Route::middleware(['auth:api', 'lang'])->group(function () {
             ->middleware('permission:VIEW_NOTIFICATIONS');
         Route::get('getUnReadNotifications', [NotificationController::class, 'getUnRead'])
             ->middleware('permission:VIEW_NOTIFICATIONS');
-        Route::get('markNotificationAsRead',[NotificationController::class,'markNotificationAsRead'])
+        Route::patch('markNotificationAsRead',[NotificationController::class,'markNotificationAsRead'])
             ->middleware('permission:READ_NOTIFICATIONS');
         Route::get('show/{id}', [NotificationController::class, 'show'])
             ->middleware('permission:VIEW_NOTIFICATION');
