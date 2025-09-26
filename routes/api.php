@@ -438,7 +438,7 @@ Route::middleware(['auth:api', 'lang'])->group(function () {
     Route::prefix('spendingPay')->middleware(['auth:api'])->group(function () {
         Route::post('payStripeSpending/{counter_id}', [SpendingPaymentController::class, 'createStripeCheckout'])
             ->middleware('permission:PROCESS_STRIPE_SPENDING_PAYMENT');
-        Route::get('payCashSpending/{counter_id}', [SpendingPaymentController::class, 'handleCashPayment'])
+        Route::post('payCashSpending/{counter_id}', [SpendingPaymentController::class, 'handleCashPayment'])
             ->middleware('permission:PROCESS_CACHE_SPENDING_PAYMENT');
         Route::get('stripe/success', [SpendingPaymentController::class, 'stripeSuccess'])->name('spendingStripe.success');
         Route::get('stripe/cancel', [SpendingPaymentController::class, 'stripeCancel'])->name('spendingStripe.cancel');
@@ -477,14 +477,14 @@ Route::middleware(['auth:api', 'lang'])->group(function () {
 
     Route::prefix('notification')->group(function () {
         Route::post('sendNotification', [NotificationController::class, 'notify']);
-//            ->middleware('permission:SEND_NOTIFICATION');
+        //            ->middleware('permission:SEND_NOTIFICATION');
         Route::get('getNotifications', [NotificationController::class, 'getAll'])
             ->middleware('permission:VIEW_NOTIFICATIONS');
         Route::get('getSentNotifications', [NotificationController::class, 'getSentNotifications'])
             ->middleware('permission:VIEW_NOTIFICATIONS');
         Route::get('getUnReadNotifications', [NotificationController::class, 'getUnRead'])
             ->middleware('permission:VIEW_NOTIFICATIONS');
-        Route::get('markNotificationAsRead',[NotificationController::class,'markNotificationAsRead'])
+        Route::get('markNotificationAsRead', [NotificationController::class, 'markNotificationAsRead'])
             ->middleware('permission:READ_NOTIFICATIONS');
         Route::get('show/{id}', [NotificationController::class, 'show'])
             ->middleware('permission:VIEW_NOTIFICATION');
