@@ -22,8 +22,8 @@ class CreateSpendingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'consume'=>'required|int',
-            'counter_id'=>'required|int|exists:counters,id',
+            'consume' => 'required|int',
+            'counter_id' => 'required|int|exists:counters,id',
         ];
     }
 }
