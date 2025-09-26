@@ -61,6 +61,13 @@ class NotificationController extends Controller
     {
         $user = $request->user();
         $notifications = $this->notificationService->getUnRead($user);
-        return $this->success(NotificationResource::collection($notifications), __('messages.success'));
+        return $this->successWithPagination(NotificationResource::collection($notifications), __('messages.success'));
+    }
+
+    public function markNotificationAsRead(Request  $request)
+    {
+        $user = $request->user();
+        $this->notificationService->markNotificationAsRead($user);
+        return $this->success(null,__('notification.read'));
     }
 }

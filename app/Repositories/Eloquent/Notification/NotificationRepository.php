@@ -42,7 +42,15 @@ class NotificationRepository
 
         return $received;
     }
+    public function getUnReadNotifications($user, $paginate = 20)
+    {
+        $received = $user->receivedNotifications()
+            ->orderByDesc('notification_user.created_at')
+            ->wherePivot('is_read', false)
+            ->paginate($paginate);
 
+        return $received;
+    }
 
     public function getNotificationsSentByMe($user, $paginate = 20)
     {
@@ -51,10 +59,10 @@ class NotificationRepository
             ->paginate($paginate);
     }
 
-    public function markNotificationAsRead($user, $notificationId)
+    public function markNotificationAsRead($user)
     {
         return $user->receivedNotifications()
-            ->where('notification_id', $notificationId)
+            ->wherePivot('is_read', false)
             ->update(['is_read' => true]);
     }
 }

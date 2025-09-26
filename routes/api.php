@@ -476,14 +476,16 @@ Route::middleware(['auth:api', 'lang'])->group(function () {
     });
 
     Route::prefix('notification')->group(function () {
-        Route::post('sendNotification', [NotificationController::class, 'notify'])
-            ->middleware('permission:SEND_NOTIFICATION');
+        Route::post('sendNotification', [NotificationController::class, 'notify']);
+//            ->middleware('permission:SEND_NOTIFICATION');
         Route::get('getNotifications', [NotificationController::class, 'getAll'])
             ->middleware('permission:VIEW_NOTIFICATIONS');
         Route::get('getSentNotifications', [NotificationController::class, 'getSentNotifications'])
             ->middleware('permission:VIEW_NOTIFICATIONS');
         Route::get('getUnReadNotifications', [NotificationController::class, 'getUnRead'])
             ->middleware('permission:VIEW_NOTIFICATIONS');
+        Route::get('markNotificationAsRead',[NotificationController::class,'markNotificationAsRead'])
+            ->middleware('permission:READ_NOTIFICATIONS');
         Route::get('show/{id}', [NotificationController::class, 'show'])
             ->middleware('permission:VIEW_NOTIFICATION');
     });

@@ -172,11 +172,11 @@ class NotificationService
 
     public function getUnRead($user)
     {
-        $notifications = $user->notifications()
-            ->whereNull('read_at')
-            ->orderBy('created_at', 'desc')
-            ->get();
-        $user->unreadNotifications->markAsRead();
+        $notifications = $this->notificationRepository->getUnReadNotifications($user);
         return $notifications;
+    }
+    public function markNotificationAsRead($user)
+    {
+       return $this->notificationRepository->markNotificationAsRead($user);
     }
 }
