@@ -113,34 +113,39 @@ class NotificationService
         $this->notifyEmployees($data);
     }
 
-    public function notifyCustomUser(array $ids, array $data = [])
+    public function notifyCustomUser(array $data = [])
     {
-        $users = User::whereIn('id', $ids)->whereNotNull("fcmToken")->pluck('fcmToken');
+        $users = User::whereIn('id', $data["ids"])->whereNotNull("fcmToken")->get(['id', 'fcmToken']);
+        if (count($users) === 0) {
+            return;
+        }
+        $tokens = $users->pluck('fcmToken')->toArray();
+        $this->baseSendNotification($data["title"], $data["body"], $tokens);
+        $this->storeNotification($data, $users->all(), auth()->user());
+    }
+
+
+    public function notifyCustomAdmin(array $data = [])
+    {
+        $users = User::role(UserTypes::ADMIN)->whereIn('id', $data["ids"])->whereNotNull("fcmToken")->get(['id', 'fcmToken']);
         if (count($users) === 0) {
             return;
         }
 
-        $this->baseSendNotification($data["title"], $data["body"], $users);
+        $tokens = $users->pluck('fcmToken')->toArray();
+        $this->baseSendNotification($data["title"], $data["body"], $tokens);
+        $this->storeNotification($data, $users->all(), auth()->user());
     }
 
-
-    public function notifyCustomAdmin(array $ids, array $data = [])
+    public function notifyCustomEmployee(array $data = [])
     {
-        $users = User::role(UserTypes::ADMIN)->whereIn('id', $ids)->whereNotNull("fcmToken")->pluck('fcmToken');
-        if (count($users) === 0) {
-            return;
-        }
-
-        $this->baseSendNotification($data["title"], $data["body"], $users);
-    }
-
-    public function notifyCustomEmployee(array $ids, array $data = [])
-    {
-        $employees = Employee::whereIn('id', $ids)->whereNotNull("fcmToken")->pluck('fcmToken');
+        $employees = Employee::whereIn('id', $data["ids"])->whereNotNull("fcmToken")->get(['id', 'fcmToken']);
         if (count($employees) === 0) {
             return;
         }
-        $this->baseSendNotification($data["title"], $data["body"], $employees);
+        $tokens = $employees->pluck('fcmToken')->toArray();
+        $this->baseSendNotification($data["title"], $data["body"], $tokens);
+        $this->storeNotification($data, $employees->all(), auth()->user());
 
     }
 
@@ -177,6 +182,6 @@ class NotificationService
     }
     public function markNotificationAsRead($user)
     {
-       return $this->notificationRepository->markNotificationAsRead($user);
+        return $this->notificationRepository->markNotificationAsRead($user);
     }
 }
