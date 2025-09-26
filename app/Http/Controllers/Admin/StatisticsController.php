@@ -16,6 +16,7 @@ use App\Models\GeneratorSetting;
 use App\Models\Payment;
 use App\Models\Spending;
 use App\Models\User;
+use App\Repositories\interfaces\Admin\CounterRepositoryInterface;
 use App\Types\DaysOfWeek;
 use App\Types\SpendingTypes;
 use Carbon\Carbon;
@@ -23,6 +24,11 @@ use Illuminate\Http\Request;
 
 class StatisticsController extends Controller
 {
+    public function __construct(
+        protected CounterRepositoryInterface $counterRepository,
+    )
+    {
+    }
     public function getOverviewStatistics(Request $request)
     {
         $generatorId = auth()->user()->powerGenerator->id;
@@ -71,7 +77,7 @@ class StatisticsController extends Controller
     public function getCounterDetails(Request $request, $counterId)
     {
         $counter = Counter::with('user')
-            ->withSum('spendings', 'consume')
+//            ->withSum('spendings', 'consume')
             ->withSum('payments', 'amount')
             ->findOrFail($counterId);
 
@@ -87,11 +93,13 @@ class StatisticsController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
+        $totalConsumption=$this->counterRepository->latestSpending($counter)?->consume;
+
         return ApiResponses::success(
             [
 
                 'counter' => CounterResource::make($counter),
-                'total_consumption' => $counter->spendings_sum_consume ?? 0,
+                'total_consumption' => $totalConsumption ?? 0,
                 'total_payments' => $counter->payments_sum_amount ?? 0,
                 'recent_spending' => SpendingResource::collection($recentSpending),
                 'recent_payments' => SpendingPaymentRersource::collection($recentPayments),
