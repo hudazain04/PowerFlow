@@ -7,6 +7,7 @@ use App\ApiHelper\ApiResponse;
 use App\Http\Requests\Notification\SendNotificationRequest;
 use App\Http\Resources\NotificationResource;
 use App\Services\NotificationService;
+use App\Types\UserTypes;
 use Illuminate\Http\Request;
 
 class NotificationController extends Controller
@@ -28,8 +29,10 @@ class NotificationController extends Controller
         $result = $this->notificationService->{$methodName}([
             'title' => $request->title,
             'body' => $request->body,
+            'type' => $request->type,
             'ids' => $request->ids ?? null
         ]);
+
 
         return $this->success($result, __('notification.sent'));
     }
@@ -38,7 +41,13 @@ class NotificationController extends Controller
     {
         $user = $request->user();
         $notifications = $this->notificationService->getAll($user);
-        return $this->successWithPagination(NotificationResource::collection($notifications), __('messafes.success'));
+        return $this->successWithPagination(NotificationResource::collection($notifications), __('messages.success'));
+    }
+    public function getSentNotifications(Request $request)
+    {
+        $user = $request->user();
+        $notifications = $this->notificationService->getSentNotifications($user);
+        return $this->successWithPagination(NotificationResource::collection($notifications), __('messages.success'));
     }
 
     public function show(Request $request, $id)
@@ -47,5 +56,19 @@ class NotificationController extends Controller
         $notification = $this->notificationService->show($user, $id);
         return $this->success(NotificationResource::make($notification), __('messages.success'));
 
+    }
+
+    public function getUnRead(Request $request)
+    {
+        $user = $request->user();
+        $notifications = $this->notificationService->getUnRead($user);
+        return $this->successWithPagination(NotificationResource::collection($notifications), __('messages.success'));
+    }
+
+    public function markNotificationAsRead(Request  $request)
+    {
+        $user = $request->user();
+        $this->notificationService->markNotificationAsRead($user);
+        return $this->success(null,__('notification.read'));
     }
 }

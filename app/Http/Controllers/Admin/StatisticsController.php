@@ -16,6 +16,7 @@ use App\Models\GeneratorSetting;
 use App\Models\Payment;
 use App\Models\Spending;
 use App\Models\User;
+use App\Repositories\interfaces\Admin\CounterRepositoryInterface;
 use App\Types\DaysOfWeek;
 use App\Types\SpendingTypes;
 use Carbon\Carbon;
@@ -23,6 +24,11 @@ use Illuminate\Http\Request;
 
 class StatisticsController extends Controller
 {
+    public function __construct(
+        protected CounterRepositoryInterface $counterRepository,
+    )
+    {
+    }
     public function getOverviewStatistics(Request $request)
     {
         $generatorId = auth()->user()->powerGenerator->id;
@@ -71,7 +77,7 @@ class StatisticsController extends Controller
     public function getCounterDetails(Request $request, $counterId)
     {
         $counter = Counter::with('user')
-            ->withSum('spendings', 'consume')
+//            ->withSum('spendings', 'consume')
             ->withSum('payments', 'amount')
             ->findOrFail($counterId);
 
@@ -87,11 +93,13 @@ class StatisticsController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
+        $totalConsumption=$this->counterRepository->latestSpending($counter)?->consume;
+
         return ApiResponses::success(
             [
 
                 'counter' => CounterResource::make($counter),
-                'total_consumption' => $counter->spendings_sum_consume ?? 0,
+                'total_consumption' => $totalConsumption ?? 0,
                 'total_payments' => $counter->payments_sum_amount ?? 0,
                 'recent_spending' => SpendingResource::collection($recentSpending),
                 'recent_payments' => SpendingPaymentRersource::collection($recentPayments),
@@ -201,7 +209,7 @@ class StatisticsController extends Controller
     }
 
 
-//    public function getDashboardOverview(Request $request)
+    //    public function getDashboardOverview(Request $request)
 //    {
 //        $generatorId = auth()->user()->powerGenerator->id;
 //
@@ -349,7 +357,7 @@ class StatisticsController extends Controller
         $generatorId = auth()->user()->powerGenerator->id;
 
         // 1. Basic counts
-        $clientCount = User::whereHas('counters', function($query) use ($generatorId) {
+        $clientCount = User::whereHas('counters', function ($query) use ($generatorId) {
             $query->where('generator_id', $generatorId);
         })->count();
 
@@ -357,7 +365,7 @@ class StatisticsController extends Controller
         $counterCount = Counter::where('generator_id', $generatorId)->count();
 
         // 2. Consumption statistics
-        $totalConsumption = Spending::whereHas('counter', function($query) use ($generatorId) {
+        $totalConsumption = Spending::whereHas('counter', function ($query) use ($generatorId) {
             $query->where('generator_id', $generatorId);
         })->sum('consume');
 
@@ -370,7 +378,7 @@ class StatisticsController extends Controller
             ->orderBy('spendings_sum_consume', 'desc')
             ->limit(5)
             ->get()
-            ->map(function($counter) {
+            ->map(function ($counter) {
                 return [
                     'id' => $counter->id,
                     'number' => $counter->number,
@@ -386,7 +394,7 @@ class StatisticsController extends Controller
             ->orderBy('spendings_sum_consume', 'asc')
             ->limit(5)
             ->get()
-            ->map(function($counter) {
+            ->map(function ($counter) {
                 return [
                     'id' => $counter->id,
                     'number' => $counter->number,
@@ -398,27 +406,27 @@ class StatisticsController extends Controller
 
         $dueCounters = $this->getDueCounters($generatorId);
 
-//        return response()->json([
-            $data = [
+        //        return response()->json([
+        $data = [
 
-                'client_count' => $clientCount,
-                'box_count' => $boxCount,
-                'counter_count' => $counterCount,
+            'client_count' => $clientCount,
+            'box_count' => $boxCount,
+            'counter_count' => $counterCount,
 
-                // Consumption statistics
+            // Consumption statistics
 //                'total_consumption' => round($totalConsumption, 2),
 //                'average_consumption' => round($averageConsumption, 2),
 
-                'top_consuming_counters' => $topConsumingCounters,
-                'least_consuming_counters' => $leastConsumingCounters,
+            'top_consuming_counters' => $topConsumingCounters,
+            'least_consuming_counters' => $leastConsumingCounters,
 
-                // Due counters
-                'counters_should_pay' => $dueCounters,
-            ];
-//            'message' => 'Dashboard overview statistics retrieved successfully',
+            // Due counters
+            'counters_should_pay' => $dueCounters,
+        ];
+        //            'message' => 'Dashboard overview statistics retrieved successfully',
 //            'code' => 200
 //        ]);
-        return ApiResponses::success($data,'statistics retrieved',ApiCode::OK);
+        return ApiResponses::success($data, 'statistics retrieved', ApiCode::OK);
     }
 
     private function getDueCounters($generatorId)
@@ -444,12 +452,16 @@ class StatisticsController extends Controller
 
 
         if ($generatorSetting->spendingType === SpendingTypes::Before) {
-            $counters = Counter::with(['spendings' => function($query) {
-                $query->orderBy('date', 'desc')->limit(1);
-            }])
-                ->with(['payments' => function($query) {
+            $counters = Counter::with([
+                'spendings' => function ($query) {
                     $query->orderBy('date', 'desc')->limit(1);
-                }])
+                }
+            ])
+                ->with([
+                    'payments' => function ($query) {
+                        $query->orderBy('date', 'desc')->limit(1);
+                    }
+                ])
                 ->where('generator_id', $generatorId)
                 ->get();
 
@@ -474,13 +486,13 @@ class StatisticsController extends Controller
                 }
             }
 
-//            $result['before_payment'] = [
+            //            $result['before_payment'] = [
 ////                '75_percent_count' => $count75,
 ////                '90_percent_count' => $count90,
 //                'counters_count' => $countCutoff +$count75+$count90
 //            ];
-            $result=$countCutoff +$count75+$count90;
-//            $result['after_payment'] = [
+            $result = $countCutoff + $count75 + $count90;
+            //            $result['after_payment'] = [
 //                'payment_day_count' => 0,
 //                'day_before_count' => 0
 //            ];
@@ -511,7 +523,7 @@ class StatisticsController extends Controller
 
             $counterCount = Counter::where('generator_id', $generatorId)->count();
 
-//            $result['before_payment'] = [
+            //            $result['before_payment'] = [
 //                '75_percent_count' => 0,
 //                '90_percent_count' => 0,
 //                'cut_off_count' => 0
@@ -519,7 +531,7 @@ class StatisticsController extends Controller
 
             if ($isPaymentDay || $isDayBeforePayment) {
                 $result['after_payment'] = [
-                    'counters_count' => $counterCount  ,
+                    'counters_count' => $counterCount,
                 ];
 
             }
