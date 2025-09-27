@@ -9,14 +9,19 @@ use App\Exceptions\GeneralException;
 use App\Helpers\LocationHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\SpendingPaymentRersource;
+use App\Models\Area;
 use App\Models\Counter;
 use App\Models\ElectricalBox;
+use App\Models\Employee;
+use App\Models\GeneratorSetting;
 use App\Models\Payment;
+use App\Models\Spending;
 use App\Models\User;
 use App\Repositories\Eloquent\User\UserAppRepository;
 use App\Services\User\UserAppService;
 use Barryvdh\DomPDF\PDF;
 use \Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Mockery\Exception;
 
@@ -144,6 +149,166 @@ class UserAppController extends Controller
             ]];
         return ApiResponses::success($result,'nearest generators',ApiCode::OK);
 
+    }
+
+    public function getFullData(Request $request)
+    {
+        $generatorId = auth()->user()->powerGenerator->id;
+
+        // 1. Summary statistics
+        $summary = [
+            'total_clients' => User::whereHas('counters', function($query) use ($generatorId) {
+                $query->where('generator_id', $generatorId);
+            })->count(),
+
+            'total_counters' => Counter::where('generator_id', $generatorId)->count(),
+
+            'total_boxes' => ElectricalBox::where('generator_id', $generatorId)->count(),
+
+            'total_employees' => Employee::where('generator_id', $generatorId)->count(),
+
+            'total_areas' => Area::where('generator_id', $generatorId)->count(),
+
+            'total_consumption' => Spending::whereHas('counter', function($query) use ($generatorId) {
+                $query->where('generator_id', $generatorId);
+            })->sum('consume'),
+
+            'total_payments' => Payment::whereHas('counter', function($query) use ($generatorId) {
+                $query->where('generator_id', $generatorId);
+            })->sum('amount'),
+        ];
+
+        // 2. Get ALL clients with their relationships
+        $clients = User::with(['counters' => function($query) use ($generatorId) {
+            $query->where('generator_id', $generatorId);
+        }])
+            ->whereHas('counters', function($query) use ($generatorId) {
+                $query->where('generator_id', $generatorId);
+            })
+            ->select('id', 'first_name', 'last_name', 'email', 'phone_number', 'created_at')
+            ->get()
+            ->map(function($client) {
+                return [
+                    'id' => $client->id,
+                    'first_name' => $client->first_name,
+                    'last_name' => $client->last_name,
+                    'email' => $client->email,
+                    'phone_number' => $client->phone_number,
+                    'created_at' => $client->created_at,
+                    'counters' => $client->counters ? $client->counters->map(function($counter) {
+                        return [
+                            'id' => $counter->id,
+                            'number' => $counter->number
+                        ];
+                    }) : []
+                ];
+            });
+
+        // 3. Get ALL counters with their relationships
+        $counters = Counter::with(['user', 'electricalBoxes' => function($query) {
+            $query->wherePivotNull('removed_at');
+        }])
+            ->where('generator_id', $generatorId)
+            ->get()
+            ->map(function($counter) {
+                return [
+                    'id' => $counter->id,
+                    'number' => $counter->number,
+                    'QRCode' => $counter->QRCode,
+                    'status' => $counter->status,
+                    'current_spending' => $counter->current_spending,
+                    'spendingType' => $counter->spendingType,
+                    'physical_device_id' => $counter->physical_device_id,
+                    'user_id' => $counter->user_id,
+                    'created_at' => $counter->created_at,
+                    'user' => $counter->user ? [
+                        'id' => $counter->user->id,
+                        'first_name' => $counter->user->first_name,
+                        'last_name' => $counter->user->last_name,
+                        'email' => $counter->user->email
+                    ] : null,
+                    'electrical_boxes' => $counter->electricalBoxes->map(function($box) {
+                        return [
+                            'id' => $box->id,
+                            'number' => $box->number,
+                            'location' => $box->location
+                        ];
+                    })
+                ];
+            });
+
+        // 4. Get ALL boxes with their relationships
+        $boxes = ElectricalBox::with(['counters' => function($query) {
+            $query->wherePivotNull('removed_at');
+        }])
+            ->where('generator_id', $generatorId)
+            ->get()
+            ->map(function($box) {
+                return [
+                    'id' => $box->id,
+                    'location' => $box->location,
+                    'latitude' => $box->latitude,
+                    'longitude' => $box->longitude,
+                    'number' => $box->number,
+                    'capacity' => $box->capacity,
+                    'created_at' => $box->created_at,
+                    'counters' => $box->counters->map(function($counter) {
+                        return [
+                            'id' => $counter->id,
+                            'number' => $counter->number,
+                            'status' => $counter->status
+                        ];
+                    })
+                ];
+            });
+
+        // 5. Get ALL employees
+        $employees = Employee::where('generator_id', $generatorId)
+            ->select('id', 'first_name', 'last_name', 'phone_number', 'area_id', 'created_at')
+            ->get();
+
+        // 6. Get ALL areas
+        $areas = Area::with(['electricalbox'])
+            ->where('generator_id', $generatorId)
+            ->select('id', 'name', 'neighborhood_id', 'created_at')
+            ->get();
+
+        // 7. Generator settings
+        $generatorSettings = GeneratorSetting::where('generator_id', $generatorId)->first();
+
+        // 8. Recent activities
+        $recentSpendings = Spending::whereHas('counter', function($query) use ($generatorId) {
+            $query->where('generator_id', $generatorId);
+        })
+            ->with('counter.user')
+            ->orderBy('date', 'desc')
+            ->limit(10)
+            ->get();
+
+        $recentPayments = Payment::whereHas('counter', function($query) use ($generatorId) {
+            $query->where('generator_id', $generatorId);
+        })
+            ->with('counter.user')
+            ->orderBy('date', 'desc')
+            ->limit(10)
+            ->get();
+
+        // Return Blade view with ALL data
+        return view('dashboard', compact(
+            'summary',
+            'clients',
+            'counters',
+            'boxes',
+            'employees',
+            'areas',
+            'generatorSettings',
+            'recentSpendings',
+            'recentPayments'
+        ));
+    }
+    public function showDashboard()
+    {
+        return view('dashboard');
     }
 
 }

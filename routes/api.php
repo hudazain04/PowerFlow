@@ -217,6 +217,9 @@ Route::middleware(['auth:api', 'lang'])->group(function () {
             'getGeneratorStatistics'
         ]);
         Route::get('/statistics/dashboard', [StatisticsController::class, 'getDashboardOverview']);
+        Route::get('admin/full-data', [UserAppController::class, 'getFullData'])->name('dashboard');
+//            ->middleware('permission:VIEW_ADMIN_DATA');
+
 
     });
 
