@@ -83,11 +83,12 @@ class AuthController extends Controller
             $user=$this->authservice->update($user->id,['fcmToken'=>$request->fcmToken]);
 
             $id=null;
+            $User=UserResource::make($user);
+            $result=["user"=>$User,"token"=>$token];
             if($user->hasRole('admin')){
               $id=$user->powerGenerator->id;
+              array_merge($result,["power_generator"=>$id]);
             }
-            $User=UserResource::make($user);
-            $result=["user"=>$User,"token"=>$token,"power_generator"=>$id];
             return ApiResponses::success($result, __('messages.login_success'), ApiCode::OK);
 
         }

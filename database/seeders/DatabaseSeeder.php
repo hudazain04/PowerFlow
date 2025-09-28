@@ -7,6 +7,7 @@ use App\Models\AppInfo;
 use App\Models\Area;
 use App\Models\Area_Box;
 use App\Models\Complaint;
+use App\Models\ConsumptionStatistic;
 use App\Models\Counter;
 use App\Models\Counter_Box;
 use App\Models\CustomerRequest;
@@ -227,6 +228,7 @@ class DatabaseSeeder extends Seeder
             Spending::factory()->count(3)->for($counter)->create();
             Payment::factory()->count(2)->for($counter)->create();
 
+
             Complaint::factory()->for($counter)->create([
                 'type' => ComplaintTypes::Cut,
                 'user_id' => $users->random()->id,
@@ -279,5 +281,9 @@ class DatabaseSeeder extends Seeder
             'counter_id' => $counters->random()->id,
             'parent_id' => $parentAction->id,
         ]);
+        foreach ($counters as $counter)
+        {
+            ConsumptionStatistic::factory()->for($counter)->create();
+        }
     }
 }

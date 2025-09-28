@@ -25,6 +25,7 @@ class SubscriptionRequest extends Model
         'afterPaymentFrequency',
         'spendingType',
         'day',
+        'admin_notes',
     ];
     public $translatable=[
         'name',

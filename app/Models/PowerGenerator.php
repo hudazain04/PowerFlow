@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\ApiHelper\Translatable;
+use App\Services\FeatureGate;
 use App\Types\SubscriptionExpirationTypes;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -133,5 +134,20 @@ class PowerGenerator extends Model
                 ['generator_id' => $this->id]
             );
         }
+    }
+
+    public function allowedFeatures()
+    {
+        $gate = app(FeatureGate::class);
+        $features = Feature::all()->pluck('key');
+
+        $allowed = [];
+        foreach ($features as $featureKey) {
+            if ($gate->check($this->id, $featureKey)) {
+                $allowed[] = $featureKey;
+            }
+        }
+
+        return $allowed;
     }
 }

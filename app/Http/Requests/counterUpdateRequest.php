@@ -25,7 +25,7 @@ class counterUpdateRequest extends FormRequest
 //            'number' => 'sometimes|required',
             'user_id' => 'sometimes|required',
             'box_id' => 'nullable|exists:electrical_boxes,id',
-            'physical_device_id'=>'nullable|string'
+            'physical_device_id'=>'nullable|string',
         ];
     }
 }

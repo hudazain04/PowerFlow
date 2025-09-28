@@ -7,9 +7,12 @@ use App\DTOs\ActionDTO;
 use App\Exceptions\ErrorException;
 use App\Repositories\interfaces\Admin\ActionRepositoryInterface;
 use App\Repositories\interfaces\Admin\CounterRepositoryInterface;
+use App\Services\NotificationService;
 use App\Types\ActionTypes;
 use App\Types\ComplaintStatusTypes;
 use App\Types\CounterStatus;
+use App\Types\NotificationTypes;
+use Illuminate\Support\Facades\Http;
 use function Symfony\Component\Translation\t;
 
 class ActionService
@@ -21,6 +24,7 @@ class ActionService
         protected ActionRepositoryInterface $actionRepository,
         protected EmployeeAssignmentService $employeeAssignmentService,
         protected CounterRepositoryInterface $counterRepository,
+        protected NotificationService $notificationService,
     )
     {
         //
@@ -45,13 +49,39 @@ class ActionService
         {
             throw new ErrorException(__('counter.notFound'),ApiCode::NOT_FOUND);
         }
+        $user=$counter->user;
         if ($action->type===ActionTypes::Cut && $action->status===ComplaintStatusTypes::Resolved)
         {
-            $counter=$this->counterRepository->update($counter->id,['status'=>CounterStatus::DisConnected]);
+            $this->counterRepository->update($counter->id,['status'=>CounterStatus::DisConnected]);
+            $this->notificationService->notifyCustomUser([
+                'title'=>__('notification.cut'),
+                'body'=> $action->parent->type===ActionTypes::OverConsume ?
+                    __('notification.cutOverCounter') :
+                    __('notification.cutPayCounter'),
+                'type'=>NotificationTypes::CustomUser,
+                'ids'=>[$user->id],
+
+            ]);
         }
         elseif ($action->type===ActionTypes::Connect  && $action->status===ComplaintStatusTypes::Resolved)
         {
-            $counter=$this->counterRepository->update($counter->id,['status'=>CounterStatus::Connect]);
+           $this->counterRepository->update($counter->id,['status'=>CounterStatus::Connect]);
+            $this->notificationService->notifyCustomUser([
+                'title'=>__('notification.connect'),
+                'body'=> __('notification.connectCounter'),
+                'type'=>NotificationTypes::CustomUser,
+                'ids'=>[$user->id],
+            ]);
+        }
+        elseif ($action->type===ActionTypes::SetUp  && $action->status===ComplaintStatusTypes::Resolved)
+        {
+            $this->counterRepository->update($counter->id,['status'=>CounterStatus::Connect]);
+            $this->notificationService->notifyCustomUser([
+                'title'=>__('notification.connect'),
+                'body'=> __('notification.connectCounter'),
+                'type'=>NotificationTypes::CustomUser,
+                'ids'=>[$user->id],
+            ]);
         }
 
         return $action;
@@ -77,15 +107,60 @@ class ActionService
                 'counter_id'=>$action->counter_id,
                 'generator_id'=>$action->generator_id,
             ]);
-            $action = $this->employeeAssignmentService->assignToAction($newAction);
+            $counter=$action->counter;
+            $response = Http::post(env('ESP_URL') . '/relay/connect/'.$counter->physical_device_id);
+            if ($response->successful()) {
+               $action=$this->actionRepository->update($newAction,[
+                  'status' =>ComplaintStatusTypes::Resolved,
+               ]);
+               $this->counterRepository->update($counter->id,[
+                  'status'=>CounterStatus::Connect,
+               ]);
+
+            }
         }
        elseif ($action->type===ActionTypes::Cut)
        {
            $action=$this->actionRepository->update($action,[
                'status'=>ComplaintStatusTypes::Accepted,
            ]);
-           $action=$this->employeeAssignmentService->assignToAction($action);
+           $counter=$action->counter;
+           $response = Http::post(env('ESP_URL') . '/relay/disconnect/'.$counter->physical_device_id);
+           if ($response->successful()) {
+               $action=$this->actionRepository->update($action,[
+                   'status' =>ComplaintStatusTypes::Resolved,
+               ]);
+               $this->counterRepository->update($counter->id,[
+                   'status'=>CounterStatus::DisConnected,
+               ]);
+
+           }
        }
+        elseif ($action->type===ActionTypes::OverConsume)
+        {
+            $action=$this->actionRepository->update($action,[
+               'status'=>ComplaintStatusTypes::Resolved,
+            ]);
+            $newAction=$this->actionRepository->create([
+                'type'=> ActionTypes::Cut,
+                'status'=>ComplaintStatusTypes::Pending,
+                'parent_id'=>$action->id,
+                'counter_id'=>$action->counter_id,
+                'generator_id'=>$action->generator_id,
+            ]);
+            $counter=$action->counter;
+            $response = Http::post(env('ESP_URL') . '/relay/disconnect/'.$counter->physical_device_id);
+            if ($response->successful()) {
+                $action=$this->actionRepository->update($newAction,[
+                    'status' =>ComplaintStatusTypes::Resolved,
+                ]);
+                $this->counterRepository->update($counter->id,[
+                    'status'=>CounterStatus::DisConnected,
+                ]);
+
+            }
+
+        }
         return  $action;
     }
 
@@ -115,6 +190,12 @@ class ActionService
     public function getAll($generator_id)
     {
         $actions=$this->actionRepository->getAll($generator_id);
+        return $actions;
+    }
+
+    public function getUserActions($user)
+    {
+        $actions=$this->actionRepository->getUserActions($user);
         return $actions;
     }
 }

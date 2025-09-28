@@ -19,7 +19,7 @@ class Counter extends Model
         'user_id',
         'generator_id',
         'physical_device_id',
-        'status'
+        'status',
     ];
 
 
@@ -41,6 +41,11 @@ class Counter extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function consumption()
+    {
+        return $this->hasOne(ConsumptionStatistic::class,'counter_id');
+    }
     public function electricalBoxes()
     {
         return $this->belongsToMany(ElectricalBox::class, 'counter__boxes', 'counter_id',
@@ -52,6 +57,11 @@ class Counter extends Model
     public function powerGenerator()
     {
         return $this->belongsTo(PowerGenerator::class,'generator_id');
+    }
+
+    public function actions()
+    {
+        return $this->hasMany(Action::class,'counter_id');
     }
     public function scopeFilter($query,array $filters)
     {

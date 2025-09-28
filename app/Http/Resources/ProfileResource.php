@@ -37,6 +37,7 @@ class ProfileResource extends JsonResource
                 'spendingType'=>$generator->settings->spendingType,
                 'day'=>$generator->settings->day,
                 'afterPaymentFrequency'=>$generator->settings->afterPaymentFrequency,
+                'allowedFeatures'=>$generator->allowedFeatures(),
             ]);
         }
         return $data;

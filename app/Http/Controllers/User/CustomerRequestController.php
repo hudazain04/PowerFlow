@@ -23,6 +23,7 @@ class CustomerRequestController extends Controller
     {
         $dto = CustomerRequestDTO::fromRequest($request);
         $dto->status=GeneratorRequests::PENDING;
+        $dto->user_id=$request->user()->id;
         $customerRequest = $this->service->createRequest($dto);
         return ApiResponses::success(CustomerRequestResource::make($customerRequest),__('customerRequest.create'),ApiCode::CREATED);
     }
@@ -33,7 +34,7 @@ class CustomerRequestController extends Controller
         $dto->status=GeneratorRequests::PENDING;
         $counter = $this->service->approveRequest($id ,$dto);
 
-        return  ApiResponses::success($counter,'success',ApiCode::OK);
+        return  ApiResponses::success($counter,__('customerRequest.approve'),ApiCode::OK);
 
     }
 
@@ -41,7 +42,7 @@ class CustomerRequestController extends Controller
     {
         $dto=CustomerRequestDTO::fromRequest($request);
         $this->service->rejectRequest($id,$dto);
-        return ApiResponses::success(null,'success',ApiCode::OK);
+        return ApiResponses::success(null,__('customerRequest.reject'),ApiCode::OK);
     }
 
     public function pendingRequests()

@@ -6,6 +6,7 @@ use App\ApiHelper\ApiResponse;
 use App\DTOs\SubscriptionRequestDTO;
 use App\Events\TopRequestedPlanEvent;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CustomerRequest\RejectRequest;
 use App\Http\Requests\SubscriptionRequest\CreateSubscriptionRequestRequest;
 use App\Http\Requests\SubscriptionRequest\RenewRequest;
 use App\Services\SuperAdmin\StatisticsService;
@@ -52,9 +53,10 @@ class SubscriptionRequestController extends Controller
         return $this->success(null, __('subscriptionRequest.approve'));
     }
 
-    public function reject(int $requestId)
+    public function reject(RejectRequest $request ,int $requestId)
     {
-        return $this->subscriptionRequestService->reject($requestId);
+        $admin_notes=$request->admin_notes;
+        return $this->subscriptionRequestService->reject($admin_notes,$requestId);
 
     }
 

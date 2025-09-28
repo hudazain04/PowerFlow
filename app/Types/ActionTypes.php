@@ -16,12 +16,14 @@ class ActionTypes
     public const Connect="connect";
     public const OverConsume="overConsume";
     public const Payment="payment";
+    public const SetUp="setUp";
 
     public const PRIORITIES = [
         self::Cut         => 2,
         self::OverConsume => 1,
         self::Connect     => 3,
         self::Payment     => 4,
+        self::SetUp       =>5,
     ];
 
     public static function getPriority(string $type): int
@@ -35,6 +37,7 @@ class ActionTypes
             self::Connect,
             self::OverConsume,
             self::Payment,
+            self::SetUp,
         ];
     }
 }
