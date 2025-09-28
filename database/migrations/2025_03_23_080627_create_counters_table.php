@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('current_spending');
             $table->enum('spendingType',array_values((new ReflectionClass(\App\Types\SpendingTypes::class))->getConstants()));
             $table->foreignId('generator_id')->nullable()->constrained('power_generators')->nullOnDelete();
-            $table->string('status')->default(\App\Types\CounterStatus::InCheck);
+            $table->string('status')->default(\App\Types\CounterStatus::Ready);
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->timestamps();
         });
