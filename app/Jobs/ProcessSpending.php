@@ -8,6 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class ProcessSpending implements ShouldQueue
 {
@@ -34,6 +35,10 @@ class ProcessSpending implements ShouldQueue
                 'consume' => $this->energyWh,
                 'date' => $this->created_at,
             ]);
+            Log::info("Spending recorded for counter {$this->counterId}: {$this->energyWh} Wh");
+        } else {
+            Log::warning("Counter not found for physical_device_id: {$this->counterId}");
         }
+
     }
 }

@@ -76,8 +76,8 @@ return [
             'driver' => 'rabbitmq',
 
             'queue' => env('RABBITMQ_QUEUE', 'default'),
-
-            'connection' => env('RABBITMQ_CONNECTION', 'default'),
+            'connection' => PhpAmqpLib\Connection\AMQPStreamConnection::class,
+//            'connection' => env('RABBITMQ_CONNECTION', 'default'),
 
             'hosts' => [
                 [
@@ -96,6 +96,9 @@ return [
                     'local_key'   => env('RABBITMQ_SSL_LOCALKEY', null),
                     'verify_peer' => env('RABBITMQ_SSL_VERIFY_PEER', true),
                     'passphrase'  => env('RABBITMQ_SSL_PASSPHRASE', null),
+                ],
+                'queue' => [
+                    'job' => VladimirYuldashev\LaravelQueueRabbitMQ\Queue\Jobs\RabbitMQJob::class,
                 ],
             ],
 
