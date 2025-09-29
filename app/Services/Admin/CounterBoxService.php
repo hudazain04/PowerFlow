@@ -150,7 +150,7 @@ class CounterBoxService
                 'counter_id'=>$counter->id,
                 'generator_id'=>$counter->generator_id,
             ]);
-//          $this->employeeAssignmentService->assignToAction($action);
+          $this->employeeAssignmentService->assignToAction($action);
             return $counter;
         });
 
