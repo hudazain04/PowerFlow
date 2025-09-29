@@ -4,6 +4,7 @@ namespace App\Repositories\Eloquent\User;
 
 use App\Exceptions\AuthException;
 use App\Models\Counter;
+use App\Models\ElectricalBox;
 use App\Models\Payment;
 use App\Models\Spending;
 use App\Models\User;
@@ -60,5 +61,10 @@ class UserAppRepository implements UserAppRepositoryInterface
         ->whereBetween('date',[$startDate,$endDate])
         ->sum('consume');
         return $consumption;
+    }
+
+    public function getBoxes()
+    {
+        return ElectricalBox::all();
     }
 }

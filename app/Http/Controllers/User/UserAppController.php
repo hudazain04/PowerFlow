@@ -8,6 +8,7 @@ use App\ApiHelper\ApiResponses;
 use App\Exceptions\GeneralException;
 use App\Helpers\LocationHelper;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ElectricalBoxResource;
 use App\Http\Resources\SpendingPaymentRersource;
 use App\Models\Area;
 use App\Models\Counter;
@@ -57,6 +58,10 @@ class UserAppController extends Controller
     public function getCounter(int $id){
        $counter=$this->service->getCounter($id);
        return ApiResponses::success($counter,'counter detail',ApiCode::OK);
+    }
+    public function getBoxes(Request $request){
+        $Boxes=$this->service->getBoxes();
+        return ApiResponses::success(ElectricalBoxResource::collection($Boxes),'All Boxes',ApiCode::OK);
     }
 
 

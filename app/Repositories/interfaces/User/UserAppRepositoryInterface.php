@@ -11,5 +11,6 @@ interface UserAppRepositoryInterface
     public function getPayments(int $id,?array $filters=[]);
     public function getCounter(int $id);
     public function getConsumption(int $counter_id,$startDate,$endDate);
+    public function getBoxes();
 
 }
