@@ -42,7 +42,7 @@ class EmployeeAssignmentService
         }
 
         $redis = Redis::connection()->client();
-        $closest = $redis->rawCommand(
+        $closest = $redis->executeRaw(
             'GEORADIUS',
             "geo:employees:{$areaId}",
             $box->longitude, $box->latitude,
@@ -126,7 +126,7 @@ class EmployeeAssignmentService
         $areaId = $area?->id;
 
         $redis = Redis::connection()->client();
-        $closest = $redis->rawCommand(
+        $closest = $redis->executeRaw(
             'GEORADIUS',
             "geo:employees:{$areaId}",
             $box->longitude, $box->latitude,
@@ -186,7 +186,6 @@ class EmployeeAssignmentService
                 ];
                 Notification::send($employee, new SystemNotification($data));
             }
-
 
 
             event(new ActionAssignEvent($action, $employeeId));
