@@ -58,6 +58,10 @@ class UserAppController extends Controller
        $counter=$this->service->getCounter($id);
        return ApiResponses::success($counter,'counter detail',ApiCode::OK);
     }
+    public function getBoxes(Request $request){
+        $Boxes=$this->service->getBoxes();
+        return ApiResponses::success($Boxes,'All Boxes',ApiCode::OK);
+    }
 
 
     public function downloadPaymentsPdf($counterId)

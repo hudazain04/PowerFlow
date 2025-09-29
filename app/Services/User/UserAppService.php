@@ -58,6 +58,9 @@ class UserAppService
     public function getCounter(int $id){
         return $this->appRepository->getCounter($id);
     }
+    public function getBoxes(){
+        return $this->appRepository->getBoxes();
+    }
    public function getConsumption(int $counter_id){
        $now=now();
         return [

@@ -104,6 +104,7 @@ Route::middleware('lang')->group(function () {
         Route::get('/pdf/{counter_id}', [UserAppController::class, 'downloadPaymentsPdf']);
         Route::get('spending_consumption/{counter_id}', [UserAppController::class, 'spendingConsumption']);
         Route::get('generators/nearby', [UserAppController::class, 'findNearbyGenerators']);
+        Route::get('boxes',[UserAppController::class,'getBoxes']);
 
 
     });
