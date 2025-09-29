@@ -10,6 +10,10 @@ class Notification extends Model
         'id',
     ];
 
+    protected $casts=[
+      'data'=>'array',
+    ];
+
     public function notifier()
     {
         return $this->morphTo();

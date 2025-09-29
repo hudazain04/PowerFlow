@@ -16,6 +16,16 @@ class Action extends Model
       'relatedData'=>'array',
     ];
 
+    public function parent()
+    {
+        return $this->belongsTo(Action::class,'parent_id');
+    }
+
+    public function counter()
+    {
+        return $this->belongsTo(Counter::class,'counter_id');
+    }
+
     protected static function booted()
     {
         static::creating(function ($action) {

@@ -6,5 +6,6 @@ use Illuminate\Support\Facades\Artisan;
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
-\Illuminate\Support\Facades\Schedule::command(\App\Console\Commands\PersistVisitsToDatabase::class)->dailyAt('13:16');
+\Illuminate\Support\Facades\Schedule::command(\App\Console\Commands\PersistVisitsToDatabase::class)->dailyAt('00:00');
+\Illuminate\Support\Facades\Schedule::command(\App\Console\Commands\CalculateConsumption::class)->dailyAt('01:00');
 

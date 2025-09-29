@@ -3,6 +3,7 @@
 namespace App\Repositories\interfaces\Admin;
 
 use App\Models\Action as ActionModel;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 interface ActionRepositoryInterface
@@ -13,5 +14,7 @@ interface ActionRepositoryInterface
 
     public function update(ActionModel $action ,array $data) : ActionModel;
 
-    public function getAll($generator_id) : Collection;
+    public function getAll($generator_id) : LengthAwarePaginator;
+
+    public function getUserActions($user): LengthAwarePaginator;
 }

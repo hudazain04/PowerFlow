@@ -12,8 +12,10 @@ use App\Notifications\SystemNotification;
 use App\Repositories\interfaces\Admin\EmployeeRepositoryInterface;
 use App\Repositories\interfaces\User\ComplaintRepositoryInterface;
 use App\Services\FirebaseService;
+use App\Services\NotificationService;
 use App\Types\ActionTypes;
 use App\Types\ComplaintStatusTypes;
+use App\Types\NotificationTypes;
 use ErrorException;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Redis;
@@ -22,7 +24,8 @@ class EmployeeAssignmentService
 {
     public function __construct(
         private ComplaintRepositoryInterface $complaintRepository,
-        private EmployeeRepositoryInterface $employeeRepository
+        private EmployeeRepositoryInterface $employeeRepository,
+        protected NotificationService $notificationService,
     ) {}
 
     /**
@@ -67,10 +70,15 @@ class EmployeeAssignmentService
         }
 
         event(new ComplaintAssignEvent($complaint, $employeeId));
-        $data=[
-            'title'=>"New Complaint Assigned To You",
-            'body'=>"Complaint #{$complaint->id}: {$complaint->description}",
-            'data'=>  [
+        $this->notificationService->notifyCustomEmployee([
+            'title'=>__('notification.complaint'),
+            'body'=>__('notification.assignComplaint',[
+                'id' => $complaint->id,
+                'description' => $complaint->description,
+            ]),
+            'type'=>NotificationTypes::CustomEmployee,
+            'ids'=>[$employee->id],
+            'data'=>[
                 'id'          => $complaint->id,
                 'status'      => $complaint->status,
                 'description' => $complaint->description,
@@ -82,8 +90,8 @@ class EmployeeAssignmentService
                     'y'=>$box->longitude,
                 ],
             ],
-        ];
-        Notification::send($employee, new SystemNotification($data));
+
+        ]);
 //        if ($employee->fcmToken) {
 //            FirebaseService::sendNotification(
 //                $employee->fcmToken,
@@ -169,8 +177,11 @@ class EmployeeAssignmentService
 //                );
 
                 $notifyData=[
-                    'title'=>"New Action Assigned To You",
-                    'body'=>"Action #{$action->id}: {$action->type}",
+                    'title'=>__('notification.action'),
+                    'body'=>__('notification.assignAction',[
+                        'id' => $action->id,
+                        'type' => $action->type,
+                    ]),
                     'data'=>$data
                 ];
                 Notification::send($employee, new SystemNotification($data));

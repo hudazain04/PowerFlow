@@ -57,6 +57,15 @@ class ActionController extends Controller
         return $this->success(ActionResource::make($action),__('messages.success'));
     }
 
+    public function getUserActions()
+    {
+        $user=auth()->user();
+        $actions=$this->actionService->getUserActions($user);
+        return $this->successWithPagination(ActionResource::collection($actions),__('messages.success'));
+
+
+    }
+
     public function getAll($generator_id)
     {
         $actions=$this->actionService->getAll($generator_id);

@@ -38,7 +38,7 @@ class TranslateDataJob implements ShouldQueue
             'data' => $this->model->only($translatable),
             'to' => [$this->language],
         ];
-        $response = Http::post('http://localhost:8080/translate', $payload);
+        $response = Http::post(env('TRANSLATION_URL') . '/translation', $payload);
         if ($response->successful()) {
             $translations = $response->body();
             $this->model->update([

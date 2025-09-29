@@ -33,13 +33,18 @@ class FeatureGate
         if (!$feature) {
             return false;
         }
-        if ($feature->pivot->value == -1) {
-            return true;
-        }
+        if ($feature->hasValue)
+        {
+            if ($feature->pivot->value == -1) {
+                return true;
+            }
 
-        $currentUsage = $this->getCurrentUsage($generator_id, $featureKey);
+            $currentUsage = $this->getCurrentUsage($generator_id, $featureKey);
 //        dd($currentUsage);
-        return ($currentUsage + $increment) <= $feature->pivot->value;
+            return ($currentUsage + $increment) <= $feature->pivot->value;
+        }
+        return true;
+
     }
 
     protected function getCurrentUsage(int $generator_id, string $featureKey): int

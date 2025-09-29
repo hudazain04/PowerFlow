@@ -123,6 +123,10 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         return $this->hasMany(Counter::class);
     }
 
+    public function actions()
+    {
+        return $this->hasManyThrough(Action::class, Counter::class);
+    }
 
     public function getJWTIdentifier()
     {

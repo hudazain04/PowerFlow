@@ -30,7 +30,7 @@ class UserFactory extends Factory
             'last_name' => $this->faker->lastName,
             'email' => $this->faker->unique()->safeEmail,
             'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
+            'password' => 12345678,
 //            'role' => $this->faker->randomElement(array_values((new \ReflectionClass(UserTypes::class))->getConstants())),
             'phone_number' => $this->faker->numerify('09########'),
             'blocked'=>$this->faker->boolean,

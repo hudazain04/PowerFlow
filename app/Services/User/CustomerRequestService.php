@@ -6,6 +6,7 @@ use App\ApiHelper\ApiCode;
 use App\DTOs\CounterDTO;
 use App\DTOs\CustomerRequestDTO;
 use App\Exceptions\ErrorException;
+use App\Mail\CustomerRequestStatusMail;
 use App\Models\Counter;
 use App\Models\CustomerRequest;
 use App\Repositories\interfaces\Admin\CounterBoxRepositoryInterface;
@@ -14,6 +15,7 @@ use App\Repositories\interfaces\Admin\ElectricalBoxRepositoryInterface;
 use App\Repositories\interfaces\User\CustomerRequestRepositoryInterface;
 use App\Types\GeneratorRequests;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class CustomerRequestService
 {
@@ -52,7 +54,9 @@ class CustomerRequestService
               'current_spending'=> 0,
 
           ]);
-          return $counter;
+            Mail::to($counter->user->email)->send(new CustomerRequestStatusMail(GeneratorRequests::APPROVED, $counter->powerGenerator->name));
+
+            return $counter;
         });
     }
 
@@ -62,7 +66,8 @@ class CustomerRequestService
             $request=$this->requestRepository->find($id);
             $requestDTO->status=GeneratorRequests::REJECTED;
            $reject= $this->requestRepository->update($id,$requestDTO->toArray());
-           return $reject;
+            Mail::to($request->user->email)->send(new CustomerRequestStatusMail(GeneratorRequests::REJECTED, $request->powerGenerator->name,$request->admin_notes));
+            return $reject;
         });
 
     }

@@ -226,7 +226,8 @@ class PermissionSeeder extends Seeder
                 'APPROVE_ACTION',
                 'REJECT_ACTION',
                 'VIEW_ACTION',
-                'VIEW_ACTIONS'
+                'VIEW_ACTIONS',
+                'VIEW_USER_ACTIONS',
 
             ],
             'Notifications'=>[
@@ -253,6 +254,7 @@ class PermissionSeeder extends Seeder
             $userRole = Role::firstOrCreate(['name' => 'user', 'guard_name' => $guard]);
             $superAdminRole->givePermissionTo(Permission::where('guard_name', $guard)->get());
             $adminPermissions = [
+                'APPROVE_CUSTOMER_REQUEST', 'REJECT_CUSTOMER_REQUEST',
                 'CREATE_NEIGHBORHOODS', 'VIEW_NEIGHBORHOODS','VIEW_NEIGHBORHOOD' ,'UPDATE_NEIGHBORHOODS', 'DELETE_NEIGHBORHOODS',
                 'CREATE_BOXES', 'VIEW_BOXES', 'UPDATE_BOXES', 'DELETE_BOXES',
                 'ASSIGN_BOXES_TO_NEIGHBORHOODS', 'REMOVE_BOXES_FROM_NEIGHBORHOODS', 'VIEW_NEIGHBORHOOD_BOXES',
@@ -277,17 +279,18 @@ class PermissionSeeder extends Seeder
             $employeePermissions = [
                 'VIEW_AREAS', 'VIEW_BOXES', 'VIEW_COUNTERS', 'VIEW_BOX_COUNTERS', 'UPDATE_BOXES','CREATE_BOXES',
                 'VIEW_COUNTER_CURRENT_BOX', 'VIEW_EMPLOYEES', 'VIEW_FAQ',
-                'CREATE_CUSTOMER_REQUEST', 'VIEW_CUSTOMER_REQUESTS', 'VIEW_NEIGHBORHOODS',
+                'APPROVE_CUSTOMER_REQUEST', 'VIEW_CUSTOMER_REQUESTS', 'VIEW_NEIGHBORHOODS',
                 'VIEW_PLANS', 'VIEW_PLAN_PRICES', 'VIEW_SUBSCRIPTIONS', 'CREATE_SUBSCRIPTION_REQUEST',
                 'VIEW_ABOUT_APP', 'VIEW_TERMS_CONDITIONS', 'VIEW_PRIVACY_POLICY',
                 'CREATE_COMPLAINT', 'CREATE_CUSTOMER_COMPLAINT', 'VIEW_COMPLAINTS',
                 'VIEW_PROFILE', 'UPDATE_PROFILE', 'VIEW_POWER_GENERATORS','CREATE_SPENDING',
-                'UPDATE_SPENDING','DELETE_SPENDING','GET_SPENDINGS','VIEW_NOTIFICATIONS','VIEW_NOTIFICATION','READ_NOTIFICATIONS'
+                'UPDATE_SPENDING','DELETE_SPENDING','GET_SPENDINGS','VIEW_NOTIFICATIONS','VIEW_NOTIFICATION','READ_NOTIFICATIONS',
+                'UPDATE_ACTION', 'APPROVE_ACTION', 'REJECT_ACTION', 'VIEW_ACTION', 'VIEW_ACTIONS',
             ];
             $employeeRole->givePermissionTo($employeePermissions);
             $userPermissions = [
-                'CREATE_GENERATOR_REQUEST', 'CREATE_CUSTOMER_REQUEST',
-                'CREATE_SUBSCRIPTION_REQUEST', 'VIEW_ABOUT_APP',
+                'CREATE_GENERATOR_REQUEST', 'CREATE_CUSTOMER_REQUEST','VIEW_USER_ACTIONS', 'APPROVE_ACTION',
+                'REJECT_ACTION', 'VIEW_ACTION', 'CREATE_SUBSCRIPTION_REQUEST', 'VIEW_ABOUT_APP',
                 'VIEW_TERMS_CONDITIONS', 'VIEW_PRIVACY_POLICY', 'CREATE_CUSTOMER_COMPLAINT',
                 'VIEW_PROFILE', 'UPDATE_PROFILE', 'PROCESS_STRIPE_PAYMENT',
                 'PROCESS_CASH_PAYMENT','PROCESS_STRIPE_SPENDING_PAYMENT' ,'PROCESS_CACHE_SPENDING_PAYMENT',

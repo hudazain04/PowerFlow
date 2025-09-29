@@ -33,7 +33,7 @@ class NotificationService
     }
 
 
-    public function baseSendNotification($title, $body, array $fcmTokens)
+    public function baseSendNotification($title, $body, array $fcmTokens,?array $data=[])
     {
         $firebase = (new Factory())
             ->withServiceAccount(storage_path('app/firebase/firebase_config.json'));
@@ -43,6 +43,7 @@ class NotificationService
         $notification = Notification::fromArray([
             'title' => $title,
             'body' => $body,
+            'data'=>$data,
         ]);
 
         $message = CloudMessage::new();

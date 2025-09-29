@@ -8,8 +8,11 @@ use App\Exceptions\ErrorException;
 use App\Models\Counter;
 use App\Models\User;
 use App\Repositories\Eloquent\Admin\CounterBoxRepository;
+use App\Repositories\interfaces\Admin\ActionRepositoryInterface;
 use App\Repositories\interfaces\Admin\CounterBoxRepositoryInterface;
 use App\Services\User\PasswordResetService;
+use App\Types\ActionTypes;
+use App\Types\ComplaintStatusTypes;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -22,6 +25,8 @@ class CounterBoxService
     public function __construct(
         private CounterBoxRepositoryInterface $repository,
         private PasswordResetService $passwordResetService,
+        protected EmployeeAssignmentService $employeeAssignmentService,
+        protected ActionRepositoryInterface $actionRepository,
     ) {
     }
 
@@ -132,14 +137,20 @@ class CounterBoxService
                 'user_id' => $user->id,
                 'generator_id' => $generator,
                 'current_spending' => 0,
-                'physical_device_id'=>$data['physical_device_id']
+                'physical_device_id'=>$data['physical_device_id'],
             ]);
 
             // If box_id is provided, assign the counter to the box
             if ($boxId) {
                 $this->assignCounterToBox($counter->id, $boxId);
             }
-
+            $action=$this->actionRepository->create([
+                'type'=> ActionTypes::SetUp,
+                'status'=>ComplaintStatusTypes::Pending,
+                'counter_id'=>$counter->id,
+                'generator_id'=>$counter->generator_id,
+            ]);
+          $this->employeeAssignmentService->assignToAction($action);
             return $counter;
         });
 
