@@ -49,6 +49,7 @@ Route::middleware('lang')->group(function () {
             Route::post('logout', [EmployeeAuthController::class, 'logout']);
             Route::get('permissions/{id}', [EmployeeAuthController::class, 'getPermissions']);
         });
+    });
 
 
         // Email verification routes
@@ -93,8 +94,6 @@ Route::middleware('lang')->group(function () {
 
         Route::get('visitLandingPage', [SuperAdminStatisticsController::class, 'visitLandingPage']);
 
-
-    });
     Route::prefix('user')->group(function () {
         Route::put('name/{id}', [UserAppController::class, 'name']);
         Route::put('password', [UserAppController::class, 'resetPassword']);
