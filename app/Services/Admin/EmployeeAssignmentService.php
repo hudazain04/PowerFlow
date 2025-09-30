@@ -45,7 +45,7 @@ class EmployeeAssignmentService
         $closest = $redis->rawCommand(
             'GEORADIUS',
             "geo:employees:{$areaId}",
-            $box->longitude, $box->latitude,
+            $box->latitude , $box->longitude,
             10, 'km',
             'WITHDIST',
             'COUNT', 1,
@@ -126,16 +126,16 @@ class EmployeeAssignmentService
         $areaId = $area?->id;
 
         $redis = Redis::connection()->client();
+//        dd($box->longitude, $box->latitude);
         $closest = $redis->rawCommand(
             'GEORADIUS',
             "geo:employees:{$areaId}",
-            $box->longitude, $box->latitude,
+             $box->latitude,$box->longitude,
             10, 'km',
             'WITHDIST',
             'COUNT', 1,
             'ASC'
         );
-
         if (!empty($closest)) {
             [$employeeId, $distance] = $closest[0];
             $action->update([
@@ -186,7 +186,6 @@ class EmployeeAssignmentService
                 ];
                 Notification::send($employee, new SystemNotification($data));
             }
-
 
 
             event(new ActionAssignEvent($action, $employeeId));
