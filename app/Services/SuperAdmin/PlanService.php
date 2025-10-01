@@ -154,7 +154,6 @@ class PlanService
     public function find(int $id)
     {
         $planModel=$this->planRepository->find($id);
-
         if ($planModel)
         {
             $planDTO=PlanDTO::fromModel($planModel);

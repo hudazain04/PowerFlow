@@ -15,6 +15,7 @@ class PlanDTO extends SimpleDTO
     public string $description;
     public ?string $image;
     public int $monthlyPrice;
+    public ?int $popular;
     public ?Collection $features;
     public ?Collection $planPrices;
 

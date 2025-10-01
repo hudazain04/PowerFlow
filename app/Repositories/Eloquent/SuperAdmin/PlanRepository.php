@@ -85,4 +85,9 @@ class PlanRepository implements PlanRepositoryInterface
 
         return $features;
     }
+
+    public function updateAll(array $data)
+    {
+        return Plan::query()->update($data);
+    }
 }

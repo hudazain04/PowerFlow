@@ -101,7 +101,7 @@ class PaymentService
         {
             throw new ErrorException(__('payment.notFound'),ApiCode::NOT_FOUND);
         }
-        $this->subscriptionPaymentRepository->update($payment,['type'=>PaymentType::Cash,'status'=>PaymentStatus::Pending]);
+        $this->subscriptionPaymentRepository->update($payment,['type'=>PaymentType::Cash,'status'=>PaymentStatus::Paid,'date'=>Carbon::now(),]);
         return $this->success($result,__('payment.cash'));
     }
 

@@ -4,6 +4,7 @@ namespace App\Payment\Visitors;
 
 use App\Payment\Methods\CashPayment;
 use App\Payment\Methods\StripePayment;
+use App\Types\PaymentStatus;
 use Stripe\Checkout\Session;
 use Stripe\Stripe;
 
@@ -61,7 +62,7 @@ class PaymentProcessor implements PaymentVisitor
     public function visitCash(CashPayment $cashPayment)
     {
         return [
-            'status' => 'pending',
+            'status' => PaymentStatus::Paid,
         ];
     }
 }

@@ -23,6 +23,7 @@ class PlanResource extends JsonResource
             'target'=>$this->target,
             'description'=>$this->description,
             'monthlyPrice'=>$this->monthlyPrice,
+            'popular'=>$this->popular,
             'planPrices'=>PlanPriceResource::collection($this->planPrices),
             'features'=>FeatureResource::collection($this->features),
 
