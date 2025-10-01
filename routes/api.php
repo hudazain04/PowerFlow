@@ -127,12 +127,12 @@ Route::middleware(['auth:api', 'lang'])->group(function () {
         // Areas
         Route::post('areas', [AreaController::class, 'store'])
             ->middleware('permission:CREATE_NEIGHBORHOODS');
-        Route::get('getArea/{id}', [AreaController::class, 'getArea'])
-            ->middleware('permission:VIEW_NEIGHBORHOOD');
+        Route::get('getArea/{id}', [AreaController::class, 'getArea']) ->can('view', 'Area');
+//            ->middleware('permission:VIEW_NEIGHBORHOOD');
         Route::get('getAreas', [AreaController::class, 'index'])
             ->middleware('permission:VIEW_NEIGHBORHOODS');
-        Route::put('area/update/{id}', [AreaController::class, 'update'])
-            ->middleware('permission:UPDATE_NEIGHBORHOODS');
+        Route::put('area/update/{id}', [AreaController::class, 'update'])->can('update','Area');
+//            ->middleware('permission:UPDATE_NEIGHBORHOODS');
         Route::delete('delete', [AreaController::class, 'delete'])
             ->middleware('permission:DELETE_NEIGHBORHOODS');
 

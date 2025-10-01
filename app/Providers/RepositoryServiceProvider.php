@@ -59,6 +59,14 @@ class RepositoryServiceProvider extends ServiceProvider
     /**
      * Register services.
      */
+
+    protected $policies = [
+        \App\Models\Area::class => \App\Policies\AreaPolicy::class,
+        \App\Models\ElectricalBox::class => \App\Policies\ElectricalBoxPolicy::class,
+        \App\Models\Counter::class => \App\Policies\CounterPolicy::class,
+        \App\Models\Employee::class => \App\Policies\EmployeePolicy::class,
+    ];
+
     public function register(): void
     {
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
@@ -80,6 +88,7 @@ class RepositoryServiceProvider extends ServiceProvider
 
     public function boot()
     {
+
 
 
         \Illuminate\Auth\Notifications\VerifyEmail::toMailUsing(function ($notifiable) {
