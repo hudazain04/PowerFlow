@@ -68,7 +68,6 @@ class UserAppService
             'weekly' => $this->appRepository->getConsumption($counter_id, $now->copy()->startOfWeek(), $now->copy()->endOfWeek()),
             'monthly' => $this->appRepository->getConsumption($counter_id, $now->copy()->startOfMonth(), $now->copy()->endOfMonth()),
             'yearly' => $this->appRepository->getConsumption($counter_id, $now->copy()->startOfYear(), $now->copy()->endOfYear())
-
         ];
    }
 

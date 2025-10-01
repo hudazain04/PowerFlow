@@ -30,8 +30,8 @@ class SubscriptionController extends Controller
         $subscriptionRequestDTO=SubscriptionRequestDTO::fromRequest($request);
         $subscriptionRequestDTO->type=SubscriptionTypes::Renew;
         $subscriptionRequestDTO->user_id=$request->user()->id;
-        $topRequestedPlan=$this->statisticsService->topRequestedPlan();
         $response= $this->subscriptionService->renew($subscriptionRequestDTO);
+        $topRequestedPlan=$this->statisticsService->topRequestedPlan();
         event(new TopRequestedPlanEvent($topRequestedPlan));
         return $response;
     }
@@ -40,8 +40,11 @@ class SubscriptionController extends Controller
     {
         $subscriptionRequestDTO=SubscriptionRequestDTO::fromRequest($request);
         $subscriptionRequestDTO->user_id=$request->user()->id;
-        $subscriptionRequestDTO->type=SubscriptionTypes::Renew;
-        return  $this->subscriptionService->upgrade($subscriptionRequestDTO);
+        $subscriptionRequestDTO->type=SubscriptionTypes::Upgrade;
+        $response= $this->subscriptionService->upgrade($subscriptionRequestDTO);
+        $topRequestedPlan=$this->statisticsService->topRequestedPlan();
+        event(new TopRequestedPlanEvent($topRequestedPlan));
+        return $response;
     }
 
     public function getLastSubscription($generator_id)

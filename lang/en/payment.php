@@ -6,6 +6,7 @@ return
     'cancel'=>'Payment was canceled',
     'create'=>'Payment created successfully , continue on Stripe',
     'notFound'=>'Payment not Found',
+    'notComplete'=>'Payment information is not complete',
 
 
 ];

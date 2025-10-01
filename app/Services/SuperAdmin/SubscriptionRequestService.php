@@ -14,6 +14,7 @@ use App\DTOs\UserDTO;
 use App\Exceptions\ErrorException;
 use App\Http\Resources\SubscriptionRequestResource;
 use App\Jobs\AfterPaymentReminderJob;
+use App\Jobs\SetExpiredSubscriptionJob;
 use App\Mail\SendSubscriptionRequestStatusMail;
 use App\Models\User;
 use App\Models\User as UserModel;
@@ -28,6 +29,7 @@ use App\Services\NotificationService;
 use App\Types\GeneratorRequests;
 use App\Types\PaymentStatus;
 use App\Types\PaymentType;
+use App\Types\SubscriptionTypes;
 use App\Types\UserTypes;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -47,6 +49,7 @@ class SubscriptionRequestService
         protected UserRepositoryInterface $userRepository,
         protected SubscriptionPaymentRepositoryInterface $subscriptionPaymentRepository,
         protected GeneratorSettingRepositoryInterface $generatorSettingRepository,
+        protected PlanPriceService $planPriceService,
     )
     {
     }
@@ -92,40 +95,65 @@ class SubscriptionRequestService
                 throw new ErrorException(__('subscriptionRequest.notFound'), ApiCode::NOT_FOUND);
             }
             $request = $this->subscriptionRequestRepository->update($request, ['status' => GeneratorRequests::APPROVED]);
-            $powerGeneratorDTO = new PowerGeneratorDTO();
-            $powerGeneratorDTO->name = $request->name;
-            $powerGeneratorDTO->location = $request->location;
-            $powerGeneratorDTO->user_id = $request->user_id;
-            $generator = $this->powerGeneratorRepository->create($powerGeneratorDTO->toArray());
-            $settingDTO=new GeneratorSettingDTO();
-            $settingDTO->generator_id=$generator->id;
-            $settingDTO->day=$request->day;
-            $settingDTO->spendingType=$request->spendingType;
-            $settingDTO->afterPaymentFrequency=$request->afterPaymentFrequency;
-            $settingDTO->kiloPrice=$request->kiloPrice;
-            $settingDTO->nextDueDate=Carbon::now()
-                ->addWeeks($request->afterPaymentFrequency)
-                ->next($request->day);
-            $this->generatorSettingRepository->create($settingDTO->toArray());
             $user=$this->userRepository->findById($request->user_id);
-            $this->userRepository->updateRole($user,UserTypes::ADMIN);
+            if ($request->type===SubscriptionTypes::NewPlan)
+            {
+                $powerGeneratorDTO = new PowerGeneratorDTO();
+                $powerGeneratorDTO->name = $request->name;
+                $powerGeneratorDTO->location = $request->location;
+                $powerGeneratorDTO->user_id = $request->user_id;
+                $generator = $this->powerGeneratorRepository->create($powerGeneratorDTO->toArray());
+                $settingDTO=new GeneratorSettingDTO();
+                $settingDTO->generator_id=$generator->id;
+                $settingDTO->day=$request->day;
+                $settingDTO->spendingType=$request->spendingType;
+                $settingDTO->afterPaymentFrequency=$request->afterPaymentFrequency;
+                $settingDTO->kiloPrice=$request->kiloPrice;
+                $settingDTO->nextDueDate=Carbon::now()
+                    ->addWeeks($request->afterPaymentFrequency)
+                    ->next($request->day);
+                $this->generatorSettingRepository->create($settingDTO->toArray());
+                $this->userRepository->updateRole($user,UserTypes::ADMIN);
+                if ($request->phones)
+                {
+                    foreach ($request->phones as $phone) {
+                        $generator->phones()->create([
+                            'number' => $phone,
+                            'generator_id'=>$generator->id,
+                        ]);
+                    }
+                }
+                $reminderDate = $settingDTO->nextDueDate->copy()->subDay()->startOfDay();
+                AfterPaymentReminderJob::dispatchAfterResponse($generator)
+                    ->delay($reminderDate);
+                $start_time=Carbon::now();
+            }
+            if ($request->type===SubscriptionTypes::Upgrade)
+            {
+                $lastSubscription=$this->subscriptionRepository->getLastForGenerator($user->powerGenerator->id);
+                $subscription=$this->subscriptionRepository->update($lastSubscription,['expired_at'=>Carbon::now()]);
+                $generator=$user->powerGenerator;
+                $start_time=Carbon::now();
+
+            }
+            if ($request->type===SubscriptionTypes::Renew)
+            {
+                $lastSubscription=$this->subscriptionRepository->getLastForGenerator($user->powerGenerator->id);
+                $generator=$user->powerGenerator;
+                $start_time=($lastSubscription->start_time)
+                ->addWeeks($lastSubscription->period);
+            }
+
             $planPrice = $this->subscriptionRequestRepository->getRelations($request, ['planprice'])->planPrice;
             $subscriptionDTO = new SubscriptionDTO();
-            $subscriptionDTO->start_time = Carbon::now();
+            $subscriptionDTO->start_time = $start_time;
             $subscriptionDTO->period = $request->period;
             $subscriptionDTO->planPrice_id = $planPrice->id;
             $subscriptionDTO->price = $planPrice->price;
             $subscriptionDTO->generator_id = $generator->id;
-            $this->subscriptionRepository->create($subscriptionDTO->toArray());
-            if ($request->phones)
-            {
-                foreach ($request->phones as $phone) {
-                    $generator->phones()->create([
-                        'number' => $phone,
-                        'generator_id'=>$generator->id,
-                    ]);
-                }
-            }
+            $subscription=$this->subscriptionRepository->create($subscriptionDTO->toArray());
+            $delay=($subscription->start_time)->addWeeks($subscription->period);
+            SetExpiredSubscriptionJob::dispatchAfterResponse($subscription)->delay($delay);
 
             $payment=$this->subscriptionPaymentRepository->findWhere(['subscriptionRequest_id'=>$requestId]);
             if (! $payment)
@@ -138,11 +166,11 @@ class SubscriptionRequestService
                     'date'=>Carbon::now(),'status'=>PaymentStatus::Paid
                 ]);
             }
-
+            if ($payment->type == null)
+            {
+                throw new ErrorException(__('payment.notComplete'),ApiCode::BAD_REQUEST);
+            }
             DB::commit();
-            $reminderDate = $settingDTO->nextDueDate->copy()->subDay()->startOfDay();
-            AfterPaymentReminderJob::dispatchAfterResponse($generator)
-                ->delay($reminderDate);
             $user=$request->user;
             Mail::to($user->email)->send(new SendSubscriptionRequestStatusMail(GeneratorRequests::APPROVED));
             return ['success'=>true];
