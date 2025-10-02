@@ -52,48 +52,48 @@ Route::middleware('lang')->group(function () {
     });
 
 
-        // Email verification routes
-        Route::get('/verify/{id}/{hash}', [VerificationController::class, 'verify'])
-            ->name('verification.verify');
+    // Email verification routes
+    Route::get('/verify/{id}/{hash}', [VerificationController::class, 'verify'])
+        ->name('verification.verify');
 
-        Route::prefix('email')->group(function () {
-            Route::post('/send-verification', [VerificationController::class, 'send'])
-                ->name('verification.send');
-            Route::post('/resend', [VerificationController::class, 'resend'])
-                ->middleware('throttle:3,1')
-                ->name('verification.resend');
-        });
+    Route::prefix('email')->group(function () {
+        Route::post('/send-verification', [VerificationController::class, 'send'])
+            ->name('verification.send');
+        Route::post('/resend', [VerificationController::class, 'resend'])
+            ->middleware('throttle:3,1')
+            ->name('verification.resend');
+    });
 
-        // Password reset routes
-        Route::prefix('/password')->group(function () {
-            Route::post('/request', [PasswordController::class, 'request']);
-            Route::post('/resend', [PasswordController::class, 'resend'])->middleware('throttle:3,1');
-            Route::post('/reset', [PasswordController::class, 'reset']);
-            Route::get('/verify', [PasswordController::class, 'verify'])->name('verification.pass');
-        });
+    // Password reset routes
+    Route::prefix('/password')->group(function () {
+        Route::post('/request', [PasswordController::class, 'request']);
+        Route::post('/resend', [PasswordController::class, 'resend'])->middleware('throttle:3,1');
+        Route::post('/reset', [PasswordController::class, 'reset']);
+        Route::get('/verify', [PasswordController::class, 'verify'])->name('verification.pass');
+    });
 
-        // Public info routes
-        Route::prefix('AppInfo')->group(function () {
-            Route::get('getAboutApp', [AppInfoController::class, 'getAboutApp']);
-            Route::get('getTermsAndConditions', [AppInfoController::class, 'getTermsAndConditions']);
-            Route::get('getPrivacyPolicy', [AppInfoController::class, 'getPrivacyPolicy']);
-        });
+    // Public info routes
+    Route::prefix('AppInfo')->group(function () {
+        Route::get('getAboutApp', [AppInfoController::class, 'getAboutApp']);
+        Route::get('getTermsAndConditions', [AppInfoController::class, 'getTermsAndConditions']);
+        Route::get('getPrivacyPolicy', [AppInfoController::class, 'getPrivacyPolicy']);
+    });
 
-        // Public plan routes
-        Route::prefix('plan')->group(function () {
-            Route::get('getAll', [PlanController::class, 'index']);
-            Route::get('findById/{id}', [PlanController::class, 'findById']);
-        });
+    // Public plan routes
+    Route::prefix('/plan')->group(function () {
+        Route::get('/getAll', [PlanController::class, 'index']);
+        Route::get('findById/{id}', [PlanController::class, 'findById']);
+    });
 
-        Route::prefix('planPrice')->group(function () {
-            Route::get('getAll/{plan_id}', [PlanPriceController::class, 'index']);
-            Route::get('findById/{id}', [PlanPriceController::class, 'findById']);
-        });
+    Route::prefix('planPrice')->group(function () {
+        Route::get('getAll/{plan_id}', [PlanPriceController::class, 'index']);
+        Route::get('findById/{id}', [PlanPriceController::class, 'findById']);
+    });
 
 
-        Route::get('visitLandingPage', [SuperAdminStatisticsController::class, 'visitLandingPage']);
-        Route::get('stripe/success', [PaymentController::class, 'stripeSuccess'])->name('stripe.success');
-        Route::get('stripe/cancel', [PaymentController::class, 'stripeCancel'])->name('stripe.cancel');
+    Route::get('visitLandingPage', [SuperAdminStatisticsController::class, 'visitLandingPage']);
+    Route::get('stripe/success', [PaymentController::class, 'stripeSuccess'])->name('stripe.success');
+    Route::get('stripe/cancel', [PaymentController::class, 'stripeCancel'])->name('stripe.cancel');
 
 
     Route::prefix('user')->group(function () {
@@ -105,7 +105,7 @@ Route::middleware('lang')->group(function () {
         Route::get('/pdf/{counter_id}', [UserAppController::class, 'downloadPaymentsPdf']);
         Route::get('spending_consumption/{counter_id}', [UserAppController::class, 'spendingConsumption']);
         Route::get('generators/nearby', [UserAppController::class, 'findNearbyGenerators']);
-        Route::get('boxes',[UserAppController::class,'getBoxes']);
+        Route::get('boxes', [UserAppController::class, 'getBoxes']);
 
 
     });
@@ -133,8 +133,8 @@ Route::middleware(['auth:api', 'lang'])->group(function () {
             ->middleware('permission:VIEW_NEIGHBORHOOD');
         Route::get('getAreas', [AreaController::class, 'index'])
             ->middleware('permission:VIEW_NEIGHBORHOODS');
-        Route::put('area/update/{area}', [AreaController::class, 'update'])->can('update','area');
-//            ->middleware('permission:UPDATE_NEIGHBORHOODS');
+        Route::put('area/update/{area}', [AreaController::class, 'update'])->can('update', 'area');
+        //            ->middleware('permission:UPDATE_NEIGHBORHOODS');
         Route::delete('delete', [AreaController::class, 'delete'])
             ->middleware('permission:DELETE_NEIGHBORHOODS');
 
@@ -220,7 +220,7 @@ Route::middleware(['auth:api', 'lang'])->group(function () {
         ]);
         Route::get('/statistics/dashboard', [StatisticsController::class, 'getDashboardOverview']);
         Route::get('admin/full-data', [UserAppController::class, 'getFullData'])->name('dashboardData');
-//            ->middleware('permission:VIEW_ADMIN_DATA');
+        //            ->middleware('permission:VIEW_ADMIN_DATA');
 
 
     });
@@ -406,7 +406,7 @@ Route::middleware(['auth:api', 'lang'])->group(function () {
             ->middleware('permission:RENEW_SUBSCRIPTION');
         Route::get('cancel', [SubscriptionController::class, 'cancel'])
             ->middleware('permission:CANCEL_SUBSCRIPTION');
-        Route::post('upgrade',[SubscriptionController::class,'upgrade'])
+        Route::post('upgrade', [SubscriptionController::class, 'upgrade'])
             ->middleware('permission:UPGRADE_SUBSCRIPTION');
     });
 
@@ -481,7 +481,7 @@ Route::middleware(['auth:api', 'lang'])->group(function () {
             ->middleware('permission:VIEW_ACTIONS');
         Route::get('getAction/{id}', [ActionController::class, 'getAction'])
             ->middleware('permission:VIEW_ACTION');
-        Route::get('getUserActions',[ActionController::class,'getUserActions'])
+        Route::get('getUserActions', [ActionController::class, 'getUserActions'])
             ->middleware('permission:VIEW_USER_ACTIONS');
 
     });
@@ -495,7 +495,7 @@ Route::middleware(['auth:api', 'lang'])->group(function () {
             ->middleware('permission:VIEW_NOTIFICATIONS');
         Route::get('getUnReadNotifications', [NotificationController::class, 'getUnRead'])
             ->middleware('permission:VIEW_NOTIFICATIONS');
-        Route::patch('markNotificationAsRead',[NotificationController::class,'markNotificationAsRead'])
+        Route::patch('markNotificationAsRead', [NotificationController::class, 'markNotificationAsRead'])
             ->middleware('permission:READ_NOTIFICATIONS');
         Route::get('show/{id}', [NotificationController::class, 'show'])
             ->middleware('permission:VIEW_NOTIFICATION');
