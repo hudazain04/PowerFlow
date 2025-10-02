@@ -47,7 +47,7 @@ class PlanRepository implements PlanRepositoryInterface
         return $plan;
     }
 
-    public function update(PlanModel $plan, array $data): PlanModel
+    public function update(PlanModel $plan, array $data): ?PlanModel
     {
         $plan->update($data);
         $plan->save();

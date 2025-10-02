@@ -19,7 +19,7 @@ interface PlanRepositoryInterface
 
     public function create(array $data) : PlanModel;
 
-    public function update(PlanModel $plan , array $data) : PlanModel;
+    public function update(PlanModel $plan , array $data) : ?PlanModel;
 
     public function delete(PlanModel $plan) : bool;
 
