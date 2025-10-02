@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('generator_id')->constrained('power_generators')->cascadeOnDelete();
             $table->enum('spendingType',array_values((new ReflectionClass(\App\Types\SpendingTypes::class))->getConstants()));
-            $table->integer('kiloPrice');
+            $table->float('kiloPrice');
             $table->integer('afterPaymentFrequency');
             $table->enum('day',array_values((new ReflectionClass(\App\Types\DaysOfWeek::class))->getConstants()));
             $table->date('nextDueDate')->nullable();

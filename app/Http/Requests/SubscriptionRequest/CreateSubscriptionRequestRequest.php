@@ -30,7 +30,7 @@ class CreateSubscriptionRequestRequest extends FormRequest
             'location'     => 'required|string',
             'phones'       => 'nullable|array',
             'planPrice_id' => 'required|exists:plan_prices,id',
-            'kiloPrice'=>'required|int',
+            'kiloPrice'=>'required|numeric',
             'afterPaymentFrequency'=>'nullable|int',
             'day'=>['required', Rule::in(array_values((new ReflectionClass(\App\Types\DaysOfWeek::class))->getConstants()))],
             'spendingType'=>['required', Rule::in(array_values((new ReflectionClass(\App\Types\SpendingTypes::class))->getConstants()))],

@@ -23,7 +23,7 @@ return new class extends Migration
             $table->foreignId('planPrice_id')->nullable()->constrained('plan_prices')->nullOnDelete();
             $table->enum('status',array_values((new ReflectionClass(\App\Types\GeneratorRequests::class))->getConstants()));
             $table->enum('spendingType',array_values((new ReflectionClass(\App\Types\SpendingTypes::class))->getConstants()));
-            $table->integer('kiloPrice')->nullable();
+            $table->float('kiloPrice')->nullable();
             $table->integer('afterPaymentFrequency')->nullable();
             $table->enum('day',array_values((new ReflectionClass(\App\Types\DaysOfWeek::class))->getConstants()))->nullable();
             $table->string('admin_notes')->nullable();
