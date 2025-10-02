@@ -79,13 +79,13 @@ class paymentController extends Controller
 
     public function stripeSuccess(Request $request)
     {
-       $this->paymentService->stripeSuccess($request);
+         $this->paymentService->stripeSuccess($request);
        return redirect(env("FRONTEND_HOST").'?shouldRedirect=true&paid=true');
     }
 
     public function stripeCancel(Request  $request)
     {
-        $this->paymentService->stripeCancel($request);
+         $this->paymentService->stripeCancel($request);
         return redirect(env("FRONTEND_HOST").'?shouldRedirect=true&paid=false');
     }
 

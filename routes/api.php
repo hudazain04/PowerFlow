@@ -91,8 +91,10 @@ Route::middleware('lang')->group(function () {
         });
 
 
-
         Route::get('visitLandingPage', [SuperAdminStatisticsController::class, 'visitLandingPage']);
+        Route::get('stripe/success', [PaymentController::class, 'stripeSuccess'])->name('stripe.success');
+        Route::get('stripe/cancel', [PaymentController::class, 'stripeCancel'])->name('stripe.cancel');
+
 
     Route::prefix('user')->group(function () {
         Route::put('name/{id}', [UserAppController::class, 'name']);
@@ -441,8 +443,6 @@ Route::middleware(['auth:api', 'lang'])->group(function () {
         ->middleware('permission:PROCESS_STRIPE_PAYMENT');
     Route::get('payCash/{request_id}', [PaymentController::class, 'handleCashPayment'])
         ->middleware('permission:PROCESS_CASH_PAYMENT');
-    Route::get('stripe/success', [PaymentController::class, 'stripeSuccess'])->name('stripe.success');
-    Route::get('stripe/cancel', [PaymentController::class, 'stripeCancel'])->name('stripe.cancel');
 
     Route::prefix('spendingPay')->middleware(['auth:api'])->group(function () {
         Route::post('payStripeSpending/{counter_id}', [SpendingPaymentController::class, 'createStripeCheckout'])
