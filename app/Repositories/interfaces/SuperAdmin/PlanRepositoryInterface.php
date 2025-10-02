@@ -28,4 +28,6 @@ interface PlanRepositoryInterface
     public function getFeaturesByKey(PlanModel $plan, array $where=[]): ?Feature;
 
     public function getPlanPrices(PlanModel $plan): Collection;
+
+    public function updateAll(array $data);
 }

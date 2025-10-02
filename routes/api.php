@@ -404,6 +404,8 @@ Route::middleware(['auth:api', 'lang'])->group(function () {
             ->middleware('permission:RENEW_SUBSCRIPTION');
         Route::get('cancel', [SubscriptionController::class, 'cancel'])
             ->middleware('permission:CANCEL_SUBSCRIPTION');
+        Route::post('upgrade',[SubscriptionController::class,'upgrade'])
+            ->middleware('permission:UPGRADE_SUBSCRIPTION');
     });
 
     // Complaint routes

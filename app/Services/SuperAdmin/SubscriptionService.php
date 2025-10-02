@@ -9,9 +9,12 @@ use App\Exceptions\ErrorException;
 use App\Http\Resources\SubscriptionResource;
 use App\Models\User as UserModel;
 use App\Repositories\interfaces\SuperAdmin\PlanPriceRepositoryInterface;
+use App\Repositories\interfaces\SuperAdmin\SubscriptionPaymentRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\SubscriptionRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\SubscriptionRequestRepositoryInterface;
 use App\Repositories\interfaces\UserRepositoryInterface;
+use App\Types\GeneratorRequests;
+use App\Types\PaymentStatus;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -26,6 +29,8 @@ class SubscriptionService
         protected UserRepositoryInterface $userRepository,
         protected SubscriptionRequestRepositoryInterface $subscriptionRequestRepository,
         protected PlanPriceRepositoryInterface $planPriceRepository,
+        protected SubscriptionPaymentRepositoryInterface $subscriptionPaymentRepository,
+        protected PlanPriceService $planPriceService,
     )
     {
         //
@@ -66,18 +71,22 @@ class SubscriptionService
         {
             throw new ErrorException(__('planPrice.notFound'),ApiCode::NOT_FOUND);
         }
-        $user=$this->userRepository->getRelations(['powerGenerator']);
-        $subscriptionRequestDTO->name=$user->powerGenerator->name;
-        $subscriptionRequestDTO->location=$user->powerGenerator->location;
+//        $user=$this->userRepository->getRelations($user,['powerGenerator']);
         $subscriptionRequestDTO->period=$planPrice->period;
-        $subscription=$this->subscriptionRepository->getLastForGenerator($user->powerGenerator->id);
-        if (! $subscription)
-        {
-            throw new ErrorException(__('subscription.notFoundForUser'),ApiCode::NOT_FOUND);
-        }
-//        dd($subscription);
-        $subscription=$this->subscriptionRepository->update($subscription,['expired_at'=>Carbon::now()]);
+        $subscriptionRequestDTO->status=GeneratorRequests::PENDING;
         $subscriptionRequest=$this->subscriptionRequestRepository->create($subscriptionRequestDTO->toArray());
+        $lastSubscription=$this->subscriptionRepository->getLastForGenerator($user->powerGenerator->id);
+        $lastPlanPrice=$lastSubscription->planPrice;
+        $usedMonths = now()->diffInMonths($lastSubscription->start_time);
+        $monthlyPrice=$lastPlanPrice->plan->monthlyPrice;
+        $remainingPrice=($lastPlanPrice->price)-($this->planPriceService->calculateTotalPrice($monthlyPrice,$lastPlanPrice->discount,$usedMonths));
+        $amount=($planPrice->price)-($remainingPrice);
+        $payment=$this->subscriptionPaymentRepository->create([
+            'user_id'=>$subscriptionRequest->user_id,
+            'status'=>PaymentStatus::Pending,
+            'amount'=>$amount,
+            'subscriptionRequest_id'=>$subscriptionRequest->id,
+        ]);
         return $this->success(null,__('subscriptionRequest.create'));
 
     }
@@ -94,12 +103,16 @@ class SubscriptionService
         {
             throw new ErrorException(__('planPrice.notFound'),ApiCode::NOT_FOUND);
         }
-        $user=$this->userRepository->getRelations($user,['powerGenerator']);
-//        dd($user->powerGenerator);
-        $subscriptionRequestDTO->name=$user->powerGenerator->name;
-        $subscriptionRequestDTO->location=$user->powerGenerator->location;
+//        $user=$this->userRepository->getRelations($user,['powerGenerator']);
         $subscriptionRequestDTO->period=$planPrice->period;
+        $subscriptionRequestDTO->status=GeneratorRequests::PENDING;
         $subscriptionRequest=$this->subscriptionRequestRepository->create($subscriptionRequestDTO->toArray());
+        $payment=$this->subscriptionPaymentRepository->create([
+            'user_id'=>$subscriptionRequest->user_id,
+            'status'=>PaymentStatus::Pending,
+            'amount'=>$planPrice->price,
+            'subscriptionRequest_id'=>$subscriptionRequest->id,
+        ]);
         return $this->success(null,__('subscriptionRequest.create'));
 
     }

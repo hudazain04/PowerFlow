@@ -12,6 +12,7 @@ class SubscriptionTypes
         //
     }
     public const Renew = "renew";
+    public const Upgrade="upgrade";
     public const Cancel = "cancel";
     public const NewPlan = "new";
 }

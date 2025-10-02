@@ -4,6 +4,7 @@ namespace App\Services\SuperAdmin;
 
 use App\ApiHelper\ApiCode;
 use App\ApiHelper\ApiResponse;
+use App\DTOs\TopRequestedPlanDTO;
 use App\Repositories\interfaces\Admin\PowerGeneratorRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\PlanPriceRepositoryInterface;
 use App\Repositories\interfaces\SuperAdmin\PlanRepositoryInterface;
@@ -115,12 +116,18 @@ class StatisticsService
 
         $data= $plans->map(function ($plan) use ($subscriptionRequests) {
             $subscriptionRequestCount = $subscriptionRequests->where('plan_id', $plan->id)->first();
-            $plan->subscriptionRequestCount = $subscriptionRequestCount ? $subscriptionRequestCount->count : 0;
-            return $plan;
+            $topRequestedPlanDTO=new TopRequestedPlanDTO();
+            $topRequestedPlanDTO->plan=$plan;
+            $topRequestedPlanDTO->count=$subscriptionRequestCount ? $subscriptionRequestCount->count : 0;
+//            $plan->subscriptionRequestCount = $subscriptionRequestCount ? $subscriptionRequestCount->count : 0;
+            return $topRequestedPlanDTO;
         });
-        $topRequestedPlan = $data->sortByDesc('subscriptionRequestCount')->first();
+        $topRequestedPlan = $data->sortByDesc('count')->first();
+        if ($topRequestedPlan) {
+            $this->planRepository->updateAll(['popular' => false]);
+            $this->planRepository->update($topRequestedPlan->plan, ['popular' => true]);
+        }
         return $topRequestedPlan;
-
     }
 
     public function visitLandingPage()

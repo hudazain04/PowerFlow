@@ -36,8 +36,8 @@ class SubscriptionRequestController extends Controller
         $requestDTO->user_id=$request->user()->id;
         $requestDTO->type=SubscriptionTypes::NewPlan;
 
-        $topRequestedPlan=$this->statisticsService->topRequestedPlan();
         $response= $this->subscriptionRequestService->store($requestDTO);
+        $topRequestedPlan=$this->statisticsService->topRequestedPlan();
         event(new TopRequestedPlanEvent($topRequestedPlan));
         return $response;
     }
