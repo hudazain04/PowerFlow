@@ -115,11 +115,11 @@ class SuperAdminStatisticsController extends Controller
                     ],
                     'areas' => [
                         'used' => $this->service->getAreas($generator_id),
-                        'total' => $features['areas_count'] ?? $generator->plan->box_limit ?? 0
+                        'total' => $features['neighborhoods_count'] ?? $generator->plan->box_limit ?? 0
                     ],
                     'employees' => [
                         'used' => $this->employeeService->getEmp($generator_id),
-                        'total' => $features['employee_count'] ?? $generator->plan->box_limit ?? 0
+                        'total' => $features['employees_count'] ?? $generator->plan->box_limit ?? 0
                     ]
 
             ],'success',ApiCode::OK);
