@@ -5,6 +5,8 @@ namespace App\Policies;
 use App\Models\Area;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Support\Facades\Log;
+
 
 class AreaPolicy
 {
@@ -38,8 +40,8 @@ class AreaPolicy
      */
     public function update(User $user, Area $area): bool
     {
-        return $user->hasPermission('UPDATE_NEIGHBORHOODS') &&
-            $user->powerGenerator->id === $area->generator_id;
+
+           return $user->powerGenerator->id === $area->generator_id && $user->hasPermissionTo('UPDATE_NEIGHBORHOODS') ;
     }
 
     /**

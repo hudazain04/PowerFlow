@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Events\EmployeeLocationUpdate;
 use App\Listeners\StoreEmployeeLocation;
+use App\Models\Area;
 use App\Models\Spending;
 use App\Observers\SpendingObserver;
+use App\Policies\AreaPolicy;
 use App\Repositories\Eloquent\Admin\ActionRepository;
 use App\Repositories\Eloquent\Admin\GeneratorSettingRepository;
 use App\Repositories\Eloquent\Admin\PaymentRepository;
@@ -55,6 +57,7 @@ use Dedoc\Scramble\Scramble;
 use Dedoc\Scramble\Support\Generator\OpenApi;
 use Dedoc\Scramble\Support\Generator\SecurityScheme;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
 
@@ -92,6 +95,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Gate::policy(Area::class, AreaPolicy::class);
         Spending::observe(SpendingObserver::class);
         Scramble::configure()
             ->withDocumentTransformers(function (OpenApi $openApi) {

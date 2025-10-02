@@ -36,9 +36,9 @@ class AreaRepository implements AreaRepositoryInterface
 
     }
 
-    public function updateArea(array $data, int $id)
+    public function updateArea(array $data, Area $area)
     {
-        $area=Area::findOrFail($id);
+//        $area=Area::findOrFail($id);
         $generator=auth()->user()->powerGenerator->id;
         $area->update([
             'name' => $data['name'],
@@ -49,7 +49,7 @@ class AreaRepository implements AreaRepositoryInterface
         if (array_key_exists('box_id',$data)){
             $box_ids = is_array($data['box_id']) ? $data['box_id'] : [$data['box_id']];
             DB::table('area__boxes')
-                ->where('area_id', $id)->delete();
+                ->where('area_id', $area->id)->delete();
             foreach ($box_ids as $box_id) {
 
                 $this->assignBoxToArea($area->id, $box_id);

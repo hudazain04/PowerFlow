@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AreaDeleteRequest;
 use App\Http\Requests\AreaRequest;
 use App\Http\Resources\AreaResource;
+use App\Models\Area;
 use App\Models\PowerGenerator;
 use App\Services\Admin\AreaService;
 use App\Services\Admin\CounterService;
@@ -30,9 +31,10 @@ class AreaController extends Controller
 
         return ApiResponses::success(AreaResource::make($area),__('area.create'),ApiCode::OK);
     }
-    public function update(AreaRequest $request,int $id){
-        $area=$this->service->updateArea($request->validated(),$id);
-        return ApiResponses::success(AreaResource::make($area),__('area.update'),ApiCode::OK);
+    public function update(AreaRequest $request, Area $area)
+    {
+        $area = $this->service->updateArea($request->validated(), $area);
+        return ApiResponses::success(AreaResource::make($area), __('area.update'), ApiCode::OK);
     }
 
     public function getArea(int $area_id)
