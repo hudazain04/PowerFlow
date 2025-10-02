@@ -127,6 +127,7 @@ class StatisticsService
             $this->planRepository->updateAll(['popular' => false]);
             $this->planRepository->update($topRequestedPlan->plan, ['popular' => true]);
         }
+        dd($topRequestedPlan);
         return $topRequestedPlan;
     }
 
