@@ -27,6 +27,7 @@ use App\Repositories\interfaces\SuperAdmin\SubscriptionRequestRepositoryInterfac
 use App\Repositories\interfaces\UserRepositoryInterface;
 use App\Services\NotificationService;
 use App\Services\Payment\PaymentService;
+use App\Services\SpendingMonitorService;
 use App\Types\GeneratorRequests;
 use App\Types\PaymentStatus;
 use App\Types\PaymentType;
@@ -51,7 +52,7 @@ class SubscriptionRequestService
         protected SubscriptionPaymentRepositoryInterface $subscriptionPaymentRepository,
         protected GeneratorSettingRepositoryInterface $generatorSettingRepository,
         protected PlanPriceService $planPriceService,
-        protected PaymentService $paymentService,
+//        protected PaymentService $paymentService,
     )
     {
     }
@@ -170,7 +171,9 @@ class SubscriptionRequestService
             }
             if ($payment->type == null)
             {
-                $this->paymentService->handleCashPayment($requestId);
+                app(PaymentService::class)->handleCashPayment($requestId);
+
+//                $this->paymentService->handleCashPayment($requestId);
             }
             DB::commit();
             $user=$request->user;
