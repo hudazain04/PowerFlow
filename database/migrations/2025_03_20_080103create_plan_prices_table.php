@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('plan_prices', function (Blueprint $table) {
             $table->id();
-            $table->integer('price');
+            $table->float('price');
             $table->integer('period');
             $table->integer('discount');
             $table->foreignId('plan_id')->constrained('plans')->onDelete('cascade');

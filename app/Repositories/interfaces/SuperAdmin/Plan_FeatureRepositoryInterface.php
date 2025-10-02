@@ -19,5 +19,5 @@ interface Plan_FeatureRepositoryInterface
 
     public function delete(Plan_FeatureModel $plan_Feature) : bool;
 
-    public function findByPlanAndFeature(int $feature_id, int $plan_id) : Plan_FeatureModel;
+    public function findByPlanAndFeature(int $feature_id, int $plan_id) : ?Plan_FeatureModel;
 }

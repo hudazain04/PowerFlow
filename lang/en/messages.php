@@ -23,6 +23,7 @@ The activation code you provided for the course has expired. Please obtain a new
         'tokenInvalid'=>'Token is invalid',
         'tokenMissing'=> 'Token is missing or invalid',
         'unauthenticated'=>'Unauthenticated',
+        'expiredSubscription'=>'Your generator subscription has expired.',
     ],
     "activation_code_controller" => [
         "error" => [

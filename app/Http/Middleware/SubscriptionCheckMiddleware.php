@@ -29,13 +29,12 @@ class SubscriptionCheckMiddleware
                     $subscription->start_time->addMonths($subscription->period)
                 )) {
                 return response()->json([
-                    'message' => 'Your generator subscription has expired.',
-                    'data' => null
+                    'message' => __('messages.error.expiredSubscription'),
+                    'subscription_expired' => true
                 ], 403);
             }
         }
 
-        return $next($request);
         return $next($request);
     }
 }

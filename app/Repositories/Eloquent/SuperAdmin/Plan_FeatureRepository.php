@@ -48,7 +48,7 @@ class Plan_FeatureRepository implements Plan_FeatureRepositoryInterface
         return $plan_Feature->delete();
     }
 
-    public function findByPlanAndFeature(int $feature_id, int $plan_id): Plan_FeatureModel
+    public function findByPlanAndFeature(int $feature_id, int $plan_id): ?Plan_FeatureModel
     {
         $Plan_feature=Plan_FeatureModel::where([
             'plan_id'=>$plan_id,'feature_id'=>$feature_id,

@@ -2,13 +2,14 @@
 
 namespace App\DTOs;
 
+use WendellAdriel\ValidatedDTO\Casting\FloatCast;
 use WendellAdriel\ValidatedDTO\Casting\IntegerCast;
 use WendellAdriel\ValidatedDTO\SimpleDTO;
 
 class PlanPriceDTO extends SimpleDTO
 {
     public ?int $id;
-    public ?int $price;
+    public ?float $price;
     public int $discount;
     public int $period;
     public ?int $plan_id;
@@ -22,7 +23,7 @@ class PlanPriceDTO extends SimpleDTO
     {
         return [
             'id'=>new IntegerCast(),
-            'price' => new IntegerCast(),
+            'price' => new FloatCast,
             'discount' => new IntegerCast(),
             'period' => new IntegerCast(),
             'plan_id' => new IntegerCast(),

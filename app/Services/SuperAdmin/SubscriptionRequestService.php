@@ -177,6 +177,7 @@ class SubscriptionRequestService
             }
             DB::commit();
             $user=$request->user;
+//            dd($user->role());
             Mail::to($user->email)->send(new SendSubscriptionRequestStatusMail(GeneratorRequests::APPROVED));
             return ['success'=>true];
 
