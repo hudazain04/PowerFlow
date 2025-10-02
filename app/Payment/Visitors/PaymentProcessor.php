@@ -37,8 +37,8 @@ class PaymentProcessor implements PaymentVisitor
                     ],
                     'quantity' => 1,
                 ]],
-                'success_url' => $payment->success . '?session_id={CHECKOUT_SESSION_ID}',
-                'cancel_url' => $payment->cancel,
+                'success_url' => env('FRONTEND_HOST').env('PAYMENT_SUCCESS_URL') . '?session_id={CHECKOUT_SESSION_ID}',
+                'cancel_url' => env('FRONTEND_HOST').env('PAYMENT_CANCEL_URL'),
             ]);
 
             return [
