@@ -30,13 +30,10 @@ class AreaService
         $area=$this->repository->getRelations($area,['neighborhood']);
         return $area;
     }
-    public function updateArea(array $data,int $id){
-
-
-         $area=$this->repository->updateArea($data,$id);
-
-         return $area;
-
+    public function updateArea(array $data, Area $area)
+    {
+        $area = $this->repository->updateArea($data, $area);
+        return $area;
     }
 
     public function getArea(int $area_id)
