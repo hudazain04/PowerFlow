@@ -116,18 +116,10 @@ class StatisticsService
 
         $data= $plans->map(function ($plan) use ($subscriptionRequests) {
             $subscriptionRequestCount = $subscriptionRequests->where('plan_id', $plan->id)->first();
-            $topRequestedPlanDTO=new TopRequestedPlanDTO();
-            $topRequestedPlanDTO->plan=$plan;
-            $topRequestedPlanDTO->count=$subscriptionRequestCount ? $subscriptionRequestCount->count : 0;
-//            $plan->subscriptionRequestCount = $subscriptionRequestCount ? $subscriptionRequestCount->count : 0;
-            return $topRequestedPlanDTO;
+            $plan->subscriptionRequestCount = $subscriptionRequestCount ? $subscriptionRequestCount->count : 0;
+            return $plan;
         });
-        $topRequestedPlan = $data->sortByDesc('count')->first();
-        if ($topRequestedPlan) {
-            $this->planRepository->updateAll(['popular' => false]);
-            $this->planRepository->update($topRequestedPlan->plan, ['popular' => true]);
-        }
-        dd($topRequestedPlan);
+        $topRequestedPlan = $data->sortByDesc('subscriptionRequestCount')->first();
         return $topRequestedPlan;
     }
 
