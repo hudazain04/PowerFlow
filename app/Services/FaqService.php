@@ -17,9 +17,9 @@ class FaqService
     public function getFaqByRole(string $role){
 
         $faqs = $this->faqRepository->getFaqByRole($role);
-        if($faqs->isEmpty()) {
-            throw FaqException::FaqNotFound();
-        }
+//        if($faqs->isEmpty()) {
+//            throw FaqException::FaqNotFound();
+//        }
         return $faqs;
     }
 
