@@ -38,7 +38,7 @@ class AreaPolicy
      */
     public function update(User $user, Area $area): bool
     {
-        return $user->hasPermission('UPDATE_NEIGHBORHOODS') &&
+        return $user->hasPermissionTo('UPDATE_NEIGHBORHOODS') &&
             $user->powerGenerator->id === $area->generator_id;
     }
 

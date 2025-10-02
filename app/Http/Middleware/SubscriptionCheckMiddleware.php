@@ -15,6 +15,22 @@ class SubscriptionCheckMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+        $user =auth()->user();
+        if ($user && $user->hasRole('admin') && $user->powerGenerator) {
+            $generator = $user->powerGenerator;
+            $subscription = $generator->subscriptions()->latest()->first();
+
+            if (!$subscription || Carbon::now()->greaterThan(
+                    $subscription->start_time->addMonths($subscription->period)
+                )) {
+                return response()->json([
+                    'message' => 'Your generator subscription has expired.',
+                    'data' => null
+                ], 403);
+            }
+        }
+
+        return $next($request);
         return $next($request);
     }
 }
