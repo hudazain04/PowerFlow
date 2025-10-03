@@ -29,7 +29,9 @@ class VerifyEmailNotification extends  VerifyEmail
     protected function verificationUrl($notifiable)
     {
 
-        URL::forceRootUrl('http://localhost:8000');
+//        URL::forceRootUrl('http://localhost:8000');
+
+//        route("verification.verify");
         return URL::temporarySignedRoute(
             'verification.verify',
             now()->addMinutes(config('auth.verification.expire', 60)),

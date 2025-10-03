@@ -24,7 +24,7 @@ class PasswordResetNotification extends Notification
     }
     public function verification($notifiable){
         $cleanToken = explode('&', $this->token)[0];
-        URL::forceRootUrl('http://localhost:8000');
+//        URL::forceRootUrl('http://localhost:8000');
         return URL::temporarySignedRoute('verification.pass',
             now()->addMinutes(config('app.url').'/reset-password?token='.$this->token),
             [
