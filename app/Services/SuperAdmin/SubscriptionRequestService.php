@@ -15,6 +15,7 @@ use App\Exceptions\ErrorException;
 use App\Http\Resources\SubscriptionRequestResource;
 use App\Jobs\AfterPaymentReminderJob;
 use App\Jobs\SetExpiredSubscriptionJob;
+use App\Jobs\SubscriptionExpirationReminderJob;
 use App\Mail\SendSubscriptionRequestStatusMail;
 use App\Models\User;
 use App\Models\User as UserModel;
@@ -155,9 +156,10 @@ class SubscriptionRequestService
             $subscriptionDTO->price = $planPrice->price;
             $subscriptionDTO->generator_id = $generator->id;
             $subscription=$this->subscriptionRepository->create($subscriptionDTO->toArray());
-            $delay=($subscription->start_time)->addWeeks($subscription->period);
+            $delay=($subscription->start_time)->copy()->addWeeks($subscription->period);
             SetExpiredSubscriptionJob::dispatchAfterResponse($subscription)->delay($delay);
-
+            $ninetyPercentDate = $subscription->start_time->copy()->addWeeks(floor($subscription->period * 0.9));
+            SubscriptionExpirationReminderJob::dispatchAfterResponse($subscription)->delay($ninetyPercentDate);
             $payment=$this->subscriptionPaymentRepository->findWhere(['subscriptionRequest_id'=>$requestId]);
             if (! $payment)
             {

@@ -28,6 +28,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
 
             "userContext" => \App\Http\Middleware\UserContextMiddleware::class,
+            'check.subscription'=>\App\Http\Middleware\SubscriptionCheckMiddleware::class,
 
         ]);
 

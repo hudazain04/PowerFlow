@@ -9,6 +9,7 @@ use App\Models\Payment;
 use App\Models\Spending;
 use App\Models\User;
 use App\Repositories\interfaces\User\UserAppRepositoryInterface;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -65,6 +66,14 @@ class UserAppRepository implements UserAppRepositoryInterface
 
     public function getBoxes()
     {
-        return ElectricalBox::all();
+        return ElectricalBox::whereHas('powerGenerator', function ($query) {
+            $query->whereHas('user', function ($userQuery) {
+                $userQuery->where('blocked', false);
+            })
+                ->whereHas('subscriptions', function ($subQuery) {
+                    $subQuery->whereRaw("DATE_ADD(start_time, INTERVAL period MONTH) >= ?", [Carbon::now()]);
+                });
+        })->get();
+//        return ElectricalBox::all();
     }
 }

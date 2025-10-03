@@ -96,54 +96,104 @@ class PlanService
         {
             $PlanDTO=PlanDTO::fromModel($planModel);
             $plan=$this->planRepository->update($planModel,$planDTO->toArray());
-            $planPriceDTOs = $planDTO->planPrices
-                ->map(function($planPriceDTO) use ($plan) {
-                    $planPriceDTO->plan_id=$plan->id;
-                    if ($planPriceDTO->id)
-                    {
-                        $monthlyPrice=$plan->monthlyPrice;
-                        $price=$this->calculateTotalPrice($monthlyPrice,$planPriceDTO->discount,$planPriceDTO->period);
-                        $planPriceDTO->price=$price;
-                        $planPrice= $this->planPriceRepository->update($planPriceDTO->toModel(PlanPrice::class),$planPriceDTO->toArray());
-                        return $planPriceDTO=PlanPriceDTO::fromModel($planPrice);
+            $existingPlanPriceIds = $plan->prices->pluck('id')->toArray();
+            $newPlanPriceIds = $planDTO->planPrices->pluck('id')->filter()->toArray();
+            $toDelete = array_diff($existingPlanPriceIds, $newPlanPriceIds);
+            foreach ($toDelete as $item)
+            {
+                $item=$this->planPriceRepository->find($item);
+                $this->planPriceRepository->delete($item);
 
-                    }
-                    else
-                    {
-                        $monthlyPrice=$plan->monthlyPrice;
-                        $price=$this->calculateTotalPrice($monthlyPrice,$planPriceDTO->discount,$planPriceDTO->period);
-                        $planPriceDTO->price=$price;
-                        $planPrice= $this->planPriceRepository->create($planPriceDTO->toArray());
-                        return $planPriceDTO=PlanPriceDTO::fromModel($planPrice);
-                    }
-
-                }
+            }
+//            dd($planDTO->planPrices);
+            $planPriceDTOs = $planDTO->planPrices->map(function($planPriceDTO) use ($plan) {
+                $planPriceDTO->plan_id = $plan->id;
+                $monthlyPrice = $plan->monthlyPrice;
+                $planPriceDTO->price = $this->calculateTotalPrice(
+                    $monthlyPrice,
+                    $planPriceDTO->discount,
+                    $planPriceDTO->period
                 );
-
-            $plan_featureDTOs =$planDTO->features
-                ->map(function($feature) use ($plan){
-                    $feature->plan_id=$plan->id;
-                    $plan_feature=$this->plan_FeatureRepository->findByPlanAndFeature($feature->feature_id,$plan->id);
-                    if ($plan_feature)
-                    {
-                         $plan_feature=$this->plan_FeatureRepository->update($plan_feature,$feature->toArray());
-                         return $plan_featureDTO=Plan_FeatureDTO::fromModel($plan_feature);
-                    }
-                    else
-                    {
-                        $plan_feature= $this->plan_FeatureRepository->create($feature->toArray());
-                        return $plan_featureDTO=Plan_FeatureDTO::fromModel($plan_feature);
-                    }
+                if ($planPriceDTO->id) {
+                    $planPrice=$this->planPriceRepository->find($planPriceDTO->id);
+                    $planPrice = $this->planPriceRepository
+                        ->update($planPrice, $planPriceDTO->toArray());
+                } else {
+                    $planPrice = $this->planPriceRepository
+                        ->create($planPriceDTO->toArray());
                 }
-                );
-            $features=$this->planRepository->getFeatures($plan);
-            $PlanDTO->planPrices=$planPriceDTOs;
-            $PlanDTO->features=$features->map(function ($feature){
-                $featureDTO=FeatureDTO::fromModel($feature);
-                $featureDTO->value=$feature->pivot->value;
+
+                return PlanPriceDTO::fromModel($planPrice);
+            });
+//            dd($planPriceDTOs);
+//            $planPriceDTOs = $planDTO->planPrices
+//                ->map(function($planPriceDTO) use ($plan) {
+//                    $planPriceDTO->plan_id=$plan->id;
+//                    if ($planPriceDTO->id)
+//                    {
+//                        $monthlyPrice=$plan->monthlyPrice;
+//                        $price=$this->calculateTotalPrice($monthlyPrice,$planPriceDTO->discount,$planPriceDTO->period);
+//                        $planPriceDTO->price=$price;
+//                        $planPrice= $this->planPriceRepository->update($planPriceDTO->toModel(PlanPrice::class),$planPriceDTO->toArray());
+//                        return $planPriceDTO=PlanPriceDTO::fromModel($planPrice);
+//
+//                    }
+//                    else
+//                    {
+//                        $monthlyPrice=$plan->monthlyPrice;
+//                        $price=$this->calculateTotalPrice($monthlyPrice,$planPriceDTO->discount,$planPriceDTO->period);
+//                        $planPriceDTO->price=$price;
+//                        $planPrice= $this->planPriceRepository->create($planPriceDTO->toArray());
+//                        return $planPriceDTO=PlanPriceDTO::fromModel($planPrice);
+//                    }
+//
+//                }
+//                );
+            $featureData = $planDTO->features->mapWithKeys(function ($featureDTO) {
+                return [
+                    $featureDTO->feature_id => ['value' => $featureDTO->value]
+                ];
+            })->toArray();
+
+            $plan->features()->sync($featureData);
+//
+//            $plan_featureDTOs =$planDTO->features
+//                ->map(function($feature) use ($plan){
+//                    $feature->plan_id=$plan->id;
+//                    $plan_feature=$this->plan_FeatureRepository->findByPlanAndFeature($feature->feature_id,$plan->id);
+//                    if ($plan_feature)
+//                    {
+//                         $plan_feature=$this->plan_FeatureRepository->update($plan_feature,$feature->toArray());
+//                         return $plan_featureDTO=Plan_FeatureDTO::fromModel($plan_feature);
+//                    }
+//                    else
+//                    {
+//                        $plan_feature= $this->plan_FeatureRepository->create($feature->toArray());
+//                        return $plan_featureDTO=Plan_FeatureDTO::fromModel($plan_feature);
+//                    }
+//                }
+//                );
+
+            $PlanDTO->planPrices = $planPriceDTOs;
+            $PlanDTO->features = $plan->features->map(function ($feature) {
+                $featureDTO = FeatureDTO::fromModel($feature);
+                $featureDTO->value = $feature->pivot->value;
                 return $featureDTO;
             });
-            return $this->success(PlanResource::make($PlanDTO),__('plan.update'));
+
+            return $this->success(
+                PlanResource::make($PlanDTO),
+                __('plan.update')
+            );
+
+//            $features=$this->planRepository->getFeatures($plan);
+//            $PlanDTO->planPrices=$planPriceDTOs;
+//            $PlanDTO->features=$features->map(function ($feature){
+//                $featureDTO=FeatureDTO::fromModel($feature);
+//                $featureDTO->value=$feature->pivot->value;
+//                return $featureDTO;
+//            });
+//            return $this->success(PlanResource::make($PlanDTO),__('plan.update'));
         }
         else
         {

@@ -22,6 +22,8 @@ class SubscriptionRequestResource extends JsonResource
             'generatorPhones'=>$this->phones,
             'plan'=>$this->planPrice?->plan ? $this->planPrice->plan->name : null,
             'price'=>$this->planPrice ? $this->planPrice->price : null,
+            'planPriceObj'=>PlanPriceResource::make($this->planPrice),
+            'planObj'=>PlanResource::make($this->plan),
             'period'=>$this->period,
             'subscriptionType'=>$this->type,
             'status'=>$this->status,

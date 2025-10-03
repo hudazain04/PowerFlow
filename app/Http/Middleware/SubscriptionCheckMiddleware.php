@@ -2,11 +2,14 @@
 
 namespace App\Http\Middleware;
 
+use App\ApiHelper\ApiCode;
+use App\Exceptions\ErrorException;
 use App\Models\Subscription as SubscriptionModel;
 use Carbon\Carbon;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use function PHPUnit\Framework\isEmpty;
 
 class SubscriptionCheckMiddleware
 {
@@ -25,13 +28,11 @@ class SubscriptionCheckMiddleware
                     return $subscription->start_time->addMonths($subscription->period)->gt(now());
 
                 });
-            if (!$subscription || Carbon::now()->greaterThan(
+            if (isEmpty($subscription) || Carbon::now()->greaterThan(
                     $subscription->start_time->addMonths($subscription->period)
                 )) {
-                return response()->json([
-                    'message' => __('messages.error.expiredSubscription'),
-                    'subscription_expired' => true
-                ], 403);
+                throw new ErrorException( __('messages.error.expiredSubscription'),ApiCode::FORBIDDEN, ['subscription_expired' => true]);
+
             }
         }
 
