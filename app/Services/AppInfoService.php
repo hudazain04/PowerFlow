@@ -41,8 +41,8 @@ class AppInfoService
     public function getAboutApp()
     {
         $appInfo=$this->appInfoRepository->find(AppInfoTypes::AboutApp);
-        $appInfoDTO=AppInfoDTO::fromModel($appInfo);
-        return $this->success(AppInfoResource::make($appInfoDTO),__('messages.success'));
+//        $appInfoDTO=AppInfoDTO::fromModel($appInfo);
+        return $this->success(AppInfoResource::make($appInfo),__('messages.success'));
     }
 
     public function updateAboutApp(AppInfoDTO $appInfoDTO)
@@ -129,8 +129,8 @@ class AppInfoService
     public function getPrivacyPolicy()
     {
         $appInfo=$this->appInfoRepository->find(AppInfoTypes::PrivacyPolicy);
-        $appInfoDTO=AppInfoDTO::fromModel($appInfo);
-        return $this->success(AppInfoResource::make($appInfoDTO),__('messages.success'));
+//        $appInfoDTO=AppInfoDTO::fromModel($appInfo);
+        return $this->success(AppInfoResource::make($appInfo),__('messages.success'));
     }
 
     public function updatePrivacyPolicy(AppInfoDTO $appInfoDTO)
