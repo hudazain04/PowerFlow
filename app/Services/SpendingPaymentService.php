@@ -174,16 +174,17 @@ class SpendingPaymentService
         {
             $generatorSettings=$this->counterRepository->getRelations($counter,['powerGenerator.settings'])->powerGenerator->settings;
             $lastPayment=$this->paymentRepository->findWhereLatest(['counter_id'=>$counter_id]);
-            $amount=(($currentSpending->consume)-($lastPayment->current_spending))/1000*$generatorSettings->kiloPrice;
+            $amount=(($currentSpending ? $currentSpending->consume : 0)-($lastPayment ? $lastPayment->current_spending : 0 ))/1000*$generatorSettings->kiloPrice;
         }
         $processor = new PaymentProcessor();
         $payment = new CashPayment();
         $result = $payment->accept($processor);
+        $consume=$currentSpending ?  $currentSpending->consume : 0;
         $payment=$this->paymentRepository->create([
             'date'=>$dto->date ?? Carbon::now(),
             'amount'=>$amount,
-            'current_spending'=>$currentSpending->consume,
-            'next_spending'=>$dto->kilos ? $currentSpending->consume+($dto->kilos*1000): null,
+            'current_spending'=>$consume,
+            'next_spending'=>$dto->kilos ? $consume+($dto->kilos*1000): null,
             'counter_id'=>$counter_id,
             'status'=>PaymentStatus::Paid,
             'type'=>PaymentType::Cash,
