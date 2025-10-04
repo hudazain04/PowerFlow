@@ -13,7 +13,7 @@ class SpendingDTO extends SimpleDTO
     public ?int $id;
     public ?Carbon $date;
     public ?int $counter_id;
-    public int $consume;
+    public float $consume;
     protected function defaults(): array
     {
         return [];
