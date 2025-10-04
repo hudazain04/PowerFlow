@@ -47,7 +47,7 @@ class SubscriptionService
                 throw new ErrorException(__('subscription.notFoundForUser'),ApiCode::NOT_FOUND);
             }
 //        dd($subscription);
-            $subscription=$this->subscriptionRepository->update($subscription,['expired_at'=>Carbon::now()]);
+            $subscription=$this->subscriptionRepository->update($subscription,['expired_at'=>true]);
             DB::commit();
             return $this->success(null,__('subscription.delete'));
         }

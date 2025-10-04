@@ -71,7 +71,8 @@ class UserAppRepository implements UserAppRepositoryInterface
                 $userQuery->where('blocked', false);
             })
                 ->whereHas('subscriptions', function ($subQuery) {
-                    $subQuery->whereRaw("DATE_ADD(start_time, INTERVAL period MONTH) >= ?", [Carbon::now()]);
+                    $subQuery->whereRaw("DATE_ADD(start_time, INTERVAL period MONTH) >= ?", [Carbon::now()])
+                    ->where(['expired_at'=>false]);
                 });
         })->get();
 //        return ElectricalBox::all();

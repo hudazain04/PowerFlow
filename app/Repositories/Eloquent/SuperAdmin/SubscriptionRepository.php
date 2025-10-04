@@ -46,7 +46,7 @@ class SubscriptionRepository implements SubscriptionRepositoryInterface
 
     public function getLastForGenerator(int $generator_id): ?SubscriptionModel
     {
-        $subscription=SubscriptionModel::where(['generator_id'=>$generator_id,'expired_at'=>null])->get()
+        $subscription=SubscriptionModel::where(['generator_id'=>$generator_id,'expired_at'=>false])->get()
             ->filter(function ($subscription){
                 return $subscription->start_time->addMonths($subscription->period)->gt(now());
 
