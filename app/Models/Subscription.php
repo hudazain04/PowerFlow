@@ -50,13 +50,15 @@ class Subscription extends Model
         if ($type==SubscriptionExpirationTypes::Active)
         {
 //            $query->whereDate('start_time', '>=', Carbon::now()->subMonths($this->period));
-            $query->whereRaw("DATE_ADD(start_time, INTERVAL period MONTH) >= ?", [Carbon::now()]);
+            $query->whereRaw("DATE_ADD(start_time, INTERVAL period MONTH) >= ?", [Carbon::now()])
+            ->where(['expired_at'=>false]);
         }
 
         elseif ($type==SubscriptionExpirationTypes::Expired)
         {
 //            $query->whereDate('start_time', '<=', Carbon::now()->subMonths($this->period));
-            $query->whereRaw("DATE_ADD(start_time, INTERVAL period MONTH) < ?", [Carbon::now()]);
+            $query->whereRaw("DATE_ADD(start_time, INTERVAL period MONTH) < ?", [Carbon::now()])
+            ->orWhere(['expired_at'=>true]);
 
         }
 
