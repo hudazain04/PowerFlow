@@ -299,8 +299,8 @@ class UserAppController extends Controller
             ->limit(10)
             ->get();
 
-        // Return Blade view with ALL data
-        return view('dashboard', compact(
+        // FIXED: Pass the actual variables to the view, not an array of strings
+        $htmlContent = view('dashboard', compact(
             'summary',
             'clients',
             'counters',
@@ -310,8 +310,22 @@ class UserAppController extends Controller
             'generatorSettings',
             'recentSpendings',
             'recentPayments'
-        ));
+        ))->render();
+
+        $fileName = 'dashboard-report-' . date('Y-m-d-H-i-s') . '.html';
+
+        // Return as downloadable file
+        return response()->streamDownload(
+            function () use ($htmlContent) {
+                echo $htmlContent;
+            },
+            $fileName, // Use the dynamic file name
+            [
+                'Content-Type' => 'text/html',
+            ]
+        );
     }
+
     public function showDashboard()
     {
         return view('dashboard');
