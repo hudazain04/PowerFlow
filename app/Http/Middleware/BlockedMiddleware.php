@@ -21,7 +21,7 @@ class BlockedMiddleware
             $user=$request->user();
             if ($user && $user->blocked)
             {
-                throw new ErrorException(__('messages.error.blocked_account'),ApiCode::FORBIDDEN);
+                throw new ErrorException(__('messages.error.blocked_account'),ApiCode::FORBIDDEN,['blocked'=>true]);
             }
         }
         catch (\Exception $exception)

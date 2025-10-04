@@ -19,7 +19,7 @@ class AreaService
 
     public function createArea(AreaDTO $dto)
     {
-        $generator=auth()->user()->powerGenerator->id;
+        $generator=auth()->user()->powerGenerator?->id;
         $area=$this->repository->createForGenerator(
             [     'name' => $dto->name,
                 'generator_id'=>$generator,

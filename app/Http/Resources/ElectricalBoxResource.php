@@ -14,6 +14,9 @@ class ElectricalBoxResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        if (!$this->relationLoaded('areas') && $this->area_id) {
+            $this->load('areas');
+        }
         return [
             'id'=>$this->id,
           'number'=>$this->number,
@@ -24,17 +27,13 @@ class ElectricalBoxResource extends JsonResource
                 'x'=>$this->latitude,
                 'y'=>$this->longitude,
             ],
-//            'area' => $this->whenLoaded('areas', function () {
-                'area' => $this->whenLoaded('areas', function () {
-                    // Get the first area and format it as an object
-                    if ($area = $this->areas->first()) {
-                        return [
-                            'id' => $area->id,
-                            'name' => $area->name,
-                        ];
-                    }
 
-
+            'area' => $this->when($this->areas->isNotEmpty(), function () {
+                $area = $this->areas->first();
+                return [
+                    'id' => $area->id,
+                    'name' => $area->name,
+                ];
             }),
         ];
     }

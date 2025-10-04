@@ -13,6 +13,7 @@ class ServerSeeder extends Seeder
     public function run(): void
     {
         $this->call([
+            AppInfoSeeder::class,
             RoleSeeder::class,
             PermissionSeeder::class,
             SuperAdminAccountSeeder::class

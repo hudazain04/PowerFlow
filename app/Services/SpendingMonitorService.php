@@ -53,19 +53,13 @@ class SpendingMonitorService
         }
         elseif ($percentage >= 75) {
             $user=$counter->user;
-            if ($user->fcmToken) {
-                FirebaseService::sendNotification(
-                    $user->fcmToken,
-                    "You have to pay , your meter  will be cut",
-                    "You have consumed 75% of your next spending",
-                    [
-                        'counter_id'=>$counter->id,
-                        'latestSpending'=>$latestSpending,
-                        'latestPayment'=>$latestPayment,
+            $this->notificationService->notifyCustomUser([
+                'title'=>__('notification.pay'),
+                'body'=> __('notification.payBefore'),
+                'type'=>NotificationTypes::CustomUser,
+                'ids'=>[$user->id],
+            ]);
 
-                    ]
-                );
-            }
         }
     }
 

@@ -18,6 +18,8 @@ class LandingProfileResource extends JsonResource
         $data=[
             'id'=>$this['user']->id,
             'full_name'=>$this['user']->fullName(),
+            'first_name'=>$this->first_name,
+            'last_name'=>$this->last_name,
             'email'=>$this['user']->email,
             'phone_number'=>$this['user']->phone_number,
             'blocked'=>$this['user']->blocked,

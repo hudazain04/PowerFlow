@@ -15,4 +15,9 @@ return [
     'assignComplaint'=>'Complaint #:id: :description',
     'overConsume'=>'your counter has over consume',
     'oveConsumeBody'=>'System noticed over consume for your counter , accept action if it is not you so we disconnect counter while solving problem',
+    'pay'=>"You have to pay , your meter  will be cut",
+    'payAfter'=>"Your counter due date for payment is tomorrow , you have today and tomorrow before 6 pm",
+    'payBefore'=>"You have consumed 75% of your next spending",
+    'expiration'=>'your subscription will expire soon',
+    'expirationBody'=>'you have to renew subscription so you  can continue services for this generator',
 ];

@@ -18,6 +18,8 @@ class ProfileResource extends JsonResource
         $data=[
             'id'=>$this->id,
             'full_name'=>$this->fullName(),
+            'first_name'=>$this->first_name,
+            'last_name'=>$this->last_name,
             'email'=>$this->email,
             'phone_number'=>$this->phone_number,
             'blocked'=>$this->blocked,

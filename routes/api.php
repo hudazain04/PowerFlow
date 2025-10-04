@@ -94,6 +94,8 @@ Route::middleware('lang')->group(function () {
     Route::get('visitLandingPage', [SuperAdminStatisticsController::class, 'visitLandingPage']);
     Route::get('stripe/success', [PaymentController::class, 'stripeSuccess'])->name('stripe.success');
     Route::get('stripe/cancel', [PaymentController::class, 'stripeCancel'])->name('stripe.cancel');
+    Route::get('stripe/success', [SpendingPaymentController::class, 'stripeSuccess'])->name('spendingStripe.success');
+    Route::get('stripe/cancel', [SpendingPaymentController::class, 'stripeCancel'])->name('spendingStripe.cancel');
 
 
     Route::prefix('user')->group(function () {
@@ -128,46 +130,46 @@ Route::middleware(['auth:api', 'lang'])->group(function () {
     Route::prefix('generator')->group(function () {
         // Areas
         Route::post('areas', [AreaController::class, 'store'])
-            ->middleware('permission:CREATE_NEIGHBORHOODS');
+            ->middleware('permission:CREATE_NEIGHBORHOODS','check.subscription','block');
         Route::get('getArea/{id}', [AreaController::class, 'getArea'])
             ->middleware('permission:VIEW_NEIGHBORHOOD');
         Route::get('getAreas', [AreaController::class, 'index'])
             ->middleware('permission:VIEW_NEIGHBORHOODS');
-        Route::put('area/update/{area}', [AreaController::class, 'update'])->can('update', 'area');
-        //            ->middleware('permission:UPDATE_NEIGHBORHOODS');
+        Route::put('area/update/{area}', [AreaController::class, 'update'])->can('update','area');
+//            ->middleware('permission:UPDATE_NEIGHBORHOODS');
         Route::delete('delete', [AreaController::class, 'delete'])
-            ->middleware('permission:DELETE_NEIGHBORHOODS');
+            ->middleware('permission:DELETE_NEIGHBORHOODS','check.subscription','block');
 
 
         // Box assignment to areas
         Route::post('/areas/{area_id}/boxes', [AreaBoxController::class, 'assignBox'])
-            ->middleware('permission:ASSIGN_BOXES_TO_NEIGHBORHOODS');
+            ->middleware('permission:ASSIGN_BOXES_TO_NEIGHBORHOODS','check.subscription','block');
         Route::get('/areas/{area_id}/boxes/available', [AreaBoxController::class, 'getAvailableBoxes'])
             ->middleware('permission:VIEW_NEIGHBORHOOD_BOXES');
         Route::delete('/areas/{area}/boxes/{box}', [AreaBoxController::class, 'removeBoxFromArea'])
-            ->middleware('permission:REMOVE_BOXES_FROM_NEIGHBORHOOD');
+            ->middleware('permission:REMOVE_BOXES_FROM_NEIGHBORHOOD','check.subscription','block');
         Route::get('/areas/{area_id}/boxes', [AreaBoxController::class, 'getAreaBoxes'])
             ->middleware('permission:VIEW_NEIGHBORHOOD_BOXES');
 
 
         // Box management
         Route::post('/boxes', [ElectricalBoxController::class, 'store'])
-            ->middleware('permission:CREATE_BOXES');
+            ->middleware('permission:CREATE_BOXES','check.subscription','block');
         Route::get('/boxes/{id}', [ElectricalBoxController::class, 'get'])
             ->middleware('permission:VIEW_BOXES');
         Route::delete('/boxes', [ElectricalBoxController::class, 'destroy'])
-            ->middleware('permission:DELETE_BOXES');
+            ->middleware('permission:DELETE_BOXES','check.subscription','block');
         Route::put('/box/update/{id}', [ElectricalBoxController::class, 'update'])
-            ->middleware('permission:UPDATE_BOXES');
+            ->middleware('permission:UPDATE_BOXES','check.subscription','block');
 
         Route::get('showBoxes/{id}', [ElectricalBoxController::class, 'show']);
         // Counter management
         Route::post('/counters', [CounterBoxController::class, 'create'])
-            ->middleware('permission:CREATE_COUNTERS');
+            ->middleware('permission:CREATE_COUNTERS','check.subscription','block');
         Route::put('/counter/update/{id}', [CounterBoxController::class, 'update'])
-            ->middleware('permission:UPDATE_COUNTERS');
+            ->middleware('permission:UPDATE_COUNTERS','check.subscription','block');
         Route::delete('counters/delete', [CounterBoxController::class, 'destroy'])
-            ->middleware('permission:DELETE_COUNTERS');
+            ->middleware('permission:DELETE_COUNTERS','check.subscription','block');
         Route::get('/counters', [CounterController::class, 'get'])
             ->middleware('permission:VIEW_COUNTERS');
 
@@ -181,15 +183,15 @@ Route::middleware(['auth:api', 'lang'])->group(function () {
         Route::get('/counters/{counter_id}/current-box', [CounterBoxController::class, 'getCurrentCounter'])
             ->middleware('permission:VIEW_COUNTER_CURRENT_BOX');
         Route::delete('/counters/remove-box', [CounterBoxController::class, 'removeCounter'])
-            ->middleware('permission:REMOVE_COUNTER_FROM_BOX');
+            ->middleware('permission:REMOVE_COUNTER_FROM_BOX','check.subscription','block');
 
         // Employee management
         Route::post('/createEmp', [EmployeeController::class, 'create'])
-            ->middleware('permission:CREATE_EMPLOYEES');
+            ->middleware('permission:CREATE_EMPLOYEES','check.subscription','block');
         Route::put('/updateEmp/{id}', [EmployeeController::class, 'update'])
-            ->middleware('permission:UPDATE_EMPLOYEES');
+            ->middleware('permission:UPDATE_EMPLOYEES','check.subscription','block');
         Route::delete('deleteEmp', [EmployeeController::class, 'delete'])
-            ->middleware('permission:DELETE_EMPLOYEES');
+            ->middleware('permission:DELETE_EMPLOYEES','check.subscription','block');
         Route::get('/getEmps/{generator_id}', [EmployeeController::class, 'getEmployees'])
             ->middleware('permission:VIEW_EMPLOYEES');
         Route::get('/getEmp/{id}', [EmployeeController::class, 'getEmployee'])
@@ -229,11 +231,11 @@ Route::middleware(['auth:api', 'lang'])->group(function () {
     // FAQ routes
     Route::prefix('faq')->group(function () {
         Route::put('/update/{id}', [FaqController::class, 'updateFaq'])
-            ->middleware('permission:UPDATE_FAQ');
+            ->middleware('permission:UPDATE_FAQ','block');
         Route::delete('delete/{id}', [FaqController::class, 'deleteFaq'])
-            ->middleware('permission:DELETE_FAQ');
+            ->middleware('permission:DELETE_FAQ','block');
         Route::post('/store', [FaqController::class, 'createFaq'])
-            ->middleware('permission:CREATE_FAQ');
+            ->middleware('permission:CREATE_FAQ','block');
         Route::get('get/{category}', [FaqController::class, 'getFaqByRole'])
             ->middleware('permission:VIEW_FAQ');
     });
@@ -256,33 +258,33 @@ Route::middleware(['auth:api', 'lang'])->group(function () {
     // Customer request routes
     Route::prefix('customer')->group(function () {
         Route::post('request', [CustomerRequestController::class, 'store'])
-            ->middleware('permission:CREATE_CUSTOMER_REQUEST');
+            ->middleware('permission:CREATE_CUSTOMER_REQUEST','block');
         Route::post('approve/{id}', [CustomerRequestController::class, 'approveRequest'])
-            ->middleware('permission:APPROVE_CUSTOMER_REQUEST');
+            ->middleware('permission:APPROVE_CUSTOMER_REQUEST','check.subscription','block');
         Route::post('reject/{id}', [CustomerRequestController::class, 'rejectRequest'])
-            ->middleware('permission:REJECT_CUSTOMER_REQUEST');
+            ->middleware('permission:REJECT_CUSTOMER_REQUEST','check.subscription','block');
         Route::get('getPending', [CustomerRequestController::class, 'pendingRequests'])
-            ->middleware('permission:VIEW_CUSTOMER_REQUESTS');
+            ->middleware('permission:VIEW_CUSTOMER_REQUESTS','check.subscription','block');
     });
 
     // Neighborhood routes
     Route::prefix('neighborhood')->group(function () {
         Route::post('store', [NeighborhoodController::class, 'store'])
-            ->middleware('permission:CREATE_AREA');
+            ->middleware('permission:CREATE_AREA','check.subscription','block');
         Route::get('all', [NeighborhoodController::class, 'index'])
             ->middleware('permission:VIEW_AREAS');
         Route::get('show/{id}', [NeighborhoodController::class, 'show'])
             ->middleware('permission:VIEW_AREAS');
         Route::put('update/{id}', [NeighborhoodController::class, 'update'])
-            ->middleware('permission:UPDATE_AREA');
+            ->middleware('permission:UPDATE_AREA','check.subscription','block');
         Route::delete('delete/{id}', [NeighborhoodController::class, 'delete'])
-            ->middleware('permission:DELETE_AREA');
+            ->middleware('permission:DELETE_AREA','check.subscription','block');
     });
 
     Route::get('/generators/{id}/info', [SuperAdminStatisticsController::class, 'getGenInfo'])
         ->middleware('permission:VIEW_INFO');
     Route::patch('generators/{id}/info/update', [PowerGeneratorController::class, 'updateInfo'])
-        ->middleware('permission:UPDATE_GENERATOR_INFO');
+        ->middleware('permission:UPDATE_GENERATOR_INFO','check.subscription','block');
     Route::middleware('role:superAdmin')->group(function () {
         Route::get('/generators/{generator}/statistics', [
             SuperAdminStatisticsController::class
@@ -301,37 +303,37 @@ Route::middleware(['auth:api', 'lang'])->group(function () {
         Route::get('findById/{id}', [FeatureController::class, 'findById'])
             ->middleware('permission:VIEW_FEATURES');
         Route::post('create', [FeatureController::class, 'store'])
-            ->middleware('permission:CREATE_FEATURE');
+            ->middleware('permission:CREATE_FEATURE','block');
         Route::patch('update/{id}', [FeatureController::class, 'update'])
-            ->middleware('permission:UPDATE_FEATURE');
+            ->middleware('permission:UPDATE_FEATURE','block');
         Route::delete('delete/{id}', [FeatureController::class, 'delete'])
-            ->middleware('permission:DELETE_FEATURE');
+            ->middleware('permission:DELETE_FEATURE','block');
     });
 
     // Plan price routes
     Route::prefix('planPrice')->group(function () {
         Route::post('create/{plan_id}', [PlanPriceController::class, 'store'])
-            ->middleware('permission:CREATE_PLAN_PRICE');
+            ->middleware('permission:CREATE_PLAN_PRICE','block');
         Route::patch('update/{id}', [PlanPriceController::class, 'update'])
-            ->middleware('permission:UPDATE_PLAN_PRICE');
+            ->middleware('permission:UPDATE_PLAN_PRICE','block');
         Route::delete('delete/{id}', [PlanPriceController::class, 'delete'])
-            ->middleware('permission:DELETE_PLAN_PRICE');
+            ->middleware('permission:DELETE_PLAN_PRICE','block');
     });
 
     // Plan routes
     Route::prefix('plan')->group(function () {
         Route::post('create', [PlanController::class, 'store'])
-            ->middleware('permission:CREATE_PLAN');
+            ->middleware('permission:CREATE_PLAN','block');
         Route::patch('update/{id}', [PlanController::class, 'update'])
-            ->middleware('permission:UPDATE_PLAN');
+            ->middleware('permission:UPDATE_PLAN','block');
         Route::delete('delete/{id}', [PlanController::class, 'delete'])
-            ->middleware('permission:DELETE_PLAN');
+            ->middleware('permission:DELETE_PLAN','block');
         Route::post('addFeature', [PlanController::class, 'addFeature'])
-            ->middleware('permission:ADD_PLAN_FEATURE');
+            ->middleware('permission:ADD_PLAN_FEATURE','block');
         Route::delete('deleteFeature/{id}', [PlanController::class, 'deleteFeature'])
-            ->middleware('permission:DELETE_PLAN_FEATURE');
+            ->middleware('permission:DELETE_PLAN_FEATURE','block');
         Route::patch('updateFeature/{id}', [PlanController::class, 'updateFeature'])
-            ->middleware('permission:UPDATE_PLAN_FEATURE');
+            ->middleware('permission:UPDATE_PLAN_FEATURE','block');
     });
 
     // Statistics routes
@@ -370,56 +372,56 @@ Route::middleware(['auth:api', 'lang'])->group(function () {
         Route::get('getAll', [SubscriptionRequestController::class, 'getAll'])
             ->middleware('permission:VIEW_SUBSCRIPTION_REQUESTS');
         Route::post('approve/{id}', [SubscriptionRequestController::class, 'approve'])
-            ->middleware('permission:APPROVE_SUBSCRIPTION_REQUEST');
+            ->middleware('permission:APPROVE_SUBSCRIPTION_REQUEST','block');
         Route::post('reject/{id}', [SubscriptionRequestController::class, 'reject'])
-            ->middleware('permission:REJECT_SUBSCRIPTION_REQUEST');
+            ->middleware('permission:REJECT_SUBSCRIPTION_REQUEST','block');
         Route::post('create', [SubscriptionRequestController::class, 'store'])
-            ->middleware('permission:CREATE_SUBSCRIPTION_REQUEST');
+            ->middleware('permission:CREATE_SUBSCRIPTION_REQUEST','block');
     });
 
     // App info management routes
     Route::prefix('AppInfo')->group(function () {
         Route::post('createAboutApp', [AppInfoController::class, 'createAboutApp'])
-            ->middleware('permission:MANAGE_ABOUT_APP');
+            ->middleware('permission:MANAGE_ABOUT_APP','block');
         Route::patch('updateAboutApp', [AppInfoController::class, 'updateAboutApp'])
-            ->middleware('permission:MANAGE_ABOUT_APP');
+            ->middleware('permission:MANAGE_ABOUT_APP','block');
         Route::delete('deleteAboutApp', [AppInfoController::class, 'deleteAboutApp'])
-            ->middleware('permission:MANAGE_ABOUT_APP');
+            ->middleware('permission:MANAGE_ABOUT_APP','block');
         Route::post('createTermsAndConditions', [AppInfoController::class, 'createTermsAndConditions'])
-            ->middleware('permission:MANAGE_TERMS_CONDITIONS');
+            ->middleware('permission:MANAGE_TERMS_CONDITIONS','block');
         Route::patch('updateTermsAndConditions', [AppInfoController::class, 'updateTermsAndConditions'])
-            ->middleware('permission:MANAGE_TERMS_CONDITIONS');
+            ->middleware('permission:MANAGE_TERMS_CONDITIONS','block');
         Route::delete('deleteTermsAndConditions', [AppInfoController::class, 'deleteTermsAndConditions'])
-            ->middleware('permission:MANAGE_TERMS_CONDITIONS');
+            ->middleware('permission:MANAGE_TERMS_CONDITIONS','block');
         Route::post('createPrivacyPolicy', [AppInfoController::class, 'createPrivacyPolicy'])
-            ->middleware('permission:MANAGE_PRIVACY_POLICY');
+            ->middleware('permission:MANAGE_PRIVACY_POLICY','block');
         Route::patch('updatePrivacyPolicy', [AppInfoController::class, 'updatePrivacyPolicy'])
-            ->middleware('permission:MANAGE_PRIVACY_POLICY');
+            ->middleware('permission:MANAGE_PRIVACY_POLICY','block');
         Route::delete('deletePrivacyPolicy', [AppInfoController::class, 'deletePrivacyPolicy'])
-            ->middleware('permission:MANAGE_PRIVACY_POLICY');
+            ->middleware('permission:MANAGE_PRIVACY_POLICY','block');
     });
 
 
     // Subscription routes
     Route::prefix('Subscription')->group(function () {
         Route::post('renew', [SubscriptionController::class, 'renew'])
-            ->middleware('permission:RENEW_SUBSCRIPTION');
+            ->middleware('permission:RENEW_SUBSCRIPTION','block','block');
         Route::get('cancel', [SubscriptionController::class, 'cancel'])
             ->middleware('permission:CANCEL_SUBSCRIPTION');
-        Route::post('upgrade', [SubscriptionController::class, 'upgrade'])
+        Route::post('upgrade',[SubscriptionController::class,'upgrade'])
             ->middleware('permission:UPGRADE_SUBSCRIPTION');
     });
 
     // Complaint routes
     Route::prefix('complaint')->group(function () {
         Route::post('createCutComplaint', [ComplaintController::class, 'createCutComplaint'])
-            ->middleware(['block', 'permission:CREATE_CUSTOMER_COMPLAINT']);
+            ->middleware(['block', 'permission:CREATE_CUSTOMER_COMPLAINT','block']);
         Route::patch('updateCutComplaint/{complaint_id}', [ComplaintController::class, 'updateCutComplaint'])
-            ->middleware('permission:UPDATE_COMPLAINT');
+            ->middleware('permission:UPDATE_COMPLAINT','block');
         Route::post('createComplaint', [ComplaintController::class, 'createComplaint'])
-            ->middleware('permission:CREATE_COMPLAINT');
+            ->middleware('permission:CREATE_COMPLAINT','block');
         Route::delete('deleteComplaint/{complaint_id}', [ComplaintController::class, 'deleteComplaint'])
-            ->middleware('permission:DELETE_COMPLAINT');
+            ->middleware('permission:DELETE_COMPLAINT','block');
         Route::get('getComplaints', [ComplaintController::class, 'getComplaints'])
             ->middleware('permission:VIEW_COMPLAINTS');
     });
@@ -431,9 +433,9 @@ Route::middleware(['auth:api', 'lang'])->group(function () {
         Route::get('getLandingProfile', [AccountController::class, 'getLandingProfile'])
             ->middleware('permission:VIEW_PROFILE');
         Route::patch('updateProfile', [AccountController::class, 'updateProfile'])
-            ->middleware('permission:UPDATE_PROFILE');
+            ->middleware('permission:UPDATE_PROFILE','block');
         Route::post('blocking/{id}', [AccountController::class, 'blocking'])
-            ->middleware('permission:BLOCK_ACCOUNTS');
+            ->middleware('permission:BLOCK_ACCOUNTS','block');
         Route::get('getAll', [AccountController::class, 'getAll'])
             ->middleware('permission:VIEW_ALL_ACCOUNTS');
     });
@@ -446,22 +448,20 @@ Route::middleware(['auth:api', 'lang'])->group(function () {
 
     Route::prefix('spendingPay')->middleware(['auth:api'])->group(function () {
         Route::post('payStripeSpending/{counter_id}', [SpendingPaymentController::class, 'createStripeCheckout'])
-            ->middleware('permission:PROCESS_STRIPE_SPENDING_PAYMENT');
+            ->middleware('permission:PROCESS_STRIPE_SPENDING_PAYMENT','check.subscription','block');
         Route::post('payCashSpending/{counter_id}', [SpendingPaymentController::class, 'handleCashPayment'])
-            ->middleware('permission:PROCESS_CACHE_SPENDING_PAYMENT');
-        Route::get('stripe/success', [SpendingPaymentController::class, 'stripeSuccess'])->name('spendingStripe.success');
-        Route::get('stripe/cancel', [SpendingPaymentController::class, 'stripeCancel'])->name('spendingStripe.cancel');
+            ->middleware('permission:PROCESS_CACHE_SPENDING_PAYMENT','check.subscription','block');
         Route::get('getSpendingPayments', [SpendingPaymentController::class, 'getSpendingPayments'])
             ->middleware('permission:VIEW_SPENDING_PAYMENTS');
     });
 
     Route::prefix('spending')->group(function () {
         Route::post('create', [SpendingController::class, 'create'])
-            ->middleware('permission:CREATE_SPENDING');
+            ->middleware('permission:CREATE_SPENDING','check.subscription','block');
         Route::patch('update/{id}', [SpendingController::class, 'update'])
-            ->middleware('permission:UPDATE_SPENDING');
+            ->middleware('permission:UPDATE_SPENDING','check.subscription','block');
         Route::delete('delete/{id}', [SpendingController::class, 'delete'])
-            ->middleware('permission:DELETE_SPENDING');
+            ->middleware('permission:DELETE_SPENDING','check.subscription','block');
         Route::get('getAll/{counter_id}', [SpendingController::class, 'getAll'])
             ->middleware('permission:GET_SPENDINGS');
         Route::get('getDays/{counter_id}', [SpendingController::class, 'getDays']);
@@ -470,13 +470,13 @@ Route::middleware(['auth:api', 'lang'])->group(function () {
 
     Route::prefix('action')->group(function () {
         Route::post('create', [ActionController::class, 'create'])
-            ->middleware('permission:CREATE_ACTION');
+            ->middleware('permission:CREATE_ACTION','check.subscription','block','block');
         Route::patch('update/{id}', [ActionController::class, 'update'])
-            ->middleware('permission:UPDATE_ACTION');
+            ->middleware('permission:UPDATE_ACTION','check.subscription','block','block');
         Route::post('approve/{id}', [ActionController::class, 'approve'])
-            ->middleware('permission:APPROVE_ACTION');
+            ->middleware('permission:APPROVE_ACTION','check.subscription','block','block');
         Route::post('reject/{id}', [ActionController::class, 'reject'])
-            ->middleware('permission:REJECT_ACTION');
+            ->middleware('permission:REJECT_ACTION','check.subscription','block','block');
         Route::get('getAll/{generator_id}', [ActionController::class, 'getAll'])
             ->middleware('permission:VIEW_ACTIONS');
         Route::get('getAction/{id}', [ActionController::class, 'getAction'])
@@ -487,8 +487,8 @@ Route::middleware(['auth:api', 'lang'])->group(function () {
     });
 
     Route::prefix('notification')->group(function () {
-        Route::post('sendNotification', [NotificationController::class, 'notify']);
-        //            ->middleware('permission:SEND_NOTIFICATION');
+        Route::post('sendNotification', [NotificationController::class, 'notify'])
+            ->middleware('permission:SEND_NOTIFICATION','check.subscription','block');
         Route::get('getNotifications', [NotificationController::class, 'getAll'])
             ->middleware('permission:VIEW_NOTIFICATIONS');
         Route::get('getSentNotifications', [NotificationController::class, 'getSentNotifications'])

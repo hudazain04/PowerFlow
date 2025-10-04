@@ -132,11 +132,11 @@ class ElectricalBoxRepository implements ElectricalBoxRepositoryInterface
 
 
             if (array_key_exists('area_id', $data)) {
+                DB::table('area__boxes')
+                    ->where('box_id', $box->id)
+                    ->delete();
                 if (!is_null($data['area_id'])) {
                     $this->assignBoxToArea($data['area_id'], $box->id);
-                } else {
-
-                    $this->removeBoxFromArea($box->id);
                 }
             }
 
@@ -144,10 +144,11 @@ class ElectricalBoxRepository implements ElectricalBoxRepositoryInterface
         });
     }
 
-    public function removeBoxFromArea(int $box_id)
+    public function removeBoxFromArea(int $box_id,int $area_id)
     {
         return DB::table('area__boxes')
             ->where('box_id', $box_id)
+            ->where('area_id',$area_id)
             ->update(['removed_at' => now()]);
     }
 

@@ -47,7 +47,7 @@ class SpendingRepository implements SpendingRepositoryInterface
         return $spendings;
     }
 
-    public function getLastForCounter(int $counter_id): SpendingModel
+    public function getLastForCounter(int $counter_id): ?SpendingModel
     {
         $spending=SpendingModel::where('counter_id',$counter_id)->latest()->first();
         return $spending;

@@ -25,7 +25,7 @@ class SetExpiredSubscriptionJob implements ShouldQueue
     public function handle(): void
     {
         $this->subscription->update([
-            'expired_at'=>Carbon::now(),
+            'expired_at'=>true,
         ]);
     }
 }

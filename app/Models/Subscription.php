@@ -38,6 +38,11 @@ class Subscription extends Model
         return $this->belongsTo(PlanPrice::class,'planPrice_id');
     }
 
+    public function powerGenerator()
+    {
+        return $this->belongsTo(PowerGenerator::class,'generator_id');
+    }
+
 
     public function scopeFilter($query, ?string $type=null)
     {
