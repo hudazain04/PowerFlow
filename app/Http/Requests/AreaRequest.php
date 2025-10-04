@@ -23,7 +23,7 @@ class AreaRequest extends FormRequest
     {
         return [
 //            'generator_id'=>'required|integer',
-            'neighborhood_id'=>'required|integer',
+            'neighborhood_id'=>'required|numeric',
             'name' => 'required|string|max:255',
             'box_id'=>'nullable|array|exists:electrical_boxes,id|array'
         ];
