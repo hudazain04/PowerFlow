@@ -18,7 +18,7 @@ class SubscriptionRequestResource extends JsonResource
             'id'=>$this->id,
             'generatorName'=>$this->name,
             'email'=>$this->user ? $this->user->email : null,
-            'userPhone'=>$this->user ? $this->user->phone_number : null,
+            'phone_number'=>$this->user ? $this->user->phone_number : null,
             'generatorPhones'=>$this->phones,
             'plan'=>$this->planPrice?->plan ? $this->planPrice->plan->name : null,
             'price'=>$this->planPrice ? $this->planPrice->price : null,

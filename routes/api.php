@@ -94,6 +94,8 @@ Route::middleware('lang')->group(function () {
     Route::get('visitLandingPage', [SuperAdminStatisticsController::class, 'visitLandingPage']);
     Route::get('stripe/success', [PaymentController::class, 'stripeSuccess'])->name('stripe.success');
     Route::get('stripe/cancel', [PaymentController::class, 'stripeCancel'])->name('stripe.cancel');
+    Route::get('stripe/success', [SpendingPaymentController::class, 'stripeSuccess'])->name('spendingStripe.success');
+    Route::get('stripe/cancel', [SpendingPaymentController::class, 'stripeCancel'])->name('spendingStripe.cancel');
 
 
     Route::prefix('user')->group(function () {
@@ -449,8 +451,6 @@ Route::middleware(['auth:api', 'lang'])->group(function () {
             ->middleware('permission:PROCESS_STRIPE_SPENDING_PAYMENT','check.subscription','block');
         Route::post('payCashSpending/{counter_id}', [SpendingPaymentController::class, 'handleCashPayment'])
             ->middleware('permission:PROCESS_CACHE_SPENDING_PAYMENT','check.subscription','block');
-        Route::get('stripe/success', [SpendingPaymentController::class, 'stripeSuccess'])->name('spendingStripe.success');
-        Route::get('stripe/cancel', [SpendingPaymentController::class, 'stripeCancel'])->name('spendingStripe.cancel');
         Route::get('getSpendingPayments', [SpendingPaymentController::class, 'getSpendingPayments'])
             ->middleware('permission:VIEW_SPENDING_PAYMENTS');
     });

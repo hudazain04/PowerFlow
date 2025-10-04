@@ -156,10 +156,10 @@ class SubscriptionRequestService
             $subscriptionDTO->price = $planPrice->price;
             $subscriptionDTO->generator_id = $generator->id;
             $subscription=$this->subscriptionRepository->create($subscriptionDTO->toArray());
-            $delay=($subscription->start_time)->copy()->addWeeks($subscription->period);
-            SetExpiredSubscriptionJob::dispatchAfterResponse($subscription)->delay($delay);
-            $ninetyPercentDate = $subscription->start_time->copy()->addWeeks(floor($subscription->period * 0.9));
-            SubscriptionExpirationReminderJob::dispatchAfterResponse($subscription)->delay($ninetyPercentDate);
+            $delay=($subscription->start_time)->copy()->addMonths($subscription->period);
+            SetExpiredSubscriptionJob::dispatch($subscription)->delay($delay);
+            $ninetyPercentDate = $subscription->start_time->copy()->addMonths(floor($subscription->period * 0.9));
+            SubscriptionExpirationReminderJob::dispatch($subscription)->delay($ninetyPercentDate);
             $payment=$this->subscriptionPaymentRepository->findWhere(['subscriptionRequest_id'=>$requestId]);
             if (! $payment)
             {
