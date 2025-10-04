@@ -22,9 +22,9 @@ class SpendingDTO extends SimpleDTO
     protected function casts(): array
     {
         return [
-            'counter_id'=>new IntegerCast(),
-            'consume'=>new IntegerCast(),
-            'date'=>new CarbonCast(),
+            'counter_id' => new IntegerCast(),
+            'consume' => new IntegerCast(),
+            'date' => new CarbonCast(),
         ];
     }
 }
