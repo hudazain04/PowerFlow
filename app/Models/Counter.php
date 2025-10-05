@@ -20,6 +20,7 @@ class Counter extends Model
         'generator_id',
         'physical_device_id',
         'status',
+        'spendingType'
     ];
 
 

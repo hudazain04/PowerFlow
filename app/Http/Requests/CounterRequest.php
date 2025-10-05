@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use ReflectionClass;
 
 class CounterRequest extends FormRequest
 {
@@ -31,6 +33,7 @@ class CounterRequest extends FormRequest
             'first_name' => 'required_if:is_new_user,true|string|nullable',
             'last_name' => 'required_if:is_new_user,true|string|nullable',
             'physical_device_id'=>'required|string',
+            'spendingType'=>['required', Rule::in(array_values((new ReflectionClass(\App\Types\SpendingTypes::class))->getConstants()))],
 
         ];
     }

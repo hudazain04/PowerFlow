@@ -137,6 +137,7 @@ class CounterBoxService
                 'user_id' => $user->id,
                 'generator_id' => $generator,
                 'current_spending' => 0,
+                'spendingType' => $data['spendingType'],
                 'physical_device_id'=>$data['physical_device_id'],
             ]);
 
