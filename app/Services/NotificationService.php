@@ -153,7 +153,7 @@ class NotificationService
 
     public function notifyCustomAdmin(array $data = [])
     {
-        $users = User::role(UserTypes::ADMIN)->whereIn('id', $data["ids"])->whereNotNull("fcmToken")->get(['id', 'fcmToken']);
+        $users = User::role(UserTypes::ADMIN)->whereIdIn($data["ids"])->whereNotNull("fcmToken")->get(['id', 'fcmToken']);
         if (count($users) === 0) {
             throw new ErrorException("jojo love hudhudte", 500, [
                 $users,
