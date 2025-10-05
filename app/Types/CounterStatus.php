@@ -5,10 +5,10 @@ namespace App\Types;
 class CounterStatus
 {
 //    public  const InCheck= 'InCheck';
-    public  const Ready = "Ready";
+    public  const Ready = "ready";
 
-    public const Connect = "Connected";
-        public const DisConnected="DisConnected";
+    public const Connect = "connected";
+        public const DisConnected="disConnected";
     public static array $CounterTypes= [
 
         self::Ready,

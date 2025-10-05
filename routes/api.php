@@ -502,6 +502,9 @@ Route::middleware(['auth:api', 'lang'])->group(function () {
     });
 });
 
+Route::get('/ping', function () {
+    return response()->json(['status' => 'ok']);
+});
 
 
 //    Route::prefix('auth')->group(function () {

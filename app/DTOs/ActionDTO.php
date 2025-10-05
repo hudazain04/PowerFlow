@@ -14,6 +14,8 @@ class ActionDTO extends SimpleDTO
     public ?int $generator_id;
     public ?int $employee_id;
     public ?int $parent_id;
+    public ?string  $type;
+    public ?string $status;
     public $relatedData;
     protected function defaults(): array
     {

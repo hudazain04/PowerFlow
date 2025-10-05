@@ -128,7 +128,7 @@ class SpendingPaymentService
         {
             $action=$this->actionService->create([
                 'type'=>ActionTypes::Payment,
-                'status'=>ComplaintStatusTypes::Assigned,
+                'status'=>ComplaintStatusTypes::Pending,
                 'counter_id'=>$counter_id,
                 'generator_id'=>$counter->generator_id,
                 'relatedData'=>['payment'=>$spendingPayment],

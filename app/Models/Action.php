@@ -29,6 +29,7 @@ class Action extends Model
     protected static function booted()
     {
         static::creating(function ($action) {
+//            dd($action);
             if (is_array($action->type)) {
                 Log::error('Action type is array: ', $action->type);
             }

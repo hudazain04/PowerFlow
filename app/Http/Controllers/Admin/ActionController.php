@@ -10,6 +10,7 @@ use App\Http\Requests\Action\UpdateActionRequest;
 use App\Http\Resources\ActionResource;
 use App\Services\Admin\ActionService;
 use App\Services\Admin\EmployeeService;
+use App\Types\ComplaintStatusTypes;
 use Illuminate\Http\Request;
 use function Symfony\Component\Translation\t;
 
@@ -26,6 +27,7 @@ class ActionController extends Controller
     public function create(CreateActionRequest $request)
     {
         $actionDTO=ActionDTO::fromRequest($request);
+        $actionDTO->status=ComplaintStatusTypes::Pending;
         $action=$this->actionService->create($actionDTO->toArray());
         return $this->success(ActionResource::make($action),__('action.create',['type' => $action->type]));
 

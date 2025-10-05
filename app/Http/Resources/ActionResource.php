@@ -24,13 +24,13 @@ class ActionResource extends JsonResource
             'priority'=>$this->priority,
             'parent'=>$this->parent,
         ];
-        if ($this->type===ActionTypes::Payment)
+        if ($this->type===ActionTypes::Payment & $this->relatedData)
         {
             array_merge($data,['payment'=>$this->relatedData['payment']]);
         }
-        if ($this->type ===ActionTypes::Cut)
+        if ($this->type ===ActionTypes::Cut & $this->relatedData)
         {
-            array_merge($data,['latestSpending'=>$this->relatedData['latestSpending'],'latestPayment'=>relatedData['latestPayment']]);
+            array_merge($data,['latestSpending'=>$this->relatedData['latestSpending'],'latestPayment'=>$this->relatedData['latestPayment']]);
         }
         return $data;
     }

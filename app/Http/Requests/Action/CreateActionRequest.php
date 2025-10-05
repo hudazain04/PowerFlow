@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Action;
 
+use App\Types\ActionTypes;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use ReflectionClass;
@@ -25,8 +26,8 @@ class CreateActionRequest extends FormRequest
     {
         return [
             'counter_id'=>'required|int|exists:counters,id',
-            'generator_id'=>'required|int|exists:generators,id',
-            'type'=>['required', Rule::in(array_values((new ReflectionClass(\App\Types\ActionTypes::class))->getConstants()))],
+            'generator_id'=>'required|int|exists:power_generators,id',
+            'type'=>['required', Rule::in(ActionTypes::all())],
             'priority'=>'required|int',
             'relatedData'=>'nullable',
         ];
