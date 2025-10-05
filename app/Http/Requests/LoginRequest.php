@@ -25,7 +25,7 @@ class LoginRequest extends FormRequest
             'email'=>'required|email',
             'password'=>'required|min:6',
             'secret_key'=>'required_if:role,employee',
-            'fcmToken'=>'required_if:role,employee,user'
+            'fcmToken'=>'required|string'
         ];
     }
 }
