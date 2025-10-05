@@ -22,7 +22,7 @@ class ActionResource extends JsonResource
             'status'=>$this->status,
             'employee_id'=>$this->employee_id,
             'priority'=>$this->priority,
-            'parent_id'=>$this->parent_id,
+            'parent'=>$this->parent,
         ];
         if ($this->type===ActionTypes::Payment)
         {

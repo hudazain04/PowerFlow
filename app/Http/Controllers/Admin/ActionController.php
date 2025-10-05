@@ -66,9 +66,9 @@ class ActionController extends Controller
 
     }
 
-    public function getAll($generator_id)
+    public function getAll($generator_id, Request $request)
     {
-        $actions=$this->actionService->getAll($generator_id);
+        $actions=$this->actionService->getAll($generator_id, $request);
         return $this->successWithPagination(ActionResource::collection($actions),__('messages.success'));
     }
 }

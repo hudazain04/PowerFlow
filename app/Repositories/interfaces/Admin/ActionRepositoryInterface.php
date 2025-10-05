@@ -14,7 +14,7 @@ interface ActionRepositoryInterface
 
     public function update(ActionModel $action ,array $data) : ActionModel;
 
-    public function getAll($generator_id) : LengthAwarePaginator;
+    public function getAll($generator_id,  ?array $filters=[] ) : LengthAwarePaginator;
 
     public function getUserActions($user): LengthAwarePaginator;
 }

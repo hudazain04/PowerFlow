@@ -47,4 +47,15 @@ class Action extends Model
         });
     }
 
+    public function scopeFilter($query,array $filters)
+    {
+        $query->when($filters['type'] ?? false , function ($query) use ($filters){
+            $query->where('type',$filters['type']);
+        });
+        $query->when($filters['status'] ?? false , function ($query) use ($filters){
+            $query->where('status',$filters['status']);
+        });
+        return $query;
+    }
+
 }

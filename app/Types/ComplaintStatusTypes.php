@@ -11,11 +11,11 @@ class ComplaintStatusTypes
     {
         //
     }
-    public const Pending = "Pending";
-    public const Assigned="Assigned";
-    public const Accepted = "Accepted";
-    public const Rejected = "Rejected";
-    public const InProgress = "InProgress";
-    public const OnHold = "OnHold";
-    public const Resolved = "Resolved";
+    public const Pending = "pending";
+    public const Assigned="assigned";
+    public const Accepted = "accepted";
+    public const Rejected = "rejected";
+    public const InProgress = "inProgress";
+    public const OnHold = "onHold";
+    public const Resolved = "resolved";
 }

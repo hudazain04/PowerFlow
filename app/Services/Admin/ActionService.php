@@ -12,6 +12,8 @@ use App\Types\ActionTypes;
 use App\Types\ComplaintStatusTypes;
 use App\Types\CounterStatus;
 use App\Types\NotificationTypes;
+
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use function Symfony\Component\Translation\t;
 
@@ -187,9 +189,9 @@ class ActionService
         return $action;
     }
 
-    public function getAll($generator_id)
+    public function getAll($generator_id,Request $request)
     {
-        $actions=$this->actionRepository->getAll($generator_id);
+        $actions=$this->actionRepository->getAll($generator_id,['type'=>$request->query('type'),'status'=>$request->query('status')]);
         return $actions;
     }
 

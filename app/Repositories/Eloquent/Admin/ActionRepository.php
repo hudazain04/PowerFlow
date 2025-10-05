@@ -37,9 +37,9 @@ class ActionRepository implements ActionRepositoryInterface
        return  $action;
     }
 
-    public function getAll($generator_id): LengthAwarePaginator
+    public function getAll($generator_id,?array $filters=[]): LengthAwarePaginator
     {
-        $actions=ActionModel::where('generator_id',$generator_id)->paginate(10);
+        $actions=ActionModel::filter($filters)->where('generator_id',$generator_id)->paginate(10);
         return  $actions;
    }
 
