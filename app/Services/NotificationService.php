@@ -33,7 +33,7 @@ class NotificationService
     }
 
 
-    public function baseSendNotification($title, $body, array $fcmTokens,?array $data=[])
+    public function baseSendNotification($title, $body, array $fcmTokens, ?array $data = [])
     {
         $firebase = (new Factory())
             ->withServiceAccount(storage_path('app/firebase/firebase_config.json'));
@@ -43,7 +43,7 @@ class NotificationService
         $notification = Notification::fromArray([
             'title' => $title,
             'body' => $body,
-            'data'=>$data,
+            'data' => $data,
         ]);
 
         $message = CloudMessage::new();
@@ -79,7 +79,7 @@ class NotificationService
     {
 
         $authUser = auth()->user();
-        $generator=$authUser->powerGenerator;
+        $generator = $authUser->powerGenerator;
         $query = User::role(UserTypes::USER)
             ->whereNotNull('fcmToken')
             ->where('id', '!=', $authUser->id);
@@ -90,7 +90,7 @@ class NotificationService
         }
 
         $users = $query->get(['id', 'fcmToken']);
-//        $users = User::role(UserTypes::USER)
+        //        $users = User::role(UserTypes::USER)
 //            ->whereNotNull("fcmToken")
 //            ->get(['id', 'fcmToken']);
 
@@ -108,16 +108,16 @@ class NotificationService
     public function notifyEmployees(array $data)
     {
         $authUser = auth()->user();
-        $generator=$authUser->powerGenerator;
+        $generator = $authUser->powerGenerator;
         $query = Employee::role(UserTypes::EMPLOYEE)
             ->whereNotNull("fcmToken")
             ->where('id', '!=', $authUser->id);
         if ($authUser->hasRole(UserTypes::ADMIN) && $generator) {
-            $query->where('generator_id',$generator->id);
+            $query->where('generator_id', $generator->id);
         }
 
         $employees = $query->get(['id', 'fcmToken']);
-//        $employees = Employee::role(UserTypes::EMPLOYEE)
+        //        $employees = Employee::role(UserTypes::EMPLOYEE)
 //            ->whereNotNull("fcmToken")
 //            ->get(['id', 'fcmToken']);
 
@@ -153,9 +153,12 @@ class NotificationService
 
     public function notifyCustomAdmin(array $data = [])
     {
-        $users = User::role(UserTypes::ADMIN)->whereIn('id', $data["ids"])->whereNotNull("fcmToken")->get(['id', 'fcmToken']);
+        $users = User::role(UserTypes::ADMIN)->whereId($data["ids"])->whereNotNull("fcmToken")->get(['id', 'fcmToken']);
         if (count($users) === 0) {
-            return;
+            throw new ErrorException("jojo love hudhudte", 500, [
+                $users,
+                $data["ids"]
+            ]);
         }
 
         $tokens = $users->pluck('fcmToken')->toArray();
