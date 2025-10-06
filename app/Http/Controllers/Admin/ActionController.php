@@ -43,8 +43,13 @@ class ActionController extends Controller
     public function  approve($action_id)
     {
         $action=$this->actionService->approve($action_id);
-        $employee=$this->employeeService->getEmployee($action->employee_id);
-        return $this->success(ActionResource::make($action),__('action.assign',['employee'=>$employee->user_name]));
+        $message=__('action.approve');
+        if ($action->employee_id)
+        {
+            $employee=$this->employeeService->getEmployee($action->employee_id);
+            $message=__('action.assign',['employee'=>$employee->user_name]);
+        }
+        return $this->success(ActionResource::make($action),$message);
     }
 
     public function reject($action_id)
