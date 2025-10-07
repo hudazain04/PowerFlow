@@ -68,7 +68,7 @@ class ActionController extends Controller
     {
         $user=auth()->user();
         $actions=$this->actionService->getUserActions($user);
-        return $this->successWithPagination(ActionResource::collection($actions),__('messages.success'));
+        return $this->success(ActionResource::collection($actions),__('messages.success'));
 
 
     }

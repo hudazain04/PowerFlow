@@ -5,6 +5,7 @@ namespace App\Repositories\Eloquent\Admin;
 use App\Models\Action as ActionModel;
 use App\Repositories\interfaces\Admin\ActionRepositoryInterface;
 use App\Types\ActionTypes;
+use App\Types\ComplaintStatusTypes;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
@@ -43,9 +44,9 @@ class ActionRepository implements ActionRepositoryInterface
         return  $actions;
    }
 
-    public function getUserActions($user): LengthAwarePaginator
+    public function getUserActions($user): Collection
     {
-        $actions=$user->actions()->where('type', ActionTypes::OverConsume)->paginate(10);
+        $actions=$user->actions()->where(['type'=> ActionTypes::OverConsume,'status'=>ComplaintStatusTypes::Pending])->get();
         return  $actions;
     }
 }
