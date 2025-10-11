@@ -16,5 +16,5 @@ interface ActionRepositoryInterface
 
     public function getAll($generator_id,  ?array $filters=[] ) : LengthAwarePaginator;
 
-    public function getUserActions($user): LengthAwarePaginator;
+    public function getUserActions($user): Collection;
 }
