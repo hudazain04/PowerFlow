@@ -33,16 +33,16 @@ class ElectricalBoxController extends Controller
         $generatorId = auth()->user()->powerGenerator->id;
         $areas = Area::where('generator_id', $generatorId)->get();
 
-        return ApiResponses::success($areas, 'Generator areas retrieved', ApiCode::OK);
+        return ApiResponses::success($areas, __('box.generator_areas_retrieved'), ApiCode::OK);
     }
     public function getBoxes(int $generator_id){
         $Boxes=$this->service->getBoxes($generator_id);
-        return ApiResponses::success(['boxes_count'=>$Boxes],'total boxes',ApiCode::OK);
+        return ApiResponses::success(['boxes_count'=>$Boxes],__('box.total_boxes'),ApiCode::OK);
     }
     public function get(int $generator_id){
         $Boxes=$this->service->get($generator_id);
         return ApiResponses::success(
-             ElectricalBoxResource::collection($Boxes),'total boxes'
+             ElectricalBoxResource::collection($Boxes),   __('box.boxes_retrieved')
 
              ,ApiCode::OK);
     }
