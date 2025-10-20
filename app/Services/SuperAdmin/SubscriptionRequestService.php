@@ -66,6 +66,7 @@ class SubscriptionRequestService
 
     public function store(SubscriptionRequestDTO $requestDTO)
     {
+        DB::beginTransaction();
         $planPrice=$this->planPriceRepository->find($requestDTO->planPrice_id);
         if (!$planPrice)
         {

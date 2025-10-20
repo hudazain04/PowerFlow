@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
+use App\ApiHelper\ApiCode;
 use App\ApiHelper\ApiResponse;
 use App\DTOs\SubscriptionRequestDTO;
 use App\Events\TopRequestedPlanEvent;
+use App\Exceptions\ErrorException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CustomerRequest\RejectRequest;
 use App\Http\Requests\SubscriptionRequest\CreateSubscriptionRequestRequest;
@@ -14,6 +16,8 @@ use App\Services\SuperAdmin\SubscriptionRequestService;
 use App\Types\SubscriptionTypes;
 use App\Types\UserTypes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 class SubscriptionRequestController extends Controller
 {
@@ -32,14 +36,24 @@ class SubscriptionRequestController extends Controller
 
     public function store(CreateSubscriptionRequestRequest $request)
     {
-        $requestDTO=SubscriptionRequestDTO::fromRequest($request);
-        $requestDTO->user_id=$request->user()->id;
-        $requestDTO->type=SubscriptionTypes::NewPlan;
+        try {
+            $requestDTO=SubscriptionRequestDTO::fromRequest($request);
+            $requestDTO->user_id=$request->user()->id;
+            $requestDTO->type=SubscriptionTypes::NewPlan;
 
-        $response= $this->subscriptionRequestService->store($requestDTO);
-        $topRequestedPlan=$this->statisticsService->topRequestedPlan();
-        event(new TopRequestedPlanEvent($topRequestedPlan));
-        return $response;
+            $response= $this->subscriptionRequestService->store($requestDTO);
+            $topRequestedPlan=$this->statisticsService->topRequestedPlan();
+            event(new TopRequestedPlanEvent($topRequestedPlan));
+            DB::commit();
+            return $response;
+
+        }
+        catch (\Throwable $exception)
+        {
+            DB::rollBack();
+            throw new ErrorException(__('messages.error.serverError'),ApiCode::INTERNAL_SERVER_ERROR);
+        }
+
     }
 
     public function getAll(Request $request)
