@@ -30,19 +30,19 @@ class EmployeeAuthController extends Controller
         $token = Auth::guard('employee')->login($employee);
         $result=["user"=>$employee,"token"=>$token];
 
-        return ApiResponses::success($result,'login successful',ApiCode::OK);
+        return ApiResponses::success($result,__('employee.login_success'),ApiCode::OK);
     }
     public function logout()
     {
         Auth::guard('employee')->logout();
 
-        return ApiResponses::success(null,'Successfully logged out',ApiCode::OK);
+        return ApiResponses::success(null,__('employee.logout_success'),ApiCode::OK);
     }
 
     public function getPermissions(int $id){
 
             $permissions = $this->service->getPermissions($id);
-            return ApiResponses::success($permissions, 'permissions', ApiCode::OK);
+            return ApiResponses::success($permissions, __('employee.permissions_retrieved'), ApiCode::OK);
 
 
     }
