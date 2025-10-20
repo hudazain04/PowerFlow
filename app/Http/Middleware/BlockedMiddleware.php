@@ -26,7 +26,9 @@ class BlockedMiddleware
         }
         catch (\Exception $exception)
         {
-            throw new ErrorException(__('messages.error.server_error'),ApiCode::INTERNAL_SERVER_ERROR);
+//            throw new ErrorException(__('messages.error.server_error'),ApiCode::INTERNAL_SERVER_ERROR);
+            throw new ErrorException($exception->getMessage(),ApiCode::INTERNAL_SERVER_ERROR);
+
         }
         return $next($request);
     }
