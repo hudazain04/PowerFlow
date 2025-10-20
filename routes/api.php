@@ -92,8 +92,8 @@ Route::middleware('lang')->group(function () {
 
 
     Route::get('visitLandingPage', [SuperAdminStatisticsController::class, 'visitLandingPage']);
-    Route::get('stripe/success', [PaymentController::class, 'stripeSuccess'])->name('stripe.success');
-    Route::get('stripe/cancel', [PaymentController::class, 'stripeCancel'])->name('stripe.cancel');
+    Route::get('spendingStripe/success', [PaymentController::class, 'stripeSuccess'])->name('stripe.success');
+    Route::get('spendingStripe/cancel', [PaymentController::class, 'stripeCancel'])->name('stripe.cancel');
     Route::get('stripe/success', [SpendingPaymentController::class, 'stripeSuccess'])->name('spendingStripe.success');
     Route::get('stripe/cancel', [SpendingPaymentController::class, 'stripeCancel'])->name('spendingStripe.cancel');
 
