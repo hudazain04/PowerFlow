@@ -13,7 +13,15 @@ class CreateSpendingRequest extends FormRequest
     {
         return true;
     }
-
+    protected function prepareForValidation(): void
+    {
+        // Multiply consume by 1000 before validation
+        if ($this->has('consume') && is_numeric($this->consume)) {
+            $this->merge([
+                'consume' => $this->consume * 1000,
+            ]);
+        }
+    }
     /**
      * Get the validation rules that apply to the request.
      *
