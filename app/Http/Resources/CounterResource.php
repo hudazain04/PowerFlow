@@ -33,7 +33,7 @@ class CounterResource extends JsonResource
             'physical_device_id' => $this->physical_device_id,
             'box_id' => $this->electricalBoxes->first() ? $this->electricalBoxes->first()->id : null,
             'user' => UserResource::make($this->user),
-            'blocked'=>($subscription->isEmpty()|| $blocked)
+            'blocked'=>($subscription->count() === 0|| $blocked)
         ];
     }
 }
