@@ -36,7 +36,7 @@ class NotificationService
     public function baseSendNotification($title, $body, array $fcmTokens, ?array $data = [])
     {
         $firebase = (new Factory())
-            ->withServiceAccount(storage_path('app/firebase/firebase_config.json'));
+            ->withServiceAccount(storage_path('app/firebase/powerflow-fe9df-firebase-adminsdk-fbsvc-1725024dbb.json'));
 
         $messaging = $firebase->createMessaging();
 

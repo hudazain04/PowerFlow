@@ -51,7 +51,9 @@ class SubscriptionRequestController extends Controller
         catch (\Throwable $exception)
         {
             DB::rollBack();
-            throw new ErrorException(__('messages.error.serverError'),ApiCode::INTERNAL_SERVER_ERROR);
+//            throw new ErrorException(__('messages.error.serverError'),ApiCode::INTERNAL_SERVER_ERROR);
+
+            throw new ErrorException($exception->getMessage(),ApiCode::INTERNAL_SERVER_ERROR);
         }
 
     }
