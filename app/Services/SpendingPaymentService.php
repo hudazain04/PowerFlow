@@ -184,7 +184,7 @@ class SpendingPaymentService
             'date'=>$dto->date ?? Carbon::now(),
             'amount'=>$amount,
             'current_spending'=>$consume,
-            'next_spending'=>$dto->kilos ? $consume+($dto->kilos*1000): null,
+            'next_spending'=>$dto->kilos ? $consume+($dto->kilos): null,
             'counter_id'=>$counter_id,
             'status'=>PaymentStatus::Paid,
             'type'=>PaymentType::Cash,
