@@ -72,16 +72,16 @@ class SpendingPaymentService
                 throw new ErrorException(__('payWithCache'),ApiCode::BAD_REQUEST);
             }
             $lastPayment=$this->paymentRepository->findWhereLatest(['counter_id'=>$counter_id]);
-            $amount=(($currentSpending ? $currentSpending->consume : 0 )-($lastPayment ? $lastPayment->current_spending : 0))/1000*$generatorSettings->kiloPrice;
+            $amount=(($currentSpending ? $currentSpending->consume/1000 : 0 )-($lastPayment ? $lastPayment->current_spending : 0))*$generatorSettings->kiloPrice;
         }
         $processor = new PaymentProcessor();
         $stripePayment = new StripePayment(null, $amount*100,"Spending Renew", route('spendingStripe.success'),route('spendingStripe.cancel'));
         $result = $stripePayment->accept($processor);
-        $consume=$currentSpending ? $currentSpending->consume : 0;
+        $consume=$currentSpending ? $currentSpending->consume/1000 : 0;
         $payment=$this->paymentRepository->create([
             'amount'=>$amount,
             'current_spending'=>$consume,
-            'next_spending'=>$dto->kilos ? $consume+($dto->kilos*1000): null,
+            'next_spending'=>($dto->kilos && $counter->spendingType === SpendingTypes::Before)? $consume+($dto->kilos): null,
             'counter_id'=>$counter_id,
             'status'=>PaymentStatus::Pending,
             'type'=>PaymentType::Stripe,
@@ -174,17 +174,17 @@ class SpendingPaymentService
         {
             $generatorSettings=$this->counterRepository->getRelations($counter,['powerGenerator.settings'])->powerGenerator->settings;
             $lastPayment=$this->paymentRepository->findWhereLatest(['counter_id'=>$counter_id]);
-            $amount=(($currentSpending ? $currentSpending->consume : 0)-($lastPayment ? $lastPayment->current_spending : 0 ))/1000*$generatorSettings->kiloPrice;
+            $amount=(($currentSpending ? $currentSpending->consume/1000 : 0)-($lastPayment ? $lastPayment->current_spending : 0 ))*$generatorSettings->kiloPrice;
         }
         $processor = new PaymentProcessor();
         $payment = new CashPayment();
         $result = $payment->accept($processor);
-        $consume=$currentSpending ?  $currentSpending->consume : 0;
+        $consume=$currentSpending ?  $currentSpending->consume/1000 : 0;
         $payment=$this->paymentRepository->create([
             'date'=>$dto->date ?? Carbon::now(),
             'amount'=>$amount,
             'current_spending'=>$consume,
-            'next_spending'=>$dto->kilos ? $consume+($dto->kilos): null,
+            'next_spending'=>($dto->kilos && $counter->spendingType === SpendingTypes::Before) ? $consume+($dto->kilos): null,
             'counter_id'=>$counter_id,
             'status'=>PaymentStatus::Paid,
             'type'=>PaymentType::Cash,
