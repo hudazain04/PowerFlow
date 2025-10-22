@@ -5,7 +5,6 @@ namespace App\Http\Resources;
 use App\Models\Subscription as SubscriptionModel;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use function PHPUnit\Framework\isEmpty;
 
 class CounterResource extends JsonResource
 {
@@ -34,7 +33,7 @@ class CounterResource extends JsonResource
             'physical_device_id' => $this->physical_device_id,
             'box_id' => $this->electricalBoxes->first() ? $this->electricalBoxes->first()->id : null,
             'user' => UserResource::make($this->user),
-            'blocked'=>(isEmpty($subscription)|| $blocked)
+            'blocked'=>($subscription->count() === 0|| $blocked)
         ];
     }
 }

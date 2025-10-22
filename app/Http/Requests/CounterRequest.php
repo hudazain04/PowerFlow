@@ -34,6 +34,7 @@ class CounterRequest extends FormRequest
             'last_name' => 'required_if:is_new_user,true|string|nullable',
             'physical_device_id'=>'required|string',
             'spendingType'=>['required', Rule::in(array_values((new ReflectionClass(\App\Types\SpendingTypes::class))->getConstants()))],
+//            'spendingType'=>[Rule::in(array_values((new ReflectionClass(\App\Types\SpendingTypes::class))->getConstants()))],
 
         ];
     }

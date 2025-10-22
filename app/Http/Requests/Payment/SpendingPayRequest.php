@@ -33,7 +33,7 @@ class SpendingPayRequest extends FormRequest
         }
         return
         [
-            'date'=>'nullable|dateTime',
+            'date'=>'nullable|date',
         ];
     }
 }
