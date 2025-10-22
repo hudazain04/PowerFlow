@@ -23,7 +23,7 @@ class SpendingService
     public function create(SpendingDTO $spendingDTO)
     {
         $lastSpending=$this->spendingRepository->getLastForCounter($spendingDTO->counter_id);
-        $spendingDTO->consume=$spendingDTO->consume*1000+$lastSpending->consume;
+        $spendingDTO->consume=($spendingDTO->consume*1000)+($lastSpending->consume);
         $spending=$this->spendingRepository->create($spendingDTO->toArray());
         return $spending;
     }
