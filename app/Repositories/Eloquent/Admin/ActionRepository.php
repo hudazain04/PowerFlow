@@ -49,4 +49,10 @@ class ActionRepository implements ActionRepositoryInterface
         $actions=$user->actions()->where(['type'=> ActionTypes::OverConsume,'status'=>ComplaintStatusTypes::Pending])->get();
         return  $actions;
     }
+
+    public function getEmployeeActions($employee): LengthAwarePaginator
+    {
+        $actions=$employee->actions()->paginate(10);
+        return $actions;
+    }
 }

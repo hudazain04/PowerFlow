@@ -52,4 +52,17 @@ class complaintcontroller extends Controller
     {
         return $this->complaintService->getComplaints($request);
     }
+
+
+    public function getUserComplaints(Request $request)
+    {
+        return $this->complaintService->getUserComplaints($request);
+    }
+
+
+    public function getEmployeeComplaints(Request $request)
+    {
+        return $this->complaintService->getEmployeeComplaints($request);
+    }
+
 }

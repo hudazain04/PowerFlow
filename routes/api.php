@@ -424,6 +424,8 @@ Route::middleware(['auth:api', 'lang'])->group(function () {
             ->middleware('permission:DELETE_COMPLAINT','block');
         Route::get('getComplaints', [ComplaintController::class, 'getComplaints'])
             ->middleware('permission:VIEW_COMPLAINTS');
+        Route::get('getUserComplaints', [ComplaintController::class, 'getUserComplaints']);
+//            ->middleware('permission:VIEW_USER_COMPLAINTS');
     });
 
     // Account routes
@@ -470,13 +472,13 @@ Route::middleware(['auth:api', 'lang'])->group(function () {
 
     Route::prefix('action')->group(function () {
         Route::post('create', [ActionController::class, 'create'])
-            ->middleware('permission:CREATE_ACTION','check.subscription','block','block');
+            ->middleware('permission:CREATE_ACTION','check.subscription','block');
         Route::patch('update/{id}', [ActionController::class, 'update'])
-            ->middleware('permission:UPDATE_ACTION','check.subscription','block','block');
+            ->middleware('permission:UPDATE_ACTION','check.subscription','block');
         Route::post('approve/{id}', [ActionController::class, 'approve'])
-            ->middleware('permission:APPROVE_ACTION','check.subscription','block','block');
+            ->middleware('permission:APPROVE_ACTION','check.subscription','block');
         Route::post('reject/{id}', [ActionController::class, 'reject'])
-            ->middleware('permission:REJECT_ACTION','check.subscription','block','block');
+            ->middleware('permission:REJECT_ACTION','check.subscription','block');
         Route::get('getAll/{generator_id}', [ActionController::class, 'getAll'])
             ->middleware('permission:VIEW_ACTIONS');
         Route::get('getAction/{id}', [ActionController::class, 'getAction'])
@@ -500,6 +502,18 @@ Route::middleware(['auth:api', 'lang'])->group(function () {
         Route::get('show/{id}', [NotificationController::class, 'show'])
             ->middleware('permission:VIEW_NOTIFICATION');
     });
+});
+
+Route::middleware(['auth:employee','lang'])->group(function (){
+    Route::get('action/getEmployeeActions',[ActionController::class,'getEmployeeActions'])
+            ->middleware('permission:VIEW_EMPLOYEE_ACTIONS');
+    Route::patch('action/update/{id}', [ActionController::class, 'update'])
+        ->middleware('permission:UPDATE_ACTION','check.subscription','block','block');
+    Route::get('complaint/getEmployeeComplaints',[ComplaintController::class,'getEmployeeComplaints'])
+        ->middleware('permission:VIEW_EMPLOYEE_COMPLAINTS');
+    Route::patch('complaint/updateCutComplaint/{complaint_id}', [ComplaintController::class, 'updateCutComplaint'])
+        ->middleware('permission:UPDATE_COMPLAINT','block');
+
 });
 
 Route::get('/ping', function () {

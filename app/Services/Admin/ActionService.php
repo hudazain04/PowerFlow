@@ -200,4 +200,10 @@ class ActionService
         $actions=$this->actionRepository->getUserActions($user);
         return $actions;
     }
+
+    public function getEmployeeActions($employee)
+    {
+        $actions=$this->actionRepository->getEmployeeActions($employee);
+        return $actions;
+    }
 }

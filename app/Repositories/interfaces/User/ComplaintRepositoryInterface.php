@@ -18,4 +18,9 @@ interface ComplaintRepositoryInterface
     public function getAll(?array $filters=[]) : LengthAwarePaginator;
 
     public function getRelations(ComplaintModel $complaint,array $relations=[]) : ComplaintModel;
+
+    public function getEmployeeComplaints($employee,?array $filters=[]) : LengthAwarePaginator;
+
+    public function getUserComplaints($user,?array $filters=[]) : LengthAwarePaginator;
+
 }

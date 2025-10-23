@@ -12,6 +12,7 @@ use App\Services\Employee\PermissionsService;
 use Clue\Redis\Protocol\Model\Request;
 use \Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use function Kreait\Firebase\RemoteConfig\user;
 
 class EmployeeAuthController extends Controller
 {
@@ -28,7 +29,7 @@ class EmployeeAuthController extends Controller
         }
 
         $token = Auth::guard('employee')->login($employee);
-        $result=["user"=>$employee,"token"=>$token];
+        $result=["user"=>$employee,"token"=>$token,'role'=>$employee->getRoleNames()->join(',')];
 
         return ApiResponses::success($result,__('employee.login_success'),ApiCode::OK);
     }

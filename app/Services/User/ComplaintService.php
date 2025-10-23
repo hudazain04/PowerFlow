@@ -84,5 +84,20 @@ class ComplaintService
 
     }
 
+    public function getEmployeeComplaints(Request $request)
+    {
+        $employee=$request->user();
+        $complaints=$this->complaintRepository->getEmployeeComplaints($employee,['status' => $request->query('status')]);
+        return $this->successWithPagination(ComplaintResource::collection($complaints),__('messages.success'));
+
+    }
+
+    public function getUserComplaints(Request $request)
+    {
+        $user=$request->user();
+        $complaints=$this->complaintRepository->getUserComplaints($user,['status' => $request->query('status')]);
+        return $this->successWithPagination(ComplaintResource::collection($complaints),__('messages.success'));
+
+    }
 
 }
