@@ -110,33 +110,33 @@ class ActionService
                 'generator_id'=>$action->generator_id,
             ]);
             $counter=$action->counter;
-            $response = Http::post(env('ESP_URL') . '/relay/connect/'.$counter->physical_device_id);
-            if ($response->successful()) {
-               $action=$this->actionRepository->update($newAction,[
-                  'status' =>ComplaintStatusTypes::Resolved,
-               ]);
-               $this->counterRepository->update($counter->id,[
-                  'status'=>CounterStatus::Connect,
-               ]);
-
-            }
+            $response = Http::post(env('ESP_URL') . '/relay/rabbitmq/disconnect/'.$counter->physical_device_id);
+//            if ($response->successful()) {
+//               $action=$this->actionRepository->update($newAction,[
+//                  'status' =>ComplaintStatusTypes::Resolved,
+//               ]);
+//               $this->counterRepository->update($counter->id,[
+//                  'status'=>CounterStatus::Connect,
+//               ]);
+//
+//            }
         }
        elseif ($action->type===ActionTypes::Cut)
        {
-           $action=$this->actionRepository->update($action,[
-               'status'=>ComplaintStatusTypes::Accepted,
-           ]);
+//           $action=$this->actionRepository->update($action,[
+//               'status'=>ComplaintStatusTypes::Accepted,
+//           ]);
            $counter=$action->counter;
-           $response = Http::post(env('ESP_URL') . '/relay/disconnect/'.$counter->physical_device_id);
-           if ($response->successful()) {
-               $action=$this->actionRepository->update($action,[
-                   'status' =>ComplaintStatusTypes::Resolved,
-               ]);
-               $this->counterRepository->update($counter->id,[
-                   'status'=>CounterStatus::DisConnected,
-               ]);
-
-           }
+           $response = Http::post(env('ESP_URL') . '/relay/rabbitmq/disconnect/'.$counter->physical_device_id);
+//           if ($response->successful()) {
+//               $action=$this->actionRepository->update($action,[
+//                   'status' =>ComplaintStatusTypes::Resolved,
+//               ]);
+//               $this->counterRepository->update($counter->id,[
+//                   'status'=>CounterStatus::DisConnected,
+//               ]);
+//
+//           }
        }
         elseif ($action->type===ActionTypes::OverConsume)
         {
@@ -151,16 +151,16 @@ class ActionService
                 'generator_id'=>$action->generator_id,
             ]);
             $counter=$action->counter;
-            $response = Http::post(env('ESP_URL') . '/relay/disconnect/'.$counter->physical_device_id);
-            if ($response->successful()) {
-                $action=$this->actionRepository->update($newAction,[
-                    'status' =>ComplaintStatusTypes::Resolved,
-                ]);
-                $this->counterRepository->update($counter->id,[
-                    'status'=>CounterStatus::DisConnected,
-                ]);
-
-            }
+            $response = Http::post(env('ESP_URL') . '/relay/connect/'.$counter->physical_device_id);
+//            if ($response->successful()) {
+//                $action=$this->actionRepository->update($newAction,[
+//                    'status' =>ComplaintStatusTypes::Resolved,
+//                ]);
+//                $this->counterRepository->update($counter->id,[
+//                    'status'=>CounterStatus::DisConnected,
+//                ]);
+//
+//            }
 
         }
         return  $action;

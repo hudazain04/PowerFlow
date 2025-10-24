@@ -18,4 +18,10 @@ class ComplaintStatusTypes
     public const InProgress = "inProgress";
     public const OnHold = "onHold";
     public const Resolved = "resolved";
+    public static array $statuses = [
+        self::Accepted,
+        self::Resolved,
+        self::Pending
+
+    ];
 }
