@@ -63,7 +63,7 @@ class ControlRelay implements ShouldQueue
 
             // Find and update the latest pending action for this counter
             $action = Action::where('counter_id', $counter->id)
-                ->where('status',ComplaintStatusTypes::Accepted )
+              ->whereIn('status', [ComplaintStatusTypes::Accepted, ComplaintStatusTypes::Pending])
              ->first();
 
             if ($action) {
