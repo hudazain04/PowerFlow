@@ -151,7 +151,7 @@ class ActionService
                 'generator_id'=>$action->generator_id,
             ]);
             $counter=$action->counter;
-            $response = Http::post(env('ESP_URL') . '/relay/connect/'.$counter->physical_device_id);
+            $response = Http::post(env('ESP_URL') . '/relay/rabbitmq/connect/'.$counter->physical_device_id);
 //            if ($response->successful()) {
 //                $action=$this->actionRepository->update($newAction,[
 //                    'status' =>ComplaintStatusTypes::Resolved,
