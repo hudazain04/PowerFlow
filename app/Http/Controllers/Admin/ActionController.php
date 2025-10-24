@@ -73,6 +73,13 @@ class ActionController extends Controller
 
     }
 
+    public function getEmployeeActions()
+    {
+        $employee=auth()->user();
+        $actions=$this->actionService->getEmployeeActions($employee);
+        return $this->successWithPagination(ActionResource::collection($actions),__('messages.success'));
+    }
+
     public function getAll($generator_id, Request $request)
     {
         $actions=$this->actionService->getAll($generator_id, $request);

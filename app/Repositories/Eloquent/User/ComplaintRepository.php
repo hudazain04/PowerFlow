@@ -4,6 +4,7 @@ namespace App\Repositories\Eloquent\User;
 
 use App\Models\Complaint as ComplaintModel;
 use App\Repositories\interfaces\User\ComplaintRepositoryInterface;
+use App\Types\ComplaintTypes;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -53,5 +54,17 @@ class ComplaintRepository implements ComplaintRepositoryInterface
     {
        $complaint->load($relations);
        return  $complaint;
+    }
+
+    public function getEmployeeComplaints($employee,?array $filters = []): LengthAwarePaginator
+    {
+        $complaints=ComplaintModel::filter($filters)->where(['employee_id'=>$employee->id,'type'=>ComplaintTypes::Cut])->paginate(10);
+        return $complaints;
+    }
+
+    public function getUserComplaints($user, ?array $filters = []): LengthAwarePaginator
+    {
+        $complaints=ComplaintModel::filter($filters)->where(['user_id'=>$user->id,'type'=>ComplaintTypes::Cut])->paginate(10);
+        return $complaints;
     }
 }

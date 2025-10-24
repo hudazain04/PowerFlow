@@ -57,6 +57,10 @@ class Employee extends Authenticate implements JWTSubject
     {
         return $this->belongsTo(User::class);
     }
+    public function actions()
+    {
+        return $this->hasMany(Action::class,'employee_id');
+    }
     public function generateSecretKey(): string
     {
         $Key = bin2hex(random_bytes(4));
