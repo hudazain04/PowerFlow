@@ -61,13 +61,14 @@ class EmployeeAssignmentService
 ////            throw new ErrorException(__('employee.notFound'));
         }
 
-        $complaint = $this->complaintRepository->update($complaint, [
-            'employee_id' => $employeeId,
-            'status'      => ComplaintStatusTypes::Assigned,
-        ]);
+
 
         if ($employeeId)
         {
+            $complaint = $this->complaintRepository->update($complaint, [
+                'employee_id' => $employeeId,
+                'status'      => ComplaintStatusTypes::Assigned,
+            ]);
             $employee = $this->employeeRepository->findEmployee($employeeId);
             if (! $employee) {
                 throw new ErrorException(__('employee.notFound'));
