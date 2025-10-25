@@ -483,8 +483,8 @@ Route::middleware(['auth:api', 'lang'])->group(function () {
             ->middleware('permission:VIEW_ACTIONS');
         Route::get('getAction/{id}', [ActionController::class, 'getAction'])
             ->middleware('permission:VIEW_ACTION');
-        Route::get('getUserActions', [ActionController::class, 'getUserActions']);
-//            ->middleware('permission:VIEW_USER_ACTIONS');
+        Route::get('getUserActions', [ActionController::class, 'getUserActions'])
+            ->middleware('permission:VIEW_USER_ACTIONS');
 
     });
 
