@@ -18,7 +18,7 @@ class EmployeeService
 
         $emp=$this->repository->create($data);
         $data2= $this->encryptionService->encryptDataForClient($emp,$data['clientPublicKey']);
-        $this->repository->updateRole($emp,UserTypes::EMPLOYEE);
+        $this->repository->updateRole($emp['user'],UserTypes::EMPLOYEE);
         return $data2;
     }
     public function update(int $id,array $data){
