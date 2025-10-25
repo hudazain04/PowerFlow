@@ -23,7 +23,7 @@ class EmployeeController extends Controller
     public function create(EmployeeRequest $request)
     {
         $emp = $this->service->create(array_merge($request->validated(), ['generator_id' => $request->user()->id]));
-        return ApiResponses::success(EmployeeResource::make($emp), __('employee.create'), ApiCode::OK);
+        return ApiResponses::success($emp, __('employee.create'), ApiCode::OK);
     }
     public function update(UpdateEmployeeRequest $request, int $id)
     {

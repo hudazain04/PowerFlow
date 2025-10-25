@@ -30,7 +30,8 @@ class EmployeeRequest extends FormRequest
             'phone_number'=>'required|max:10|unique:employees,phone_number',
             'area_id'=>'nullable|exists:areas,id',
             'permissions' => 'array',
-            'permissions.*' => 'string|exists:permissions,name'
+            'permissions.*' => 'string|exists:permissions,name',
+            'clientPublicKey'=>'required|string',
         ];
     }
 

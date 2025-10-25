@@ -15,6 +15,7 @@ class EmployeeService
 
     public function create(array $data){
 
+
         $emp=$this->repository->create($data);
         $this->repository->updateRole($emp,UserTypes::EMPLOYEE);
         return $emp;
