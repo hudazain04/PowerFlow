@@ -31,6 +31,7 @@ class CounterResource extends JsonResource
             'current_spending' => $this->current_spending,
             'spendingType' => $this->spendingType,
             'physical_device_id' => $this->physical_device_id,
+            'generator_name'=>$this->powerGenerator->name,
             'box_id' => $this->electricalBoxes->first() ? $this->electricalBoxes->first()->id : null,
             'user' => UserResource::make($this->user),
             'blocked'=>($subscription->count() === 0|| $blocked)
