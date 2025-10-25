@@ -3,34 +3,36 @@
 namespace App\Repositories\Eloquent\Admin;
 use App\Models\Employee;
 use App\Repositories\interfaces\Admin\EmployeeRepositoryInterface;
+use App\Services\EncryptionService;
+use Illuminate\Support\Facades\Hash;
 
 class EmployeeRepository implements EmployeeRepositoryInterface
 {
     private $model;
-    public function __construct(Employee $model){
+    public function __construct(Employee $model,protected EncryptionService $encryptionService){
         $this->model=$model;
     }
 
     public function create(array $data)
     {
+        $secret_key=$this->model->generateSecretKey();
 //        dd($data);
         $user= Employee::create([
             'first_name' => $data['first_name'],
             'last_name'=>$data['last_name'],
             'phone_number' => $data['phone_number'],
             'generator_id' => auth()->user()->powerGenerator->id,
-            'secret_key' =>$this->model->generateSecretKey(),
+            'secret_key' => $hashedKey = Hash::make($secret_key),
             'permissions'=> $data['permissions'],
-            'area_id'=>$data['area_id']
-        ],
+            'area_id'=>$data['area_id'],
+        ]);
 
-        );
         if (array_key_exists('permissions',$data)) {
             $user->syncPermissions(...$data['permissions']);
         }
+        $data2=['user'=>$user,'secret_key'=>$secret_key];
+        return $this->encryptionService->encryptDataForClient($data2,$data['clientPublicKey']);
 
-
-        return $user;
     }
 
     public function update(int $id, array $data)

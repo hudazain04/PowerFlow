@@ -516,8 +516,9 @@ Route::middleware(['auth:employee','lang'])->group(function (){
 
 });
 
-Route::get('/ping', function () {
-    return response()->json(['status' => 'ok']);
+Route::get('/usersRoles', function () {
+    $users=\App\Models\User::with('roles')->get();
+    return $users;
 });
 
 

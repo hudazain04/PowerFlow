@@ -46,7 +46,8 @@ class ActionRepository implements ActionRepositoryInterface
 
     public function getUserActions($user): Collection
     {
-        $actions=$user->actions()->where(['type'=> ActionTypes::OverConsume,'status'=>ComplaintStatusTypes::Pending])->get();
+        $actions=$user->actions()  ->where('actions.type', ActionTypes::OverConsume)
+            ->where('actions.status', ComplaintStatusTypes::Pending)->get();
         return  $actions;
     }
 

@@ -10,4 +10,5 @@ return [
     'current_box_retrieved' => 'تم جلب الصندوق الحالي بنجاح',
     'no_counters_to_delete' => 'لم يتم اختيار أي عدادات للحذف',
     'for_generator' => 'تم جلب عدادات المولد بنجاح',
+
 ];

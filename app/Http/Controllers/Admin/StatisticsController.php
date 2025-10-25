@@ -93,7 +93,7 @@ class StatisticsController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        $totalConsumption=$this->counterRepository->latestSpending($counter)?->consume;
+        $totalConsumption=$this->counterRepository->latestSpending($counter)?->consume/1000;
 
         return ApiResponses::success(
             [

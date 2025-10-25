@@ -12,4 +12,5 @@ return [
     'permissions_retrieved' => 'تم جلب الصلاحيات بنجاح',
     'login_success' => 'تم تسجيل الدخول بنجاح',
     'logout_success' => 'تم تسجيل الخروج بنجاح',
+    'noEmployeeIds' => 'لم يتم تقديم أي معرفات موظفين للحذف.',
 ];
