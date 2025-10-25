@@ -6,19 +6,20 @@ use App\ApiHelper\ApiCode;
 use App\ApiHelper\ApiResponses;
 use App\Models\Employee;
 use App\Repositories\interfaces\Admin\EmployeeRepositoryInterface;
+use App\Services\EncryptionService;
 use App\Types\UserTypes;
 
 class EmployeeService
 
 {
-    public function __construct(private EmployeeRepositoryInterface $repository){}
+    public function __construct(private EmployeeRepositoryInterface $repository , protected EncryptionService $encryptionService){}
 
     public function create(array $data){
 
-
         $emp=$this->repository->create($data);
+        $data2= $this->encryptionService->encryptDataForClient($emp,$data['clientPublicKey']);
         $this->repository->updateRole($emp,UserTypes::EMPLOYEE);
-        return $emp;
+        return $data2;
     }
     public function update(int $id,array $data){
         $employee=$this->repository->update($id,array_merge($data,['generator_id'=>auth()->user()->powerGenerator->id]));

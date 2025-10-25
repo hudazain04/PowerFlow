@@ -30,8 +30,8 @@ class EmployeeRepository implements EmployeeRepositoryInterface
         if (array_key_exists('permissions',$data)) {
             $user->syncPermissions(...$data['permissions']);
         }
-        $data2=['user'=>$user,'secret_key'=>$secret_key];
-        return $this->encryptionService->encryptDataForClient($data2,$data['clientPublicKey']);
+
+        return  ['user'=>$user,'secret_key'=>$secret_key];
 
     }
 
