@@ -8,4 +8,6 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 \Illuminate\Support\Facades\Schedule::command(\App\Console\Commands\PersistVisitsToDatabase::class)->dailyAt('00:00');
 \Illuminate\Support\Facades\Schedule::command(\App\Console\Commands\CalculateConsumption::class)->dailyAt('01:00');
+\Illuminate\Support\Facades\Schedule::command(\App\Console\Commands\PersistVisitsToDatabase::class)->dailyAt('00:00');
+\Illuminate\Support\Facades\Schedule::command(\App\Console\Commands\ConsumeSpendings::class)->dailyAt('01:00');
 

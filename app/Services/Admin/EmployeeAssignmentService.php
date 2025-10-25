@@ -52,46 +52,54 @@ class EmployeeAssignmentService
             'ASC'
         );
 
-        if (empty($closest)) {
-            throw new ErrorException(__('employee.notFound'));
+//        if (empty($closest)) {
+////            throw new ErrorException(__('employee.notFound'));
+//        }
+        $employeeId=null;
+        if (  !empty($closest)) {
+            [$employeeId, $distance] = $closest[0];
+////            throw new ErrorException(__('employee.notFound'));
         }
-
-        [$employeeId, $distance] = $closest[0];
-
 
         $complaint = $this->complaintRepository->update($complaint, [
             'employee_id' => $employeeId,
             'status'      => ComplaintStatusTypes::Assigned,
         ]);
 
-        $employee = $this->employeeRepository->findEmployee($employeeId);
-        if (! $employee) {
-            throw new ErrorException(__('employee.notFound'));
+        if ($employeeId)
+        {
+            $employee = $this->employeeRepository->findEmployee($employeeId);
+            if (! $employee) {
+                throw new ErrorException(__('employee.notFound'));
+            }
+            event(new ComplaintAssignEvent($complaint, $employeeId));
+            $this->notificationService->notifyCustomEmployee([
+                'title'=>__('notification.complaint'),
+                'body'=>__('notification.assignComplaint',[
+                    'id' => $complaint->id,
+                    'description' => $complaint->description,
+                ]),
+                'type'=>NotificationTypes::CustomEmployee,
+                'ids'=>[$employee->id],
+                'data'=>[
+                    'id'          => $complaint->id,
+                    'status'      => $complaint->status,
+                    'description' => $complaint->description,
+                    'type'        => $complaint->type,
+                    'counter'     => CounterResource::make($complaint->counter),
+                    'created_at'  => $complaint->created_at->format('Y-m-d h:s a'),
+                    'maps'=>[
+                        'x'=>$box->latitude,
+                        'y'=>$box->longitude,
+                    ],
+                ],
+
+            ]);
+
         }
 
-        event(new ComplaintAssignEvent($complaint, $employeeId));
-        $this->notificationService->notifyCustomEmployee([
-            'title'=>__('notification.complaint'),
-            'body'=>__('notification.assignComplaint',[
-                'id' => $complaint->id,
-                'description' => $complaint->description,
-            ]),
-            'type'=>NotificationTypes::CustomEmployee,
-            'ids'=>[$employee->id],
-            'data'=>[
-                'id'          => $complaint->id,
-                'status'      => $complaint->status,
-                'description' => $complaint->description,
-                'type'        => $complaint->type,
-                'counter'     => CounterResource::make($complaint->counter),
-                'created_at'  => $complaint->created_at->format('Y-m-d h:s a'),
-                'maps'=>[
-                    'x'=>$box->latitude,
-                    'y'=>$box->longitude,
-                ],
-            ],
 
-        ]);
+
 //        if ($employee->fcmToken) {
 //            FirebaseService::sendNotification(
 //                $employee->fcmToken,
