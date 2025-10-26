@@ -32,7 +32,7 @@ class CalculateConsumption extends Command
         foreach ($counters as $counter) {
             $spendings = $counter->spendings()
                 ->whereDate('created_at', '>=', now()->subDays(7))
-                ->pluck('amount');
+                ->pluck('consume');
             if ($spendings->count() < 4) {
                 continue;
             }
