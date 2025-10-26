@@ -102,12 +102,12 @@ class AuthController extends Controller
          }
         public function counterChangeStatus (int $counter_id,string $action){
                 $counter=Counter::where('physical_device_id',$counter_id);
-            $counterStatus = $this->$action === 'connect' ? CounterStatus::Connect : "disconnect";
+
             // Update counter status
         //    $counter->update([
         //        'status' => $counterStatus,
         //    ]);
-           return Http::post(env('ESP_URL') . '/relay/rabbitmq/'. $counterStatus . "/" . $counter->physical_device_id);
+           return Http::post(env('ESP_URL') . '/relay/rabbitmq/'. $action . "/" . $counter->physical_device_id);
         }
 
 
