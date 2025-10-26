@@ -16,17 +16,20 @@ use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Jobs\SendEmailJob;
 use App\Models\Area;
+use App\Models\Counter;
 use App\Models\User;
 use App\Notifications\AccountApprovedNotification;
 use App\Notifications\AccountRejectedNotification;
 use App\Services\User\VerificationService;
 use App\Services\UserService;
+use App\Types\CounterStatus;
 use App\Types\UserTypes;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Psy\Readline\Hoa\Event;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use function PHPUnit\Framework\isNull;
@@ -97,7 +100,15 @@ class AuthController extends Controller
              JWTAuth::invalidate(JWTAuth::getToken());
              return ApiResponses::success(null, __('messages.logout'),ApiCode::OK);
          }
-
+        public function counterChangeStatus (int $counter_id,string $action){
+                $counter=Counter::where('physical_device_id',$counter_id);
+            $counterStatus = $this->$action === 'connect' ? CounterStatus::Connect : CounterStatus::DisConnected;
+            // Update counter status
+        //    $counter->update([
+        //        'status' => $counterStatus,
+        //    ]);
+           return Http::post(env('ESP_URL') . '/relay/rabbitmq/'. $counterStatus . "/" . $counter->physical_device_id);
+        }
 
 
 

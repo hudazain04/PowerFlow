@@ -223,7 +223,7 @@ Route::middleware(['auth:api', 'lang'])->group(function () {
         Route::get('/statistics/dashboard', [StatisticsController::class, 'getDashboardOverview']);
         Route::get('admin/full-data', [UserAppController::class, 'getFullData'])->name('dashboardData');
         //            ->middleware('permission:VIEW_ADMIN_DATA');
-
+         Route::post('/relay/{counter_id}/{action}',[AuthController::class,'counterChangeStatus']);
 
     });
 
