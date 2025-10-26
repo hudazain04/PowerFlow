@@ -107,7 +107,8 @@ class AuthController extends Controller
         //    $counter->update([
         //        'status' => $counterStatus,
         //    ]);
-           return Http::post(env('ESP_URL') . '/relay/rabbitmq/'. $action . "/" . $counter->physical_device_id);
+           Http::post(env('ESP_URL') . '/relay/rabbitmq/'. $action . "/" . $counter->physical_device_id);
+           return ApiResponses::success(null,__('messages.success'));
         }
 
 
