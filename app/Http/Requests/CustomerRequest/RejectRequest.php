@@ -22,7 +22,7 @@ class RejectRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'admin_notes' => 'required|string|max:500',
+            'admin_notes' => 'nullable|string|max:500',
         ];
     }
 }

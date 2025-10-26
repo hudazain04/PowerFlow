@@ -66,7 +66,7 @@ class StatisticsController extends Controller
                 'active_counters' => $activeCounters,
                 'recent_payments' => $recentPayments,
             ],
-            'statistics',
+            __('statistics.overview'),
             ApiCode::OK
 
 
@@ -93,7 +93,7 @@ class StatisticsController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        $totalConsumption=$this->counterRepository->latestSpending($counter)?->consume;
+        $totalConsumption=$this->counterRepository->latestSpending($counter)?->consume/1000;
 
         return ApiResponses::success(
             [
@@ -104,7 +104,7 @@ class StatisticsController extends Controller
                 'recent_spending' => SpendingResource::collection($recentSpending),
                 'recent_payments' => SpendingPaymentRersource::collection($recentPayments),
             ],
-            'Counter details retrieved successfully',
+            __('statistics.counter_details'),
             ApiCode::OK
         );
     }
@@ -127,7 +127,7 @@ class StatisticsController extends Controller
                 'capacity' => $box->capacity,
                 'available_slots' => $box->capacity - $box->counters_count,
             ],
-            'Box details retrieved successfully',
+            __('statistics.box_details'),
             ApiCode::OK
         ]);
     }
@@ -150,7 +150,7 @@ class StatisticsController extends Controller
                 'boxes_count' => $area->electricalbox_count,
                 'boxes' => $boxes,
             ],
-            'Area details retrieved successfully',
+            __('statistics.area_details'),
             ApiCode::OK
         ]);
     }
@@ -170,7 +170,7 @@ class StatisticsController extends Controller
 
         return ApiResponses::success([
             $totals,
-            'Total counts retrieved successfully',
+            __('statistics.total_counts'),
             ApiCode::OK
         ]);
     }
@@ -426,7 +426,7 @@ class StatisticsController extends Controller
         //            'message' => 'Dashboard overview statistics retrieved successfully',
 //            'code' => 200
 //        ]);
-        return ApiResponses::success($data, 'statistics retrieved', ApiCode::OK);
+        return ApiResponses::success($data, __('statistics.dashboard_overview'), ApiCode::OK);
     }
 
     private function getDueCounters($generatorId)

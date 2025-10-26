@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\ConsumptionStatistic;
+use App\Models\Counter;
 use Illuminate\Console\Command;
 
 class CalculateConsumption extends Command

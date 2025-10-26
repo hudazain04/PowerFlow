@@ -4,13 +4,14 @@ namespace App\DTOs;
 
 use Carbon\Carbon;
 use WendellAdriel\ValidatedDTO\Casting\CarbonCast;
+use WendellAdriel\ValidatedDTO\Casting\FloatCast;
 use WendellAdriel\ValidatedDTO\Casting\IntegerCast;
 use WendellAdriel\ValidatedDTO\SimpleDTO;
 
 class SpendingPayDTO extends SimpleDTO
 {
     public ?int $id;
-    public ?int $kilos;
+    public ?float $kilos;
     public ?Carbon $date;
     protected function defaults(): array
     {
@@ -20,7 +21,7 @@ class SpendingPayDTO extends SimpleDTO
     protected function casts(): array
     {
         return [
-            'kilos'=>new IntegerCast(),
+            'kilos'=>new FloatCast(),
             'date'=>new CarbonCast(),
 
         ];

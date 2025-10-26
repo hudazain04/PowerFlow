@@ -14,7 +14,7 @@ class SpendingObserver
     public function created(Spending $spending)
     {
         $counter=$spending->counter;
-        $counter->update(['current_spending'=>$spending->consume]);
+        $counter->update(['current_spending'=>$spending->consume/1000]);
         $counter->save();
         if ($counter->spendingType === SpendingTypes::Before)
         {

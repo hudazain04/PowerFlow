@@ -17,7 +17,7 @@ class SpendingResource extends JsonResource
         return[
           'id'=>$this->id,
           'counter_id'=>$this->counter_id,
-            'consume' => number_format($this->consume, 3),
+            'consume' => $this->consume/1000,
           'date'=>$this->date->format('Y-m-d H:s a')
         ];
     }

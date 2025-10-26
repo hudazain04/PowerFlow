@@ -21,7 +21,7 @@ class CounterBoxController extends Controller
     {
         $this->service->assignCounter(...$request->validated());
 
-        return ApiResponses::success(null, 'Counter assigned to box successfully', ApiCode::OK);
+        return ApiResponses::success(null,  __('counter.assign'), ApiCode::OK);
     }
     public function create(CounterRequest $request){
         $result = $this->service->createCounter($request->validated());
@@ -53,7 +53,7 @@ class CounterBoxController extends Controller
     public function getBoxCounters($boxId)
     {
         $counters = $this->service->getBoxCounters($boxId);
-        return ApiResponses::success($counters, 'Box counters retrieved successfully', ApiCode::OK);
+        return ApiResponses::success($counters, __('counter.box_counters_retrieved'), ApiCode::OK);
     }
     public function getCurrentCounter(int $counterId)
     {
@@ -62,18 +62,18 @@ class CounterBoxController extends Controller
         if (!$box) {
             return ApiResponses::success(
                 null,
-                'Counter is not currently assigned to any box',
+                __('counter.not_assigned'),
                 ApiCode::OK
             );
         }
 
-        return ApiResponses::success($box, 'Current box retrieved successfully', ApiCode::OK);
+        return ApiResponses::success($box, __('counter.current_box_retrieved'), ApiCode::OK);
     }
     public function removeCounter(CounterBoxRequest $request)
     {
         $this->service->removeCounter( ...$request->validated());
 
 
-        return ApiResponses::success(null, 'Counter removed from box successfully', ApiCode::OK);
+        return ApiResponses::success(null, __('counter.remove'), ApiCode::OK);
     }
 }

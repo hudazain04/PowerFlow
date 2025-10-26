@@ -57,16 +57,19 @@ class Employee extends Authenticate implements JWTSubject
     {
         return $this->belongsTo(User::class);
     }
+    public function actions()
+    {
+        return $this->hasMany(Action::class,'employee_id');
+    }
     public function generateSecretKey(): string
     {
         $Key = bin2hex(random_bytes(4));
-        $hashedKey = Hash::make($Key);
 
-        $this->update([
-            'secret_key' => $hashedKey,
-        ]);
+//        $this->update([
+//            'secret_key' => $hashedKey,
+//        ]);
 
-        return $hashedKey;
+        return $Key;
     }
     public function routeNotificationForFcm()
     {

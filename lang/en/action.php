@@ -4,4 +4,5 @@ return[
     'notFound'=>'Action not found',
     'assign'=>'Action assigned for employee :employee',
     'update'=>'Action status updated successfully',
+    'approve'=>'Action approved successfully',
 ];

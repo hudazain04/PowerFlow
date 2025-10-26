@@ -3,6 +3,7 @@
 namespace App\DTOs;
 
 use WendellAdriel\ValidatedDTO\Casting\CarbonCast;
+use WendellAdriel\ValidatedDTO\Casting\FloatCast;
 use WendellAdriel\ValidatedDTO\Casting\IntegerCast;
 use WendellAdriel\ValidatedDTO\SimpleDTO;
 use Carbon\Carbon;
@@ -17,7 +18,7 @@ class SubscriptionRequestDTO extends SimpleDTO
     public ?int $user_id;
     public ?string $status;
     public ?int $planPrice_id;
-    public ?int $kiloPrice;
+    public ?float $kiloPrice;
     public ?string $spendingType;
     public ?string $day;
     public ?array $phones;
@@ -38,7 +39,7 @@ class SubscriptionRequestDTO extends SimpleDTO
             'created_at'=>new CarbonCast(),
             'planPrice_id'=>new IntegerCast(),
             'user_id'=>new IntegerCast(),
-            'kiloPrice'=>new IntegerCast(),
+            'kiloPrice'=>new FloatCast(),
             'afterPaymentFrequency'=>new IntegerCast(),
 
 

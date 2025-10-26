@@ -23,7 +23,7 @@ class EmployeeController extends Controller
     public function create(EmployeeRequest $request)
     {
         $emp = $this->service->create(array_merge($request->validated(), ['generator_id' => $request->user()->id]));
-        return ApiResponses::success(EmployeeResource::make($emp), __('employee.create'), ApiCode::OK);
+        return ApiResponses::success($emp, __('employee.create'), ApiCode::OK);
     }
     public function update(UpdateEmployeeRequest $request, int $id)
     {
@@ -39,7 +39,7 @@ class EmployeeController extends Controller
         if ($request->has('ids')) {
             $ids = $request->input('ids');
             $this->service->deleteMultiple($ids);
-            return ApiResponses::success(null, 'success', ApiCode::OK);
+            return ApiResponses::success(null, __('employee.bulk_delete'), ApiCode::OK);
         }
 
         return ApiResponses::error(__('employee.noEmployeeIds'), ApiCode::BAD_REQUEST);
@@ -48,17 +48,17 @@ class EmployeeController extends Controller
     public function getEmployees(int $id)
     {
         $emp = $this->service->getEmployees($id);
-        return ApiResponses::success(EmployeeResource::collection($emp), __('messages.success'), ApiCode::OK);
+        return ApiResponses::success(EmployeeResource::collection($emp),  __('employee.employees_retrieved'), ApiCode::OK);
     }
     public function getEmployee(int $id)
     {
         $emp = $this->service->getEmployee($id);
-        return ApiResponses::success(EmployeeResource::make($emp), __('messages.success'), ApiCode::OK);
+        return ApiResponses::success(EmployeeResource::make($emp), __('employee.employee_retrieved'), ApiCode::OK);
     }
     public function getEmp(int $generator_id)
     {
         $emp = $this->service->getEmp($generator_id);
-        return ApiResponses::success(EmployeeResource::make($emp), __('messages.success'), ApiCode::OK);
+        return ApiResponses::success(EmployeeResource::make($emp),__('employee.employee_retrieved'), ApiCode::OK);
     }
     public function assignPermissions(Request $request, $id)
     {
@@ -72,7 +72,7 @@ class EmployeeController extends Controller
 
         $user->syncPermissions($request->permissions);
         $permissions = $user->getPermissionNames();
-        return ApiResponses::success($permissions, 'success', ApiCode::OK);
+        return ApiResponses::success($permissions,  __('employee.permissions_assigned'), ApiCode::OK);
     }
     public function getPermission()
     {
@@ -88,6 +88,6 @@ class EmployeeController extends Controller
             'employeePermissions'=>$employeePermissions,
         ];
 
-        return ApiResponses::success($permissions, __('messages.success'), ApiCode::OK);
+        return ApiResponses::success($permissions, __('employee.permissions_retrieved'), ApiCode::OK);
     }
 }

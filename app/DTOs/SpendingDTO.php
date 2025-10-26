@@ -5,6 +5,7 @@ namespace App\DTOs;
 use Carbon\Carbon;
 use Illuminate\Validation\Rules\In;
 use WendellAdriel\ValidatedDTO\Casting\CarbonCast;
+use WendellAdriel\ValidatedDTO\Casting\FloatCast;
 use WendellAdriel\ValidatedDTO\Casting\IntegerCast;
 use WendellAdriel\ValidatedDTO\SimpleDTO;
 
@@ -23,7 +24,7 @@ class SpendingDTO extends SimpleDTO
     {
         return [
             'counter_id' => new IntegerCast(),
-            'consume' => new IntegerCast(),
+            'consume' => new FloatCast(),
             'date' => new CarbonCast(),
         ];
     }

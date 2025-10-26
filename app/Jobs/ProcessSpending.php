@@ -27,18 +27,32 @@ class ProcessSpending implements ShouldQueue
 
     public function handle(): void
     {
+
+        Log::info("ProcessSpending job started", [
+            'counterId' => $this->counterId,
+            'energyWh' => $this->energyWh,
+            'created_at' => $this->created_at
+        ]);
+
         $counter = Counter::where('physical_device_id', $this->counterId)->first();
 
         if ($counter) {
-            Spending::create([
+            Log::info("Counter found", ['counter_id' => $counter->id]);
+
+            $spending = Spending::create([
                 'counter_id' => $counter->id,
                 'consume' => $this->energyWh,
                 'date' => $this->created_at,
             ]);
-            Log::info("Spending recorded for counter {$this->counterId}: {$this->energyWh} Wh");
+
+            Log::info("Spending record created", [
+                'spending_id' => $spending->id,
+                'counter_id' => $counter->id,
+                'consume' => $this->energyWh
+            ]);
+
         } else {
             Log::warning("Counter not found for physical_device_id: {$this->counterId}");
         }
-
     }
 }

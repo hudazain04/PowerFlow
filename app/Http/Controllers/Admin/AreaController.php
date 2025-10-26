@@ -41,7 +41,7 @@ class AreaController extends Controller
     {
         $area=$this->service->getArea($area_id);
 //        dd($area->electricalbox);
-        return $this->success(AreaResource::make($area),__('messages.success'));
+        return $this->success(AreaResource::make($area), __('area.get'),ApiCode::OK);
     }
 
 
@@ -62,11 +62,11 @@ class AreaController extends Controller
 
         $this->service->deleteAreas($ids);
 
-        return ApiResponses::success(null, __('area delete success'), ApiCode::OK);
+        return ApiResponses::success(null, __('area.delete_success'), ApiCode::OK);
     }
     public function getAreas(int $generator_id){
         $areas=$this->service->getAreas($generator_id);
-        return ApiResponses::success($areas,"areas for generator",ApiCode::OK);
+        return ApiResponses::success($areas,__('area.areas_for_generator'),ApiCode::OK);
     }
 
 

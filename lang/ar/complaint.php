@@ -1,7 +1,8 @@
 <?php
 return [
-    'createCut'=>'cut complaint created successfully',
-    'updateCut'=>'cut complaint status updated successfully',
-    'notFound'=>'complaint not found',
-    'create'=>'complaint created successfully',
-];
+    'createCut' => 'تم إنشاء شكوى انقطاع بنجاح.',
+    'updateCut' => 'تم تحديث حالة شكوى الانقطاع بنجاح.',
+    'notFound' => 'لم يتم العثور على الشكوى.',
+    'create' => 'تم إنشاء الشكوى بنجاح.',
+    'delete' => 'تم حذف الشكوى بنجاح.',
+    ];

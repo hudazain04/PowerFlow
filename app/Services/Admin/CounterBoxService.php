@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Repositories\Eloquent\Admin\CounterBoxRepository;
 use App\Repositories\interfaces\Admin\ActionRepositoryInterface;
 use App\Repositories\interfaces\Admin\CounterBoxRepositoryInterface;
+use App\Repositories\interfaces\Admin\PowerGeneratorRepositoryInterface;
 use App\Services\User\PasswordResetService;
 use App\Types\ActionTypes;
 use App\Types\ComplaintStatusTypes;
@@ -27,6 +28,7 @@ class CounterBoxService
         private PasswordResetService $passwordResetService,
         protected EmployeeAssignmentService $employeeAssignmentService,
         protected ActionRepositoryInterface $actionRepository,
+        protected PowerGeneratorRepositoryInterface $powerGeneratorRepository,
     ) {
     }
 
@@ -130,6 +132,8 @@ class CounterBoxService
             $qrCode = $this->generateQRCode($qrCodeData);
             $qrCodeUrl = asset($qrCode['url']);
 
+            $powerGenerator=$this->powerGeneratorRepository->find($generator);
+            $generatorSetting=$powerGenerator->settings;
             // Create the counter
             $counter = $this->repository->create([
                 'number' => $counterNumber,
@@ -137,7 +141,7 @@ class CounterBoxService
                 'user_id' => $user->id,
                 'generator_id' => $generator,
                 'current_spending' => 0,
-                'spendingType' => $data['spendingType'],
+                'spendingType' => $data['spendingType'] ?? $generatorSetting->spendingType,
                 'physical_device_id'=>$data['physical_device_id'],
             ]);
 

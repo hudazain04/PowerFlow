@@ -110,7 +110,7 @@ class ActionService
                 'generator_id'=>$action->generator_id,
             ]);
             $counter=$action->counter;
-            $response = Http::post(env('ESP_URL') . '/relay/connect/'.$counter->physical_device_id);
+            $response = Http::post(env('ESP_URL') . '/relay/rabbitmq/connect/'.$counter->physical_device_id);
             if ($response->successful()) {
                $action=$this->actionRepository->update($newAction,[
                   'status' =>ComplaintStatusTypes::Resolved,
@@ -123,11 +123,11 @@ class ActionService
         }
        elseif ($action->type===ActionTypes::Cut)
        {
-           $action=$this->actionRepository->update($action,[
-               'status'=>ComplaintStatusTypes::Accepted,
-           ]);
+//           $action=$this->actionRepository->update($action,[
+//               'status'=>ComplaintStatusTypes::Accepted,
+//           ]);
            $counter=$action->counter;
-           $response = Http::post(env('ESP_URL') . '/relay/disconnect/'.$counter->physical_device_id);
+           $response = Http::post(env('ESP_URL') . '/relay/rabbitmq/disconnect/'.$counter->physical_device_id);
            if ($response->successful()) {
                $action=$this->actionRepository->update($action,[
                    'status' =>ComplaintStatusTypes::Resolved,
@@ -151,7 +151,7 @@ class ActionService
                 'generator_id'=>$action->generator_id,
             ]);
             $counter=$action->counter;
-            $response = Http::post(env('ESP_URL') . '/relay/disconnect/'.$counter->physical_device_id);
+            $response = Http::post(env('ESP_URL') . '/relay/rabbitmq/disconnect/'.$counter->physical_device_id);
             if ($response->successful()) {
                 $action=$this->actionRepository->update($newAction,[
                     'status' =>ComplaintStatusTypes::Resolved,
@@ -198,6 +198,12 @@ class ActionService
     public function getUserActions($user)
     {
         $actions=$this->actionRepository->getUserActions($user);
+        return $actions;
+    }
+
+    public function getEmployeeActions($employee)
+    {
+        $actions=$this->actionRepository->getEmployeeActions($employee);
         return $actions;
     }
 }

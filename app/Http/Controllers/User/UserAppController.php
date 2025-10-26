@@ -37,7 +37,7 @@ class UserAppController extends Controller
             'newPassword'=>'required|string']);
         $user_id=$request->user()->id;
         $password=$this->service->resetPassword($user_id,...$validate);
-            return ApiResponses::success($password,__('auth.newPassword'),ApiCode::OK);
+            return ApiResponses::success($password,__('userApp.password_reset'),ApiCode::OK);
     }
     public function name(Request $request){
         $validate=$request->validate([
@@ -46,23 +46,23 @@ class UserAppController extends Controller
         ]);
         $user_id=$request->user()->id;
         $name =$this->service->name($user_id,$validate);
-        return ApiResponses::success($name,'New Name',ApiCode::OK);
+        return ApiResponses::success($name, __('userApp.name_updated'),ApiCode::OK);
     }
     public function getCounters(int $id){
         $counter=$this->service->getCounters($id);
-        return ApiResponses::success(CounterResource::collection($counter),__('messages.success'),ApiCode::OK);
+        return ApiResponses::success(CounterResource::collection($counter),__('userApp.counters_retrieved'),ApiCode::OK);
     }
     public function getPayments(int $id,Request $request){
         $payment=$this->service->getPayments($id,$request);
-        return $this->successWithPagination(SpendingPaymentRersource::collection($payment),__('messages.success'),ApiCode::OK);
+        return $this->successWithPagination(SpendingPaymentRersource::collection($payment), __('userApp.payments_retrieved'),ApiCode::OK);
     }
     public function getCounter(int $id){
        $counter=$this->service->getCounter($id);
-       return ApiResponses::success(CounterResource::make($counter),__('messages.success'),ApiCode::OK);
+       return ApiResponses::success(CounterResource::make($counter),__('userApp.counter_retrieved'),ApiCode::OK);
     }
     public function getBoxes(Request $request){
         $Boxes=$this->service->getBoxes();
-        return ApiResponses::success(ElectricalBoxResource::collection($Boxes),'All Boxes',ApiCode::OK);
+        return ApiResponses::success(ElectricalBoxResource::collection($Boxes),__('userApp.boxes_retrieved'),ApiCode::OK);
     }
 
 
@@ -93,7 +93,7 @@ class UserAppController extends Controller
     }
     public function spendingConsumption(int $counter_id){
         $consumption=$this->service->getConsumption($counter_id);
-        return ApiResponses::success($consumption,'consumption rate',ApiCode::OK);
+        return ApiResponses::success($consumption,__('userApp.consumption_rate'),ApiCode::OK);
     }
     public function findNearbyGenerators(Request $request)
     {

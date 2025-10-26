@@ -26,6 +26,7 @@ class Action extends Model
         return $this->belongsTo(Counter::class,'counter_id');
     }
 
+
     protected static function booted()
     {
         static::creating(function ($action) {
