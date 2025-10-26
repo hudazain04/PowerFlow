@@ -101,7 +101,7 @@ class AuthController extends Controller
              return ApiResponses::success(null, __('messages.logout'),ApiCode::OK);
          }
         public function counterChangeStatus (int $counter_id,string $action){
-                $counter=Counter::where('physical_device_id',$counter_id)->first();
+                $counter=Counter::where('id',$counter_id)->first();
 
             // Update counter status
         //    $counter->update([
