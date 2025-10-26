@@ -102,7 +102,7 @@ class AuthController extends Controller
          }
         public function counterChangeStatus (int $counter_id,string $action){
                 $counter=Counter::where('physical_device_id',$counter_id);
-            $counterStatus = $this->$action === 'connect' ? CounterStatus::Connect : CounterStatus::DisConnected;
+            $counterStatus = $this->$action === 'connect' ? CounterStatus::Connect : "disconnect";
             // Update counter status
         //    $counter->update([
         //        'status' => $counterStatus,
